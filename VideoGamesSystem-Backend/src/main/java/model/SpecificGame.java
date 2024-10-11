@@ -5,7 +5,7 @@
 import java.util.*;
 
 // line 68 "model.ump"
-// line 172 "model.ump"
+// line 160 "model.ump"
 public class SpecificGame
 {
 

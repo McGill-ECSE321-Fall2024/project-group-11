@@ -6,7 +6,7 @@ import java.sql.Date;
 import java.util.*;
 
 // line 61 "model.ump"
-// line 166 "model.ump"
+// line 154 "model.ump"
 public class Order
 {
 
@@ -21,13 +21,12 @@ public class Order
   //Order Associations
   private List<SpecificGame> specificGames;
   private Customer customer;
-  private Cart cart;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public Order(int aNumber, Date aDate, Customer aCustomer, Cart aCart, SpecificGame... allSpecificGames)
+  public Order(int aNumber, Date aDate, Customer aCustomer, SpecificGame... allSpecificGames)
   {
     number = aNumber;
     date = aDate;
@@ -41,11 +40,6 @@ public class Order
     if (!didAddCustomer)
     {
       throw new RuntimeException("Unable to create order due to customer. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-    }
-    boolean didAddCart = setCart(aCart);
-    if (!didAddCart)
-    {
-      throw new RuntimeException("Unable to create order due to cart. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
     }
   }
 
@@ -112,11 +106,6 @@ public class Order
   public Customer getCustomer()
   {
     return customer;
-  }
-  /* Code from template association_GetOne */
-  public Cart getCart()
-  {
-    return cart;
   }
   /* Code from template association_IsNumberOfValidMethod */
   public boolean isNumberOfSpecificGamesValid()
@@ -271,36 +260,6 @@ public class Order
     wasSet = true;
     return wasSet;
   }
-  /* Code from template association_SetOneToMandatoryMany */
-  public boolean setCart(Cart aCart)
-  {
-    boolean wasSet = false;
-    //Must provide cart to order
-    if (aCart == null)
-    {
-      return wasSet;
-    }
-
-    if (cart != null && cart.numberOfOrders() <= Cart.minimumNumberOfOrders())
-    {
-      return wasSet;
-    }
-
-    Cart existingCart = cart;
-    cart = aCart;
-    if (existingCart != null && !existingCart.equals(aCart))
-    {
-      boolean didRemove = existingCart.removeOrder(this);
-      if (!didRemove)
-      {
-        cart = existingCart;
-        return wasSet;
-      }
-    }
-    cart.addOrder(this);
-    wasSet = true;
-    return wasSet;
-  }
 
   public void delete()
   {
@@ -316,12 +275,6 @@ public class Order
     {
       placeholderCustomer.removeOrder(this);
     }
-    Cart placeholderCart = cart;
-    this.cart = null;
-    if(placeholderCart != null)
-    {
-      placeholderCart.removeOrder(this);
-    }
   }
 
 
@@ -330,7 +283,6 @@ public class Order
     return super.toString() + "["+
             "number" + ":" + getNumber()+ "]" + System.getProperties().getProperty("line.separator") +
             "  " + "date" + "=" + (getDate() != null ? !getDate().equals(this)  ? getDate().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
-            "  " + "customer = "+(getCustomer()!=null?Integer.toHexString(System.identityHashCode(getCustomer())):"null") + System.getProperties().getProperty("line.separator") +
-            "  " + "cart = "+(getCart()!=null?Integer.toHexString(System.identityHashCode(getCart())):"null");
+            "  " + "customer = "+(getCustomer()!=null?Integer.toHexString(System.identityHashCode(getCustomer())):"null");
   }
 }

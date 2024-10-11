@@ -3,9 +3,9 @@
 
 
 
-// line 10 "model.ump"
-// line 198 "model.ump"
-public class Employer extends Staff
+// line 17 "model.ump"
+// line 195 "model.ump"
+public class Owner extends Staff
 {
 
   //------------------------
@@ -16,7 +16,7 @@ public class Employer extends Staff
   // CONSTRUCTOR
   //------------------------
 
-  public Employer(String aUserName, int aIdNum)
+  public Owner(String aUserName, int aIdNum)
   {
     super(aUserName, aIdNum);
   }

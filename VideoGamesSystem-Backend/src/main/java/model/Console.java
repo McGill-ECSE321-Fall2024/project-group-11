@@ -4,40 +4,46 @@
 
 import java.util.*;
 
-// line 40 "model.ump"
-// line 218 "model.ump"
-public class Wishlist
+// line 105 "model.ump"
+// line 215 "model.ump"
+public class Console
 {
 
   //------------------------
   // MEMBER VARIABLES
   //------------------------
 
-  //Wishlist Associations
-  private Customer customer;
+  //Console Attributes
+  private String console;
+
+  //Console Associations
   private List<Game> games;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public Wishlist(Customer aCustomer)
+  public Console(String aConsole)
   {
-    boolean didAddCustomer = setCustomer(aCustomer);
-    if (!didAddCustomer)
-    {
-      throw new RuntimeException("Unable to create wishlist due to customer. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-    }
+    console = aConsole;
     games = new ArrayList<Game>();
   }
 
   //------------------------
   // INTERFACE
   //------------------------
-  /* Code from template association_GetOne */
-  public Customer getCustomer()
+
+  public boolean setConsole(String aConsole)
   {
-    return customer;
+    boolean wasSet = false;
+    console = aConsole;
+    wasSet = true;
+    return wasSet;
+  }
+
+  public String getConsole()
+  {
+    return console;
   }
   /* Code from template association_GetMany */
   public Game getGame(int index)
@@ -69,25 +75,6 @@ public class Wishlist
     int index = games.indexOf(aGame);
     return index;
   }
-  /* Code from template association_SetOneToMany */
-  public boolean setCustomer(Customer aCustomer)
-  {
-    boolean wasSet = false;
-    if (aCustomer == null)
-    {
-      return wasSet;
-    }
-
-    Customer existingCustomer = customer;
-    customer = aCustomer;
-    if (existingCustomer != null && !existingCustomer.equals(aCustomer))
-    {
-      existingCustomer.removeWishlist(this);
-    }
-    customer.addWishlist(this);
-    wasSet = true;
-    return wasSet;
-  }
   /* Code from template association_MinimumNumberOfMethod */
   public static int minimumNumberOfGames()
   {
@@ -99,13 +86,13 @@ public class Wishlist
     boolean wasAdded = false;
     if (games.contains(aGame)) { return false; }
     games.add(aGame);
-    if (aGame.indexOfWishlist(this) != -1)
+    if (aGame.indexOfConsole(this) != -1)
     {
       wasAdded = true;
     }
     else
     {
-      wasAdded = aGame.addWishlist(this);
+      wasAdded = aGame.addConsole(this);
       if (!wasAdded)
       {
         games.remove(aGame);
@@ -124,13 +111,13 @@ public class Wishlist
 
     int oldIndex = games.indexOf(aGame);
     games.remove(oldIndex);
-    if (aGame.indexOfWishlist(this) == -1)
+    if (aGame.indexOfConsole(this) == -1)
     {
       wasRemoved = true;
     }
     else
     {
-      wasRemoved = aGame.removeWishlist(this);
+      wasRemoved = aGame.removeConsole(this);
       if (!wasRemoved)
       {
         games.add(oldIndex,aGame);
@@ -173,18 +160,18 @@ public class Wishlist
 
   public void delete()
   {
-    Customer placeholderCustomer = customer;
-    this.customer = null;
-    if(placeholderCustomer != null)
-    {
-      placeholderCustomer.removeWishlist(this);
-    }
     ArrayList<Game> copyOfGames = new ArrayList<Game>(games);
     games.clear();
     for(Game aGame : copyOfGames)
     {
-      aGame.removeWishlist(this);
+      aGame.removeConsole(this);
     }
   }
 
+
+  public String toString()
+  {
+    return super.toString() + "["+
+            "console" + ":" + getConsole()+ "]";
+  }
 }

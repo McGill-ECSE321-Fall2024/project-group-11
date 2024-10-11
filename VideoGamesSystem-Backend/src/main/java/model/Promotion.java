@@ -2,30 +2,35 @@
 /*This code was generated using the UMPLE 1.35.0.7523.c616a4dce modeling language!*/
 
 
+import java.sql.Date;
 import java.util.*;
 
 // line 111 "model.ump"
-// line 228 "model.ump"
-public class Console
+// line 172 "model.ump"
+public class Promotion
 {
 
   //------------------------
   // MEMBER VARIABLES
   //------------------------
 
-  //Console Attributes
-  private String console;
+  //Promotion Attributes
+  private int percentage;
+  private Date startDate;
+  private Date endDate;
 
-  //Console Associations
+  //Promotion Associations
   private List<Game> games;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public Console(String aConsole)
+  public Promotion(int aPercentage, Date aStartDate, Date aEndDate)
   {
-    console = aConsole;
+    percentage = aPercentage;
+    startDate = aStartDate;
+    endDate = aEndDate;
     games = new ArrayList<Game>();
   }
 
@@ -33,17 +38,43 @@ public class Console
   // INTERFACE
   //------------------------
 
-  public boolean setConsole(String aConsole)
+  public boolean setPercentage(int aPercentage)
   {
     boolean wasSet = false;
-    console = aConsole;
+    percentage = aPercentage;
     wasSet = true;
     return wasSet;
   }
 
-  public String getConsole()
+  public boolean setStartDate(Date aStartDate)
   {
-    return console;
+    boolean wasSet = false;
+    startDate = aStartDate;
+    wasSet = true;
+    return wasSet;
+  }
+
+  public boolean setEndDate(Date aEndDate)
+  {
+    boolean wasSet = false;
+    endDate = aEndDate;
+    wasSet = true;
+    return wasSet;
+  }
+
+  public int getPercentage()
+  {
+    return percentage;
+  }
+
+  public Date getStartDate()
+  {
+    return startDate;
+  }
+
+  public Date getEndDate()
+  {
+    return endDate;
   }
   /* Code from template association_GetMany */
   public Game getGame(int index)
@@ -86,13 +117,13 @@ public class Console
     boolean wasAdded = false;
     if (games.contains(aGame)) { return false; }
     games.add(aGame);
-    if (aGame.indexOfConsole(this) != -1)
+    if (aGame.indexOfPromotion(this) != -1)
     {
       wasAdded = true;
     }
     else
     {
-      wasAdded = aGame.addConsole(this);
+      wasAdded = aGame.addPromotion(this);
       if (!wasAdded)
       {
         games.remove(aGame);
@@ -111,13 +142,13 @@ public class Console
 
     int oldIndex = games.indexOf(aGame);
     games.remove(oldIndex);
-    if (aGame.indexOfConsole(this) == -1)
+    if (aGame.indexOfPromotion(this) == -1)
     {
       wasRemoved = true;
     }
     else
     {
-      wasRemoved = aGame.removeConsole(this);
+      wasRemoved = aGame.removePromotion(this);
       if (!wasRemoved)
       {
         games.add(oldIndex,aGame);
@@ -164,7 +195,7 @@ public class Console
     games.clear();
     for(Game aGame : copyOfGames)
     {
-      aGame.removeConsole(this);
+      aGame.removePromotion(this);
     }
   }
 
@@ -172,6 +203,8 @@ public class Console
   public String toString()
   {
     return super.toString() + "["+
-            "console" + ":" + getConsole()+ "]";
+            "percentage" + ":" + getPercentage()+ "]" + System.getProperties().getProperty("line.separator") +
+            "  " + "startDate" + "=" + (getStartDate() != null ? !getStartDate().equals(this)  ? getStartDate().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
+            "  " + "endDate" + "=" + (getEndDate() != null ? !getEndDate().equals(this)  ? getEndDate().toString().replaceAll("  ","    ") : "this" : "null");
   }
 }

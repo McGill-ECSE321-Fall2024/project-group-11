@@ -3,29 +3,29 @@
 
 
 
-// line 34 "model.ump"
-// line 213 "model.ump"
-public class GameStatus
+// line 100 "model.ump"
+// line 210 "model.ump"
+public class ReviewRating
 {
 
   //------------------------
   // ENUMERATIONS
   //------------------------
 
-  public enum Status { InStock, OutOfStock, Archived }
+  public enum Status { Like, Dislike }
 
   //------------------------
   // MEMBER VARIABLES
   //------------------------
 
-  //GameStatus Attributes
+  //ReviewRating Attributes
   private Status status;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public GameStatus(Status aStatus)
+  public ReviewRating(Status aStatus)
   {
     status = aStatus;
   }
