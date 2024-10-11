@@ -31,6 +31,8 @@ The application must support these functionalities via a web frontend, ensuring 
 
 # Deliverable 1: Requirements, Domain Model, and Database Design
 
+You can see the Deliverable Report in the wiki folder under deliverables
+
 This deliverable includes:
 - requirements selection (functional and non-functional system requirements).
 - Use case diagrams and detailed specifications for six use cases.
