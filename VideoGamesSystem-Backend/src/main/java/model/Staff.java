@@ -4,7 +4,7 @@
 
 
 // line 29 "model.ump"
-// line 200 "model.ump"
+// line 201 "model.ump"
 public abstract class Staff extends Account
 {
 

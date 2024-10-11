@@ -234,9 +234,9 @@ public class Customer extends Account
     return 0;
   }
   /* Code from template association_AddManyToOne */
-  public Order addOrder(int aNumber, Date aDate, SpecificGame... allSpecificGames)
+  public Order addOrder(int aNumber, Date aDate)
   {
-    return new Order(aNumber, aDate, this, allSpecificGames);
+    return new Order(aNumber, aDate, this);
   }
 
   public boolean addOrder(Order aOrder)
@@ -393,13 +393,13 @@ public class Customer extends Account
     boolean wasAdded = false;
     if (cart.contains(aCart)) { return false; }
     cart.add(aCart);
-    if (aCart.indexOfCustomer(this) != -1)
+    if (aCart.indexOfCart(this) != -1)
     {
       wasAdded = true;
     }
     else
     {
-      wasAdded = aCart.addCustomer(this);
+      wasAdded = aCart.addCart(this);
       if (!wasAdded)
       {
         cart.remove(aCart);
@@ -418,13 +418,13 @@ public class Customer extends Account
 
     int oldIndex = cart.indexOf(aCart);
     cart.remove(oldIndex);
-    if (aCart.indexOfCustomer(this) == -1)
+    if (aCart.indexOfCart(this) == -1)
     {
       wasRemoved = true;
     }
     else
     {
-      wasRemoved = aCart.removeCustomer(this);
+      wasRemoved = aCart.removeCart(this);
       if (!wasRemoved)
       {
         cart.add(oldIndex,aCart);
@@ -491,7 +491,7 @@ public class Customer extends Account
     cart.clear();
     for(Game aCart : copyOfCart)
     {
-      aCart.removeCustomer(this);
+      aCart.removeCart(this);
     }
     super.delete();
   }

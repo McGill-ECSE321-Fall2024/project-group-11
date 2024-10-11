@@ -26,7 +26,7 @@ public class Game
   private List<Promotion> promotions;
   private List<SpecificGame> specificgame;
   private List<Customer> wishlist;
-  private List<Customer> customers;
+  private List<Customer> cart;
   private List<Category> categories;
   private List<Console> consoles;
 
@@ -46,7 +46,7 @@ public class Game
     promotions = new ArrayList<Promotion>();
     specificgame = new ArrayList<SpecificGame>();
     wishlist = new ArrayList<Customer>();
-    customers = new ArrayList<Customer>();
+    cart = new ArrayList<Customer>();
     categories = new ArrayList<Category>();
     boolean didAddCategories = setCategories(allCategories);
     if (!didAddCategories)
@@ -258,33 +258,33 @@ public class Game
     return index;
   }
   /* Code from template association_GetMany */
-  public Customer getCustomer(int index)
+  public Customer getCart(int index)
   {
-    Customer aCustomer = customers.get(index);
-    return aCustomer;
+    Customer aCart = cart.get(index);
+    return aCart;
   }
 
-  public List<Customer> getCustomers()
+  public List<Customer> getCart()
   {
-    List<Customer> newCustomers = Collections.unmodifiableList(customers);
-    return newCustomers;
+    List<Customer> newCart = Collections.unmodifiableList(cart);
+    return newCart;
   }
 
-  public int numberOfCustomers()
+  public int numberOfCart()
   {
-    int number = customers.size();
+    int number = cart.size();
     return number;
   }
 
-  public boolean hasCustomers()
+  public boolean hasCart()
   {
-    boolean has = customers.size() > 0;
+    boolean has = cart.size() > 0;
     return has;
   }
 
-  public int indexOfCustomer(Customer aCustomer)
+  public int indexOfCart(Customer aCart)
   {
-    int index = customers.indexOf(aCustomer);
+    int index = cart.indexOf(aCart);
     return index;
   }
   /* Code from template association_GetMany */
@@ -656,84 +656,84 @@ public class Game
     return wasAdded;
   }
   /* Code from template association_MinimumNumberOfMethod */
-  public static int minimumNumberOfCustomers()
+  public static int minimumNumberOfCart()
   {
     return 0;
   }
   /* Code from template association_AddManyToManyMethod */
-  public boolean addCustomer(Customer aCustomer)
+  public boolean addCart(Customer aCart)
   {
     boolean wasAdded = false;
-    if (customers.contains(aCustomer)) { return false; }
-    customers.add(aCustomer);
-    if (aCustomer.indexOfCart(this) != -1)
+    if (cart.contains(aCart)) { return false; }
+    cart.add(aCart);
+    if (aCart.indexOfCart(this) != -1)
     {
       wasAdded = true;
     }
     else
     {
-      wasAdded = aCustomer.addCart(this);
+      wasAdded = aCart.addCart(this);
       if (!wasAdded)
       {
-        customers.remove(aCustomer);
+        cart.remove(aCart);
       }
     }
     return wasAdded;
   }
   /* Code from template association_RemoveMany */
-  public boolean removeCustomer(Customer aCustomer)
+  public boolean removeCart(Customer aCart)
   {
     boolean wasRemoved = false;
-    if (!customers.contains(aCustomer))
+    if (!cart.contains(aCart))
     {
       return wasRemoved;
     }
 
-    int oldIndex = customers.indexOf(aCustomer);
-    customers.remove(oldIndex);
-    if (aCustomer.indexOfCart(this) == -1)
+    int oldIndex = cart.indexOf(aCart);
+    cart.remove(oldIndex);
+    if (aCart.indexOfCart(this) == -1)
     {
       wasRemoved = true;
     }
     else
     {
-      wasRemoved = aCustomer.removeCart(this);
+      wasRemoved = aCart.removeCart(this);
       if (!wasRemoved)
       {
-        customers.add(oldIndex,aCustomer);
+        cart.add(oldIndex,aCart);
       }
     }
     return wasRemoved;
   }
   /* Code from template association_AddIndexControlFunctions */
-  public boolean addCustomerAt(Customer aCustomer, int index)
+  public boolean addCartAt(Customer aCart, int index)
   {  
     boolean wasAdded = false;
-    if(addCustomer(aCustomer))
+    if(addCart(aCart))
     {
       if(index < 0 ) { index = 0; }
-      if(index > numberOfCustomers()) { index = numberOfCustomers() - 1; }
-      customers.remove(aCustomer);
-      customers.add(index, aCustomer);
+      if(index > numberOfCart()) { index = numberOfCart() - 1; }
+      cart.remove(aCart);
+      cart.add(index, aCart);
       wasAdded = true;
     }
     return wasAdded;
   }
 
-  public boolean addOrMoveCustomerAt(Customer aCustomer, int index)
+  public boolean addOrMoveCartAt(Customer aCart, int index)
   {
     boolean wasAdded = false;
-    if(customers.contains(aCustomer))
+    if(cart.contains(aCart))
     {
       if(index < 0 ) { index = 0; }
-      if(index > numberOfCustomers()) { index = numberOfCustomers() - 1; }
-      customers.remove(aCustomer);
-      customers.add(index, aCustomer);
+      if(index > numberOfCart()) { index = numberOfCart() - 1; }
+      cart.remove(aCart);
+      cart.add(index, aCart);
       wasAdded = true;
     } 
     else 
     {
-      wasAdded = addCustomerAt(aCustomer, index);
+      wasAdded = addCartAt(aCart, index);
     }
     return wasAdded;
   }
@@ -982,11 +982,11 @@ public class Game
     {
       aWishlist.removeWishlist(this);
     }
-    ArrayList<Customer> copyOfCustomers = new ArrayList<Customer>(customers);
-    customers.clear();
-    for(Customer aCustomer : copyOfCustomers)
+    ArrayList<Customer> copyOfCart = new ArrayList<Customer>(cart);
+    cart.clear();
+    for(Customer aCart : copyOfCart)
     {
-      aCustomer.removeCart(this);
+      aCart.removeCart(this);
     }
     ArrayList<Category> copyOfCategories = new ArrayList<Category>(categories);
     categories.clear();

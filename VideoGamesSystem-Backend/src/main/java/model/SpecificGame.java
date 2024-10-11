@@ -2,7 +2,6 @@
 /*This code was generated using the UMPLE 1.35.0.7523.c616a4dce modeling language!*/
 
 
-import java.util.*;
 
 // line 68 "model.ump"
 // line 160 "model.ump"
@@ -18,7 +17,7 @@ public class SpecificGame
 
   //SpecificGame Associations
   private Game game;
-  private List<Order> orders;
+  private Order order;
 
   //------------------------
   // CONSTRUCTOR
@@ -32,7 +31,6 @@ public class SpecificGame
     {
       throw new RuntimeException("Unable to create specificgame due to game. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
     }
-    orders = new ArrayList<Order>();
   }
 
   //------------------------
@@ -56,35 +54,16 @@ public class SpecificGame
   {
     return game;
   }
-  /* Code from template association_GetMany */
-  public Order getOrder(int index)
+  /* Code from template association_GetOne */
+  public Order getOrder()
   {
-    Order aOrder = orders.get(index);
-    return aOrder;
+    return order;
   }
 
-  public List<Order> getOrders()
+  public boolean hasOrder()
   {
-    List<Order> newOrders = Collections.unmodifiableList(orders);
-    return newOrders;
-  }
-
-  public int numberOfOrders()
-  {
-    int number = orders.size();
-    return number;
-  }
-
-  public boolean hasOrders()
-  {
-    boolean has = orders.size() > 0;
+    boolean has = order != null;
     return has;
-  }
-
-  public int indexOfOrder(Order aOrder)
-  {
-    int index = orders.indexOf(aOrder);
-    return index;
   }
   /* Code from template association_SetOneToMany */
   public boolean setGame(Game aGame)
@@ -105,87 +84,22 @@ public class SpecificGame
     wasSet = true;
     return wasSet;
   }
-  /* Code from template association_MinimumNumberOfMethod */
-  public static int minimumNumberOfOrders()
+  /* Code from template association_SetOptionalOneToMany */
+  public boolean setOrder(Order aOrder)
   {
-    return 0;
-  }
-  /* Code from template association_AddManyToManyMethod */
-  public boolean addOrder(Order aOrder)
-  {
-    boolean wasAdded = false;
-    if (orders.contains(aOrder)) { return false; }
-    orders.add(aOrder);
-    if (aOrder.indexOfSpecificGame(this) != -1)
+    boolean wasSet = false;
+    Order existingOrder = order;
+    order = aOrder;
+    if (existingOrder != null && !existingOrder.equals(aOrder))
     {
-      wasAdded = true;
+      existingOrder.removeSpecificGame(this);
     }
-    else
+    if (aOrder != null)
     {
-      wasAdded = aOrder.addSpecificGame(this);
-      if (!wasAdded)
-      {
-        orders.remove(aOrder);
-      }
+      aOrder.addSpecificGame(this);
     }
-    return wasAdded;
-  }
-  /* Code from template association_RemoveMany */
-  public boolean removeOrder(Order aOrder)
-  {
-    boolean wasRemoved = false;
-    if (!orders.contains(aOrder))
-    {
-      return wasRemoved;
-    }
-
-    int oldIndex = orders.indexOf(aOrder);
-    orders.remove(oldIndex);
-    if (aOrder.indexOfSpecificGame(this) == -1)
-    {
-      wasRemoved = true;
-    }
-    else
-    {
-      wasRemoved = aOrder.removeSpecificGame(this);
-      if (!wasRemoved)
-      {
-        orders.add(oldIndex,aOrder);
-      }
-    }
-    return wasRemoved;
-  }
-  /* Code from template association_AddIndexControlFunctions */
-  public boolean addOrderAt(Order aOrder, int index)
-  {  
-    boolean wasAdded = false;
-    if(addOrder(aOrder))
-    {
-      if(index < 0 ) { index = 0; }
-      if(index > numberOfOrders()) { index = numberOfOrders() - 1; }
-      orders.remove(aOrder);
-      orders.add(index, aOrder);
-      wasAdded = true;
-    }
-    return wasAdded;
-  }
-
-  public boolean addOrMoveOrderAt(Order aOrder, int index)
-  {
-    boolean wasAdded = false;
-    if(orders.contains(aOrder))
-    {
-      if(index < 0 ) { index = 0; }
-      if(index > numberOfOrders()) { index = numberOfOrders() - 1; }
-      orders.remove(aOrder);
-      orders.add(index, aOrder);
-      wasAdded = true;
-    } 
-    else 
-    {
-      wasAdded = addOrderAt(aOrder, index);
-    }
-    return wasAdded;
+    wasSet = true;
+    return wasSet;
   }
 
   public void delete()
@@ -196,18 +110,11 @@ public class SpecificGame
     {
       placeholderGame.removeSpecificgame(this);
     }
-    ArrayList<Order> copyOfOrders = new ArrayList<Order>(orders);
-    orders.clear();
-    for(Order aOrder : copyOfOrders)
+    if (order != null)
     {
-      if (aOrder.numberOfSpecificGames() <= Order.minimumNumberOfSpecificGames())
-      {
-        aOrder.delete();
-      }
-      else
-      {
-        aOrder.removeSpecificGame(this);
-      }
+      Order placeholderOrder = order;
+      this.order = null;
+      placeholderOrder.removeSpecificGame(this);
     }
   }
 
@@ -216,6 +123,7 @@ public class SpecificGame
   {
     return super.toString() + "["+
             "serialNumber" + ":" + getSerialNumber()+ "]" + System.getProperties().getProperty("line.separator") +
-            "  " + "game = "+(getGame()!=null?Integer.toHexString(System.identityHashCode(getGame())):"null");
+            "  " + "game = "+(getGame()!=null?Integer.toHexString(System.identityHashCode(getGame())):"null") + System.getProperties().getProperty("line.separator") +
+            "  " + "order = "+(getOrder()!=null?Integer.toHexString(System.identityHashCode(getOrder())):"null");
   }
 }

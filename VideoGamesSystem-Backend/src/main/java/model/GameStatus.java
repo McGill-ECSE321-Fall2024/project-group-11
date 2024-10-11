@@ -4,7 +4,7 @@
 
 
 // line 36 "model.ump"
-// line 205 "model.ump"
+// line 206 "model.ump"
 public class GameStatus
 {
 

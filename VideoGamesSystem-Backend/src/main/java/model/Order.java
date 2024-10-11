@@ -26,16 +26,11 @@ public class Order
   // CONSTRUCTOR
   //------------------------
 
-  public Order(int aNumber, Date aDate, Customer aCustomer, SpecificGame... allSpecificGames)
+  public Order(int aNumber, Date aDate, Customer aCustomer)
   {
     number = aNumber;
     date = aDate;
     specificGames = new ArrayList<SpecificGame>();
-    boolean didAddSpecificGames = setSpecificGames(allSpecificGames);
-    if (!didAddSpecificGames)
-    {
-      throw new RuntimeException("Unable to create Order, must have at least 1 specificGames. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-    }
     boolean didAddCustomer = setCustomer(aCustomer);
     if (!didAddCustomer)
     {
@@ -107,107 +102,44 @@ public class Order
   {
     return customer;
   }
-  /* Code from template association_IsNumberOfValidMethod */
-  public boolean isNumberOfSpecificGamesValid()
-  {
-    boolean isValid = numberOfSpecificGames() >= minimumNumberOfSpecificGames();
-    return isValid;
-  }
   /* Code from template association_MinimumNumberOfMethod */
   public static int minimumNumberOfSpecificGames()
   {
-    return 1;
+    return 0;
   }
-  /* Code from template association_AddManyToManyMethod */
+  /* Code from template association_AddManyToOptionalOne */
   public boolean addSpecificGame(SpecificGame aSpecificGame)
   {
     boolean wasAdded = false;
     if (specificGames.contains(aSpecificGame)) { return false; }
-    specificGames.add(aSpecificGame);
-    if (aSpecificGame.indexOfOrder(this) != -1)
+    Order existingOrder = aSpecificGame.getOrder();
+    if (existingOrder == null)
     {
-      wasAdded = true;
+      aSpecificGame.setOrder(this);
+    }
+    else if (!this.equals(existingOrder))
+    {
+      existingOrder.removeSpecificGame(aSpecificGame);
+      addSpecificGame(aSpecificGame);
     }
     else
     {
-      wasAdded = aSpecificGame.addOrder(this);
-      if (!wasAdded)
-      {
-        specificGames.remove(aSpecificGame);
-      }
+      specificGames.add(aSpecificGame);
     }
+    wasAdded = true;
     return wasAdded;
   }
-  /* Code from template association_AddMStarToMany */
+
   public boolean removeSpecificGame(SpecificGame aSpecificGame)
   {
     boolean wasRemoved = false;
-    if (!specificGames.contains(aSpecificGame))
+    if (specificGames.contains(aSpecificGame))
     {
-      return wasRemoved;
-    }
-
-    if (numberOfSpecificGames() <= minimumNumberOfSpecificGames())
-    {
-      return wasRemoved;
-    }
-
-    int oldIndex = specificGames.indexOf(aSpecificGame);
-    specificGames.remove(oldIndex);
-    if (aSpecificGame.indexOfOrder(this) == -1)
-    {
+      specificGames.remove(aSpecificGame);
+      aSpecificGame.setOrder(null);
       wasRemoved = true;
     }
-    else
-    {
-      wasRemoved = aSpecificGame.removeOrder(this);
-      if (!wasRemoved)
-      {
-        specificGames.add(oldIndex,aSpecificGame);
-      }
-    }
     return wasRemoved;
-  }
-  /* Code from template association_SetMStarToMany */
-  public boolean setSpecificGames(SpecificGame... newSpecificGames)
-  {
-    boolean wasSet = false;
-    ArrayList<SpecificGame> verifiedSpecificGames = new ArrayList<SpecificGame>();
-    for (SpecificGame aSpecificGame : newSpecificGames)
-    {
-      if (verifiedSpecificGames.contains(aSpecificGame))
-      {
-        continue;
-      }
-      verifiedSpecificGames.add(aSpecificGame);
-    }
-
-    if (verifiedSpecificGames.size() != newSpecificGames.length || verifiedSpecificGames.size() < minimumNumberOfSpecificGames())
-    {
-      return wasSet;
-    }
-
-    ArrayList<SpecificGame> oldSpecificGames = new ArrayList<SpecificGame>(specificGames);
-    specificGames.clear();
-    for (SpecificGame aNewSpecificGame : verifiedSpecificGames)
-    {
-      specificGames.add(aNewSpecificGame);
-      if (oldSpecificGames.contains(aNewSpecificGame))
-      {
-        oldSpecificGames.remove(aNewSpecificGame);
-      }
-      else
-      {
-        aNewSpecificGame.addOrder(this);
-      }
-    }
-
-    for (SpecificGame anOldSpecificGame : oldSpecificGames)
-    {
-      anOldSpecificGame.removeOrder(this);
-    }
-    wasSet = true;
-    return wasSet;
   }
   /* Code from template association_AddIndexControlFunctions */
   public boolean addSpecificGameAt(SpecificGame aSpecificGame, int index)
@@ -263,11 +195,9 @@ public class Order
 
   public void delete()
   {
-    ArrayList<SpecificGame> copyOfSpecificGames = new ArrayList<SpecificGame>(specificGames);
-    specificGames.clear();
-    for(SpecificGame aSpecificGame : copyOfSpecificGames)
+    while( !specificGames.isEmpty() )
     {
-      aSpecificGame.removeOrder(this);
+      specificGames.get(0).setOrder(null);
     }
     Customer placeholderCustomer = customer;
     this.customer = null;
