@@ -43,12 +43,12 @@ This deliverable includes:
 ## Team Members and Roles
 
 | Name            | Role                 | Hours                            | Contribution|
-|-----------------|----------------------|----------------------------------|              |
-| Emile Labrunie   | Project Manager, uses Cases Designer  | 16hours                        |                 |
-|  Paolo Lahoud| Requirements and UML diagram | 20 hours                        |               |
+|-----------------|----------------------|----------------------------------|----------------------------------|
+| Emile Labrunie   | Project Manager, uses Cases Designer  | 16hours  | Manage Wiki pages, manage table of contents, keep track of, update, and type out meeting minutes, create issues for deliverable 1did the use cases and one use case Specification ( mention which one) |
+|  Paolo Lahoud| Requirements and UML diagram | 20 hours | Create & manage Domain Model,create persistence layer , add JPA annotations, create CRUD & update CRUD repository, create JUnit tests for persistence layer, create issues for deliverable 1, comment CRUD and persistence.             |
 | Rami El Nawam | Database Designer    | 17 hours                         |               |
-| Jeffrey Nahas  |  Build System Lead     | 18 hours                         |                |
-|  Yanzhe Zhang|Test Developer      | 17 hours                         |              |
+| Jeffrey Nahas  |  Build System Lead     | 18 hours                         | Schedule meetings, prepare meeting agendas, deliver project timeline, create & manage Wiki pages, create & manage meeting minutes, create & manage table of contents, , create Agile board,  create issues for deliverable 1, technical writing for requirements, translate requirements to issues, create this deliverable 1                |
+|  Yanzhe Zhang|Test Developer      | 17 hours                         |  Assist writing test cases and one use case diagram           |
 
 Each team member contributed to the project through their assigned roles, ensuring that all tasks for Deliverable 1 were completed efficiently and on time.
 
