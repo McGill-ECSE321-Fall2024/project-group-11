@@ -8,11 +8,11 @@ Welcome to our ECSE 321 Project repository! This project focuses on developing a
 
 | Name            | GitHub Name                                       | Major                  | Year |
 |-----------------|---------------------------------------------------|------------------------|------|
-| Emile Labrunie |     | Computer Engineering   | U2   |
-| Paolo Lahoud |            | Software Enineering             | U2   |
-| Rami El Nawam    |     | Software Enineering | U2   |
-| Jeffrey Nahas  | | Software Engineering   | U2   |
-| Yanzhe Zhang|   | Software Engineering   | U2   |
+| Emile Labrunie |     E10o0 (https://github.com/E10o0)| Computer Engineering   | U2   |
+| Paolo Lahoud |    Gommo203 (https://github.com/Gommo203)        | Software Enineering             | U2   |
+| Rami El Nawam    |  Rami EL-Nawam (https://github.com/RamiNawam)   | Software Enineering | U2   |
+| Jeffrey Nahas  | JeffreyNahas (https://github.com/JeffreyNahas) | Software Engineering   | U2   |
+| Yanzhe Zhang| yanzhehw (https://github.com/yanzhehw) | Software Engineering   | U2   |
 
 
 # Main Scope of the Project
@@ -27,26 +27,28 @@ Key functionalities include:
 
 The application must support these functionalities via a web frontend, ensuring accessibility for all stakeholders. No external system integrations are required. 
 
+## DELIVERABLES:
+
 # Deliverable 1: Requirements, Domain Model, and Database Design
 
 This deliverable includes:
-- A requirements model (functional and non-functional system requirements).
-- Use case diagrams and detailed specifications for the top six use cases.
+- requirements selection (functional and non-functional system requirements).
+- Use case diagrams and detailed specifications for six use cases.
 - A domain model represented through UML class diagrams.
-- A PostgreSQL-based persistence layer implemented with Hibernate.
+- A PostgreSQL-based persistence layer implemented.
 - A test suite validating read/write operations for each class of the domain model.
 - A build system automating the compilation and testing processes.
 - Documentation of team meetings and design decisions in the project wiki.
 
 ## Team Members and Roles
 
-| Name            | Role                 | Effort (hours) for Deliverable 1 |
-|-----------------|----------------------|----------------------------------|
-| Emile Labrunie   | Project Manager      | 12 hours                        |
-| Mathieu Godbout  | Requirements Analyst | 10 hours                        |
-| [Other Member 1] | Database Designer    | 8 hours                         |
-| [Other Member 2] | Test Developer       | 9 hours                         |
-| [Other Member 3] | Build System Lead    | 7 hours                         |
+| Name            | Role                 | Hours                            | Contribution|
+|-----------------|----------------------|----------------------------------|              |
+| Emile Labrunie   | Project Manager, uses Cases Designer  | 16hours                        |                 |
+|  Paolo Lahoud| Requirements and UML diagram | 20 hours                        |               |
+| Rami El Nawam | Database Designer    | 17 hours                         |               |
+| Jeffrey Nahas  |  Build System Lead     | 18 hours                         |                |
+|  Yanzhe Zhang|Test Developer      | 17 hours                         |              |
 
 Each team member contributed to the project through their assigned roles, ensuring that all tasks for Deliverable 1 were completed efficiently and on time.
 
