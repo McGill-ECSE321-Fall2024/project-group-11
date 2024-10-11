@@ -6,9 +6,11 @@ import java.sql.Date;
 
 // line 81 "model.ump"
 // line 148 "model.ump"
+@Entity
 public class Reply
 {
-
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   //------------------------
   // MEMBER VARIABLES
   //------------------------
@@ -18,6 +20,7 @@ public class Reply
   private Date replyDate;
 
   //Reply Associations
+  @OneToOne
   private Review review;
 
   //------------------------

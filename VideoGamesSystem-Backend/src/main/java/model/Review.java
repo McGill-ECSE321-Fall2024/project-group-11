@@ -7,9 +7,11 @@ import java.sql.Date;
 
 // line 89 "model.ump"
 // line 140 "model.ump"
+@Entity
 public class Review
 {
-
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   //------------------------
   // MEMBER VARIABLES
   //------------------------
@@ -19,8 +21,11 @@ public class Review
   private String content;
 
   //Review Associations
+  @OneToMany
   private List<Reply> reply;
+  @OneToOne
   private Customer customer;
+  @OneToOne
   private Game game;
 
   //------------------------

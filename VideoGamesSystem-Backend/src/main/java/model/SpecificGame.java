@@ -7,6 +7,8 @@
 // line 160 "model.ump"
 public class SpecificGame
 {
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
 
   //------------------------
   // MEMBER VARIABLES
@@ -16,7 +18,9 @@ public class SpecificGame
   private int serialNumber;
 
   //SpecificGame Associations
+  @OneToOne
   private Game game;
+  @OneToOne
   private Order order;
 
   //------------------------

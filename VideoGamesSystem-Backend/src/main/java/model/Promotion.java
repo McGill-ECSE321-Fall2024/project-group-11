@@ -7,9 +7,11 @@ import java.util.*;
 
 // line 111 "model.ump"
 // line 172 "model.ump"
+@Entity
 public class Promotion
 {
-
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   //------------------------
   // MEMBER VARIABLES
   //------------------------
@@ -20,6 +22,7 @@ public class Promotion
   private Date endDate;
 
   //Promotion Associations
+  @OneToMany
   private List<Game> games;
 
   //------------------------

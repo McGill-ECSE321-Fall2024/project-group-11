@@ -7,8 +7,11 @@ import java.util.*;
 
 // line 61 "model.ump"
 // line 154 "model.ump"
+@Entity
 public class Order
 {
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
 
   //------------------------
   // MEMBER VARIABLES
@@ -19,7 +22,9 @@ public class Order
   private Date date;
 
   //Order Associations
+  @OneToMany
   private List<SpecificGame> specificGames;
+  @OneToOne
   private Customer customer;
 
   //------------------------

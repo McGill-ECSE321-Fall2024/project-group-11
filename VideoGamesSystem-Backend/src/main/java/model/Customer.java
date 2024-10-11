@@ -7,17 +7,26 @@ import java.sql.Date;
 
 // line 2 "model.ump"
 // line 178 "model.ump"
+
+@Entity
+@DiscriminatorValue("Customer")
 public class Customer extends Account
 {
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
 
   //------------------------
   // MEMBER VARIABLES
   //------------------------
 
   //Customer Associations
+  @OneToMany
   private List<Review> review;
+  @OneToMany
   private List<Order> order;
+  @OneToMany
   private List<Game> wishlist;
+  @OneToMany
   private List<Game> cart;
 
   //------------------------

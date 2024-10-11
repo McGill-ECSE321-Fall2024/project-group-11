@@ -8,6 +8,8 @@ import java.util.*;
 // line 216 "model.ump"
 public class Console
 {
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
 
   //------------------------
   // MEMBER VARIABLES
@@ -16,6 +18,7 @@ public class Console
   //Console Attributes
   private String console;
 
+  @OneToMany
   //Console Associations
   private List<Game> games;
 

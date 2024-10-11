@@ -5,9 +5,13 @@
 
 // line 29 "model.ump"
 // line 201 "model.ump"
+
+@Entity
+@DiscriminatorValue("Staff")
 public abstract class Staff extends Account
 {
-
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   //------------------------
   // MEMBER VARIABLES
   //------------------------

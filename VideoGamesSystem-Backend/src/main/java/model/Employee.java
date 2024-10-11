@@ -5,8 +5,12 @@
 
 // line 12 "model.ump"
 // line 191 "model.ump"
-public class Employer extends Staff
+@Entity
+@DiscriminatorValue("Employee")
+public class Employee extends Staff
 {
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
 
   //------------------------
   // MEMBER VARIABLES
@@ -16,7 +20,7 @@ public class Employer extends Staff
   // CONSTRUCTOR
   //------------------------
 
-  public Employer(String aUserName, int aIdNum)
+  public Employee(String aUserName, int aIdNum)
   {
     super(aUserName, aIdNum);
   }

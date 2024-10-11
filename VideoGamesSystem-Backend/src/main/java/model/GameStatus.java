@@ -24,7 +24,7 @@ public class GameStatus
   //------------------------
   // CONSTRUCTOR
   //------------------------
-
+  
   public GameStatus(Status aStatus)
   {
     status = aStatus;

@@ -1,14 +1,13 @@
 /*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.35.0.7523.c616a4dce modeling language!*/
 
-
 import java.util.*;
-
 // line 74 "model.ump"
 // line 134 "model.ump"
 public class Category
 {
-
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   //------------------------
   // MEMBER VARIABLES
   //------------------------
@@ -17,6 +16,7 @@ public class Category
   private String category;
 
   //Category Associations
+  @OneToMany
   private List<Game> games;
 
   //------------------------
