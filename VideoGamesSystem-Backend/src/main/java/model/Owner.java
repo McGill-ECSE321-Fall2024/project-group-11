@@ -3,8 +3,8 @@
 
 
 
-// line 15 "model.ump"
-// line 203 "model.ump"
+// line 17 "model.ump"
+// line 196 "model.ump"
 public class Owner extends Staff
 {
 

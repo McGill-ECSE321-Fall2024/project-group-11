@@ -3,8 +3,8 @@
 
 
 
-// line 10 "model.ump"
-// line 198 "model.ump"
+// line 12 "model.ump"
+// line 191 "model.ump"
 public class Employer extends Staff
 {
 

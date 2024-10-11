@@ -3,51 +3,54 @@
 
 
 
-// line 20 "model.ump"
-// line 178 "model.ump"
-public abstract class Account
+// line 29 "model.ump"
+// line 201 "model.ump"
+public abstract class Staff extends Account
 {
 
   //------------------------
   // MEMBER VARIABLES
   //------------------------
 
-  //Account Attributes
-  private String userName;
+  //Staff Attributes
+  private int idNum;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public Account(String aUserName)
+  public Staff(String aUserName, int aIdNum)
   {
-    userName = aUserName;
+    super(aUserName);
+    idNum = aIdNum;
   }
 
   //------------------------
   // INTERFACE
   //------------------------
 
-  public boolean setUserName(String aUserName)
+  public boolean setIdNum(int aIdNum)
   {
     boolean wasSet = false;
-    userName = aUserName;
+    idNum = aIdNum;
     wasSet = true;
     return wasSet;
   }
 
-  public String getUserName()
+  public int getIdNum()
   {
-    return userName;
+    return idNum;
   }
 
   public void delete()
-  {}
+  {
+    super.delete();
+  }
 
 
   public String toString()
   {
     return super.toString() + "["+
-            "userName" + ":" + getUserName()+ "]";
+            "idNum" + ":" + getIdNum()+ "]";
   }
 }

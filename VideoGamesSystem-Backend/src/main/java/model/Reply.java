@@ -4,8 +4,8 @@
 
 import java.sql.Date;
 
-// line 87 "model.ump"
-// line 160 "model.ump"
+// line 81 "model.ump"
+// line 148 "model.ump"
 public class Reply
 {
 
