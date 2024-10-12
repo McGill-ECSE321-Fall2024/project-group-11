@@ -1,3 +1,57 @@
 # project-group-11
-This project if for selling games yes
-line2
+
+Team Introduction
+
+Welcome to our ECSE 321 Project repository! This project focuses on developing a system in compliance with software engineering principles, covering requirements, domain modeling, database design, and more. Our team is dedicated to implementing a solution following best practices in agile project management and ensuring the quality of the system through testing, documentation, and collaboration.
+
+# Team Members:
+
+| Name            | GitHub Name                                       | Major                  | Year |
+|-----------------|---------------------------------------------------|------------------------|------|
+| Emile Labrunie |     E10o0 (https://github.com/E10o0)| Computer Engineering   | U2   |
+| Paolo Lahoud |    Gommo203 (https://github.com/Gommo203)        | Software Enineering             | U2   |
+| Rami El Nawam    |  Rami EL-Nawam (https://github.com/RamiNawam)   | Software Enineering | U2   |
+| Jeffrey Nahas  | JeffreyNahas (https://github.com/JeffreyNahas) | Software Engineering   | U2   |
+| Yanzhe Zhang| yanzhehw (https://github.com/yanzhehw) | Software Engineering   | U2   |
+
+
+# Main Scope of the Project
+
+The owner of an independent game shop wants to expand their business with an online store. Our task is to develop a web application that allows the owner and employees to manage the product catalog, inventory, and customer orders. The system should also provide a user-friendly interface for customers to browse and purchase games online. 
+
+Key functionalities include:
+- Store staff can manage the inventory, add new games, and remove games.
+- The owner can approve new games before they are published.
+- Customers can create accounts, purchase games, track order history, save items to a wish list, and post reviews.
+- The owner requires an administrative dashboard for managing employees, game categories, reviewing customer orders, and replying to reviews.
+
+The application must support these functionalities via a web frontend, ensuring accessibility for all stakeholders. No external system integrations are required. 
+
+## DELIVERABLES:
+
+# Deliverable 1: Requirements, Domain Model, and Database Design
+
+You can see the Deliverable Report in the wiki folder under deliverables
+
+This deliverable includes:
+- requirements selection (functional and non-functional system requirements).
+- Use case diagrams and detailed specifications for six use cases.
+- A domain model represented through UML class diagrams.
+- A PostgreSQL-based persistence layer implemented.
+- A test suite validating read/write operations for each class of the domain model.
+- A build system automating the compilation and testing processes.
+- Documentation of team meetings and design decisions in the project wiki.
+
+## Team Members and Roles
+
+| Name            | Role                 | Hours                            | Contribution|
+|-----------------|----------------------|----------------------------------|----------------------------------|
+| Emile Labrunie   | Project Manager, uses Cases Designer  | 16hours  | Manage Wiki pages, manage table of contents, keep track of, update, and type out meeting minutes, create issues for deliverable 1did the use cases and one use case Specification ( mention which one) |
+|  Paolo Lahoud| Requirements and UML diagram | 20 hours | Create & manage Domain Model,create persistence layer , add JPA annotations, create CRUD & update CRUD repository, create JUnit tests for persistence layer, create issues for deliverable 1, comment CRUD and persistence.             |
+| Rami El Nawam | Database Designer    | 17 hours                         |               |
+| Jeffrey Nahas  |  Build System Lead     | 18 hours                         | Schedule meetings, prepare meeting agendas, deliver project timeline, create & manage Wiki pages, create & manage meeting minutes, create & manage table of contents, , create Agile board,  create issues for deliverable 1, technical writing for requirements, translate requirements to issues, create this deliverable 1                |
+|  Yanzhe Zhang|Test Developer      | 17 hours                         |  Assist writing test cases and one use case diagram           |
+
+Each team member contributed to the project through their assigned roles, ensuring that all tasks for Deliverable 1 were completed efficiently and on time.
+
+
