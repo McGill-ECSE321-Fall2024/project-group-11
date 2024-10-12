@@ -5,7 +5,7 @@
 import java.util.*;
 
 // line 44 "model.ump"
-// line 122 "model.ump"
+// line 121 "model.ump"
 public class Game
 {
 
@@ -24,7 +24,7 @@ public class Game
   //Game Associations
   private List<Review> reviews;
   private List<Promotion> promotions;
-  private List<SpecificGame> specificgame;
+  private List<SpecificGame> specificGames;
   private List<Customer> wishlist;
   private List<Customer> cart;
   private List<Category> categories;
@@ -44,7 +44,7 @@ public class Game
     console = aConsole;
     reviews = new ArrayList<Review>();
     promotions = new ArrayList<Promotion>();
-    specificgame = new ArrayList<SpecificGame>();
+    specificGames = new ArrayList<SpecificGame>();
     wishlist = new ArrayList<Customer>();
     cart = new ArrayList<Customer>();
     categories = new ArrayList<Category>();
@@ -198,33 +198,33 @@ public class Game
     return index;
   }
   /* Code from template association_GetMany */
-  public SpecificGame getSpecificgame(int index)
+  public SpecificGame getSpecificGame(int index)
   {
-    SpecificGame aSpecificgame = specificgame.get(index);
-    return aSpecificgame;
+    SpecificGame aSpecificGame = specificGames.get(index);
+    return aSpecificGame;
   }
 
-  public List<SpecificGame> getSpecificgame()
+  public List<SpecificGame> getSpecificGames()
   {
-    List<SpecificGame> newSpecificgame = Collections.unmodifiableList(specificgame);
-    return newSpecificgame;
+    List<SpecificGame> newSpecificGames = Collections.unmodifiableList(specificGames);
+    return newSpecificGames;
   }
 
-  public int numberOfSpecificgame()
+  public int numberOfSpecificGames()
   {
-    int number = specificgame.size();
+    int number = specificGames.size();
     return number;
   }
 
-  public boolean hasSpecificgame()
+  public boolean hasSpecificGames()
   {
-    boolean has = specificgame.size() > 0;
+    boolean has = specificGames.size() > 0;
     return has;
   }
 
-  public int indexOfSpecificgame(SpecificGame aSpecificgame)
+  public int indexOfSpecificGame(SpecificGame aSpecificGame)
   {
-    int index = specificgame.indexOf(aSpecificgame);
+    int index = specificGames.indexOf(aSpecificGame);
     return index;
   }
   /* Code from template association_GetMany */
@@ -502,74 +502,74 @@ public class Game
     return wasAdded;
   }
   /* Code from template association_MinimumNumberOfMethod */
-  public static int minimumNumberOfSpecificgame()
+  public static int minimumNumberOfSpecificGames()
   {
     return 0;
   }
   /* Code from template association_AddManyToOne */
-  public SpecificGame addSpecificgame(int aSerialNumber)
+  public SpecificGame addSpecificGame(int aSerialNumber)
   {
     return new SpecificGame(aSerialNumber, this);
   }
 
-  public boolean addSpecificgame(SpecificGame aSpecificgame)
+  public boolean addSpecificGame(SpecificGame aSpecificGame)
   {
     boolean wasAdded = false;
-    if (specificgame.contains(aSpecificgame)) { return false; }
-    Game existingGame = aSpecificgame.getGame();
+    if (specificGames.contains(aSpecificGame)) { return false; }
+    Game existingGame = aSpecificGame.getGame();
     boolean isNewGame = existingGame != null && !this.equals(existingGame);
     if (isNewGame)
     {
-      aSpecificgame.setGame(this);
+      aSpecificGame.setGame(this);
     }
     else
     {
-      specificgame.add(aSpecificgame);
+      specificGames.add(aSpecificGame);
     }
     wasAdded = true;
     return wasAdded;
   }
 
-  public boolean removeSpecificgame(SpecificGame aSpecificgame)
+  public boolean removeSpecificGame(SpecificGame aSpecificGame)
   {
     boolean wasRemoved = false;
-    //Unable to remove aSpecificgame, as it must always have a game
-    if (!this.equals(aSpecificgame.getGame()))
+    //Unable to remove aSpecificGame, as it must always have a game
+    if (!this.equals(aSpecificGame.getGame()))
     {
-      specificgame.remove(aSpecificgame);
+      specificGames.remove(aSpecificGame);
       wasRemoved = true;
     }
     return wasRemoved;
   }
   /* Code from template association_AddIndexControlFunctions */
-  public boolean addSpecificgameAt(SpecificGame aSpecificgame, int index)
+  public boolean addSpecificGameAt(SpecificGame aSpecificGame, int index)
   {  
     boolean wasAdded = false;
-    if(addSpecificgame(aSpecificgame))
+    if(addSpecificGame(aSpecificGame))
     {
       if(index < 0 ) { index = 0; }
-      if(index > numberOfSpecificgame()) { index = numberOfSpecificgame() - 1; }
-      specificgame.remove(aSpecificgame);
-      specificgame.add(index, aSpecificgame);
+      if(index > numberOfSpecificGames()) { index = numberOfSpecificGames() - 1; }
+      specificGames.remove(aSpecificGame);
+      specificGames.add(index, aSpecificGame);
       wasAdded = true;
     }
     return wasAdded;
   }
 
-  public boolean addOrMoveSpecificgameAt(SpecificGame aSpecificgame, int index)
+  public boolean addOrMoveSpecificGameAt(SpecificGame aSpecificGame, int index)
   {
     boolean wasAdded = false;
-    if(specificgame.contains(aSpecificgame))
+    if(specificGames.contains(aSpecificGame))
     {
       if(index < 0 ) { index = 0; }
-      if(index > numberOfSpecificgame()) { index = numberOfSpecificgame() - 1; }
-      specificgame.remove(aSpecificgame);
-      specificgame.add(index, aSpecificgame);
+      if(index > numberOfSpecificGames()) { index = numberOfSpecificGames() - 1; }
+      specificGames.remove(aSpecificGame);
+      specificGames.add(index, aSpecificGame);
       wasAdded = true;
     } 
     else 
     {
-      wasAdded = addSpecificgameAt(aSpecificgame, index);
+      wasAdded = addSpecificGameAt(aSpecificGame, index);
     }
     return wasAdded;
   }
@@ -956,26 +956,22 @@ public class Game
 
   public void delete()
   {
-    while (reviews.size() > 0)
+    for(int i=reviews.size(); i > 0; i--)
     {
-      Review aReview = reviews.get(reviews.size() - 1);
+      Review aReview = reviews.get(i - 1);
       aReview.delete();
-      reviews.remove(aReview);
     }
-    
     ArrayList<Promotion> copyOfPromotions = new ArrayList<Promotion>(promotions);
     promotions.clear();
     for(Promotion aPromotion : copyOfPromotions)
     {
       aPromotion.removeGame(this);
     }
-    while (specificgame.size() > 0)
+    for(int i=specificGames.size(); i > 0; i--)
     {
-      SpecificGame aSpecificgame = specificgame.get(specificgame.size() - 1);
-      aSpecificgame.delete();
-      specificgame.remove(aSpecificgame);
+      SpecificGame aSpecificGame = specificGames.get(i - 1);
+      aSpecificGame.delete();
     }
-    
     ArrayList<Customer> copyOfWishlist = new ArrayList<Customer>(wishlist);
     wishlist.clear();
     for(Customer aWishlist : copyOfWishlist)

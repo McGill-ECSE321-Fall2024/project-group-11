@@ -5,7 +5,7 @@
 import java.util.*;
 import java.sql.Date;
 
-// line 89 "model.ump"
+// line 88 "model.ump"
 // line 140 "model.ump"
 public class Review
 {
@@ -226,13 +226,11 @@ public class Review
 
   public void delete()
   {
-    while (reply.size() > 0)
+    for(int i=reply.size(); i > 0; i--)
     {
-      Reply aReply = reply.get(reply.size() - 1);
+      Reply aReply = reply.get(i - 1);
       aReply.delete();
-      reply.remove(aReply);
     }
-    
     Customer placeholderCustomer = customer;
     this.customer = null;
     if(placeholderCustomer != null)

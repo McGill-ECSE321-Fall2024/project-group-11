@@ -3,7 +3,7 @@
 
 
 
-// line 68 "model.ump"
+// line 67 "model.ump"
 // line 160 "model.ump"
 public class SpecificGame
 {
@@ -29,7 +29,7 @@ public class SpecificGame
     boolean didAddGame = setGame(aGame);
     if (!didAddGame)
     {
-      throw new RuntimeException("Unable to create specificgame due to game. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
+      throw new RuntimeException("Unable to create specificGame due to game. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
     }
   }
 
@@ -78,9 +78,9 @@ public class SpecificGame
     game = aGame;
     if (existingGame != null && !existingGame.equals(aGame))
     {
-      existingGame.removeSpecificgame(this);
+      existingGame.removeSpecificGame(this);
     }
-    game.addSpecificgame(this);
+    game.addSpecificGame(this);
     wasSet = true;
     return wasSet;
   }
@@ -108,7 +108,7 @@ public class SpecificGame
     this.game = null;
     if(placeholderGame != null)
     {
-      placeholderGame.removeSpecificgame(this);
+      placeholderGame.removeSpecificGame(this);
     }
     if (order != null)
     {

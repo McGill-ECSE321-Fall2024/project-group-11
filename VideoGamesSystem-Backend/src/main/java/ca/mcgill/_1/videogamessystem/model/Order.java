@@ -2,7 +2,6 @@
 /*This code was generated using the UMPLE 1.35.0.7523.c616a4dce modeling language!*/
 
 
-import java.sql.Date;
 import java.util.*;
 
 // line 61 "model.ump"
@@ -16,7 +15,6 @@ public class Order
 
   //Order Attributes
   private int number;
-  private Date date;
 
   //Order Associations
   private List<SpecificGame> specificGames;
@@ -26,10 +24,9 @@ public class Order
   // CONSTRUCTOR
   //------------------------
 
-  public Order(int aNumber, Date aDate, Customer aCustomer)
+  public Order(int aNumber, Customer aCustomer)
   {
     number = aNumber;
-    date = aDate;
     specificGames = new ArrayList<SpecificGame>();
     boolean didAddCustomer = setCustomer(aCustomer);
     if (!didAddCustomer)
@@ -50,22 +47,9 @@ public class Order
     return wasSet;
   }
 
-  public boolean setDate(Date aDate)
-  {
-    boolean wasSet = false;
-    date = aDate;
-    wasSet = true;
-    return wasSet;
-  }
-
   public int getNumber()
   {
     return number;
-  }
-
-  public Date getDate()
-  {
-    return date;
   }
   /* Code from template association_GetMany */
   public SpecificGame getSpecificGame(int index)
@@ -212,7 +196,6 @@ public class Order
   {
     return super.toString() + "["+
             "number" + ":" + getNumber()+ "]" + System.getProperties().getProperty("line.separator") +
-            "  " + "date" + "=" + (getDate() != null ? !getDate().equals(this)  ? getDate().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
             "  " + "customer = "+(getCustomer()!=null?Integer.toHexString(System.identityHashCode(getCustomer())):"null");
   }
 }

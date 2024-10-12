@@ -3,7 +3,6 @@
 
 
 import java.util.*;
-import java.sql.Date;
 
 // line 2 "model.ump"
 // line 178 "model.ump"
@@ -15,8 +14,8 @@ public class Customer extends Account
   //------------------------
 
   //Customer Associations
-  private List<Review> review;
-  private List<Order> order;
+  private List<Review> reviews;
+  private List<Order> orders;
   private List<Game> wishlist;
   private List<Game> cart;
 
@@ -27,8 +26,8 @@ public class Customer extends Account
   public Customer(String aUserName)
   {
     super(aUserName);
-    review = new ArrayList<Review>();
-    order = new ArrayList<Order>();
+    reviews = new ArrayList<Review>();
+    orders = new ArrayList<Order>();
     wishlist = new ArrayList<Game>();
     cart = new ArrayList<Game>();
   }
@@ -39,61 +38,61 @@ public class Customer extends Account
   /* Code from template association_GetMany */
   public Review getReview(int index)
   {
-    Review aReview = review.get(index);
+    Review aReview = reviews.get(index);
     return aReview;
   }
 
-  public List<Review> getReview()
+  public List<Review> getReviews()
   {
-    List<Review> newReview = Collections.unmodifiableList(review);
-    return newReview;
+    List<Review> newReviews = Collections.unmodifiableList(reviews);
+    return newReviews;
   }
 
-  public int numberOfReview()
+  public int numberOfReviews()
   {
-    int number = review.size();
+    int number = reviews.size();
     return number;
   }
 
-  public boolean hasReview()
+  public boolean hasReviews()
   {
-    boolean has = review.size() > 0;
+    boolean has = reviews.size() > 0;
     return has;
   }
 
   public int indexOfReview(Review aReview)
   {
-    int index = review.indexOf(aReview);
+    int index = reviews.indexOf(aReview);
     return index;
   }
   /* Code from template association_GetMany */
   public Order getOrder(int index)
   {
-    Order aOrder = order.get(index);
+    Order aOrder = orders.get(index);
     return aOrder;
   }
 
-  public List<Order> getOrder()
+  public List<Order> getOrders()
   {
-    List<Order> newOrder = Collections.unmodifiableList(order);
-    return newOrder;
+    List<Order> newOrders = Collections.unmodifiableList(orders);
+    return newOrders;
   }
 
-  public int numberOfOrder()
+  public int numberOfOrders()
   {
-    int number = order.size();
+    int number = orders.size();
     return number;
   }
 
-  public boolean hasOrder()
+  public boolean hasOrders()
   {
-    boolean has = order.size() > 0;
+    boolean has = orders.size() > 0;
     return has;
   }
 
   public int indexOfOrder(Order aOrder)
   {
-    int index = order.indexOf(aOrder);
+    int index = orders.indexOf(aOrder);
     return index;
   }
   /* Code from template association_GetMany */
@@ -157,7 +156,7 @@ public class Customer extends Account
     return index;
   }
   /* Code from template association_MinimumNumberOfMethod */
-  public static int minimumNumberOfReview()
+  public static int minimumNumberOfReviews()
   {
     return 0;
   }
@@ -170,7 +169,7 @@ public class Customer extends Account
   public boolean addReview(Review aReview)
   {
     boolean wasAdded = false;
-    if (review.contains(aReview)) { return false; }
+    if (reviews.contains(aReview)) { return false; }
     Customer existingCustomer = aReview.getCustomer();
     boolean isNewCustomer = existingCustomer != null && !this.equals(existingCustomer);
     if (isNewCustomer)
@@ -179,7 +178,7 @@ public class Customer extends Account
     }
     else
     {
-      review.add(aReview);
+      reviews.add(aReview);
     }
     wasAdded = true;
     return wasAdded;
@@ -191,7 +190,7 @@ public class Customer extends Account
     //Unable to remove aReview, as it must always have a customer
     if (!this.equals(aReview.getCustomer()))
     {
-      review.remove(aReview);
+      reviews.remove(aReview);
       wasRemoved = true;
     }
     return wasRemoved;
@@ -203,9 +202,9 @@ public class Customer extends Account
     if(addReview(aReview))
     {
       if(index < 0 ) { index = 0; }
-      if(index > numberOfReview()) { index = numberOfReview() - 1; }
-      review.remove(aReview);
-      review.add(index, aReview);
+      if(index > numberOfReviews()) { index = numberOfReviews() - 1; }
+      reviews.remove(aReview);
+      reviews.add(index, aReview);
       wasAdded = true;
     }
     return wasAdded;
@@ -214,12 +213,12 @@ public class Customer extends Account
   public boolean addOrMoveReviewAt(Review aReview, int index)
   {
     boolean wasAdded = false;
-    if(review.contains(aReview))
+    if(reviews.contains(aReview))
     {
       if(index < 0 ) { index = 0; }
-      if(index > numberOfReview()) { index = numberOfReview() - 1; }
-      review.remove(aReview);
-      review.add(index, aReview);
+      if(index > numberOfReviews()) { index = numberOfReviews() - 1; }
+      reviews.remove(aReview);
+      reviews.add(index, aReview);
       wasAdded = true;
     } 
     else 
@@ -229,20 +228,20 @@ public class Customer extends Account
     return wasAdded;
   }
   /* Code from template association_MinimumNumberOfMethod */
-  public static int minimumNumberOfOrder()
+  public static int minimumNumberOfOrders()
   {
     return 0;
   }
   /* Code from template association_AddManyToOne */
-  public Order addOrder(int aNumber, Date aDate)
+  public Order addOrder(int aNumber)
   {
-    return new Order(aNumber, aDate, this);
+    return new Order(aNumber, this);
   }
 
   public boolean addOrder(Order aOrder)
   {
     boolean wasAdded = false;
-    if (order.contains(aOrder)) { return false; }
+    if (orders.contains(aOrder)) { return false; }
     Customer existingCustomer = aOrder.getCustomer();
     boolean isNewCustomer = existingCustomer != null && !this.equals(existingCustomer);
     if (isNewCustomer)
@@ -251,7 +250,7 @@ public class Customer extends Account
     }
     else
     {
-      order.add(aOrder);
+      orders.add(aOrder);
     }
     wasAdded = true;
     return wasAdded;
@@ -263,7 +262,7 @@ public class Customer extends Account
     //Unable to remove aOrder, as it must always have a customer
     if (!this.equals(aOrder.getCustomer()))
     {
-      order.remove(aOrder);
+      orders.remove(aOrder);
       wasRemoved = true;
     }
     return wasRemoved;
@@ -275,9 +274,9 @@ public class Customer extends Account
     if(addOrder(aOrder))
     {
       if(index < 0 ) { index = 0; }
-      if(index > numberOfOrder()) { index = numberOfOrder() - 1; }
-      order.remove(aOrder);
-      order.add(index, aOrder);
+      if(index > numberOfOrders()) { index = numberOfOrders() - 1; }
+      orders.remove(aOrder);
+      orders.add(index, aOrder);
       wasAdded = true;
     }
     return wasAdded;
@@ -286,12 +285,12 @@ public class Customer extends Account
   public boolean addOrMoveOrderAt(Order aOrder, int index)
   {
     boolean wasAdded = false;
-    if(order.contains(aOrder))
+    if(orders.contains(aOrder))
     {
       if(index < 0 ) { index = 0; }
-      if(index > numberOfOrder()) { index = numberOfOrder() - 1; }
-      order.remove(aOrder);
-      order.add(index, aOrder);
+      if(index > numberOfOrders()) { index = numberOfOrders() - 1; }
+      orders.remove(aOrder);
+      orders.add(index, aOrder);
       wasAdded = true;
     } 
     else 
@@ -467,20 +466,16 @@ public class Customer extends Account
 
   public void delete()
   {
-    while (review.size() > 0)
+    for(int i=reviews.size(); i > 0; i--)
     {
-      Review aReview = review.get(review.size() - 1);
+      Review aReview = reviews.get(i - 1);
       aReview.delete();
-      review.remove(aReview);
     }
-    
-    while (order.size() > 0)
+    for(int i=orders.size(); i > 0; i--)
     {
-      Order aOrder = order.get(order.size() - 1);
+      Order aOrder = orders.get(i - 1);
       aOrder.delete();
-      order.remove(aOrder);
     }
-    
     ArrayList<Game> copyOfWishlist = new ArrayList<Game>(wishlist);
     wishlist.clear();
     for(Game aWishlist : copyOfWishlist)
