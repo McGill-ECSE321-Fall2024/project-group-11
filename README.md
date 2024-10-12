@@ -31,7 +31,8 @@ The application must support these functionalities via a web frontend, ensuring 
 
 # Deliverable 1: Requirements, Domain Model, and Database Design
 
-You can see the Deliverable Report in the wiki folder under deliverables
+You can see the Deliverable Report here: [Link Text](https://github.com/E10o0/McGill-ECSE321-Fall2024/project-group-11/wiki/Deliverable1)
+
 
 This deliverable includes:
 - requirements selection (functional and non-functional system requirements).
