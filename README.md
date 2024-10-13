@@ -47,11 +47,11 @@ This deliverable includes:
 
 | Name            | Role                 | Hours                            | Contribution|
 |-----------------|----------------------|----------------------------------|----------------------------------|
-| Emile Labrunie   | Project Manager, uses Cases Designer  | 16hours  | Manage Wiki pages, manage table of contents, keep track of, update, and type out meeting minutes, create issues for deliverable 1did the use cases and one use case Specification ( mention which one) |
-|  Paolo Lahoud| Requirements and UML diagram | 20 hours | Create & manage Domain Model,create persistence layer , add JPA annotations, create CRUD & update CRUD repository, create JUnit tests for persistence layer, create issues for deliverable 1, comment CRUD and persistence.             |
-| Rami El Nawam | Database Designer    | 17 hours                         |               |
-| Jeffrey Nahas  |  Build System Lead     | 18 hours                         | Schedule meetings, prepare meeting agendas, deliver project timeline, create & manage Wiki pages, create & manage meeting minutes, create & manage table of contents, , create Agile board,  create issues for deliverable 1, technical writing for requirements, translate requirements to issues, create this deliverable 1                |
-|  Yanzhe Zhang|Test Developer      | 17 hours                         |  Assist writing test cases and one use case diagram           |
+| Emile Labrunie   | Project Manager, uses Cases Designer  | 16hours  | Manage Wiki pages,manage table of contents,did the use cases diagrams, create issues for deliverable 1,one use case specification|
+|  Paolo Lahoud| Requirements and UML diagram | 20 hours | Create & manage Domain Model ,Schedule meetings,technical writing for requirements,    writing test cases ,one use case specification     |
+| Rami El Nawam | Database Designer    | 17 hours |create CRUD & update CRUD repository,comment CRUD and persistence. add JPA annotations ,one use case specification |
+| Jeffrey Nahas  |  Build System Lead     | 18 hours | create persistence layer,create JUnit tests for persistence layer,writing test cases,one use case specification  |
+|  Yanzhe Zhang|Test Developer, persistence layer developer    | 17 hours | update, and type out meeting minutes,writing test cases, one use case specification|
 
 Each team member contributed to the project through their assigned roles, ensuring that all tasks for Deliverable 1 were completed efficiently and on time.
 
