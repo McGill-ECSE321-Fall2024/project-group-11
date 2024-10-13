@@ -3,8 +3,8 @@
 
 
 
-// line 67 "model.ump"
-// line 160 "model.ump"
+// line 72 "model.ump"
+// line 166 "model.ump"
 public class SpecificGame
 {
 

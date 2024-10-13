@@ -4,8 +4,8 @@
 
 import java.util.*;
 
-// line 44 "model.ump"
-// line 121 "model.ump"
+// line 48 "model.ump"
+// line 127 "model.ump"
 public class Game
 {
 
@@ -19,7 +19,6 @@ public class Game
   private int stockQantity;
   private GameStatus gamestatus;
   private int price;
-  private ConsoleType console;
 
   //Game Associations
   private List<Review> reviews;
@@ -34,14 +33,13 @@ public class Game
   // CONSTRUCTOR
   //------------------------
 
-  public Game(String aTitle, String aDescription, int aStockQantity, GameStatus aGamestatus, int aPrice, ConsoleType aConsole, Category... allCategories)
+  public Game(String aTitle, String aDescription, int aStockQantity, GameStatus aGamestatus, int aPrice, Category... allCategories)
   {
     title = aTitle;
     description = aDescription;
     stockQantity = aStockQantity;
     gamestatus = aGamestatus;
     price = aPrice;
-    console = aConsole;
     reviews = new ArrayList<Review>();
     promotions = new ArrayList<Promotion>();
     specificGames = new ArrayList<SpecificGame>();
@@ -100,14 +98,6 @@ public class Game
     return wasSet;
   }
 
-  public boolean setConsole(ConsoleType aConsole)
-  {
-    boolean wasSet = false;
-    console = aConsole;
-    wasSet = true;
-    return wasSet;
-  }
-
   public String getTitle()
   {
     return title;
@@ -131,11 +121,6 @@ public class Game
   public int getPrice()
   {
     return price;
-  }
-
-  public ConsoleType getConsole()
-  {
-    return console;
   }
   /* Code from template association_GetMany */
   public Review getReview(int index)
@@ -353,9 +338,9 @@ public class Game
     return 0;
   }
   /* Code from template association_AddManyToOne */
-  public Review addReview(int aRating, String aContent, Customer aCustomer)
+  public Review addReview(int aRating, String aContent, int aCardNumber, Customer aCustomer)
   {
-    return new Review(aRating, aContent, aCustomer, this);
+    return new Review(aRating, aContent, aCardNumber, aCustomer, this);
   }
 
   public boolean addReview(Review aReview)
@@ -1006,7 +991,6 @@ public class Game
             "description" + ":" + getDescription()+ "," +
             "stockQantity" + ":" + getStockQantity()+ "," +
             "price" + ":" + getPrice()+ "]" + System.getProperties().getProperty("line.separator") +
-            "  " + "gamestatus" + "=" + (getGamestatus() != null ? !getGamestatus().equals(this)  ? getGamestatus().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
-            "  " + "console" + "=" + (getConsole() != null ? !getConsole().equals(this)  ? getConsole().toString().replaceAll("  ","    ") : "this" : "null");
+            "  " + "gamestatus" + "=" + (getGamestatus() != null ? !getGamestatus().equals(this)  ? getGamestatus().toString().replaceAll("  ","    ") : "this" : "null");
   }
 }

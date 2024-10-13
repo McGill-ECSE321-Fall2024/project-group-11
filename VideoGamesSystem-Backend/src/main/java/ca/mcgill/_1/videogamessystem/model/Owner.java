@@ -4,7 +4,7 @@
 
 
 // line 17 "model.ump"
-// line 196 "model.ump"
+// line 203 "model.ump"
 public class Owner extends Staff
 {
 
@@ -16,9 +16,9 @@ public class Owner extends Staff
   // CONSTRUCTOR
   //------------------------
 
-  public Owner(String aUserName, int aIdNum)
+  public Owner(String aUserName, String aEmail, String aPassword, int aPhoneNumber, String aAdress, int aIdNum)
   {
-    super(aUserName, aIdNum);
+    super(aUserName, aEmail, aPassword, aPhoneNumber, aAdress, aIdNum);
   }
 
   //------------------------

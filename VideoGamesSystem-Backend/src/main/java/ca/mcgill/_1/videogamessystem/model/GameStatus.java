@@ -3,8 +3,8 @@
 
 
 
-// line 36 "model.ump"
-// line 206 "model.ump"
+// line 40 "model.ump"
+// line 213 "model.ump"
 public class GameStatus
 {
 

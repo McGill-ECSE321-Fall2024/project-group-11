@@ -3,8 +3,8 @@
 
 
 
-// line 99 "model.ump"
-// line 211 "model.ump"
+// line 105 "model.ump"
+// line 218 "model.ump"
 public class ReviewRating
 {
 

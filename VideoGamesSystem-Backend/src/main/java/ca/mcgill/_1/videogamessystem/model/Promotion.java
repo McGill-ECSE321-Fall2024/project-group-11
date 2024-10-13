@@ -5,8 +5,8 @@
 import java.sql.Date;
 import java.util.*;
 
-// line 110 "model.ump"
-// line 172 "model.ump"
+// line 116 "model.ump"
+// line 178 "model.ump"
 public class Promotion
 {
 

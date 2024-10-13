@@ -3,8 +3,8 @@
 
 
 
-// line 29 "model.ump"
-// line 201 "model.ump"
+// line 33 "model.ump"
+// line 208 "model.ump"
 public abstract class Staff extends Account
 {
 
@@ -19,9 +19,9 @@ public abstract class Staff extends Account
   // CONSTRUCTOR
   //------------------------
 
-  public Staff(String aUserName, int aIdNum)
+  public Staff(String aUserName, String aEmail, String aPassword, int aPhoneNumber, String aAdress, int aIdNum)
   {
-    super(aUserName);
+    super(aUserName, aEmail, aPassword, aPhoneNumber, aAdress);
     idNum = aIdNum;
   }
 

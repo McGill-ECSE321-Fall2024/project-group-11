@@ -4,7 +4,7 @@
 
 
 // line 12 "model.ump"
-// line 191 "model.ump"
+// line 198 "model.ump"
 public class Employer extends Staff
 {
 
@@ -16,9 +16,9 @@ public class Employer extends Staff
   // CONSTRUCTOR
   //------------------------
 
-  public Employer(String aUserName, int aIdNum)
+  public Employer(String aUserName, String aEmail, String aPassword, int aPhoneNumber, String aAdress, int aIdNum)
   {
-    super(aUserName, aIdNum);
+    super(aUserName, aEmail, aPassword, aPhoneNumber, aAdress, aIdNum);
   }
 
   //------------------------

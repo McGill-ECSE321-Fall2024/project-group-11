@@ -4,8 +4,8 @@
 
 import java.util.*;
 
-// line 104 "model.ump"
-// line 216 "model.ump"
+// line 110 "model.ump"
+// line 223 "model.ump"
 public class Console
 {
 
@@ -14,7 +14,7 @@ public class Console
   //------------------------
 
   //Console Attributes
-  private String console;
+  private String consoleType;
 
   //Console Associations
   private List<Game> games;
@@ -23,9 +23,9 @@ public class Console
   // CONSTRUCTOR
   //------------------------
 
-  public Console(String aConsole)
+  public Console(String aConsoleType)
   {
-    console = aConsole;
+    consoleType = aConsoleType;
     games = new ArrayList<Game>();
   }
 
@@ -33,17 +33,17 @@ public class Console
   // INTERFACE
   //------------------------
 
-  public boolean setConsole(String aConsole)
+  public boolean setConsoleType(String aConsoleType)
   {
     boolean wasSet = false;
-    console = aConsole;
+    consoleType = aConsoleType;
     wasSet = true;
     return wasSet;
   }
 
-  public String getConsole()
+  public String getConsoleType()
   {
-    return console;
+    return consoleType;
   }
   /* Code from template association_GetMany */
   public Game getGame(int index)
@@ -172,6 +172,6 @@ public class Console
   public String toString()
   {
     return super.toString() + "["+
-            "console" + ":" + getConsole()+ "]";
+            "consoleType" + ":" + getConsoleType()+ "]";
   }
 }

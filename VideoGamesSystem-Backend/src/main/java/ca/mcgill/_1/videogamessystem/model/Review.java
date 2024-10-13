@@ -5,8 +5,8 @@
 import java.util.*;
 import java.sql.Date;
 
-// line 88 "model.ump"
-// line 140 "model.ump"
+// line 93 "model.ump"
+// line 146 "model.ump"
 public class Review
 {
 
@@ -17,6 +17,7 @@ public class Review
   //Review Attributes
   private int rating;
   private String content;
+  private int cardNumber;
 
   //Review Associations
   private List<Reply> reply;
@@ -27,10 +28,11 @@ public class Review
   // CONSTRUCTOR
   //------------------------
 
-  public Review(int aRating, String aContent, Customer aCustomer, Game aGame)
+  public Review(int aRating, String aContent, int aCardNumber, Customer aCustomer, Game aGame)
   {
     rating = aRating;
     content = aContent;
+    cardNumber = aCardNumber;
     reply = new ArrayList<Reply>();
     boolean didAddCustomer = setCustomer(aCustomer);
     if (!didAddCustomer)
@@ -64,6 +66,14 @@ public class Review
     return wasSet;
   }
 
+  public boolean setCardNumber(int aCardNumber)
+  {
+    boolean wasSet = false;
+    cardNumber = aCardNumber;
+    wasSet = true;
+    return wasSet;
+  }
+
   public int getRating()
   {
     return rating;
@@ -72,6 +82,11 @@ public class Review
   public String getContent()
   {
     return content;
+  }
+
+  public int getCardNumber()
+  {
+    return cardNumber;
   }
   /* Code from template association_GetMany */
   public Reply getReply(int index)
@@ -250,7 +265,8 @@ public class Review
   {
     return super.toString() + "["+
             "rating" + ":" + getRating()+ "," +
-            "content" + ":" + getContent()+ "]" + System.getProperties().getProperty("line.separator") +
+            "content" + ":" + getContent()+ "," +
+            "cardNumber" + ":" + getCardNumber()+ "]" + System.getProperties().getProperty("line.separator") +
             "  " + "customer = "+(getCustomer()!=null?Integer.toHexString(System.identityHashCode(getCustomer())):"null") + System.getProperties().getProperty("line.separator") +
             "  " + "game = "+(getGame()!=null?Integer.toHexString(System.identityHashCode(getGame())):"null");
   }

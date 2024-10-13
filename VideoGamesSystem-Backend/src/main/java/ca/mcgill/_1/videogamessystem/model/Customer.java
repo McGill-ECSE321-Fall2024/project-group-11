@@ -3,9 +3,10 @@
 
 
 import java.util.*;
+import java.sql.Date;
 
 // line 2 "model.ump"
-// line 178 "model.ump"
+// line 184 "model.ump"
 public class Customer extends Account
 {
 
@@ -23,9 +24,9 @@ public class Customer extends Account
   // CONSTRUCTOR
   //------------------------
 
-  public Customer(String aUserName)
+  public Customer(String aUserName, String aEmail, String aPassword, int aPhoneNumber, String aAdress)
   {
-    super(aUserName);
+    super(aUserName, aEmail, aPassword, aPhoneNumber, aAdress);
     reviews = new ArrayList<Review>();
     orders = new ArrayList<Order>();
     wishlist = new ArrayList<Game>();
@@ -161,9 +162,9 @@ public class Customer extends Account
     return 0;
   }
   /* Code from template association_AddManyToOne */
-  public Review addReview(int aRating, String aContent, Game aGame)
+  public Review addReview(int aRating, String aContent, int aCardNumber, Game aGame)
   {
-    return new Review(aRating, aContent, this, aGame);
+    return new Review(aRating, aContent, aCardNumber, this, aGame);
   }
 
   public boolean addReview(Review aReview)
@@ -233,9 +234,9 @@ public class Customer extends Account
     return 0;
   }
   /* Code from template association_AddManyToOne */
-  public Order addOrder(int aNumber)
+  public Order addOrder(int aNumber, Date aDate, int aCardNumber)
   {
-    return new Order(aNumber, this);
+    return new Order(aNumber, aDate, aCardNumber, this);
   }
 
   public boolean addOrder(Order aOrder)
