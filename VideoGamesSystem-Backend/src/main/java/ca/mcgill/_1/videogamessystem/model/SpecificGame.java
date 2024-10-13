@@ -13,10 +13,14 @@ public class SpecificGame
   //------------------------
 
   //SpecificGame Attributes
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int serialNumber;
 
   //SpecificGame Associations
+  @OneToOne
   private Game game;
+  @OneToOne
   private Order order;
 
   //------------------------

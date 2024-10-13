@@ -5,6 +5,8 @@
 
 // line 17 "model.ump"
 // line 196 "model.ump"
+@Entity
+@DiscriminatorValue("Owner")
 public class Owner extends Staff
 {
 

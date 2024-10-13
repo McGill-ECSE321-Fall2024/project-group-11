@@ -5,6 +5,8 @@
 
 // line 12 "model.ump"
 // line 191 "model.ump"
+@Entity
+@DiscriminatorValue("Employer")
 public class Employer extends Staff
 {
 

@@ -14,9 +14,12 @@ public class Category
   //------------------------
 
   //Category Attributes
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private String category;
 
   //Category Associations
+  @OneToMany
   private List<Game> games;
 
   //------------------------

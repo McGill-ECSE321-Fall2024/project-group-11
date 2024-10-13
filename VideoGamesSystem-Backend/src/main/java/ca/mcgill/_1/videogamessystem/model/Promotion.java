@@ -7,6 +7,7 @@ import java.util.*;
 
 // line 110 "model.ump"
 // line 172 "model.ump"
+@Entity
 public class Promotion
 {
 
@@ -15,11 +16,14 @@ public class Promotion
   //------------------------
 
   //Promotion Attributes
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int percentage;
   private Date startDate;
   private Date endDate;
 
   //Promotion Associations
+  @OneToMany
   private List<Game> games;
 
   //------------------------

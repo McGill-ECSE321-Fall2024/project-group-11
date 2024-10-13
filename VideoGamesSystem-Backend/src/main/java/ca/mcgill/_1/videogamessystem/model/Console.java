@@ -14,9 +14,12 @@ public class Console
   //------------------------
 
   //Console Attributes
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private String console;
 
   //Console Associations
+  @OneToMany
   private List<Game> games;
 
   //------------------------

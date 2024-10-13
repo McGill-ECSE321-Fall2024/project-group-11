@@ -6,6 +6,7 @@ import java.util.*;
 
 // line 44 "model.ump"
 // line 121 "model.ump"
+@Entity
 public class Game
 {
 
@@ -14,6 +15,8 @@ public class Game
   //------------------------
 
   //Game Attributes
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private String title;
   private String description;
   private int stockQantity;
@@ -22,12 +25,19 @@ public class Game
   private ConsoleType console;
 
   //Game Associations
+  @OneToMany
   private List<Review> reviews;
+  @OneToMany
   private List<Promotion> promotions;
+  @OneToMany
   private List<SpecificGame> specificGames;
+  @OneToMany
   private List<Customer> wishlist;
+  @OneToMany
   private List<Customer> cart;
+  @OneToMany
   private List<Category> categories;
+  @OneToMany
   private List<Console> consoles;
 
   //------------------------

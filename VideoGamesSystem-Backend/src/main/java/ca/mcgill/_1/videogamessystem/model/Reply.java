@@ -6,6 +6,7 @@ import java.sql.Date;
 
 // line 80 "model.ump"
 // line 148 "model.ump"
+@Entity
 public class Reply
 {
 
@@ -14,10 +15,13 @@ public class Reply
   //------------------------
 
   //Reply Attributes
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private String reply;
   private Date replyDate;
 
   //Reply Associations
+  @OneToOne
   private Review review;
 
   //------------------------

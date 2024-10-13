@@ -5,6 +5,12 @@
 
 // line 22 "model.ump"
 // line 166 "model.ump"
+
+
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "TYPE", discriminatorType = DiscriminatorType.STRING)
+
 public abstract class Account
 {
 
@@ -13,6 +19,8 @@ public abstract class Account
   //------------------------
 
   //Account Attributes
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private String userName;
 
   //------------------------
