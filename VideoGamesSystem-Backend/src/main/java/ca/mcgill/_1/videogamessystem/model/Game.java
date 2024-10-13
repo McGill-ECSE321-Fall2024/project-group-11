@@ -4,6 +4,10 @@
 
 import java.util.*;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.GeneratedValue;
+
 // line 44 "model.ump"
 // line 121 "model.ump"
 @Entity

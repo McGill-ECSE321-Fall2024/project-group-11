@@ -5,6 +5,10 @@
 
 // line 67 "model.ump"
 // line 160 "model.ump"
+
+import jakarta.persistence.Id;
+import jakarta.persistence.GeneratedValue;
+
 public class SpecificGame
 {
 

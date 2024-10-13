@@ -4,6 +4,10 @@
 
 import java.util.*;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
+
 // line 2 "model.ump"
 // line 178 "model.ump"
 @Entity

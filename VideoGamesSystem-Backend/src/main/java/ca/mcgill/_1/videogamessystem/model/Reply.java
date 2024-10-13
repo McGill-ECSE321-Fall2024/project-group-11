@@ -3,7 +3,9 @@
 
 
 import java.sql.Date;
-
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.GeneratedValue;
 // line 80 "model.ump"
 // line 148 "model.ump"
 @Entity

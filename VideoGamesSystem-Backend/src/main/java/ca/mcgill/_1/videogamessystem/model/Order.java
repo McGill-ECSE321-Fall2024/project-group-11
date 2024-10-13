@@ -3,6 +3,9 @@
 
 
 import java.util.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.GeneratedValue;
 
 // line 61 "model.ump"
 // line 154 "model.ump"
