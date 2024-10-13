@@ -1,10 +1,10 @@
-package ca.mcgill._1.videogamessystem;
+package ca.mcgill.ecse321.videogamesystem;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class VideogamessystemApplicationTests {
+class VideogamesystemApplicationTests {
 
 	@Test
 	void contextLoads() {
