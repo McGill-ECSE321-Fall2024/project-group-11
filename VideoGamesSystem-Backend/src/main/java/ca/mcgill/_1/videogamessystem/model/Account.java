@@ -24,14 +24,18 @@ public abstract class Account {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private String userName;
   private Date creationDate;
+  private String email;
+  private String password;
 
   // ------------------------
   // CONSTRUCTOR
   // ------------------------
 
-  public Account(String aUserName, Date aCreationDate) {
+  public Account(String aUserName, Date aCreationDate, String aEmail, String apassword) {
     userName = aUserName;
     creationDate = acreationDate;
+    email = aEmail;
+    password = apassword;
   }
 
   // ------------------------
@@ -47,6 +51,14 @@ public abstract class Account {
 
   public String getUserName() {
     return userName;
+  }
+
+  public String getCreationDate() {
+    return creationDate;
+  }
+
+  public String getEmail() {
+    return email;
   }
 
   public void delete() {
