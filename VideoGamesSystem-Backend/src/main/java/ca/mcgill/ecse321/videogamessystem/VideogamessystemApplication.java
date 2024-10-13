@@ -1,4 +1,4 @@
-package ca.mcgill._1.videogamessystem;
+package ca.mcgill.ecse321.videogamessystem;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

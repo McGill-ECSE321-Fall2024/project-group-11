@@ -1,31 +1,32 @@
+package ca.mcgill.ecse321.videogamessystem.model;
 /*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.35.0.7523.c616a4dce modeling language!*/
 
 
 import java.util.*;
 
-// line 110 "model.ump"
-// line 223 "model.ump"
-public class Console
+// line 78 "model.ump"
+// line 140 "model.ump"
+public class Category
 {
 
   //------------------------
   // MEMBER VARIABLES
   //------------------------
 
-  //Console Attributes
-  private String consoleType;
+  //Category Attributes
+  private String category;
 
-  //Console Associations
+  //Category Associations
   private List<Game> games;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public Console(String aConsoleType)
+  public Category(String aCategory)
   {
-    consoleType = aConsoleType;
+    category = aCategory;
     games = new ArrayList<Game>();
   }
 
@@ -33,17 +34,17 @@ public class Console
   // INTERFACE
   //------------------------
 
-  public boolean setConsoleType(String aConsoleType)
+  public boolean setCategory(String aCategory)
   {
     boolean wasSet = false;
-    consoleType = aConsoleType;
+    category = aCategory;
     wasSet = true;
     return wasSet;
   }
 
-  public String getConsoleType()
+  public String getCategory()
   {
-    return consoleType;
+    return category;
   }
   /* Code from template association_GetMany */
   public Game getGame(int index)
@@ -86,13 +87,13 @@ public class Console
     boolean wasAdded = false;
     if (games.contains(aGame)) { return false; }
     games.add(aGame);
-    if (aGame.indexOfConsole(this) != -1)
+    if (aGame.indexOfCategory(this) != -1)
     {
       wasAdded = true;
     }
     else
     {
-      wasAdded = aGame.addConsole(this);
+      wasAdded = aGame.addCategory(this);
       if (!wasAdded)
       {
         games.remove(aGame);
@@ -111,13 +112,13 @@ public class Console
 
     int oldIndex = games.indexOf(aGame);
     games.remove(oldIndex);
-    if (aGame.indexOfConsole(this) == -1)
+    if (aGame.indexOfCategory(this) == -1)
     {
       wasRemoved = true;
     }
     else
     {
-      wasRemoved = aGame.removeConsole(this);
+      wasRemoved = aGame.removeCategory(this);
       if (!wasRemoved)
       {
         games.add(oldIndex,aGame);
@@ -164,7 +165,14 @@ public class Console
     games.clear();
     for(Game aGame : copyOfGames)
     {
-      aGame.removeConsole(this);
+      if (aGame.numberOfCategories() <= Game.minimumNumberOfCategories())
+      {
+        aGame.delete();
+      }
+      else
+      {
+        aGame.removeCategory(this);
+      }
     }
   }
 
@@ -172,6 +180,6 @@ public class Console
   public String toString()
   {
     return super.toString() + "["+
-            "consoleType" + ":" + getConsoleType()+ "]";
+            "category" + ":" + getCategory()+ "]";
   }
 }

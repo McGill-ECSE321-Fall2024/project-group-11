@@ -1,4 +1,4 @@
-package ca.mcgill._1.videogamessystem;
+package ca.mcgill.ecse321.videogamessystem;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
