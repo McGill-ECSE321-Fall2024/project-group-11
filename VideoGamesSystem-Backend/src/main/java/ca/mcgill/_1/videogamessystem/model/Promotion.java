@@ -4,9 +4,13 @@
 
 import java.sql.Date;
 import java.util.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.GeneratedValue;
 
 // line 110 "model.ump"
 // line 172 "model.ump"
+@Entity
 public class Promotion
 {
 
@@ -15,11 +19,14 @@ public class Promotion
   //------------------------
 
   //Promotion Attributes
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int percentage;
   private Date startDate;
   private Date endDate;
 
   //Promotion Associations
+  @OneToMany
   private List<Game> games;
 
   //------------------------

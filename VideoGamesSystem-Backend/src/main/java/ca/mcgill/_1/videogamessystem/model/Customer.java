@@ -4,8 +4,14 @@
 
 import java.util.*;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
+
 // line 2 "model.ump"
 // line 178 "model.ump"
+@Entity
+@DiscriminatorValue("Customer")
 public class Customer extends Account
 {
 
@@ -14,9 +20,13 @@ public class Customer extends Account
   //------------------------
 
   //Customer Associations
+  @OneToMany
   private List<Review> reviews;
+  @OneToMany
   private List<Order> orders;
+  @OneToMany
   private List<Game> wishlist;
+  @OneToMany
   private List<Game> cart;
 
   //------------------------

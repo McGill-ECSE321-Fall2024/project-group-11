@@ -5,6 +5,11 @@
 
 // line 67 "model.ump"
 // line 160 "model.ump"
+
+import jakarta.persistence.Id;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+
 public class SpecificGame
 {
 
@@ -13,10 +18,14 @@ public class SpecificGame
   //------------------------
 
   //SpecificGame Attributes
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int serialNumber;
 
   //SpecificGame Associations
+  @OneToOne
   private Game game;
+  @OneToOne
   private Order order;
 
   //------------------------

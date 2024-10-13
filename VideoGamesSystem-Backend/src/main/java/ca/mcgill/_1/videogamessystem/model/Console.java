@@ -3,6 +3,8 @@
 
 
 import java.util.*;
+import jakarta.persistence.Id;
+import jakarta.persistence.GeneratedValue;
 
 // line 104 "model.ump"
 // line 216 "model.ump"
@@ -14,9 +16,12 @@ public class Console
   //------------------------
 
   //Console Attributes
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private String console;
 
   //Console Associations
+  @OneToMany
   private List<Game> games;
 
   //------------------------

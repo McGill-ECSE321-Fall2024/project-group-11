@@ -4,9 +4,13 @@
 
 import java.util.*;
 import java.sql.Date;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.GeneratedValue;
 
 // line 88 "model.ump"
 // line 140 "model.ump"
+@Entity
 public class Review
 {
 
@@ -15,12 +19,17 @@ public class Review
   //------------------------
 
   //Review Attributes
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int rating;
   private String content;
 
   //Review Associations
+  @OneToMany
   private List<Reply> reply;
+  @OneToOne
   private Customer customer;
+  @OneToOne
   private Game game;
 
   //------------------------

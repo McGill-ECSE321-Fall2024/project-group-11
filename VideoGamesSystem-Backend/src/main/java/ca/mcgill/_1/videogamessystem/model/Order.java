@@ -3,9 +3,13 @@
 
 
 import java.util.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.GeneratedValue;
 
 // line 61 "model.ump"
 // line 154 "model.ump"
+@Entity
 public class Order
 {
 
@@ -14,10 +18,14 @@ public class Order
   //------------------------
 
   //Order Attributes
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int number;
 
   //Order Associations
+  @OneToMany
   private List<SpecificGame> specificGames;
+  @OneToOne
   private Customer customer;
 
   //------------------------
