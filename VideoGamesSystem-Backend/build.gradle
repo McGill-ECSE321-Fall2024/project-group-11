@@ -31,5 +31,12 @@ dependencies {
 }
 
 tasks.named('test') {
-	useJUnitPlatform()
+    useJUnitPlatform()
+    
+    testLogging {
+        exceptionFormat "full"  // This ensures the full stack trace is printed when a test fails
+        // You can also add other configurations, for example:
+        events "passed", "skipped", "failed"
+    }
 }
+

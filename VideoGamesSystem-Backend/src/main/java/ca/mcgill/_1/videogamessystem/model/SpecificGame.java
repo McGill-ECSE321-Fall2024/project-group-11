@@ -1,3 +1,4 @@
+package ca.mcgill._1.videogamessystem.model;
 /*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.35.0.7523.c616a4dce modeling language!*/
 
@@ -7,8 +8,9 @@
 // line 160 "model.ump"
 
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.GenerationType;
 
 public class SpecificGame
 {

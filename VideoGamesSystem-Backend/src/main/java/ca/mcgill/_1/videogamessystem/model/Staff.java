@@ -1,14 +1,13 @@
+package ca.mcgill._1.videogamessystem.model;
 /*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.35.0.7523.c616a4dce modeling language!*/
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.Inheritance;
-import jakarta.persistence.InheritanceType;
+import java.sql.Date;
 
 // line 29 "model.ump"
 // line 201 "model.ump"
 @Entity
-@DiscriminatorValue("Staff")
 public abstract class Staff extends Account
 {
 
@@ -23,10 +22,9 @@ public abstract class Staff extends Account
   // CONSTRUCTOR
   //------------------------
 
-  public Staff(String aUserName, int aIdNum)
-  {
-    super(aUserName);
-    idNum = aIdNum;
+  public Staff(String aUserName, String aEmail, String aPassword, int aPhoneNumber, String aAddress, Date aCreationDate, int aIdNum) {
+    super(aUserName, aEmail, aPassword, aPhoneNumber, aAddress, aCreationDate);
+    this.idNum = aIdNum;
   }
 
   //------------------------

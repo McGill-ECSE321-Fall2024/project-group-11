@@ -1,3 +1,4 @@
+package ca.mcgill._1.videogamessystem.model;
 /*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.35.0.7523.c616a4dce modeling language!*/
 
@@ -5,13 +6,12 @@
 import java.util.*;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.Inheritance;
-import jakarta.persistence.InheritanceType;
+import jakarta.persistence.OneToMany;
+import java.sql.Date;
 
 // line 2 "model.ump"
 // line 178 "model.ump"
 @Entity
-@DiscriminatorValue("Customer")
 public class Customer extends Account
 {
 
@@ -33,9 +33,8 @@ public class Customer extends Account
   // CONSTRUCTOR
   //------------------------
 
-  public Customer(String aUserName)
-  {
-    super(aUserName);
+  public Customer(String aUserName, String aEmail, String aPassword, int aPhoneNumber, String aAddress, Date aCreationDate) {
+    super(aUserName, aEmail, aPassword, aPhoneNumber, aAddress, aCreationDate);
     reviews = new ArrayList<Review>();
     orders = new ArrayList<Order>();
     wishlist = new ArrayList<Game>();

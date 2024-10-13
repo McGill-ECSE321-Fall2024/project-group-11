@@ -1,3 +1,4 @@
+package ca.mcgill._1.videogamessystem.model;
 /*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.35.0.7523.c616a4dce modeling language!*/
 
@@ -6,7 +7,9 @@ import java.util.*;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 
 // line 44 "model.ump"
 // line 121 "model.ump"
@@ -26,7 +29,7 @@ public class Game
   private int stockQantity;
   private GameStatus gamestatus;
   private int price;
-  private ConsoleType console;
+  private Console console;
 
   //Game Associations
   @OneToMany
@@ -48,7 +51,7 @@ public class Game
   // CONSTRUCTOR
   //------------------------
 
-  public Game(String aTitle, String aDescription, int aStockQantity, GameStatus aGamestatus, int aPrice, ConsoleType aConsole, Category... allCategories)
+  public Game(String aTitle, String aDescription, int aStockQantity, GameStatus aGamestatus, int aPrice, Console aConsole, Category... allCategories)
   {
     title = aTitle;
     description = aDescription;
@@ -114,7 +117,7 @@ public class Game
     return wasSet;
   }
 
-  public boolean setConsole(ConsoleType aConsole)
+  public boolean setConsole(Console aConsole)
   {
     boolean wasSet = false;
     console = aConsole;
@@ -147,7 +150,7 @@ public class Game
     return price;
   }
 
-  public ConsoleType getConsole()
+  public Console getConsole()
   {
     return console;
   }

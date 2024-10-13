@@ -1,3 +1,4 @@
+package ca.mcgill._1.videogamessystem.model;
 /*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.35.0.7523.c616a4dce modeling language!*/
 
@@ -6,7 +7,10 @@ import java.util.*;
 import java.sql.Date;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 
 // line 88 "model.ump"
 // line 140 "model.ump"

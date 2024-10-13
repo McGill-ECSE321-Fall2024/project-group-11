@@ -1,14 +1,14 @@
+package ca.mcgill._1.videogamessystem.model;
 /*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.35.0.7523.c616a4dce modeling language!*/
 
+import java.sql.Date;
+
 import jakarta.persistence.Entity;
-import jakarta.persistence.Inheritance;
-import jakarta.persistence.InheritanceType;
 
 // line 17 "model.ump"
 // line 196 "model.ump"
 @Entity
-@DiscriminatorValue("Owner")
 public class Owner extends Staff
 {
 
@@ -20,9 +20,9 @@ public class Owner extends Staff
   // CONSTRUCTOR
   //------------------------
 
-  public Owner(String aUserName, int aIdNum)
-  {
-    super(aUserName, aIdNum);
+
+  public Owner(String aUserName, String aEmail, String aPassword, int aPhoneNumber, String aAddress, Date aCreationDate, int aIdNum) {
+    super(aUserName, aEmail, aPassword, aPhoneNumber, aAddress, aCreationDate, aIdNum);
   }
 
   //------------------------
