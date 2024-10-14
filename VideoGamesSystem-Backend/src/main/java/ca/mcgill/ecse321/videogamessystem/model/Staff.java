@@ -3,8 +3,6 @@ package ca.mcgill.ecse321.videogamessystem.model;
 /*This code was generated using the UMPLE 1.35.0.7523.c616a4dce modeling language!*/
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 import java.sql.Date;

@@ -8,8 +8,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 
 // line 61 "model.ump"
 // line 154 "model.ump"
