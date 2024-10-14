@@ -15,8 +15,6 @@ java {
 
 repositories {
 	mavenCentral()
-	jcenter()
-
 }
 
 dependencies {
@@ -25,9 +23,7 @@ dependencies {
 	runtimeOnly 'org.postgresql:postgresql'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-	
-	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+
 }
 
 tasks.named('test') {
@@ -39,4 +35,3 @@ tasks.named('test') {
         events "passed", "skipped", "failed"
     }
 }
-

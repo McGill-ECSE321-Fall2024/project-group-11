@@ -4,19 +4,16 @@ package ca.mcgill._1.videogamessystem.model;
 
 // line 22 "model.ump"
 // line 166 "model.ump"
-import jakarta.persistence.Entity;
+
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
-import jakarta.persistence.Inheritance;
-import jakarta.persistence.InheritanceType;
+
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Id;
 import java.sql.Date;
 
-@Entity
 @MappedSuperclass
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public abstract class Account {
 
   // ------------------------
@@ -37,6 +34,9 @@ public abstract class Account {
   // ------------------------
   // CONSTRUCTOR
   // ------------------------
+
+  public Account() {
+  }
 
   public Account(String aUserName, String aEmail, String aPassword, int aPhoneNumber, String aAddress, Date aCreationDate) {
     userName = aUserName;

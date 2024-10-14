@@ -3,6 +3,10 @@ package ca.mcgill._1.videogamessystem.model;
 /*This code was generated using the UMPLE 1.35.0.7523.c616a4dce modeling language!*/
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
 import java.sql.Date;
 
 // line 29 "model.ump"
@@ -16,11 +20,16 @@ public abstract class Staff extends Account
   //------------------------
 
   //Staff Attributes
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int idNum;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
+  // Default constructor (required by Hibernate)
+  public Staff() {
+  }
 
   public Staff(String aUserName, String aEmail, String aPassword, int aPhoneNumber, String aAddress, Date aCreationDate, int aIdNum) {
     super(aUserName, aEmail, aPassword, aPhoneNumber, aAddress, aCreationDate);

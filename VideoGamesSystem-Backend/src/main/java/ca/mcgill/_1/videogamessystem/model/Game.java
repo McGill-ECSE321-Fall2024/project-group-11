@@ -24,12 +24,20 @@ public class Game
   //Game Attributes
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
+
   private String title;
   private String description;
   private int stockQantity;
-  private GameStatus gamestatus;
+  private GameStatus status;
   private int price;
-  private Console console;
+
+  public enum GameStatus {
+    ACTIVE,
+    INACTIVE,
+    PENDING,
+    ARCHIVED
+  }
 
   //Game Associations
   @OneToMany
@@ -45,20 +53,20 @@ public class Game
   @OneToMany
   private List<Category> categories;
   @OneToMany
-  private List<Console> consoles;
+  private List<GameConsole> gameConsoles;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public Game(String aTitle, String aDescription, int aStockQantity, GameStatus aGamestatus, int aPrice, Console aConsole, Category... allCategories)
+  public Game(String aTitle, String aDescription, int aStockQantity, GameStatus aStatus, int aPrice, Category... allCategories)
   {
     title = aTitle;
     description = aDescription;
     stockQantity = aStockQantity;
-    gamestatus = aGamestatus;
+    status = aStatus;
     price = aPrice;
-    console = aConsole;
+    gameConsoles = new ArrayList<>();
     reviews = new ArrayList<Review>();
     promotions = new ArrayList<Promotion>();
     specificGames = new ArrayList<SpecificGame>();
@@ -70,7 +78,6 @@ public class Game
     {
       throw new RuntimeException("Unable to create Game, must have at least 1 categories. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
     }
-    consoles = new ArrayList<Console>();
   }
 
   //------------------------
@@ -101,10 +108,10 @@ public class Game
     return wasSet;
   }
 
-  public boolean setGamestatus(GameStatus aGamestatus)
+  public boolean setStatus(GameStatus aStatus)
   {
     boolean wasSet = false;
-    gamestatus = aGamestatus;
+    status = aStatus;
     wasSet = true;
     return wasSet;
   }
@@ -117,12 +124,13 @@ public class Game
     return wasSet;
   }
 
-  public boolean setConsole(Console aConsole)
-  {
-    boolean wasSet = false;
-    console = aConsole;
-    wasSet = true;
-    return wasSet;
+  // Getters and setters
+  public Long getId() {
+    return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
   }
 
   public String getTitle()
@@ -140,9 +148,9 @@ public class Game
     return stockQantity;
   }
 
-  public GameStatus getGamestatus()
+  public GameStatus getStatus()
   {
-    return gamestatus;
+    return status;
   }
 
   public int getPrice()
@@ -150,10 +158,7 @@ public class Game
     return price;
   }
 
-  public Console getConsole()
-  {
-    return console;
-  }
+
   /* Code from template association_GetMany */
   public Review getReview(int index)
   {
@@ -337,33 +342,47 @@ public class Game
   /* Code from template association_GetMany */
   public Console getConsole(int index)
   {
-    Console aConsole = consoles.get(index);
+    GameConsole gc = gameConsoles.get(index);
+    Console aConsole = gc.getConsole();
     return aConsole;
   }
 
-  public List<Console> getConsoles()
-  {
-    List<Console> newConsoles = Collections.unmodifiableList(consoles);
-    return newConsoles;
+  public List<GameConsole> getGameConsoles() {
+    return this.gameConsoles;
+  }
+
+  public List<Console> getConsoles() {
+    List<GameConsole> GMs = new ArrayList<>();
+    List<Console> consoles = new ArrayList<>();
+    GMs = this.gameConsoles;
+    for (GameConsole GM : GMs) {
+      consoles.add(GM.getConsole());
+    }
+    return consoles;
   }
 
   public int numberOfConsoles()
   {
-    int number = consoles.size();
+    int number = gameConsoles.size();
     return number;
   }
 
   public boolean hasConsoles()
   {
-    boolean has = consoles.size() > 0;
+    boolean has = gameConsoles.size() > 0;
     return has;
   }
 
   public int indexOfConsole(Console aConsole)
   {
-    int index = consoles.indexOf(aConsole);
-    return index;
+    for (int i = 0; i < gameConsoles.size(); i++) {
+      if (gameConsoles.get(i).getConsole().equals(aConsole)) {
+        return i;
+      }
+    }
+    return -1;
   }
+
   /* Code from template association_MinimumNumberOfMethod */
   public static int minimumNumberOfReviews()
   {
@@ -893,82 +912,154 @@ public class Game
   {
     return 0;
   }
-  /* Code from template association_AddManyToManyMethod */
-  public boolean addConsole(Console aConsole)
-  {
+
+
+  public boolean addGameConsole(GameConsole aGC) {
     boolean wasAdded = false;
-    if (consoles.contains(aConsole)) { return false; }
-    consoles.add(aConsole);
-    if (aConsole.indexOfGame(this) != -1)
-    {
-      wasAdded = true;
+
+    // Check if this GameConsole is already added to the list
+    if (gameConsoles.contains(aGC)) {
+      return false;
     }
-    else
-    {
-      wasAdded = aConsole.addGame(this);
-      if (!wasAdded)
-      {
-        consoles.remove(aConsole);
+
+    // Add GameConsole to the list in Console
+    gameConsoles.add(aGC);
+
+    // Check if the GameConsole already contains this Console
+    if (aGC.getGame().equals(this)) {
+      wasAdded = true;
+    } else {
+      // Add this Console to the GameConsole entity
+      aGC.setGame(this);
+      wasAdded = aGC.getConsole().getGames().add(this);
+
+      // If the Console wasn't added successfully, remove the GameConsole
+      if (!wasAdded) {
+        gameConsoles.remove(aGC);
       }
     }
     return wasAdded;
   }
-  /* Code from template association_RemoveMany */
-  public boolean removeConsole(Console aConsole)
+
+  /* Code from template association_AddManyToManyMethod */
+  public boolean addConsole(Console aConsole)
   {
+    GameConsole aGC = new GameConsole(this, aConsole);
+    boolean wasAdded = false;
+    wasAdded = this.addGameConsole(aGC) && aConsole.addGameConsole(aGC);
+    if (!wasAdded) {
+      this.removeGameConsole(aGC);
+      aConsole.removeGameConsole(aGC);
+    }
+    return wasAdded;
+  }
+
+
+
+  public boolean removeGameConsole(GameConsole aGC) {
     boolean wasRemoved = false;
-    if (!consoles.contains(aConsole))
-    {
-      return wasRemoved;
+
+    // Check if the GameConsole is in the gameConsoles list
+    if (!gameConsoles.contains(aGC)) {
+      return wasRemoved; // If it's not there, return false
     }
 
-    int oldIndex = consoles.indexOf(aConsole);
-    consoles.remove(oldIndex);
-    if (aConsole.indexOfGame(this) == -1)
-    {
-      wasRemoved = true;
+    // Remove GameConsole from the list
+    int oldIndex = gameConsoles.indexOf(aGC);
+    gameConsoles.remove(oldIndex);
+
+    // Check if this Console is still referenced in the GameConsole
+    if (aGC.getGame().equals(this)) {
+      wasRemoved = true; // It is correctly removed
+    } else {
+      // Try to remove this Console from the GameConsole object
+      wasRemoved = aGC.getConsole().getGames().remove(this);
+
+      // If unsuccessful, re-add the GameConsole back to the list
+      if (!wasRemoved) {
+        gameConsoles.add(oldIndex, aGC);
+      }
     }
-    else
-    {
-      wasRemoved = aConsole.removeGame(this);
-      if (!wasRemoved)
-      {
-        consoles.add(oldIndex,aConsole);
+
+    return wasRemoved;
+  }
+
+  /* Code from template association_RemoveMany */
+  public boolean removeConsole(Console aConsole){
+    boolean wasRemoved = false;
+    for (GameConsole GM : gameConsoles) {
+      if (GM.getConsole().equals(aConsole)) {
+        return this.removeGameConsole(GM) && aConsole.removeGameConsole(GM);
       }
     }
     return wasRemoved;
   }
-  /* Code from template association_AddIndexControlFunctions */
-  public boolean addConsoleAt(Console aConsole, int index)
-  {  
+
+  public boolean addGameConsoleAt(GameConsole aGC, int index) {
     boolean wasAdded = false;
-    if(addConsole(aConsole))
-    {
-      if(index < 0 ) { index = 0; }
-      if(index > numberOfConsoles()) { index = numberOfConsoles() - 1; }
-      consoles.remove(aConsole);
-      consoles.add(index, aConsole);
+
+    // Check if the GameConsole is added successfully using the addGameConsole
+    // method
+    if (addGameConsole(aGC)) {
+      // Ensure index is within the valid range
+      if (index < 0) {
+        index = 0;
+      }
+      if (index > gameConsoles.size()) {
+        index = gameConsoles.size();
+      }
+
+      // Remove and re-add GameConsole at the specified index
+      gameConsoles.remove(aGC);
+      gameConsoles.add(index, aGC);
       wasAdded = true;
     }
+
     return wasAdded;
   }
 
+
+
+  public boolean addConsoleAt(Console aConsole, int index) {
+    GameConsole aGC = new GameConsole(this, aConsole);
+    if (this.addGameConsoleAt(aGC, index) && aGC.getConsole().addGameConsole(aGC)) {
+      return true;
+    }
+    this.removeGameConsole(aGC);
+    aConsole.removeGameConsole(aGC);
+    return false;
+  }
+
+  public boolean addOrMoveGameConsoleAt(GameConsole aGC, int index) {
+    boolean wasAdded = false;
+
+    // Check if the GameConsole is already present in the list
+    if (gameConsoles.contains(aGC)) {
+      // Ensure index is within the valid range
+      if (index < 0) {
+        index = 0;
+      }
+      if (index > gameConsoles.size()) {
+        index = gameConsoles.size();
+      }
+      // Remove and re-add GameConsole at the specified index
+      gameConsoles.remove(aGC);
+      gameConsoles.add(index, aGC);
+      wasAdded = true;
+    } else {
+      // If not already in the list, add the GameConsole at the specified index
+      wasAdded = addGameConsoleAt(aGC, index);
+    }
+
+    return wasAdded;
+  }
+
+
+
   public boolean addOrMoveConsoleAt(Console aConsole, int index)
   {
-    boolean wasAdded = false;
-    if(consoles.contains(aConsole))
-    {
-      if(index < 0 ) { index = 0; }
-      if(index > numberOfConsoles()) { index = numberOfConsoles() - 1; }
-      consoles.remove(aConsole);
-      consoles.add(index, aConsole);
-      wasAdded = true;
-    } 
-    else 
-    {
-      wasAdded = addConsoleAt(aConsole, index);
-    }
-    return wasAdded;
+    GameConsole aGC = new GameConsole(this, aConsole);
+    return this.addOrMoveGameConsoleAt(aGC, index);
   }
 
   public void delete()
@@ -1007,12 +1098,15 @@ public class Game
     {
       aCategory.removeGame(this);
     }
-    ArrayList<Console> copyOfConsoles = new ArrayList<Console>(consoles);
-    consoles.clear();
-    for(Console aConsole : copyOfConsoles)
-    {
-      aConsole.removeGame(this);
+
+    ArrayList<GameConsole> copyOfGC = new ArrayList<GameConsole>(gameConsoles);
+    gameConsoles.clear();
+    for (GameConsole aGC : copyOfGC) {
+      aGC.getConsole().removeGameConsole(aGC);
+      aGC.removeConsole();
+      aGC.removeGame();
     }
+
   }
 
 
@@ -1023,7 +1117,6 @@ public class Game
             "description" + ":" + getDescription()+ "," +
             "stockQantity" + ":" + getStockQantity()+ "," +
             "price" + ":" + getPrice()+ "]" + System.getProperties().getProperty("line.separator") +
-            "  " + "gamestatus" + "=" + (getGamestatus() != null ? !getGamestatus().equals(this)  ? getGamestatus().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
-            "  " + "console" + "=" + (getConsole() != null ? !getConsole().equals(this)  ? getConsole().toString().replaceAll("  ","    ") : "this" : "null");
+            "  " + "gamestatus" + "=" + (getStatus() != null ? !getStatus().equals(this)  ? getStatus().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator");
   }
 }

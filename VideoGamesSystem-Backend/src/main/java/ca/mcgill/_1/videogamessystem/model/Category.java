@@ -6,10 +6,12 @@ package ca.mcgill._1.videogamessystem.model;
 import java.util.*;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 // line 73 "model.ump"
 // line 134 "model.ump"
+@Entity
 public class Category
 {
 
