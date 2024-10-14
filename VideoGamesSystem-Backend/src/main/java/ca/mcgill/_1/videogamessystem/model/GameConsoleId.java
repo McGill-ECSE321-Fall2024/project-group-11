@@ -1,3 +1,5 @@
+package ca.mcgill._1.videogamessystem.model;
+
 import jakarta.persistence.Embeddable;
 import java.io.Serializable;
 import java.util.Objects;
