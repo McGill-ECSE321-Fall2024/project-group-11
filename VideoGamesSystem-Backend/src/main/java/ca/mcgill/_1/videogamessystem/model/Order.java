@@ -23,7 +23,6 @@ public class Order
 
   //Order Attributes
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int number;
 
   //Order Associations

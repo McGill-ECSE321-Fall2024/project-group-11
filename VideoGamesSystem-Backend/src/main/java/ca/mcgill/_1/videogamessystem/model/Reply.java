@@ -22,6 +22,8 @@ public class Reply
   //Reply Attributes
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
+
   private String reply;
   private Date replyDate;
 

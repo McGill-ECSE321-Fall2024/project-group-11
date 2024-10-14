@@ -25,6 +25,9 @@ public class Review
   //Review Attributes
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
+
+  
   private int rating;
   private String content;
 

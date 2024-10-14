@@ -6,6 +6,9 @@ package ca.mcgill._1.videogamessystem.model;
 import java.util.*;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import java.sql.Date;
 
@@ -18,7 +21,10 @@ public class Customer extends Account
   //------------------------
   // MEMBER VARIABLES
   //------------------------
-
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
+  
   //Customer Associations
   @OneToMany
   private List<Review> reviews;

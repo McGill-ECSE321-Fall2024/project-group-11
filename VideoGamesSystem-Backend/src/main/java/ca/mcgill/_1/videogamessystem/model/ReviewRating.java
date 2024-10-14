@@ -26,6 +26,8 @@ public class ReviewRating
   //ReviewRating Attributes
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
+
   private Status status;
 
   //------------------------

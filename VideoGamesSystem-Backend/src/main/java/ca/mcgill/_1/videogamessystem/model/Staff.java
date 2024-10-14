@@ -21,7 +21,6 @@ public abstract class Staff extends Account
 
   //Staff Attributes
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int idNum;
 
   //------------------------

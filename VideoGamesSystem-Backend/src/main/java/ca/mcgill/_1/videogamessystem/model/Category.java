@@ -22,6 +22,8 @@ public class Category
   //Category Attributes
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private int idNum;
+  
   private String category;
 
   //Category Associations

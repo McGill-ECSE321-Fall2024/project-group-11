@@ -8,9 +8,8 @@ import jakarta.persistence.Entity;
 // line 12 "model.ump"
 // line 191 "model.ump"
 @Entity
-public class Employer extends Staff
+public class Employee extends Staff
 {
-
   //------------------------
   // MEMBER VARIABLES
   //------------------------
@@ -19,7 +18,7 @@ public class Employer extends Staff
   // CONSTRUCTOR
   //------------------------
 
-  public Employer(String aUserName, String aEmail, String aPassword, int aPhoneNumber, String aAddress, Date aCreationDate, int aIdNum) {
+  public Employee(String aUserName, String aEmail, String aPassword, int aPhoneNumber, String aAddress, Date aCreationDate, int aIdNum) {
     super(aUserName, aEmail, aPassword, aPhoneNumber, aAddress, aCreationDate, aIdNum);
   }
 

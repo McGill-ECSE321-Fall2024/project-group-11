@@ -24,6 +24,8 @@ public class Promotion
   //Promotion Attributes
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
+  
   private int percentage;
   private Date startDate;
   private Date endDate;

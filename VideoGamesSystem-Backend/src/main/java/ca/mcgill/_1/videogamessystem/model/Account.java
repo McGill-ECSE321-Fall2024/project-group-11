@@ -24,6 +24,8 @@ public abstract class Account {
   @Id
   @GeneratedValue(generator = "account_id_sequence_generator", strategy = GenerationType.SEQUENCE)
   @SequenceGenerator(name = "account_id_sequence_generator", sequenceName = "account_id_seq", allocationSize = 1)
+  private Long id;
+  
   private String userName;
   private String email;
   private String password;

@@ -4,6 +4,6 @@ import org.springframework.data.repository.CrudRepository;
 
 import ca.mcgill._1.videogamessystem.model.Review;
 
-public interface ReviewRepository extends CrudRepository<Review, Integer>{
-    public Review findReview(int rating, String content);
+public interface ReviewRepository extends CrudRepository<Review, Long>{
+    public Review findReviewById(Long id);
 }

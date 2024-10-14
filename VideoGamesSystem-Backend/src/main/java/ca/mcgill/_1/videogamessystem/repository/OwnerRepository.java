@@ -5,5 +5,5 @@ import org.springframework.data.repository.CrudRepository;
 import ca.mcgill._1.videogamessystem.model.Owner;
 
 public interface OwnerRepository extends CrudRepository<Owner, Integer>{
-    public Owner findOwnerById(int id);
+    public Owner findOwnerById(int idNum);
 }
