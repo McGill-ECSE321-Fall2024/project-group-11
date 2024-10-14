@@ -5,5 +5,5 @@ import org.springframework.data.repository.CrudRepository;
 import ca.mcgill._1.videogamessystem.model.Staff;
 
 public interface StaffRepository extends CrudRepository<Staff, Integer>{
-    
+    public Staff findStaffById(int idNum);
 }

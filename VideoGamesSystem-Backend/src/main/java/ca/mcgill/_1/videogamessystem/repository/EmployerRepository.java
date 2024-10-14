@@ -5,5 +5,5 @@ import org.springframework.data.repository.CrudRepository;
 import ca.mcgill._1.videogamessystem.model.Employer;
 
 public interface EmployerRepository extends CrudRepository<Employer, Integer>{
-    
+        public Employer findEmployerById(int idNum);
 }
