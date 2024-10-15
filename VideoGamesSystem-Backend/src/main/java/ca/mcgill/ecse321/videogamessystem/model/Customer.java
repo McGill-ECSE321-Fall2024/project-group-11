@@ -25,6 +25,10 @@ public class Customer extends Account
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  public int getId(){
+    return id;
+  }
+
   //Customer Associations
   @OneToMany
   private List<Review> reviews;
