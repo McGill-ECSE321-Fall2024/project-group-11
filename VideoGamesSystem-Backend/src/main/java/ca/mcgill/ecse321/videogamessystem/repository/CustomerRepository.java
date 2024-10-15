@@ -8,6 +8,3 @@ public interface CustomerRepository extends CrudRepository<Customer, Integer>{
     public Customer findCustomerById(int idNum);
 }
 
-public interface CustomerRepository extends CrudRepository<Customer, String>{
-    public Customer findCustomerByUserName(String userName);
-}
