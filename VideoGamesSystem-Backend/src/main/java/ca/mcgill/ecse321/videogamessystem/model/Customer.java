@@ -26,8 +26,7 @@ public class Customer extends Account
   private Long id;
 
   public int getId(){
-    int id = (int) id;
-    return id;
+    return (int) id;
   }
 
   //Customer Associations
