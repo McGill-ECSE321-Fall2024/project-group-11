@@ -8,9 +8,9 @@ group = 'ca.mcgill.321'
 version = '0.0.1-SNAPSHOT'
 
 java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
-    }
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(21)
+	}
 }
 
 repositories {
@@ -23,15 +23,8 @@ dependencies {
 	runtimeOnly 'org.postgresql:postgresql'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-
 }
 
 tasks.named('test') {
-    useJUnitPlatform()
-    
-    testLogging {
-        exceptionFormat "full"  // This ensures the full stack trace is printed when a test fails
-        // You can also add other configurations, for example:
-        events "passed", "skipped", "failed"
-    }
+	useJUnitPlatform()
 }
