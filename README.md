@@ -62,24 +62,17 @@ Each team member contributed to the project through their assigned roles, ensuri
 You can see the Deliverable Report here: [Deliverable12](https://github.com/McGill-ECSE321-Fall2024/project-group-11/wiki/Deliverable2)
 
 
-This deliverable includes:
-- requirements selection (functional and non-functional system requirements).
-- Use case diagrams and detailed specifications for six use cases.
-- A domain model represented through UML class diagrams.
-- A PostgreSQL-based persistence layer implemented.
-- A test suite validating read/write operations for each class of the domain model.
-- A build system automating the compilation and testing processes.
-- Documentation of team meetings and design decisions in the project wiki.
+For Deliverable 2, we will implement backend services using Java Spring to provide RESTful HTTP endpoints for all use cases, supported by a persistence layer from Deliverable 1. This includes creating a software quality assurance plan, achieving high test coverage through unit and integration testing with JUnit, and documenting our testing and quality assurance practices. A build system will be set up to automate compilation, testing, and coverage reporting. We’ll use GitHub’s issue tracking for project management and document our progress, team roles, and key design decisions in a project report linked in the README file.
 
 ## Team Members and Roles
 
 | Name            | Role                 | Hours                            | Contribution|
 |-----------------|----------------------|----------------------------------|----------------------------------|
-| Emile Labrunie   | Project Manager, uses Cases Designer  | 16hours  | Manage Wiki pages,manage table of contents,did the use cases diagrams, create issues for deliverable 1,one use case specification|
-|  Paolo Lahoud| Requirements and UML diagram | 20 hours | Create & manage Domain Model ,Schedule meetings,technical writing for requirements,    writing test cases ,one use case specification     |
-| Rami El Nawam | Database Designer    | 17 hours |create CRUD & update CRUD repository,comment CRUD and persistence. add JPA annotations ,one use case specification |
-| Jeffrey Nahas  |  Build System Lead     | 18 hours | create persistence layer,create JUnit tests for persistence layer,writing test cases,one use case specification  |
-|  Yanzhe Zhang|Test Developer, persistence layer developer    | 17 hours | update, and type out meeting minutes,writing test cases, one use case specification|
+| Emile Labrunie   | Management and Testing | 20hours  | Manage Wiki pages,manage table of contents,Re did the UML diagram|
+|  Paolo Lahoud| Development and Testing  | 22 hours |Schedule meetings, Unit testing    |
+| Rami El Nawam | Development and Testing    | 21 hours | Meeting Minutes, Re did Umple code|
+| Jeffrey Nahas  | Development and Testing     | 23 hours | created data base again, and ran Tests |
+|  Yanzhe Zhang|Development and Testing    | 22 hours | Persistence Layer|
 
 Each team member contributed to the project through their assigned roles, ensuring that all tasks for Deliverable 1 were completed efficiently and on time.
 
