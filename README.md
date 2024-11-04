@@ -56,3 +56,30 @@ This deliverable includes:
 Each team member contributed to the project through their assigned roles, ensuring that all tasks for Deliverable 1 were completed efficiently and on time.
 
 
+
+# Deliverable 2: Backend Services, Behaviour Modelling, and Testin
+
+You can see the Deliverable Report here: [Deliverable12](https://github.com/McGill-ECSE321-Fall2024/project-group-11/wiki/Deliverable2)
+
+
+This deliverable includes:
+- requirements selection (functional and non-functional system requirements).
+- Use case diagrams and detailed specifications for six use cases.
+- A domain model represented through UML class diagrams.
+- A PostgreSQL-based persistence layer implemented.
+- A test suite validating read/write operations for each class of the domain model.
+- A build system automating the compilation and testing processes.
+- Documentation of team meetings and design decisions in the project wiki.
+
+## Team Members and Roles
+
+| Name            | Role                 | Hours                            | Contribution|
+|-----------------|----------------------|----------------------------------|----------------------------------|
+| Emile Labrunie   | Project Manager, uses Cases Designer  | 16hours  | Manage Wiki pages,manage table of contents,did the use cases diagrams, create issues for deliverable 1,one use case specification|
+|  Paolo Lahoud| Requirements and UML diagram | 20 hours | Create & manage Domain Model ,Schedule meetings,technical writing for requirements,    writing test cases ,one use case specification     |
+| Rami El Nawam | Database Designer    | 17 hours |create CRUD & update CRUD repository,comment CRUD and persistence. add JPA annotations ,one use case specification |
+| Jeffrey Nahas  |  Build System Lead     | 18 hours | create persistence layer,create JUnit tests for persistence layer,writing test cases,one use case specification  |
+|  Yanzhe Zhang|Test Developer, persistence layer developer    | 17 hours | update, and type out meeting minutes,writing test cases, one use case specification|
+
+Each team member contributed to the project through their assigned roles, ensuring that all tasks for Deliverable 1 were completed efficiently and on time.
+
