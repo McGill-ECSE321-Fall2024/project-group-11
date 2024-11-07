@@ -2,9 +2,15 @@
 /*This code was generated using the UMPLE 1.35.0.7523.c616a4dce modeling language!*/
 package ca.mcgill.ecse321.videogamessystem.model;
 
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Entity;
+
 
 // line 41 "model.ump"
 // line 138 "model.ump"
+@Entity
 public class SpecificGame
 {
 
@@ -13,11 +19,15 @@ public class SpecificGame
   //------------------------
 
   //SpecificGame Attributes
+  @Id
   private int serialNumber;
+
   private boolean availability;
 
   //SpecificGame Associations
+  @OneToOne
   private Game game;
+  @ManyToOne
   private Order order;
 
   //------------------------

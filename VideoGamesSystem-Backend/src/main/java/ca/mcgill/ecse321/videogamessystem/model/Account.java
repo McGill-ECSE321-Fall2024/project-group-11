@@ -2,12 +2,18 @@
 /*This code was generated using the UMPLE 1.35.0.7523.c616a4dce modeling language!*/
 package ca.mcgill.ecse321.videogamessystem.model;
 
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.Id;
 
 /**
  * Unable to update umple code due to error at [26,2]
  */
 // line 3 "model.ump"
 // line 122 "model.ump"
+@MappedSuperclass
 public abstract class Account
 {
 
@@ -16,6 +22,11 @@ public abstract class Account
   //------------------------
 
   //Account Attributes
+  @Id
+  @GeneratedValue(generator = "account_id_sequence_generator", strategy = GenerationType.SEQUENCE)
+  @SequenceGenerator(name = "account_id_sequence_generator", sequenceName = "account_id_seq", allocationSize = 1)
+  private Long id;
+
   private String userName;
   private String email;
   private String password;

@@ -2,9 +2,13 @@
 /*This code was generated using the UMPLE 1.35.0.7523.c616a4dce modeling language!*/
 package ca.mcgill.ecse321.videogamessystem.model;
 
+import jakarta.persistence.EmbeddedId;
+import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToOne;
 
 // line 112 "model.ump"
 // line 202 "model.ump"
+@Entity
 public class GameConsole
 {
 
@@ -13,9 +17,11 @@ public class GameConsole
   //------------------------
 
   //GameConsole Attributes
+  @EmbeddedId
   private int gameConsoleID;
 
   //GameConsole Associations
+  @ManyToOne
   private Console console;
 
   //------------------------

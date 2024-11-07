@@ -3,8 +3,14 @@
 package ca.mcgill.ecse321.videogamessystem.model;
 
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+
 // line 62 "model.ump"
 // line 178 "model.ump"
+@Entity
 public class Console
 {
 
@@ -13,6 +19,10 @@ public class Console
   //------------------------
 
   //Console Attributes
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
+
   private String consoleType;
 
   //------------------------

@@ -2,9 +2,15 @@
 /*This code was generated using the UMPLE 1.35.0.7523.c616a4dce modeling language!*/
 package ca.mcgill.ecse321.videogamessystem.model;
 
+import jakarta.persistence.Id;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.ManyToOne;
 
 // line 102 "model.ump"
 // line 158 "model.ump"
+@Entity
 public class SpecificReviewRating
 {
 
@@ -13,10 +19,16 @@ public class SpecificReviewRating
   //------------------------
 
   //SpecificReviewRating Attributes
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
+
   private ReviewRating reviewRating;
 
   //SpecificReviewRating Associations
+  @ManyToOne
   private Review review;
+  @ManyToOne
   private Customer customer;
 
   //------------------------

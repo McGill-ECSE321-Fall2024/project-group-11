@@ -2,9 +2,15 @@
 /*This code was generated using the UMPLE 1.35.0.7523.c616a4dce modeling language!*/
 package ca.mcgill.ecse321.videogamessystem.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.ManyToOne;
 
 // line 19 "model.ump"
 // line 188 "model.ump"
+@Entity
 public class Game
 {
 
@@ -13,6 +19,10 @@ public class Game
   //------------------------
 
   //Game Attributes
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
+
   private String description;
   private int stockQantity;
   private GameStatus gamestatus;
@@ -21,8 +31,11 @@ public class Game
   private String category;
 
   //Game Associations
+  @ManyToOne
   private Wishlist wishlist;
+  @ManyToOne
   private GameConsole gameConsole;
+  @ManyToOne
   private Promotion promotion;
 
   //------------------------

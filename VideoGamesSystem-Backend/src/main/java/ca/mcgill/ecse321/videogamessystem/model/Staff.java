@@ -2,9 +2,11 @@
 /*This code was generated using the UMPLE 1.35.0.7523.c616a4dce modeling language!*/
 package ca.mcgill.ecse321.videogamessystem.model;
 
+import jakarta.persistence.Entity;
 
 // line 96 "model.ump"
 // line 153 "model.ump"
+@Entity
 public class Staff extends Account
 {
 
@@ -13,6 +15,7 @@ public class Staff extends Account
   //------------------------
 
   //Staff Attributes
+
   private StaffType staffType;
 
   //------------------------

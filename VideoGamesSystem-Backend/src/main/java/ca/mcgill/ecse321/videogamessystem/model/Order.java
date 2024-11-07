@@ -5,8 +5,16 @@ package ca.mcgill.ecse321.videogamessystem.model;
 import java.sql.Date;
 import java.util.*;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+
 // line 33 "model.ump"
 // line 132 "model.ump"
+@Entity
 public class Order
 {
 
@@ -15,12 +23,16 @@ public class Order
   //------------------------
 
   //Order Attributes
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int number;
   private Date orderDate;
   private int cardNumber;
 
   //Order Associations
+  @OneToMany
   private List<SpecificGame> specificGames;
+  @ManyToOne
   private Customer customer;
 
   //------------------------

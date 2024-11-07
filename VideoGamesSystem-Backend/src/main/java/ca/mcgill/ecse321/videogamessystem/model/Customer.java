@@ -2,9 +2,12 @@
 /*This code was generated using the UMPLE 1.35.0.7523.c616a4dce modeling language!*/
 package ca.mcgill.ecse321.videogamessystem.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.OneToOne;
 
 // line 76 "model.ump"
 // line 163 "model.ump"
+@Entity
 public class Customer extends Account
 {
 
@@ -13,11 +16,14 @@ public class Customer extends Account
   //------------------------
 
   //Customer Attributes
+
   private int phoneNumber;
   private String adress;
 
   //Customer Associations
+  @OneToOne
   private Wishlist wishlist;
+  
 
   //------------------------
   // CONSTRUCTOR
