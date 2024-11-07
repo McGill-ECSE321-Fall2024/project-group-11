@@ -18,7 +18,7 @@ public class GameConsole
 
   //GameConsole Attributes
   @EmbeddedId
-  private int gameConsoleID;
+  private GameConsoleId gameConsoleID;
 
   //GameConsole Associations
   @ManyToOne
@@ -28,7 +28,7 @@ public class GameConsole
   // CONSTRUCTOR
   //------------------------
 
-  public GameConsole(int aGameConsoleID, Console aConsole)
+  public GameConsole(GameConsoleId aGameConsoleID, Console aConsole)
   {
     gameConsoleID = aGameConsoleID;
     if (!setConsole(aConsole))
@@ -41,7 +41,7 @@ public class GameConsole
   // INTERFACE
   //------------------------
 
-  public boolean setGameConsoleID(int aGameConsoleID)
+  public boolean setGameConsoleID(GameConsoleId aGameConsoleID)
   {
     boolean wasSet = false;
     gameConsoleID = aGameConsoleID;
@@ -49,7 +49,7 @@ public class GameConsole
     return wasSet;
   }
 
-  public int getGameConsoleID()
+  public GameConsoleId getGameConsoleID()
   {
     return gameConsoleID;
   }
