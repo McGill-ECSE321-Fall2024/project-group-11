@@ -25,6 +25,8 @@ public class Review
   //Review Attributes
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
+  
   private int gameRating;
   private String reviewContent;
   private Date reviewDate;
