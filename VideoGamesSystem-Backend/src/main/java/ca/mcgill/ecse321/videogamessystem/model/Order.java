@@ -1,3 +1,4 @@
+package ca.mcgill.ecse321.videogamessystem.model;
 /*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.35.0.7523.c616a4dce modeling language!*/
 
@@ -137,7 +138,7 @@ public class Order
     return customer;
   }
   /* Code from template association_MinimumNumberOfMethod */
-  public static int minimumNumberOfSpecificGames()
+  public int minimumNumberOfSpecificGames()
   {
     return 1;
   }

@@ -1,3 +1,4 @@
+package ca.mcgill.ecse321.videogamessystem.model;
 /*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.35.0.7523.c616a4dce modeling language!*/
 
@@ -14,7 +15,7 @@ public class SpecificGame
 
   //SpecificGame Attributes
   private int serialNumber;
-  private bool availability;
+  private boolean availability;
   private int specificGameID;
 
   //SpecificGame Associations
@@ -25,7 +26,7 @@ public class SpecificGame
   // CONSTRUCTOR
   //------------------------
 
-  public SpecificGame(int aSerialNumber, bool aAvailability, int aSpecificGameID, Game aGame)
+  public SpecificGame(int aSerialNumber, boolean aAvailability, int aSpecificGameID, Game aGame)
   {
     serialNumber = aSerialNumber;
     availability = aAvailability;
@@ -48,7 +49,7 @@ public class SpecificGame
     return wasSet;
   }
 
-  public boolean setAvailability(bool aAvailability)
+  public boolean setAvailability(boolean aAvailability)
   {
     boolean wasSet = false;
     availability = aAvailability;
@@ -69,7 +70,7 @@ public class SpecificGame
     return serialNumber;
   }
 
-  public bool getAvailability()
+  public boolean getAvailability()
   {
     return availability;
   }
@@ -173,15 +174,12 @@ public class SpecificGame
       }
     }
   }
-
-
-  public String toString()
-  {
-    return super.toString() + "["+
-            "serialNumber" + ":" + getSerialNumber()+ "," +
-            "specificGameID" + ":" + getSpecificGameID()+ "]" + System.getProperties().getProperty("line.separator") +
-            "  " + "availability" + "=" + (getAvailability() != null ? !getAvailability().equals(this)  ? getAvailability().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
-            "  " + "game = "+(getGame()!=null?Integer.toHexString(System.identityHashCode(getGame())):"null") + System.getProperties().getProperty("line.separator") +
-            "  " + "order = "+(getOrder()!=null?Integer.toHexString(System.identityHashCode(getOrder())):"null");
-  }
+  public String toString() {
+    return super.toString() + "[" +
+            "serialNumber" + ":" + getSerialNumber() + "," +
+            "specificGameID" + ":" + getSpecificGameID() + "]" + System.getProperties().getProperty("line.separator") +
+            "  " + "availability" + "=" + getAvailability() + System.getProperties().getProperty("line.separator") +
+            "  " + "game = " + (getGame() != null ? Integer.toHexString(System.identityHashCode(getGame())) : "null") + System.getProperties().getProperty("line.separator") +
+            "  " + "order = " + (getOrder() != null ? Integer.toHexString(System.identityHashCode(getOrder())) : "null");
+}
 }
