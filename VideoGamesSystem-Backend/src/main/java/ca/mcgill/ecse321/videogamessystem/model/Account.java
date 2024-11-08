@@ -27,6 +27,10 @@ public abstract class Account
   @SequenceGenerator(name = "account_id_sequence_generator", sequenceName = "account_id_seq", allocationSize = 1)
   private Long id;
 
+  public long getId(){
+    return id;
+  }
+
   private String userName;
   private String email;
   private String password;

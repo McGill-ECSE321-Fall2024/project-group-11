@@ -2,7 +2,8 @@ package test.java.ca.mcgill.ecse321.videogamessystem;
 // package ca.mcgill.ecse321.videogamessystem.repository;
 
 import ca.mcgill.ecse321.videogamessystem.model.Customer;
-import ca.mcgill.ecse321.videogamessystem.dao.CustomerRepository;
+import ca.mcgill.ecse321.videogamessystem.model.Wishlist;
+import ca.mcgill.ecse321.videogamessystem.repository.CustomerRepository;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -15,7 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.sql.Date;
 import ca.mcgill.ecse321.videogamessystem.model.Customer;
 
-@SpringBootTest
+@SpringBootTest(classes = Customer.class)
 public class CustomerTests {
     @Autowired 
     private CustomerRepository customerRepo;
@@ -36,15 +37,16 @@ public class CustomerTests {
         int aPhoneNumber = 123456678;
         String aEmail = "paolo.lahoud@mailmcgill.ca";
         String aPassword = "987654321";
+        Wishlist aWishlist = null;
 
 
-        Customer customer = new Customer(aUserName, aEmail, aPassword, aPhoneNumber, aAddress, aCreationDate);
+        Customer customer = new Customer(aUserName, aEmail, aPassword, aPhoneNumber, aAddress, aWishlist);
 
         //Save
         customer = customerRepo.save(customer);
         //wishlist = wishlistRepo.save(wishlist);
 
-        int id = customer.getId();
+        long id = customer.getId();
         //Read
         Customer customer_from_DB = customerRepo.findCustomerById(id);
 
