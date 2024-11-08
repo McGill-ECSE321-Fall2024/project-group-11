@@ -4,7 +4,9 @@ package ca.mcgill.ecse321.videogamessystem.model;
 
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.MapsId;
 
 // line 112 "model.ump"
 // line 202 "model.ump"
@@ -22,6 +24,8 @@ public class GameConsole
 
   //GameConsole Associations
   @ManyToOne
+  @MapsId("consoleId") // Links consoleId in GameConsoleId with Console
+  @JoinColumn(name = "console_id") // Maps to the primary key in Console
   private Console console;
 
   //------------------------

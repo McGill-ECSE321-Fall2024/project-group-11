@@ -21,7 +21,7 @@ public class Wishlist
   //Wishlist Attributes
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long Id;
+  private Long id;
 
   private int nbOfItems;
 
