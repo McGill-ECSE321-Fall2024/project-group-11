@@ -16,33 +16,33 @@ public class Staff extends Account
 
   //Staff Attributes
 
-  private StaffType staffType;
+  private boolean admin;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public Staff(String aUserName, String aEmail, String aPassword, StaffType aStaffType)
+  public Staff(String aUserName, String aEmail, String aPassword, boolean isAdmin)
   {
     super(aUserName, aEmail, aPassword);
-    staffType = aStaffType;
+    admin = isAdmin;
   }
 
   //------------------------
   // INTERFACE
   //------------------------
 
-  public boolean setStaffType(StaffType aStaffType)
+  public boolean setStaffType(boolean isAdmin)
   {
     boolean wasSet = false;
-    staffType = aStaffType;
+    admin = isAdmin;
     wasSet = true;
     return wasSet;
   }
 
-  public StaffType getStaffType()
+  public boolean getStaffType()
   {
-    return staffType;
+    return admin;
   }
 
   public void delete()
@@ -53,7 +53,7 @@ public class Staff extends Account
 
   public String toString()
   {
-    return super.toString() + "["+ "]" + System.getProperties().getProperty("line.separator") +
-            "  " + "staffType" + "=" + (getStaffType() != null ? !getStaffType().equals(this)  ? getStaffType().toString().replaceAll("  ","    ") : "this" : "null");
+      return super.toString() + System.getProperties().getProperty("line.separator") +
+              "  " + "admin=" + admin;
   }
 }

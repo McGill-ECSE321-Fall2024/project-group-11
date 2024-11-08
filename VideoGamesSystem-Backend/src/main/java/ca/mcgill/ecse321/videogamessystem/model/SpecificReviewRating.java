@@ -1,5 +1,3 @@
-/*PLEASE DO NOT EDIT THIS CODE*/
-/*This code was generated using the UMPLE 1.35.0.7523.c616a4dce modeling language!*/
 package ca.mcgill.ecse321.videogamessystem.model;
 
 import jakarta.persistence.Id;
@@ -7,27 +5,30 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 
 // line 102 "model.ump"
 // line 158 "model.ump"
 @Entity
-public class SpecificReviewRating
-{
+public class SpecificReviewRating {
 
   //------------------------
   // MEMBER VARIABLES
   //------------------------
 
-  //SpecificReviewRating Attributes
+  // SpecificReviewRating Attributes
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  @Enumerated(EnumType.STRING)
   private ReviewRating reviewRating;
 
-  //SpecificReviewRating Associations
+  // SpecificReviewRating Associations
   @ManyToOne
   private Review review;
+  
   @ManyToOne
   private Customer customer;
 
@@ -35,15 +36,12 @@ public class SpecificReviewRating
   // CONSTRUCTOR
   //------------------------
 
-  public SpecificReviewRating(ReviewRating aReviewRating, Review aReview, Customer aCustomer)
-  {
+  public SpecificReviewRating(ReviewRating aReviewRating, Review aReview, Customer aCustomer) {
     reviewRating = aReviewRating;
-    if (!setReview(aReview))
-    {
+    if (!setReview(aReview)) {
       throw new RuntimeException("Unable to create SpecificReviewRating due to aReview. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
     }
-    if (!setCustomer(aCustomer))
-    {
+    if (!setCustomer(aCustomer)) {
       throw new RuntimeException("Unable to create SpecificReviewRating due to aCustomer. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
     }
   }
@@ -52,63 +50,55 @@ public class SpecificReviewRating
   // INTERFACE
   //------------------------
 
-  public boolean setReviewRating(ReviewRating aReviewRating)
-  {
+  public boolean setReviewRating(ReviewRating aReviewRating) {
     boolean wasSet = false;
     reviewRating = aReviewRating;
     wasSet = true;
     return wasSet;
   }
 
-  public ReviewRating getReviewRating()
-  {
+  public ReviewRating getReviewRating() {
     return reviewRating;
   }
-  /* Code from template association_GetOne */
-  public Review getReview()
-  {
+
+  public Review getReview() {
     return review;
   }
-  /* Code from template association_GetOne */
-  public Customer getCustomer()
-  {
+
+  public Customer getCustomer() {
     return customer;
   }
-  /* Code from template association_SetUnidirectionalOne */
-  public boolean setReview(Review aNewReview)
-  {
+
+  public boolean setReview(Review aNewReview) {
     boolean wasSet = false;
-    if (aNewReview != null)
-    {
+    if (aNewReview != null) {
       review = aNewReview;
       wasSet = true;
     }
     return wasSet;
   }
-  /* Code from template association_SetUnidirectionalOne */
-  public boolean setCustomer(Customer aNewCustomer)
-  {
+
+  public boolean setCustomer(Customer aNewCustomer) {
     boolean wasSet = false;
-    if (aNewCustomer != null)
-    {
+    if (aNewCustomer != null) {
       customer = aNewCustomer;
       wasSet = true;
     }
     return wasSet;
   }
 
-  public void delete()
-  {
+  public void delete() {
     review = null;
     customer = null;
   }
 
-
-  public String toString()
-  {
-    return super.toString() + "["+ "]" + System.getProperties().getProperty("line.separator") +
-            "  " + "reviewRating" + "=" + (getReviewRating() != null ? !getReviewRating().equals(this)  ? getReviewRating().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
-            "  " + "review = "+(getReview()!=null?Integer.toHexString(System.identityHashCode(getReview())):"null") + System.getProperties().getProperty("line.separator") +
-            "  " + "customer = "+(getCustomer()!=null?Integer.toHexString(System.identityHashCode(getCustomer())):"null");
+  @Override
+  public String toString() {
+    return "SpecificReviewRating{" +
+           "id=" + id +
+           ", reviewRating=" + reviewRating +
+           ", review=" + (review != null ? Integer.toHexString(System.identityHashCode(review)) : "null") +
+           ", customer=" + (customer != null ? Integer.toHexString(System.identityHashCode(customer)) : "null") +
+           '}';
   }
 }

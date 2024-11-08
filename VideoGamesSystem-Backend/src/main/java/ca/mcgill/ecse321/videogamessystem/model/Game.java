@@ -25,7 +25,6 @@ public class Game
 
   private String description;
   private int stockQantity;
-  private GameStatus gamestatus;
   private int price;
   private String title;
   private String category;
@@ -42,11 +41,10 @@ public class Game
   // CONSTRUCTOR
   //------------------------
 
-  public Game(String aDescription, int aStockQantity, GameStatus aGamestatus, int aPrice, String aTitle, String aCategory, Wishlist aWishlist, GameConsole aGameConsole, Promotion aPromotion)
+  public Game(String aDescription, int aStockQantity, int aPrice, String aTitle, String aCategory, Wishlist aWishlist, GameConsole aGameConsole, Promotion aPromotion)
   {
     description = aDescription;
     stockQantity = aStockQantity;
-    gamestatus = aGamestatus;
     price = aPrice;
     title = aTitle;
     category = aCategory;
@@ -84,14 +82,6 @@ public class Game
     return wasSet;
   }
 
-  public boolean setGamestatus(GameStatus aGamestatus)
-  {
-    boolean wasSet = false;
-    gamestatus = aGamestatus;
-    wasSet = true;
-    return wasSet;
-  }
-
   public boolean setPrice(int aPrice)
   {
     boolean wasSet = false;
@@ -124,11 +114,6 @@ public class Game
   public int getStockQantity()
   {
     return stockQantity;
-  }
-
-  public GameStatus getGamestatus()
-  {
-    return gamestatus;
   }
 
   public int getPrice()
@@ -210,7 +195,6 @@ public class Game
             "price" + ":" + getPrice()+ "," +
             "title" + ":" + getTitle()+ "," +
             "category" + ":" + getCategory()+ "]" + System.getProperties().getProperty("line.separator") +
-            "  " + "gamestatus" + "=" + (getGamestatus() != null ? !getGamestatus().equals(this)  ? getGamestatus().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
             "  " + "wishlist = "+(getWishlist()!=null?Integer.toHexString(System.identityHashCode(getWishlist())):"null") + System.getProperties().getProperty("line.separator") +
             "  " + "gameConsole = "+(getGameConsole()!=null?Integer.toHexString(System.identityHashCode(getGameConsole())):"null") + System.getProperties().getProperty("line.separator") +
             "  " + "promotion = "+(getPromotion()!=null?Integer.toHexString(System.identityHashCode(getPromotion())):"null");
