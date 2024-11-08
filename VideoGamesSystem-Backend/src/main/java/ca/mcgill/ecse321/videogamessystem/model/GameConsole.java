@@ -1,97 +1,89 @@
+/*PLEASE DO NOT EDIT THIS CODE*/
+/*This code was generated using the UMPLE 1.35.0.7523.c616a4dce modeling language!*/
 package ca.mcgill.ecse321.videogamessystem.model;
 
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.MapsId;
 
+// line 112 "model.ump"
+// line 202 "model.ump"
 @Entity
-public class GameConsole {
+public class GameConsole
+{
 
-    @EmbeddedId
-    private GameConsoleId id;
+  //------------------------
+  // MEMBER VARIABLES
+  //------------------------
 
-    @ManyToOne
-    @JoinColumn(name = "gameId", insertable = false, updatable = false)
-    private Game game;
+  //GameConsole Attributes
+  @EmbeddedId
+  private GameConsoleId gameConsoleID;
 
-    @ManyToOne
-    @JoinColumn(name = "consoleId", insertable = false, updatable = false)
-    private Console console;
+  //GameConsole Associations
+  @ManyToOne
+  @MapsId("consoleId") // Links consoleId in GameConsoleId with Console
+  @JoinColumn(name = "console_id") // Maps to the primary key in Console
+  private Console console;
 
-    // Constructors
-    public GameConsole() {
+  //------------------------
+  // CONSTRUCTOR
+  //------------------------
+
+  public GameConsole(GameConsoleId aGameConsoleID, Console aConsole)
+  {
+    gameConsoleID = aGameConsoleID;
+    if (!setConsole(aConsole))
+    {
+      throw new RuntimeException("Unable to create GameConsole due to aConsole. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
     }
+  }
 
-    public GameConsole(Game game, Console console) {
-        this.game = game;
-        this.console = console;
-        this.id = new GameConsoleId(game.getId(), console.getId());
+  //------------------------
+  // INTERFACE
+  //------------------------
+
+  public boolean setGameConsoleID(GameConsoleId aGameConsoleID)
+  {
+    boolean wasSet = false;
+    gameConsoleID = aGameConsoleID;
+    wasSet = true;
+    return wasSet;
+  }
+
+  public GameConsoleId getGameConsoleID()
+  {
+    return gameConsoleID;
+  }
+  /* Code from template association_GetOne */
+  public Console getConsole()
+  {
+    return console;
+  }
+  /* Code from template association_SetUnidirectionalOne */
+  public boolean setConsole(Console aNewConsole)
+  {
+    boolean wasSet = false;
+    if (aNewConsole != null)
+    {
+      console = aNewConsole;
+      wasSet = true;
     }
+    return wasSet;
+  }
 
-    // Getters and setters
-    public GameConsoleId getId() {
-        return id;
-    }
-
-    public void setId(GameConsoleId id) {
-        this.id = id;
-    }
-
-    public Game getGame() {
-        return game;
-    }
-
-    public void setGame(Game game) {
-        this.game = game;
-    }
-
-    public Console getConsole() {
-        return console;
-    }
-
-    public void setConsole(Console console) {
-        this.console = console;
-    }
-
-    public boolean removeConsole() {
-        boolean wasRemoved = false;
-
-        // Check if the GameConsole has an associated Console
-        if (this.console != null) {
-            Console oldConsole = this.console;
-
-            // Remove the current GameConsole from the Console's list of GameConsoles
-            oldConsole.getGameConsoles().remove(this);
-
-            // Nullify the reference to the Console in this GameConsole
-            this.console = null;
-
-            wasRemoved = true;
-        }
-        return wasRemoved;
-    }
-
-    public boolean removeGame() {
-        boolean wasRemoved = false;
-
-        // Check if the GameConsole has an associated Game
-        if (this.game != null) {
-            Game oldGame = this.game;
-
-            // Remove the current GameConsole from the Game's list of GameConsoles
-            oldGame.getGameConsoles().remove(this);
-
-            // Nullify the reference to the Game in this GameConsole
-            this.game = null;
-
-            wasRemoved = true;
-        }
-
-        return wasRemoved;
-    }
+  public void delete()
+  {
+    console = null;
+  }
 
 
-
-
+  public String toString()
+  {
+    return super.toString() + "["+
+            "gameConsoleID" + ":" + getGameConsoleID()+ "]" + System.getProperties().getProperty("line.separator") +
+            "  " + "console = "+(getConsole()!=null?Integer.toHexString(System.identityHashCode(getConsole())):"null");
+  }
 }

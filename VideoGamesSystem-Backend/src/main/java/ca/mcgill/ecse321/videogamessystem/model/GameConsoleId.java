@@ -8,6 +8,7 @@ import java.util.Objects;
 public class GameConsoleId implements Serializable {
 
     private Long gameId;
+
     private Long consoleId;
 
     // Default constructor

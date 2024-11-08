@@ -1,16 +1,13 @@
-package ca.mcgill.ecse321.videogamessystem.model;
 /*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.35.0.7523.c616a4dce modeling language!*/
+package ca.mcgill.ecse321.videogamessystem.model;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
 
-import java.sql.Date;
-
-// line 29 "model.ump"
-// line 201 "model.ump"
+// line 96 "model.ump"
+// line 153 "model.ump"
 @Entity
-public abstract class Staff extends Account
+public class Staff extends Account
 {
 
   //------------------------
@@ -18,36 +15,34 @@ public abstract class Staff extends Account
   //------------------------
 
   //Staff Attributes
-  @Id
-  private int idNum;
+
+  private boolean admin;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
-  // Default constructor (required by Hibernate)
-  public Staff() {
-  }
 
-  public Staff(String aUserName, String aEmail, String aPassword, int aPhoneNumber, String aAddress, Date aCreationDate, int aIdNum) {
-    super(aUserName, aEmail, aPassword, aPhoneNumber, aAddress, aCreationDate);
-    this.idNum = aIdNum;
+  public Staff(String aUserName, String aEmail, String aPassword, boolean isAdmin)
+  {
+    super(aUserName, aEmail, aPassword);
+    admin = isAdmin;
   }
 
   //------------------------
   // INTERFACE
   //------------------------
 
-  public boolean setIdNum(int aIdNum)
+  public boolean setStaffType(boolean isAdmin)
   {
     boolean wasSet = false;
-    idNum = aIdNum;
+    admin = isAdmin;
     wasSet = true;
     return wasSet;
   }
 
-  public int getIdNum()
+  public boolean getStaffType()
   {
-    return idNum;
+    return admin;
   }
 
   public void delete()
@@ -58,7 +53,7 @@ public abstract class Staff extends Account
 
   public String toString()
   {
-    return super.toString() + "["+
-            "idNum" + ":" + getIdNum()+ "]";
+      return super.toString() + System.getProperties().getProperty("line.separator") +
+              "  " + "admin=" + admin;
   }
 }

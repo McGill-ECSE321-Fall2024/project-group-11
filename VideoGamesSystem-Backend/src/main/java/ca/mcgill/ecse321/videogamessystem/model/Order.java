@@ -1,16 +1,19 @@
-package ca.mcgill.ecse321.videogamessystem.model;
 /*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.35.0.7523.c616a4dce modeling language!*/
+package ca.mcgill.ecse321.videogamessystem.model;
 
-
+import java.sql.Date;
 import java.util.*;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 
-// line 61 "model.ump"
-// line 154 "model.ump"
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+
+// line 33 "model.ump"
+// line 132 "model.ump"
 @Entity
 public class Order
 {
@@ -21,26 +24,35 @@ public class Order
 
   //Order Attributes
   @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int number;
+  private Date orderDate;
+  private int cardNumber;
 
   //Order Associations
   @OneToMany
   private List<SpecificGame> specificGames;
-  @OneToOne
+  @ManyToOne
   private Customer customer;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public Order(int aNumber, Customer aCustomer)
+  public Order(int aNumber, Date aOrderDate, int aCardNumber, Customer aCustomer, SpecificGame... allSpecificGames)
   {
     number = aNumber;
+    orderDate = aOrderDate;
+    cardNumber = aCardNumber;
     specificGames = new ArrayList<SpecificGame>();
-    boolean didAddCustomer = setCustomer(aCustomer);
-    if (!didAddCustomer)
+    boolean didAddSpecificGames = setSpecificGames(allSpecificGames);
+    if (!didAddSpecificGames)
     {
-      throw new RuntimeException("Unable to create order due to customer. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
+      throw new RuntimeException("Unable to create Order, must have at least 1 specificGames. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
+    }
+    if (!setCustomer(aCustomer))
+    {
+      throw new RuntimeException("Unable to create Order due to aCustomer. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
     }
   }
 
@@ -56,9 +68,35 @@ public class Order
     return wasSet;
   }
 
+  public boolean setOrderDate(Date aOrderDate)
+  {
+    boolean wasSet = false;
+    orderDate = aOrderDate;
+    wasSet = true;
+    return wasSet;
+  }
+
+  public boolean setCardNumber(int aCardNumber)
+  {
+    boolean wasSet = false;
+    cardNumber = aCardNumber;
+    wasSet = true;
+    return wasSet;
+  }
+
   public int getNumber()
   {
     return number;
+  }
+
+  public Date getOrderDate()
+  {
+    return orderDate;
+  }
+
+  public int getCardNumber()
+  {
+    return cardNumber;
   }
   /* Code from template association_GetMany */
   public SpecificGame getSpecificGame(int index)
@@ -98,27 +136,24 @@ public class Order
   /* Code from template association_MinimumNumberOfMethod */
   public static int minimumNumberOfSpecificGames()
   {
-    return 0;
+    return 1;
   }
-  /* Code from template association_AddManyToOptionalOne */
+  /* Code from template association_AddMNToOptionalOne */
   public boolean addSpecificGame(SpecificGame aSpecificGame)
   {
     boolean wasAdded = false;
     if (specificGames.contains(aSpecificGame)) { return false; }
     Order existingOrder = aSpecificGame.getOrder();
-    if (existingOrder == null)
+    if (existingOrder != null && existingOrder.numberOfSpecificGames() <= minimumNumberOfSpecificGames())
     {
-      aSpecificGame.setOrder(this);
+      return wasAdded;
     }
-    else if (!this.equals(existingOrder))
+    else if (existingOrder != null)
     {
-      existingOrder.removeSpecificGame(aSpecificGame);
-      addSpecificGame(aSpecificGame);
+      existingOrder.specificGames.remove(aSpecificGame);
     }
-    else
-    {
-      specificGames.add(aSpecificGame);
-    }
+    specificGames.add(aSpecificGame);
+    setOrder(aSpecificGame,this);
     wasAdded = true;
     return wasAdded;
   }
@@ -126,13 +161,81 @@ public class Order
   public boolean removeSpecificGame(SpecificGame aSpecificGame)
   {
     boolean wasRemoved = false;
-    if (specificGames.contains(aSpecificGame))
+    if (specificGames.contains(aSpecificGame) && numberOfSpecificGames() > minimumNumberOfSpecificGames())
     {
       specificGames.remove(aSpecificGame);
-      aSpecificGame.setOrder(null);
+      setOrder(aSpecificGame,null);
       wasRemoved = true;
     }
     return wasRemoved;
+  }
+  /* Code from template association_SetMNToOptionalOne */
+  public boolean setSpecificGames(SpecificGame... newSpecificGames)
+  {
+    boolean wasSet = false;
+    if (newSpecificGames.length < minimumNumberOfSpecificGames())
+    {
+      return wasSet;
+    }
+
+    ArrayList<SpecificGame> checkNewSpecificGames = new ArrayList<SpecificGame>();
+    HashMap<Order,Integer> orderToNewSpecificGames = new HashMap<Order,Integer>();
+    for (SpecificGame aSpecificGame : newSpecificGames)
+    {
+      if (checkNewSpecificGames.contains(aSpecificGame))
+      {
+        return wasSet;
+      }
+      else if (aSpecificGame.getOrder() != null && !this.equals(aSpecificGame.getOrder()))
+      {
+        Order existingOrder = aSpecificGame.getOrder();
+        if (!orderToNewSpecificGames.containsKey(existingOrder))
+        {
+          orderToNewSpecificGames.put(existingOrder, Integer.valueOf(existingOrder.numberOfSpecificGames()));
+        }
+        Integer currentCount = orderToNewSpecificGames.get(existingOrder);
+        int nextCount = currentCount - 1;
+        if (nextCount < 1)
+        {
+          return wasSet;
+        }
+        orderToNewSpecificGames.put(existingOrder, Integer.valueOf(nextCount));
+      }
+      checkNewSpecificGames.add(aSpecificGame);
+    }
+
+    specificGames.removeAll(checkNewSpecificGames);
+
+    for (SpecificGame orphan : specificGames)
+    {
+      setOrder(orphan, null);
+    }
+    specificGames.clear();
+    for (SpecificGame aSpecificGame : newSpecificGames)
+    {
+      if (aSpecificGame.getOrder() != null)
+      {
+        aSpecificGame.getOrder().specificGames.remove(aSpecificGame);
+      }
+      setOrder(aSpecificGame, this);
+      specificGames.add(aSpecificGame);
+    }
+    wasSet = true;
+    return wasSet;
+  }
+  /* Code from template association_GetPrivate */
+  private void setOrder(SpecificGame aSpecificGame, Order aOrder)
+  {
+    try
+    {
+      java.lang.reflect.Field mentorField = aSpecificGame.getClass().getDeclaredField("order");
+      mentorField.setAccessible(true);
+      mentorField.set(aSpecificGame, aOrder);
+    }
+    catch (Exception e)
+    {
+      throw new RuntimeException("Issue internally setting aOrder to aSpecificGame", e);
+    }
   }
   /* Code from template association_AddIndexControlFunctions */
   public boolean addSpecificGameAt(SpecificGame aSpecificGame, int index)
@@ -166,45 +269,35 @@ public class Order
     }
     return wasAdded;
   }
-  /* Code from template association_SetOneToMany */
-  public boolean setCustomer(Customer aCustomer)
+  /* Code from template association_SetUnidirectionalOne */
+  public boolean setCustomer(Customer aNewCustomer)
   {
     boolean wasSet = false;
-    if (aCustomer == null)
+    if (aNewCustomer != null)
     {
-      return wasSet;
+      customer = aNewCustomer;
+      wasSet = true;
     }
-
-    Customer existingCustomer = customer;
-    customer = aCustomer;
-    if (existingCustomer != null && !existingCustomer.equals(aCustomer))
-    {
-      existingCustomer.removeOrder(this);
-    }
-    customer.addOrder(this);
-    wasSet = true;
     return wasSet;
   }
 
   public void delete()
   {
-    while( !specificGames.isEmpty() )
+    for(SpecificGame aSpecificGame : specificGames)
     {
-      specificGames.get(0).setOrder(null);
+      setOrder(aSpecificGame,null);
     }
-    Customer placeholderCustomer = customer;
-    this.customer = null;
-    if(placeholderCustomer != null)
-    {
-      placeholderCustomer.removeOrder(this);
-    }
+    specificGames.clear();
+    customer = null;
   }
 
 
   public String toString()
   {
     return super.toString() + "["+
-            "number" + ":" + getNumber()+ "]" + System.getProperties().getProperty("line.separator") +
+            "number" + ":" + getNumber()+ "," +
+            "cardNumber" + ":" + getCardNumber()+ "]" + System.getProperties().getProperty("line.separator") +
+            "  " + "orderDate" + "=" + (getOrderDate() != null ? !getOrderDate().equals(this)  ? getOrderDate().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
             "  " + "customer = "+(getCustomer()!=null?Integer.toHexString(System.identityHashCode(getCustomer())):"null");
   }
 }

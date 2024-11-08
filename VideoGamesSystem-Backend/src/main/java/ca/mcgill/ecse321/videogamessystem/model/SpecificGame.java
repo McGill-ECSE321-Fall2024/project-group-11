@@ -1,16 +1,15 @@
-package ca.mcgill.ecse321.videogamessystem.model;
 /*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.35.0.7523.c616a4dce modeling language!*/
-
-
-
-// line 67 "model.ump"
-// line 160 "model.ump"
+package ca.mcgill.ecse321.videogamessystem.model;
 
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Entity;
 
+
+// line 41 "model.ump"
+// line 138 "model.ump"
 @Entity
 public class SpecificGame
 {
@@ -23,23 +22,25 @@ public class SpecificGame
   @Id
   private int serialNumber;
 
+  private boolean availability;
+
   //SpecificGame Associations
   @OneToOne
   private Game game;
-  @OneToOne
+  @ManyToOne
   private Order order;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public SpecificGame(int aSerialNumber, Game aGame)
+  public SpecificGame(int aSerialNumber, boolean aAvailability, Game aGame)
   {
     serialNumber = aSerialNumber;
-    boolean didAddGame = setGame(aGame);
-    if (!didAddGame)
+    availability = aAvailability;
+    if (!setGame(aGame))
     {
-      throw new RuntimeException("Unable to create specificGame due to game. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
+      throw new RuntimeException("Unable to create SpecificGame due to aGame. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
     }
   }
 
@@ -55,9 +56,22 @@ public class SpecificGame
     return wasSet;
   }
 
+  public boolean setAvailability(boolean aAvailability)
+  {
+    boolean wasSet = false;
+    availability = aAvailability;
+    wasSet = true;
+    return wasSet;
+  }
+
   public int getSerialNumber()
   {
     return serialNumber;
+  }
+
+  public boolean getAvailability()
+  {
+    return availability;
   }
   /* Code from template association_GetOne */
   public Game getGame()
@@ -75,65 +89,93 @@ public class SpecificGame
     boolean has = order != null;
     return has;
   }
-  /* Code from template association_SetOneToMany */
-  public boolean setGame(Game aGame)
+  /* Code from template association_SetUnidirectionalOne */
+  public boolean setGame(Game aNewGame)
   {
     boolean wasSet = false;
-    if (aGame == null)
+    if (aNewGame != null)
     {
-      return wasSet;
+      game = aNewGame;
+      wasSet = true;
     }
-
-    Game existingGame = game;
-    game = aGame;
-    if (existingGame != null && !existingGame.equals(aGame))
-    {
-      existingGame.removeSpecificGame(this);
-    }
-    game.addSpecificGame(this);
-    wasSet = true;
     return wasSet;
   }
-  /* Code from template association_SetOptionalOneToMany */
+  /* Code from template association_SetOptionalOneToMandatoryMany */
   public boolean setOrder(Order aOrder)
   {
+    //
+    // This source of this source generation is association_SetOptionalOneToMandatoryMany.jet
+    // This set file assumes the generation of a maximumNumberOfXXX method does not exist because 
+    // it's not required (No upper bound)
+    //   
     boolean wasSet = false;
     Order existingOrder = order;
-    order = aOrder;
-    if (existingOrder != null && !existingOrder.equals(aOrder))
+
+    if (existingOrder == null)
     {
-      existingOrder.removeSpecificGame(this);
-    }
-    if (aOrder != null)
+      if (aOrder != null)
+      {
+        if (aOrder.addSpecificGame(this))
+        {
+          existingOrder = aOrder;
+          wasSet = true;
+        }
+      }
+    } 
+    else if (existingOrder != null)
     {
-      aOrder.addSpecificGame(this);
+      if (aOrder == null)
+      {
+        if (existingOrder.minimumNumberOfSpecificGames() < existingOrder.numberOfSpecificGames())
+        {
+          existingOrder.removeSpecificGame(this);
+          existingOrder = aOrder;  // aOrder == null
+          wasSet = true;
+        }
+      } 
+      else
+      {
+        if (existingOrder.minimumNumberOfSpecificGames() < existingOrder.numberOfSpecificGames())
+        {
+          existingOrder.removeSpecificGame(this);
+          aOrder.addSpecificGame(this);
+          existingOrder = aOrder;
+          wasSet = true;
+        }
+      }
     }
-    wasSet = true;
+    if (wasSet)
+    {
+      order = existingOrder;
+    }
     return wasSet;
   }
-
+  
   public void delete()
   {
-    Game placeholderGame = game;
-    this.game = null;
-    if(placeholderGame != null)
-    {
-      placeholderGame.removeSpecificGame(this);
-    }
+    game = null;
     if (order != null)
     {
-      Order placeholderOrder = order;
-      this.order = null;
-      placeholderOrder.removeSpecificGame(this);
+      if (order.numberOfSpecificGames() <= 1)
+      {
+        order.delete();
+      }
+      else
+      {
+        Order placeholderOrder = order;
+        this.order = null;
+        placeholderOrder.removeSpecificGame(this);
+      }
     }
   }
 
-
-  public String toString()
-  {
-    return super.toString() + "["+
-            "serialNumber" + ":" + getSerialNumber()+ "]" + System.getProperties().getProperty("line.separator") +
-            "  " + "game = "+(getGame()!=null?Integer.toHexString(System.identityHashCode(getGame())):"null") + System.getProperties().getProperty("line.separator") +
-            "  " + "order = "+(getOrder()!=null?Integer.toHexString(System.identityHashCode(getOrder())):"null");
+  
+  public String toString() {
+    return super.toString() + "[" +
+        "serialNumber" + ":" + getSerialNumber() + "," +
+        "  " + "availability" + "=" + getAvailability() + System.getProperties().getProperty("line.separator") +
+        "  " + "game = " + (getGame() != null ? Integer.toHexString(System.identityHashCode(getGame())) : "null")
+        + System.getProperties().getProperty("line.separator") +
+        "  " + "order = " + (getOrder() != null ? Integer.toHexString(System.identityHashCode(getOrder())) : "null");
   }
 }

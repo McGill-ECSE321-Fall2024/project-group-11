@@ -1,19 +1,12 @@
-package ca.mcgill.ecse321.videogamessystem.model;
 /*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.35.0.7523.c616a4dce modeling language!*/
-
-
-import java.util.*;
+package ca.mcgill.ecse321.videogamessystem.model;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import java.sql.Date;
+import jakarta.persistence.OneToOne;
 
-// line 2 "model.ump"
-// line 178 "model.ump"
+// line 76 "model.ump"
+// line 163 "model.ump"
 @Entity
 public class Customer extends Account
 {
@@ -21,493 +14,93 @@ public class Customer extends Account
   //------------------------
   // MEMBER VARIABLES
   //------------------------
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
 
-  public int getId(){
-    return (int) id;
-  }
+  //Customer Attributes
+
+  private int phoneNumber;
+  private String adress;
 
   //Customer Associations
-  @OneToMany
-  private List<Review> reviews;
-  @OneToMany
-  private List<Order> orders;
-  @OneToMany
-  private List<Game> wishlist;
-  @OneToMany
-  private List<Game> cart;
+  @OneToOne
+  private Wishlist wishlist;
+  
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public Customer(String aUserName, String aEmail, String aPassword, int aPhoneNumber, String aAddress, Date aCreationDate) {
-    super(aUserName, aEmail, aPassword, aPhoneNumber, aAddress, aCreationDate);
-    reviews = new ArrayList<Review>();
-    orders = new ArrayList<Order>();
-    wishlist = new ArrayList<Game>();
-    cart = new ArrayList<Game>();
+  public Customer(String aUserName, String aEmail, String aPassword, int aPhoneNumber, String aAdress, Wishlist aWishlist)
+  {
+    super(aUserName, aEmail, aPassword);
+    phoneNumber = aPhoneNumber;
+    adress = aAdress;
+    if (aWishlist == null || aWishlist.getCustomer() != null)
+    {
+      throw new RuntimeException("Unable to create Customer due to aWishlist. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
+    }
+    wishlist = aWishlist;
+  }
+
+  public Customer(String aUserName, String aEmail, String aPassword, int aPhoneNumber, String aAdress, int aNbOfItemsForWishlist)
+  {
+    super(aUserName, aEmail, aPassword);
+    phoneNumber = aPhoneNumber;
+    adress = aAdress;
+    wishlist = new Wishlist(aNbOfItemsForWishlist, this);
   }
 
   //------------------------
   // INTERFACE
   //------------------------
-  /* Code from template association_GetMany */
-  public Review getReview(int index)
+
+  public boolean setPhoneNumber(int aPhoneNumber)
   {
-    Review aReview = reviews.get(index);
-    return aReview;
+    boolean wasSet = false;
+    phoneNumber = aPhoneNumber;
+    wasSet = true;
+    return wasSet;
   }
 
-  public List<Review> getReviews()
+  public boolean setAdress(String aAdress)
   {
-    List<Review> newReviews = Collections.unmodifiableList(reviews);
-    return newReviews;
+    boolean wasSet = false;
+    adress = aAdress;
+    wasSet = true;
+    return wasSet;
   }
 
-  public int numberOfReviews()
+  public int getPhoneNumber()
   {
-    int number = reviews.size();
-    return number;
+    return phoneNumber;
   }
 
-  public boolean hasReviews()
+  public String getAdress()
   {
-    boolean has = reviews.size() > 0;
-    return has;
+    return adress;
   }
-
-  public int indexOfReview(Review aReview)
+  /* Code from template association_GetOne */
+  public Wishlist getWishlist()
   {
-    int index = reviews.indexOf(aReview);
-    return index;
-  }
-  /* Code from template association_GetMany */
-  public Order getOrder(int index)
-  {
-    Order aOrder = orders.get(index);
-    return aOrder;
-  }
-
-  public List<Order> getOrders()
-  {
-    List<Order> newOrders = Collections.unmodifiableList(orders);
-    return newOrders;
-  }
-
-  public int numberOfOrders()
-  {
-    int number = orders.size();
-    return number;
-  }
-
-  public boolean hasOrders()
-  {
-    boolean has = orders.size() > 0;
-    return has;
-  }
-
-  public int indexOfOrder(Order aOrder)
-  {
-    int index = orders.indexOf(aOrder);
-    return index;
-  }
-  /* Code from template association_GetMany */
-  public Game getWishlist(int index)
-  {
-    Game aWishlist = wishlist.get(index);
-    return aWishlist;
-  }
-
-  public List<Game> getWishlist()
-  {
-    List<Game> newWishlist = Collections.unmodifiableList(wishlist);
-    return newWishlist;
-  }
-
-  public int numberOfWishlist()
-  {
-    int number = wishlist.size();
-    return number;
-  }
-
-  public boolean hasWishlist()
-  {
-    boolean has = wishlist.size() > 0;
-    return has;
-  }
-
-  public int indexOfWishlist(Game aWishlist)
-  {
-    int index = wishlist.indexOf(aWishlist);
-    return index;
-  }
-  /* Code from template association_GetMany */
-  public Game getCart(int index)
-  {
-    Game aCart = cart.get(index);
-    return aCart;
-  }
-
-  public List<Game> getCart()
-  {
-    List<Game> newCart = Collections.unmodifiableList(cart);
-    return newCart;
-  }
-
-  public int numberOfCart()
-  {
-    int number = cart.size();
-    return number;
-  }
-
-  public boolean hasCart()
-  {
-    boolean has = cart.size() > 0;
-    return has;
-  }
-
-  public int indexOfCart(Game aCart)
-  {
-    int index = cart.indexOf(aCart);
-    return index;
-  }
-  /* Code from template association_MinimumNumberOfMethod */
-  public static int minimumNumberOfReviews()
-  {
-    return 0;
-  }
-  /* Code from template association_AddManyToOne */
-  public Review addReview(int aRating, String aContent, Game aGame)
-  {
-    return new Review(aRating, aContent, this, aGame);
-  }
-
-  public boolean addReview(Review aReview)
-  {
-    boolean wasAdded = false;
-    if (reviews.contains(aReview)) { return false; }
-    Customer existingCustomer = aReview.getCustomer();
-    boolean isNewCustomer = existingCustomer != null && !this.equals(existingCustomer);
-    if (isNewCustomer)
-    {
-      aReview.setCustomer(this);
-    }
-    else
-    {
-      reviews.add(aReview);
-    }
-    wasAdded = true;
-    return wasAdded;
-  }
-
-  public boolean removeReview(Review aReview)
-  {
-    boolean wasRemoved = false;
-    //Unable to remove aReview, as it must always have a customer
-    if (!this.equals(aReview.getCustomer()))
-    {
-      reviews.remove(aReview);
-      wasRemoved = true;
-    }
-    return wasRemoved;
-  }
-  /* Code from template association_AddIndexControlFunctions */
-  public boolean addReviewAt(Review aReview, int index)
-  {  
-    boolean wasAdded = false;
-    if(addReview(aReview))
-    {
-      if(index < 0 ) { index = 0; }
-      if(index > numberOfReviews()) { index = numberOfReviews() - 1; }
-      reviews.remove(aReview);
-      reviews.add(index, aReview);
-      wasAdded = true;
-    }
-    return wasAdded;
-  }
-
-  public boolean addOrMoveReviewAt(Review aReview, int index)
-  {
-    boolean wasAdded = false;
-    if(reviews.contains(aReview))
-    {
-      if(index < 0 ) { index = 0; }
-      if(index > numberOfReviews()) { index = numberOfReviews() - 1; }
-      reviews.remove(aReview);
-      reviews.add(index, aReview);
-      wasAdded = true;
-    } 
-    else 
-    {
-      wasAdded = addReviewAt(aReview, index);
-    }
-    return wasAdded;
-  }
-  /* Code from template association_MinimumNumberOfMethod */
-  public static int minimumNumberOfOrders()
-  {
-    return 0;
-  }
-  /* Code from template association_AddManyToOne */
-  public Order addOrder(int aNumber)
-  {
-    return new Order(aNumber, this);
-  }
-
-  public boolean addOrder(Order aOrder)
-  {
-    boolean wasAdded = false;
-    if (orders.contains(aOrder)) { return false; }
-    Customer existingCustomer = aOrder.getCustomer();
-    boolean isNewCustomer = existingCustomer != null && !this.equals(existingCustomer);
-    if (isNewCustomer)
-    {
-      aOrder.setCustomer(this);
-    }
-    else
-    {
-      orders.add(aOrder);
-    }
-    wasAdded = true;
-    return wasAdded;
-  }
-
-  public boolean removeOrder(Order aOrder)
-  {
-    boolean wasRemoved = false;
-    //Unable to remove aOrder, as it must always have a customer
-    if (!this.equals(aOrder.getCustomer()))
-    {
-      orders.remove(aOrder);
-      wasRemoved = true;
-    }
-    return wasRemoved;
-  }
-  /* Code from template association_AddIndexControlFunctions */
-  public boolean addOrderAt(Order aOrder, int index)
-  {  
-    boolean wasAdded = false;
-    if(addOrder(aOrder))
-    {
-      if(index < 0 ) { index = 0; }
-      if(index > numberOfOrders()) { index = numberOfOrders() - 1; }
-      orders.remove(aOrder);
-      orders.add(index, aOrder);
-      wasAdded = true;
-    }
-    return wasAdded;
-  }
-
-  public boolean addOrMoveOrderAt(Order aOrder, int index)
-  {
-    boolean wasAdded = false;
-    if(orders.contains(aOrder))
-    {
-      if(index < 0 ) { index = 0; }
-      if(index > numberOfOrders()) { index = numberOfOrders() - 1; }
-      orders.remove(aOrder);
-      orders.add(index, aOrder);
-      wasAdded = true;
-    } 
-    else 
-    {
-      wasAdded = addOrderAt(aOrder, index);
-    }
-    return wasAdded;
-  }
-  /* Code from template association_MinimumNumberOfMethod */
-  public static int minimumNumberOfWishlist()
-  {
-    return 0;
-  }
-  /* Code from template association_AddManyToManyMethod */
-  public boolean addWishlist(Game aWishlist)
-  {
-    boolean wasAdded = false;
-    if (wishlist.contains(aWishlist)) { return false; }
-    wishlist.add(aWishlist);
-    if (aWishlist.indexOfWishlist(this) != -1)
-    {
-      wasAdded = true;
-    }
-    else
-    {
-      wasAdded = aWishlist.addWishlist(this);
-      if (!wasAdded)
-      {
-        wishlist.remove(aWishlist);
-      }
-    }
-    return wasAdded;
-  }
-  /* Code from template association_RemoveMany */
-  public boolean removeWishlist(Game aWishlist)
-  {
-    boolean wasRemoved = false;
-    if (!wishlist.contains(aWishlist))
-    {
-      return wasRemoved;
-    }
-
-    int oldIndex = wishlist.indexOf(aWishlist);
-    wishlist.remove(oldIndex);
-    if (aWishlist.indexOfWishlist(this) == -1)
-    {
-      wasRemoved = true;
-    }
-    else
-    {
-      wasRemoved = aWishlist.removeWishlist(this);
-      if (!wasRemoved)
-      {
-        wishlist.add(oldIndex,aWishlist);
-      }
-    }
-    return wasRemoved;
-  }
-  /* Code from template association_AddIndexControlFunctions */
-  public boolean addWishlistAt(Game aWishlist, int index)
-  {  
-    boolean wasAdded = false;
-    if(addWishlist(aWishlist))
-    {
-      if(index < 0 ) { index = 0; }
-      if(index > numberOfWishlist()) { index = numberOfWishlist() - 1; }
-      wishlist.remove(aWishlist);
-      wishlist.add(index, aWishlist);
-      wasAdded = true;
-    }
-    return wasAdded;
-  }
-
-  public boolean addOrMoveWishlistAt(Game aWishlist, int index)
-  {
-    boolean wasAdded = false;
-    if(wishlist.contains(aWishlist))
-    {
-      if(index < 0 ) { index = 0; }
-      if(index > numberOfWishlist()) { index = numberOfWishlist() - 1; }
-      wishlist.remove(aWishlist);
-      wishlist.add(index, aWishlist);
-      wasAdded = true;
-    } 
-    else 
-    {
-      wasAdded = addWishlistAt(aWishlist, index);
-    }
-    return wasAdded;
-  }
-  /* Code from template association_MinimumNumberOfMethod */
-  public static int minimumNumberOfCart()
-  {
-    return 0;
-  }
-  /* Code from template association_AddManyToManyMethod */
-  public boolean addCart(Game aCart)
-  {
-    boolean wasAdded = false;
-    if (cart.contains(aCart)) { return false; }
-    cart.add(aCart);
-    if (aCart.indexOfCart(this) != -1)
-    {
-      wasAdded = true;
-    }
-    else
-    {
-      wasAdded = aCart.addCart(this);
-      if (!wasAdded)
-      {
-        cart.remove(aCart);
-      }
-    }
-    return wasAdded;
-  }
-  /* Code from template association_RemoveMany */
-  public boolean removeCart(Game aCart)
-  {
-    boolean wasRemoved = false;
-    if (!cart.contains(aCart))
-    {
-      return wasRemoved;
-    }
-
-    int oldIndex = cart.indexOf(aCart);
-    cart.remove(oldIndex);
-    if (aCart.indexOfCart(this) == -1)
-    {
-      wasRemoved = true;
-    }
-    else
-    {
-      wasRemoved = aCart.removeCart(this);
-      if (!wasRemoved)
-      {
-        cart.add(oldIndex,aCart);
-      }
-    }
-    return wasRemoved;
-  }
-  /* Code from template association_AddIndexControlFunctions */
-  public boolean addCartAt(Game aCart, int index)
-  {  
-    boolean wasAdded = false;
-    if(addCart(aCart))
-    {
-      if(index < 0 ) { index = 0; }
-      if(index > numberOfCart()) { index = numberOfCart() - 1; }
-      cart.remove(aCart);
-      cart.add(index, aCart);
-      wasAdded = true;
-    }
-    return wasAdded;
-  }
-
-  public boolean addOrMoveCartAt(Game aCart, int index)
-  {
-    boolean wasAdded = false;
-    if(cart.contains(aCart))
-    {
-      if(index < 0 ) { index = 0; }
-      if(index > numberOfCart()) { index = numberOfCart() - 1; }
-      cart.remove(aCart);
-      cart.add(index, aCart);
-      wasAdded = true;
-    } 
-    else 
-    {
-      wasAdded = addCartAt(aCart, index);
-    }
-    return wasAdded;
+    return wishlist;
   }
 
   public void delete()
   {
-    for(int i=reviews.size(); i > 0; i--)
+    Wishlist existingWishlist = wishlist;
+    wishlist = null;
+    if (existingWishlist != null)
     {
-      Review aReview = reviews.get(i - 1);
-      aReview.delete();
-    }
-    for(int i=orders.size(); i > 0; i--)
-    {
-      Order aOrder = orders.get(i - 1);
-      aOrder.delete();
-    }
-    ArrayList<Game> copyOfWishlist = new ArrayList<Game>(wishlist);
-    wishlist.clear();
-    for(Game aWishlist : copyOfWishlist)
-    {
-      aWishlist.removeWishlist(this);
-    }
-    ArrayList<Game> copyOfCart = new ArrayList<Game>(cart);
-    cart.clear();
-    for(Game aCart : copyOfCart)
-    {
-      aCart.removeCart(this);
+      existingWishlist.delete();
     }
     super.delete();
   }
 
+
+  public String toString()
+  {
+    return super.toString() + "["+
+            "phoneNumber" + ":" + getPhoneNumber()+ "," +
+            "adress" + ":" + getAdress()+ "]" + System.getProperties().getProperty("line.separator") +
+            "  " + "wishlist = "+(getWishlist()!=null?Integer.toHexString(System.identityHashCode(getWishlist())):"null");
+  }
 }

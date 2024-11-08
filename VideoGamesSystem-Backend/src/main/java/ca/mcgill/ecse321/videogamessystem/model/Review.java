@@ -1,19 +1,19 @@
 package ca.mcgill.ecse321.videogamessystem.model;
+
 /*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.35.0.7523.c616a4dce modeling language!*/
 
 
-import java.util.*;
 import java.sql.Date;
+
 import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Id;
 
-// line 88 "model.ump"
-// line 140 "model.ump"
+// line 47 "model.ump"
+// line 172 "model.ump"
 @Entity
 public class Review
 {
@@ -26,37 +26,29 @@ public class Review
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-
-
-  private int rating;
-  private String content;
+  
+  private int gameRating;
+  private String reviewContent;
+  private Date reviewDate;
 
   //Review Associations
-  @OneToMany
-  private List<Reply> reply;
-  @OneToOne
+  @ManyToOne
+  private Review replies;
+  @ManyToOne
   private Customer customer;
-  @OneToOne
-  private Game game;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public Review(int aRating, String aContent, Customer aCustomer, Game aGame)
+  public Review(int aGameRating, String aReviewContent, Date aReviewDate, Customer aCustomer)
   {
-    rating = aRating;
-    content = aContent;
-    reply = new ArrayList<Reply>();
-    boolean didAddCustomer = setCustomer(aCustomer);
-    if (!didAddCustomer)
+    gameRating = aGameRating;
+    reviewContent = aReviewContent;
+    reviewDate = aReviewDate;
+    if (!setCustomer(aCustomer))
     {
-      throw new RuntimeException("Unable to create review due to customer. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-    }
-    boolean didAddGame = setGame(aGame);
-    if (!didAddGame)
-    {
-      throw new RuntimeException("Unable to create review due to game. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
+      throw new RuntimeException("Unable to create Review due to aCustomer. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
     }
   }
 
@@ -64,210 +56,93 @@ public class Review
   // INTERFACE
   //------------------------
 
-  public boolean setRating(int aRating)
+  public boolean setGameRating(int aGameRating)
   {
     boolean wasSet = false;
-    rating = aRating;
+    gameRating = aGameRating;
     wasSet = true;
     return wasSet;
   }
 
-  public boolean setContent(String aContent)
+  public boolean setReviewContent(String aReviewContent)
   {
     boolean wasSet = false;
-    content = aContent;
+    reviewContent = aReviewContent;
     wasSet = true;
     return wasSet;
   }
 
-  public int getRating()
+  public boolean setReviewDate(Date aReviewDate)
   {
-    return rating;
+    boolean wasSet = false;
+    reviewDate = aReviewDate;
+    wasSet = true;
+    return wasSet;
   }
 
-  public String getContent()
+  public int getGameRating()
   {
-    return content;
-  }
-  /* Code from template association_GetMany */
-  public Reply getReply(int index)
-  {
-    Reply aReply = reply.get(index);
-    return aReply;
+    return gameRating;
   }
 
-  public List<Reply> getReply()
+  public String getReviewContent()
   {
-    List<Reply> newReply = Collections.unmodifiableList(reply);
-    return newReply;
+    return reviewContent;
   }
 
-  public int numberOfReply()
+  public Date getReviewDate()
   {
-    int number = reply.size();
-    return number;
+    return reviewDate;
+  }
+  /* Code from template association_GetOne */
+  public Review getReplies()
+  {
+    return replies;
   }
 
-  public boolean hasReply()
+  public boolean hasReplies()
   {
-    boolean has = reply.size() > 0;
+    boolean has = replies != null;
     return has;
-  }
-
-  public int indexOfReply(Reply aReply)
-  {
-    int index = reply.indexOf(aReply);
-    return index;
   }
   /* Code from template association_GetOne */
   public Customer getCustomer()
   {
     return customer;
   }
-  /* Code from template association_GetOne */
-  public Game getGame()
-  {
-    return game;
-  }
-  /* Code from template association_MinimumNumberOfMethod */
-  public static int minimumNumberOfReply()
-  {
-    return 0;
-  }
-  /* Code from template association_AddManyToOne */
-  public Reply addReply(String aReply, Date aReplyDate)
-  {
-    return new Reply(aReply, aReplyDate, this);
-  }
-
-  public boolean addReply(Reply aReply)
-  {
-    boolean wasAdded = false;
-    if (reply.contains(aReply)) { return false; }
-    Review existingReview = aReply.getReview();
-    boolean isNewReview = existingReview != null && !this.equals(existingReview);
-    if (isNewReview)
-    {
-      aReply.setReview(this);
-    }
-    else
-    {
-      reply.add(aReply);
-    }
-    wasAdded = true;
-    return wasAdded;
-  }
-
-  public boolean removeReply(Reply aReply)
-  {
-    boolean wasRemoved = false;
-    //Unable to remove aReply, as it must always have a review
-    if (!this.equals(aReply.getReview()))
-    {
-      reply.remove(aReply);
-      wasRemoved = true;
-    }
-    return wasRemoved;
-  }
-  /* Code from template association_AddIndexControlFunctions */
-  public boolean addReplyAt(Reply aReply, int index)
-  {  
-    boolean wasAdded = false;
-    if(addReply(aReply))
-    {
-      if(index < 0 ) { index = 0; }
-      if(index > numberOfReply()) { index = numberOfReply() - 1; }
-      reply.remove(aReply);
-      reply.add(index, aReply);
-      wasAdded = true;
-    }
-    return wasAdded;
-  }
-
-  public boolean addOrMoveReplyAt(Reply aReply, int index)
-  {
-    boolean wasAdded = false;
-    if(reply.contains(aReply))
-    {
-      if(index < 0 ) { index = 0; }
-      if(index > numberOfReply()) { index = numberOfReply() - 1; }
-      reply.remove(aReply);
-      reply.add(index, aReply);
-      wasAdded = true;
-    } 
-    else 
-    {
-      wasAdded = addReplyAt(aReply, index);
-    }
-    return wasAdded;
-  }
-  /* Code from template association_SetOneToMany */
-  public boolean setCustomer(Customer aCustomer)
+  /* Code from template association_SetUnidirectionalOptionalOne */
+  public boolean setReplies(Review aNewReplies)
   {
     boolean wasSet = false;
-    if (aCustomer == null)
-    {
-      return wasSet;
-    }
-
-    Customer existingCustomer = customer;
-    customer = aCustomer;
-    if (existingCustomer != null && !existingCustomer.equals(aCustomer))
-    {
-      existingCustomer.removeReview(this);
-    }
-    customer.addReview(this);
+    replies = aNewReplies;
     wasSet = true;
     return wasSet;
   }
-  /* Code from template association_SetOneToMany */
-  public boolean setGame(Game aGame)
+  /* Code from template association_SetUnidirectionalOne */
+  public boolean setCustomer(Customer aNewCustomer)
   {
     boolean wasSet = false;
-    if (aGame == null)
+    if (aNewCustomer != null)
     {
-      return wasSet;
+      customer = aNewCustomer;
+      wasSet = true;
     }
-
-    Game existingGame = game;
-    game = aGame;
-    if (existingGame != null && !existingGame.equals(aGame))
-    {
-      existingGame.removeReview(this);
-    }
-    game.addReview(this);
-    wasSet = true;
     return wasSet;
   }
 
   public void delete()
   {
-    for(int i=reply.size(); i > 0; i--)
-    {
-      Reply aReply = reply.get(i - 1);
-      aReply.delete();
-    }
-    Customer placeholderCustomer = customer;
-    this.customer = null;
-    if(placeholderCustomer != null)
-    {
-      placeholderCustomer.removeReview(this);
-    }
-    Game placeholderGame = game;
-    this.game = null;
-    if(placeholderGame != null)
-    {
-      placeholderGame.removeReview(this);
-    }
+    replies = null;
+    customer = null;
   }
 
 
   public String toString()
   {
     return super.toString() + "["+
-            "rating" + ":" + getRating()+ "," +
-            "content" + ":" + getContent()+ "]" + System.getProperties().getProperty("line.separator") +
-            "  " + "customer = "+(getCustomer()!=null?Integer.toHexString(System.identityHashCode(getCustomer())):"null") + System.getProperties().getProperty("line.separator") +
-            "  " + "game = "+(getGame()!=null?Integer.toHexString(System.identityHashCode(getGame())):"null");
+            "gameRating" + ":" + getGameRating()+ "," +
+            "reviewContent" + ":" + getReviewContent()+ "]" + System.getProperties().getProperty("line.separator") +
+            "  " + "reviewDate" + "=" + (getReviewDate() != null ? !getReviewDate().equals(this)  ? getReviewDate().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
+            "  " + "customer = "+(getCustomer()!=null?Integer.toHexString(System.identityHashCode(getCustomer())):"null");
   }
 }
