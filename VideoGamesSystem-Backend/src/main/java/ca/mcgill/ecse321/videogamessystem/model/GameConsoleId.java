@@ -1,5 +1,6 @@
 package ca.mcgill.ecse321.videogamessystem.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import java.io.Serializable;
 import java.util.Objects;
@@ -7,7 +8,10 @@ import java.util.Objects;
 @Embeddable
 public class GameConsoleId implements Serializable {
 
+    @Column(name = "game_id")  // Specify the column name explicitly
     private Long gameId;
+
+    @Column(name = "console_id")  // Specify the column name explicitly
     private Long consoleId;
 
     // Default constructor
