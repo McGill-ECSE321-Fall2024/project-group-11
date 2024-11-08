@@ -5,5 +5,6 @@ import org.springframework.data.repository.CrudRepository;
 import ca.mcgill.ecse321.videogamessystem.model.SpecificReviewRating;
 
 public interface SpecificReviewRatingRepository extends CrudRepository<SpecificReviewRating, Long>{
-    public SpecificReviewRating findReviewById(Long id);
+    // find the specific review with id
+    public SpecificReviewRating findReviewRatingById(Long id);
 }
