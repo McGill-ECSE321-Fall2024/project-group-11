@@ -1,6 +1,8 @@
 package ca.mcgill.ecse321.videogamessystem.model;
 
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Embeddable;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -22,21 +24,25 @@ public class SpecificReviewRating {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Enumerated(EnumType.STRING)
-  private ReviewRating reviewRating;
+  private boolean reviewRating;
 
   // SpecificReviewRating Associations
+
   @ManyToOne
+  @JoinColumn(name="customer_id")
+  private Customer customer;
+
+  @ManyToOne
+  @JoinColumn(name="review_id")
   private Review review;
   
-  @ManyToOne
-  private Customer customer;
+  
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public SpecificReviewRating(ReviewRating aReviewRating, Review aReview, Customer aCustomer) {
+  public SpecificReviewRating(boolean aReviewRating, Review aReview, Customer aCustomer) {
     reviewRating = aReviewRating;
     if (!setReview(aReview)) {
       throw new RuntimeException("Unable to create SpecificReviewRating due to aReview. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
@@ -50,14 +56,14 @@ public class SpecificReviewRating {
   // INTERFACE
   //------------------------
 
-  public boolean setReviewRating(ReviewRating aReviewRating) {
+  public boolean setReviewRating(boolean aReviewRating) {
     boolean wasSet = false;
     reviewRating = aReviewRating;
     wasSet = true;
     return wasSet;
   }
 
-  public ReviewRating getReviewRating() {
+  public boolean getReviewRating() {
     return reviewRating;
   }
 
