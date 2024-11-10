@@ -126,7 +126,7 @@ public class SpecificGame
     {
       if (aOrder == null)
       {
-        if (existingOrder.minimumNumberOfSpecificGames() < existingOrder.numberOfSpecificGames())
+        if (Order.minimumNumberOfSpecificGames() < existingOrder.numberOfSpecificGames())
         {
           existingOrder.removeSpecificGame(this);
           existingOrder = aOrder;  // aOrder == null
@@ -135,7 +135,7 @@ public class SpecificGame
       } 
       else
       {
-        if (existingOrder.minimumNumberOfSpecificGames() < existingOrder.numberOfSpecificGames())
+        if (Order.minimumNumberOfSpecificGames() < existingOrder.numberOfSpecificGames())
         {
           existingOrder.removeSpecificGame(this);
           aOrder.addSpecificGame(this);
