@@ -27,7 +27,7 @@ public class Game
   private int stockQantity;
   private int price;
   private String title;
-  private String category;
+  private Category category;
 
   //Game Associations
   @ManyToOne
@@ -41,7 +41,7 @@ public class Game
   // CONSTRUCTOR
   //------------------------
 
-  public Game(String aDescription, int aStockQantity, int aPrice, String aTitle, String aCategory, Wishlist aWishlist, GameConsole aGameConsole, Promotion aPromotion)
+  public Game(String aDescription, int aStockQantity, int aPrice, String aTitle, Category aCategory, Wishlist aWishlist, GameConsole aGameConsole, Promotion aPromotion)
   {
     description = aDescription;
     stockQantity = aStockQantity;
@@ -98,7 +98,7 @@ public class Game
     return wasSet;
   }
 
-  public boolean setCategory(String aCategory)
+  public boolean setCategory(Category aCategory)
   {
     boolean wasSet = false;
     category = aCategory;
@@ -126,7 +126,7 @@ public class Game
     return title;
   }
 
-  public String getCategory()
+  public Category getCategory()
   {
     return category;
   }
