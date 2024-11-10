@@ -1,13 +1,15 @@
 package ca.mcgill.ecse321.videogamessystem.repository;
 
+import java.sql.Date;
+import java.util.List;
+
 import org.springframework.data.repository.CrudRepository;
 
 import ca.mcgill.ecse321.videogamessystem.model.Review;
-import java.util.List;
-import java.util.Date;
 
 
 public interface ReviewRepository extends CrudRepository<Review, Long>{
+    // find the review usinf=g the id
     public Review findReviewById(Long id);
 
     List<Review> findReviewByReviewDate(Date reviewDate);

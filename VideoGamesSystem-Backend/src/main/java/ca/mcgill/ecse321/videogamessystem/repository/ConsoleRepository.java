@@ -1,8 +1,8 @@
 package ca.mcgill.ecse321.videogamessystem.repository;
 
-import org.springframework.data.repository.CrudRepository;
-
 import java.util.List;
+
+import org.springframework.data.repository.CrudRepository;
 
 import ca.mcgill.ecse321.videogamessystem.model.Console;
 
