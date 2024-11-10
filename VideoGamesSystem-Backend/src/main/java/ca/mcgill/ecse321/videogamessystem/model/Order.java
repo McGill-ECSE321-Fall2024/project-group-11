@@ -39,21 +39,14 @@ public class Order
   // CONSTRUCTOR
   //------------------------
 
-  public Order(int aNumber, Date aOrderDate, int aCardNumber, Customer aCustomer, SpecificGame... allSpecificGames)
+  public Order(int aNumber, Date aOrderDate, int aCardNumber)
   {
     number = aNumber;
     orderDate = aOrderDate;
     cardNumber = aCardNumber;
     specificGames = new ArrayList<SpecificGame>();
-    boolean didAddSpecificGames = setSpecificGames(allSpecificGames);
-    if (!didAddSpecificGames)
-    {
-      throw new RuntimeException("Unable to create Order, must have at least 1 specificGames. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-    }
-    if (!setCustomer(aCustomer))
-    {
-      throw new RuntimeException("Unable to create Order due to aCustomer. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-    }
+    Customer customer = new Customer();
+    this.customer = customer;
   }
 
   //------------------------

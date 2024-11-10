@@ -36,6 +36,10 @@ public class Console
     consoleType = aConsoleType;
   }
 
+  public Console(){
+    
+  }
+
   //------------------------
   // INTERFACE
   //------------------------

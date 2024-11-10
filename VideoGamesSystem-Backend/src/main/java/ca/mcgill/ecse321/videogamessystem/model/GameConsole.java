@@ -32,13 +32,15 @@ public class GameConsole
   // CONSTRUCTOR
   //------------------------
 
-  public GameConsole(GameConsoleId aGameConsoleID, Console aConsole)
+  public GameConsole(GameConsoleId aGameConsoleID)
   {
     gameConsoleID = aGameConsoleID;
-    if (!setConsole(aConsole))
-    {
-      throw new RuntimeException("Unable to create GameConsole due to aConsole. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-    }
+    Console console = new Console();
+    this.console = console;
+  }
+
+  public GameConsole(){
+    
   }
 
   //------------------------

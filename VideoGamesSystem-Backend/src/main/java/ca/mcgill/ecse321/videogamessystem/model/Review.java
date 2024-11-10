@@ -17,7 +17,6 @@ import jakarta.persistence.Id;
 @Entity
 public class Review
 {
-
   //------------------------
   // MEMBER VARIABLES
   //------------------------
@@ -33,7 +32,7 @@ public class Review
 
   //Review Associations
   @ManyToOne
-  private Review replies;
+  private Review parentReview;
   @ManyToOne
   private Customer customer;
 
@@ -41,15 +40,19 @@ public class Review
   // CONSTRUCTOR
   //------------------------
 
-  public Review(int aGameRating, String aReviewContent, Date aReviewDate, Customer aCustomer)
+  public Review(int aGameRating, String aReviewContent, Date aReviewDate)
   {
     gameRating = aGameRating;
     reviewContent = aReviewContent;
     reviewDate = aReviewDate;
-    if (!setCustomer(aCustomer))
-    {
-      throw new RuntimeException("Unable to create Review due to aCustomer. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-    }
+    Customer customer = new Customer();
+    this.customer = customer;
+    Review parentReview = new Review();
+    this.parentReview = parentReview;
+  }
+
+  public Review(){
+
   }
 
   //------------------------
@@ -95,14 +98,14 @@ public class Review
     return reviewDate;
   }
   /* Code from template association_GetOne */
-  public Review getReplies()
+  public Review getParentReview()
   {
-    return replies;
+    return parentReview;
   }
 
-  public boolean hasReplies()
+  public boolean hasParentReview()
   {
-    boolean has = replies != null;
+    boolean has = parentReview != null;
     return has;
   }
   /* Code from template association_GetOne */
@@ -111,13 +114,14 @@ public class Review
     return customer;
   }
   /* Code from template association_SetUnidirectionalOptionalOne */
-  public boolean setReplies(Review aNewReplies)
+  public boolean setParentReview(Review aNewParentReview)
   {
     boolean wasSet = false;
-    replies = aNewReplies;
+    parentReview = aNewParentReview;
     wasSet = true;
     return wasSet;
   }
+
   /* Code from template association_SetUnidirectionalOne */
   public boolean setCustomer(Customer aNewCustomer)
   {
@@ -132,7 +136,7 @@ public class Review
 
   public void delete()
   {
-    replies = null;
+    parentReview = null;
     customer = null;
   }
 

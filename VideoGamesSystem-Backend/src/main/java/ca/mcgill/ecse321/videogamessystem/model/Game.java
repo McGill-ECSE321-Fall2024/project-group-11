@@ -13,7 +13,6 @@ import jakarta.persistence.ManyToOne;
 @Entity
 public class Game
 {
-
   //------------------------
   // MEMBER VARIABLES
   //------------------------
@@ -41,25 +40,24 @@ public class Game
   // CONSTRUCTOR
   //------------------------
 
-  public Game(String aDescription, int aStockQantity, int aPrice, String aTitle, Category aCategory, Wishlist aWishlist, GameConsole aGameConsole, Promotion aPromotion)
+  public Game(String aDescription, int aStockQantity, int aPrice, String aTitle, Category aCategory)
   {
     description = aDescription;
     stockQantity = aStockQantity;
     price = aPrice;
     title = aTitle;
     category = aCategory;
-    if (!setWishlist(aWishlist))
-    {
-      throw new RuntimeException("Unable to create Game due to aWishlist. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-    }
-    if (!setGameConsole(aGameConsole))
-    {
-      throw new RuntimeException("Unable to create Game due to aGameConsole. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-    }
-    if (!setPromotion(aPromotion))
-    {
-      throw new RuntimeException("Unable to create Game due to aPromotion. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-    }
+
+    //Wishlist aWishlist, GameConsole aGameConsole, Promotion aPromotion
+    Wishlist wishlist = new Wishlist();
+    this.wishlist = wishlist;
+    GameConsole gameConsole = new GameConsole();
+    this.gameConsole = gameConsole;
+    Promotion promotion = new Promotion();
+    this.promotion = promotion;
+  }
+  public Game(){
+    
   }
 
   //------------------------
@@ -145,6 +143,7 @@ public class Game
   {
     return promotion;
   }
+
   /* Code from template association_SetUnidirectionalOne */
   public boolean setWishlist(Wishlist aNewWishlist)
   {
@@ -199,4 +198,25 @@ public class Game
             "  " + "gameConsole = "+(getGameConsole()!=null?Integer.toHexString(System.identityHashCode(getGameConsole())):"null") + System.getProperties().getProperty("line.separator") +
             "  " + "promotion = "+(getPromotion()!=null?Integer.toHexString(System.identityHashCode(getPromotion())):"null");
   }
+
+  // ------------------------
+  // MEMBER VARIABLES
+  // ------------------------
+  public enum Category {
+    Adventure,
+    Action,
+    Sports,
+    Strategy,
+    Puzzle,
+    Party,
+    Survival,
+    Arcade,
+    Other;
+
+    @Override
+    public String toString() {
+      return name();
+    }
+  }
+  
 }
