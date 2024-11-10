@@ -7,6 +7,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Id;
+import jakarta.persistence.Column;
 
 /**
  * Unable to update umple code due to error at [26,2]
@@ -27,8 +28,12 @@ public abstract class Account
   @SequenceGenerator(name = "account_id_sequence_generator", sequenceName = "account_id_seq", allocationSize = 1)
   private Long id;
 
+  @Column(unique= true)
   private String userName;
+
+  @Column(unique= true)
   private String email;
+  
   private String password;
 
   //------------------------
