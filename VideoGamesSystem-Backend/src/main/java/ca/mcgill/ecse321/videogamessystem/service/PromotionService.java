@@ -17,7 +17,7 @@ public class PromotionService {
     private PromotionRepository promotionRepository;
 
     @Autowired
-    private void setPromotionRepository(PromotionRepository promotionRepository) {
+    public PromotionService(PromotionRepository promotionRepository) {
         this.promotionRepository = promotionRepository;
     }
 
@@ -46,14 +46,14 @@ public class PromotionService {
 
     @Transactional
     public List<Promotion> gePromotionByStartdate(Date startDate){
-        return this.promotionRepository.findPromotionBystartDate(startDate);
+        return this.promotionRepository.findPromotionByStartDate(startDate);
 
     }
 
 
     @Transactional
     public List<Promotion> gePromotionByEnddate(Date endDate){
-        return this.promotionRepository.findPromotionByendDate(endDate);
+        return this.promotionRepository.findPromotionByEndDate(endDate);
     }
 
 
@@ -67,22 +67,12 @@ public class PromotionService {
     public Promotion updatePromotioPercentage(int newPercentage, Promotion promotion){
 
     }
-
-    
-
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-    
 }
+
+    
+
+
+    
+
+
+

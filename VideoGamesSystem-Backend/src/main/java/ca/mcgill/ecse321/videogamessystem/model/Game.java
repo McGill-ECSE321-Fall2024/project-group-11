@@ -96,10 +96,10 @@ public class Game
     return wasSet;
   }
 
-  public boolean setCategory(Category aCategory)
+  public boolean setCategory(Category category2)
   {
     boolean wasSet = false;
-    category = aCategory;
+    category = category2;
     wasSet = true;
     return wasSet;
   }
