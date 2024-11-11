@@ -23,7 +23,7 @@ public class Game
   private Long id;
 
   private String description;
-  private int stockQantity;
+  private int stockQuantity;
   private int price;
   private String title;
   private Category category;
@@ -40,10 +40,10 @@ public class Game
   // CONSTRUCTOR
   //------------------------
 
-  public Game(String aDescription, int aStockQantity, int aPrice, String aTitle, Category aCategory)
+  public Game(String aDescription, int aStockQuantity, int aPrice, String aTitle, Category aCategory)
   {
     description = aDescription;
-    stockQantity = aStockQantity;
+    stockQuantity = aStockQuantity;
     price = aPrice;
     title = aTitle;
     category = aCategory;
@@ -72,10 +72,10 @@ public class Game
     return wasSet;
   }
 
-  public boolean setStockQantity(int aStockQantity)
+  public boolean setStockQuantity(int aStockQuantity)
   {
     boolean wasSet = false;
-    stockQantity = aStockQantity;
+    stockQuantity = aStockQuantity;
     wasSet = true;
     return wasSet;
   }
@@ -109,9 +109,9 @@ public class Game
     return description;
   }
 
-  public int getStockQantity()
+  public int getStockQuantity()
   {
-    return stockQantity;
+    return stockQuantity;
   }
 
   public int getPrice()
@@ -190,7 +190,7 @@ public class Game
   {
     return super.toString() + "["+
             "description" + ":" + getDescription()+ "," +
-            "stockQantity" + ":" + getStockQantity()+ "," +
+            "stockQuantity" + ":" + getStockQuantity()+ "," +
             "price" + ":" + getPrice()+ "," +
             "title" + ":" + getTitle()+ "," +
             "category" + ":" + getCategory()+ "]" + System.getProperties().getProperty("line.separator") +

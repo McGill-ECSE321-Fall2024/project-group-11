@@ -5,6 +5,7 @@ package ca.mcgill.ecse321.videogamessystem.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Column;
@@ -27,6 +28,8 @@ public class Console
   @Column(unique = true)
   private String consoleType;
 
+  @ManyToOne
+  private GameConsole gameConsole;
   //------------------------
   // CONSTRUCTOR
   //------------------------
@@ -34,10 +37,12 @@ public class Console
   public Console(String aConsoleType)
   {
     consoleType = aConsoleType;
+    GameConsole gameconsole = new GameConsole();
+    this.gameConsole = gameconsole;
   }
 
   public Console(){
-    
+
   }
 
   //------------------------
@@ -55,6 +60,14 @@ public class Console
   public String getConsoleType()
   {
     return consoleType;
+  }
+
+  public GameConsole getGameConsole() {
+    return gameConsole;
+  }
+
+  public void setGameConsole(GameConsole aGameConsole) {
+    this.gameConsole = aGameConsole;
   }
 
   public void delete()

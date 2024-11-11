@@ -9,10 +9,13 @@ import ca.mcgill.ecse321.videogamessystem.model.Promotion;
 
 public interface PromotionRepository extends CrudRepository<Promotion, Long>{
     // find the promotion with id 
-    public Promotion findPromotionById(Long id);
+    Promotion findPromotionById(Long id);
+
+    List<Promotion> findPromotionByPercentage(int percentage);
 
     // lsit all the promotion with same start date
-    public List<Promotion> findPromotionByStartDate(Date startDate);
+    List<Promotion> findPromotionByStartDate(Date startDate);
+
     // list all the promotion with same end date
-    public List<Promotion> findPromotionByEndDate(Date endDate);
+    List<Promotion> findPromotionByEndDate(Date endDate);
 }

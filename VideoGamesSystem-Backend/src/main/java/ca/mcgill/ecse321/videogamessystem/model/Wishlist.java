@@ -36,6 +36,8 @@ public class Wishlist
   public Wishlist()
   {
     nbOfItems = 0;
+    Customer customer = new Customer();
+    this.customer = customer;
   }
 
   //------------------------

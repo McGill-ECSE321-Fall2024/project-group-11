@@ -28,6 +28,11 @@ public class GameConsole
   @JoinColumn(name = "console_id") // Maps to the primary key in Console
   private Console console;
 
+  @ManyToOne
+  @MapsId("gameId") // Links consoleId in GameConsoleId with Console
+  @JoinColumn(name = "game_id") // Maps to the primary key in Console
+  private Game game;
+
   //------------------------
   // CONSTRUCTOR
   //------------------------
@@ -37,6 +42,8 @@ public class GameConsole
     gameConsoleID = aGameConsoleID;
     Console console = new Console();
     this.console = console;
+    Game game = new Game();
+    this.game = game;
   }
 
   public GameConsole(){
@@ -59,21 +66,21 @@ public class GameConsole
   {
     return gameConsoleID;
   }
-  /* Code from template association_GetOne */
-  public Console getConsole()
-  {
+  
+  public Game getGame() {
+    return game;
+  }
+
+  public void setGame(Game game) {
+    this.game = game;
+  }
+
+  public Console getConsole() {
     return console;
   }
-  /* Code from template association_SetUnidirectionalOne */
-  public boolean setConsole(Console aNewConsole)
-  {
-    boolean wasSet = false;
-    if (aNewConsole != null)
-    {
-      console = aNewConsole;
-      wasSet = true;
-    }
-    return wasSet;
+
+  public void setConsole(Console console) {
+    this.console = console;
   }
 
   public void delete()

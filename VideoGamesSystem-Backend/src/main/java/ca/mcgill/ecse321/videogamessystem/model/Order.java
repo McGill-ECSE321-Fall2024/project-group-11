@@ -3,14 +3,11 @@
 package ca.mcgill.ecse321.videogamessystem.model;
 
 import java.sql.Date;
-import java.util.*;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 
 // line 33 "model.ump"
 // line 132 "model.ump"
@@ -30,8 +27,6 @@ public class Order
   private int cardNumber;
 
   //Order Associations
-  @OneToMany
-  private List<SpecificGame> specificGames;
   @ManyToOne
   private Customer customer;
 
@@ -44,9 +39,12 @@ public class Order
     number = aNumber;
     orderDate = aOrderDate;
     cardNumber = aCardNumber;
-    specificGames = new ArrayList<SpecificGame>();
     Customer customer = new Customer();
     this.customer = customer;
+  }
+
+  public Order(){
+
   }
 
   //------------------------
@@ -91,177 +89,13 @@ public class Order
   {
     return cardNumber;
   }
-  /* Code from template association_GetMany */
-  public SpecificGame getSpecificGame(int index)
-  {
-    SpecificGame aSpecificGame = specificGames.get(index);
-    return aSpecificGame;
-  }
 
-  public List<SpecificGame> getSpecificGames()
-  {
-    List<SpecificGame> newSpecificGames = Collections.unmodifiableList(specificGames);
-    return newSpecificGames;
-  }
-
-  public int numberOfSpecificGames()
-  {
-    int number = specificGames.size();
-    return number;
-  }
-
-  public boolean hasSpecificGames()
-  {
-    boolean has = specificGames.size() > 0;
-    return has;
-  }
-
-  public int indexOfSpecificGame(SpecificGame aSpecificGame)
-  {
-    int index = specificGames.indexOf(aSpecificGame);
-    return index;
-  }
   /* Code from template association_GetOne */
   public Customer getCustomer()
   {
     return customer;
   }
-  /* Code from template association_MinimumNumberOfMethod */
-  public static int minimumNumberOfSpecificGames()
-  {
-    return 1;
-  }
-  /* Code from template association_AddMNToOptionalOne */
-  public boolean addSpecificGame(SpecificGame aSpecificGame)
-  {
-    boolean wasAdded = false;
-    if (specificGames.contains(aSpecificGame)) { return false; }
-    Order existingOrder = aSpecificGame.getOrder();
-    if (existingOrder != null && existingOrder.numberOfSpecificGames() <= minimumNumberOfSpecificGames())
-    {
-      return wasAdded;
-    }
-    else if (existingOrder != null)
-    {
-      existingOrder.specificGames.remove(aSpecificGame);
-    }
-    specificGames.add(aSpecificGame);
-    setOrder(aSpecificGame,this);
-    wasAdded = true;
-    return wasAdded;
-  }
 
-  public boolean removeSpecificGame(SpecificGame aSpecificGame)
-  {
-    boolean wasRemoved = false;
-    if (specificGames.contains(aSpecificGame) && numberOfSpecificGames() > minimumNumberOfSpecificGames())
-    {
-      specificGames.remove(aSpecificGame);
-      setOrder(aSpecificGame,null);
-      wasRemoved = true;
-    }
-    return wasRemoved;
-  }
-  /* Code from template association_SetMNToOptionalOne */
-  public boolean setSpecificGames(SpecificGame... newSpecificGames)
-  {
-    boolean wasSet = false;
-    if (newSpecificGames.length < minimumNumberOfSpecificGames())
-    {
-      return wasSet;
-    }
-
-    ArrayList<SpecificGame> checkNewSpecificGames = new ArrayList<SpecificGame>();
-    HashMap<Order,Integer> orderToNewSpecificGames = new HashMap<Order,Integer>();
-    for (SpecificGame aSpecificGame : newSpecificGames)
-    {
-      if (checkNewSpecificGames.contains(aSpecificGame))
-      {
-        return wasSet;
-      }
-      else if (aSpecificGame.getOrder() != null && !this.equals(aSpecificGame.getOrder()))
-      {
-        Order existingOrder = aSpecificGame.getOrder();
-        if (!orderToNewSpecificGames.containsKey(existingOrder))
-        {
-          orderToNewSpecificGames.put(existingOrder, Integer.valueOf(existingOrder.numberOfSpecificGames()));
-        }
-        Integer currentCount = orderToNewSpecificGames.get(existingOrder);
-        int nextCount = currentCount - 1;
-        if (nextCount < 1)
-        {
-          return wasSet;
-        }
-        orderToNewSpecificGames.put(existingOrder, Integer.valueOf(nextCount));
-      }
-      checkNewSpecificGames.add(aSpecificGame);
-    }
-
-    specificGames.removeAll(checkNewSpecificGames);
-
-    for (SpecificGame orphan : specificGames)
-    {
-      setOrder(orphan, null);
-    }
-    specificGames.clear();
-    for (SpecificGame aSpecificGame : newSpecificGames)
-    {
-      if (aSpecificGame.getOrder() != null)
-      {
-        aSpecificGame.getOrder().specificGames.remove(aSpecificGame);
-      }
-      setOrder(aSpecificGame, this);
-      specificGames.add(aSpecificGame);
-    }
-    wasSet = true;
-    return wasSet;
-  }
-  /* Code from template association_GetPrivate */
-  private void setOrder(SpecificGame aSpecificGame, Order aOrder)
-  {
-    try
-    {
-      java.lang.reflect.Field mentorField = aSpecificGame.getClass().getDeclaredField("order");
-      mentorField.setAccessible(true);
-      mentorField.set(aSpecificGame, aOrder);
-    }
-    catch (Exception e)
-    {
-      throw new RuntimeException("Issue internally setting aOrder to aSpecificGame", e);
-    }
-  }
-  /* Code from template association_AddIndexControlFunctions */
-  public boolean addSpecificGameAt(SpecificGame aSpecificGame, int index)
-  {  
-    boolean wasAdded = false;
-    if(addSpecificGame(aSpecificGame))
-    {
-      if(index < 0 ) { index = 0; }
-      if(index > numberOfSpecificGames()) { index = numberOfSpecificGames() - 1; }
-      specificGames.remove(aSpecificGame);
-      specificGames.add(index, aSpecificGame);
-      wasAdded = true;
-    }
-    return wasAdded;
-  }
-
-  public boolean addOrMoveSpecificGameAt(SpecificGame aSpecificGame, int index)
-  {
-    boolean wasAdded = false;
-    if(specificGames.contains(aSpecificGame))
-    {
-      if(index < 0 ) { index = 0; }
-      if(index > numberOfSpecificGames()) { index = numberOfSpecificGames() - 1; }
-      specificGames.remove(aSpecificGame);
-      specificGames.add(index, aSpecificGame);
-      wasAdded = true;
-    } 
-    else 
-    {
-      wasAdded = addSpecificGameAt(aSpecificGame, index);
-    }
-    return wasAdded;
-  }
   /* Code from template association_SetUnidirectionalOne */
   public boolean setCustomer(Customer aNewCustomer)
   {
@@ -276,11 +110,6 @@ public class Order
 
   public void delete()
   {
-    for(SpecificGame aSpecificGame : specificGames)
-    {
-      setOrder(aSpecificGame,null);
-    }
-    specificGames.clear();
     customer = null;
   }
 

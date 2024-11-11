@@ -5,11 +5,15 @@ import java.util.List;
 import org.springframework.data.repository.CrudRepository;
 
 import ca.mcgill.ecse321.videogamessystem.model.Console;
+import ca.mcgill.ecse321.videogamessystem.model.Game;
 
 public interface ConsoleRepository extends CrudRepository<Console, Long>{
-    public Console findConsoleById(Long id);
+    
+    Console findConsoleById(Long id);
 
-    List<Console> findConsoleByConsoleType(String consoleType);
+    Console findConsoleByConsoleType(String consoleType);
+
+    List<Console> findConsoleByGame(Game game);
 }
 
 

@@ -36,14 +36,12 @@ public class SpecificReviewRating {
   // CONSTRUCTOR
   //------------------------
 
-  public SpecificReviewRating(ReviewRating aReviewRating, Review aReview, Customer aCustomer) {
+  public SpecificReviewRating(ReviewRating aReviewRating) {
     reviewRating = aReviewRating;
-    if (!setReview(aReview)) {
-      throw new RuntimeException("Unable to create SpecificReviewRating due to aReview. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-    }
-    if (!setCustomer(aCustomer)) {
-      throw new RuntimeException("Unable to create SpecificReviewRating due to aCustomer. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-    }
+    Customer customer = new Customer();
+    this.customer = customer;
+    Review review = new Review();
+    this.review = review;
   }
 
   //------------------------
@@ -100,5 +98,15 @@ public class SpecificReviewRating {
            ", review=" + (review != null ? Integer.toHexString(System.identityHashCode(review)) : "null") +
            ", customer=" + (customer != null ? Integer.toHexString(System.identityHashCode(customer)) : "null") +
            '}';
+  }
+  //Enumeration
+  public enum ReviewRating {
+    Like,
+    Dislike;
+
+    @Override
+    public String toString() {
+      return name();
+    }
   }
 }
