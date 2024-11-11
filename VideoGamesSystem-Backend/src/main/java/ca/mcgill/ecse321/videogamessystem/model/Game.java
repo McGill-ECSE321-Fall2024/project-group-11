@@ -56,6 +56,7 @@ public class Game
     Promotion promotion = new Promotion();
     this.promotion = promotion;
   }
+  
   public Game(){
     
   }
