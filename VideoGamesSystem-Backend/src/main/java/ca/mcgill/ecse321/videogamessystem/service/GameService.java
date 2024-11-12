@@ -52,10 +52,10 @@ public class GameService {
      * @return
      */
 
-    public Game getGameBytitle(){}
+    //public Game getGameBytitle(){}
 
 
-    public List<Game> getGameBycategory(Category category){}
+    //public List<Game> getGameBycategory(Category category){}
     
     
 }

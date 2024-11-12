@@ -13,7 +13,7 @@ public interface GameRepository extends CrudRepository<Game, Long>{
 
     Game findGameById(Long id);
 
-    List<Game> findGameByStockQantity(int stockQuantity);
+    List<Game> findGameByStockQuantity(int stockQuantity);
 
     List<Game> findGameByprice(int price);
 
