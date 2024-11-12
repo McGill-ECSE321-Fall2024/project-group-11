@@ -78,6 +78,10 @@ public abstract class Account
     return wasSet;
   }
 
+
+  public Long getId(){
+    return id;
+  }
   public String getUserName()
   {
     return userName;
