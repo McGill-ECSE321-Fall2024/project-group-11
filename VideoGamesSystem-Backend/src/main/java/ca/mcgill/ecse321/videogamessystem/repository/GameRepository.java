@@ -23,5 +23,5 @@ public interface GameRepository extends CrudRepository<Game, Long>{
 
     List<Game> findGameByConsole(Console console);
 
-    List<Game> findByPromotion(Promotion promotion);
+    List<Game> findGameByPromotion(Promotion promotion);
 }

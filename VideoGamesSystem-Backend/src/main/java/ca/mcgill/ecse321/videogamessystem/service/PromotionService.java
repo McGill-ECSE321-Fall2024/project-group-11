@@ -18,20 +18,17 @@ import jakarta.transaction.Transactional;
 
 @Service
 public class PromotionService {
+    
+    @Autowired
     private PromotionRepository promotionRepository;
 
+    @Autowired
     private GameRepository gameRepository;
 
     @Autowired
-    public void setPromotionRepository(PromotionRepository promotionRepository) {
+    private void setPromotionRepository(PromotionRepository promotionRepository) {
         this.promotionRepository = promotionRepository;
     }
-
-    @Autowired
-    public void setGameRepository(GameRepository gameRepository) {
-        this.gameRepository = gameRepository;
-    }
-
 
     @Transactional
     public Promotion createPromotion(int percentage, Date startDate, Date endDate){
@@ -51,14 +48,7 @@ public class PromotionService {
         promotion.setPercentage(percentage);
         promotion.setEndDate(endDate);
         promotion.setStartDate(startDate);
-
-        return promotion;
-    }
-
-    @Transactional
-    public List<Promotion> gePromotionByStartdate(Date startDate){
-        return this.promotionRepository.findPromotionByStartDate(startDate);
-
+        return promotionRepository.save(promotion);
     }
 
 
@@ -129,9 +119,10 @@ public class PromotionService {
     @Transactional
     public Promotion deletePromotion(Long id){
         Promotion exsistingpromotion = this.getPromotionById(id);
-        List<Game> games = gameRepository.findByPromotion(exsistingpromotion);
+        List<Game> games = gameRepository.findGameByPromotion(exsistingpromotion);
         for(Game game: games){
             game.setPromotion(null);
+            gameRepository.save(game);
         }
         promotionRepository.delete(exsistingpromotion);
         return exsistingpromotion;
@@ -164,11 +155,3 @@ public class PromotionService {
 
     
 }
-
-    
-
-
-    
-
-
-
