@@ -23,9 +23,15 @@ public class PromotionService {
     private GameRepository gameRepository;
 
     @Autowired
-    public PromotionService(PromotionRepository promotionRepository) {
+    public void setPromotionRepository(PromotionRepository promotionRepository) {
         this.promotionRepository = promotionRepository;
     }
+
+    @Autowired
+    public void setGameRepository(GameRepository gameRepository) {
+        this.gameRepository = gameRepository;
+    }
+
 
     @Transactional
     public Promotion createPromotion(int percentage, Date startDate, Date endDate){

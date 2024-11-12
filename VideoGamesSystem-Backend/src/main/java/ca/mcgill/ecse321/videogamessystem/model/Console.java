@@ -26,19 +26,16 @@ public class Console
   private Long id;
 
   @Column(unique = true)
-  private String consoleType;
+  private ConsoleType consoleType;
 
-  @ManyToOne
-  private GameConsole gameConsole;
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public Console(String aConsoleType)
+  public Console(ConsoleType aConsoleType)
   {
     consoleType = aConsoleType;
-    GameConsole gameconsole = new GameConsole();
-    this.gameConsole = gameconsole;
+
   }
 
   public Console(){
@@ -49,7 +46,7 @@ public class Console
   // INTERFACE
   //------------------------
 
-  public boolean setConsoleType(String aConsoleType)
+  public boolean setConsoleType(ConsoleType aConsoleType)
   {
     boolean wasSet = false;
     consoleType = aConsoleType;
@@ -57,17 +54,9 @@ public class Console
     return wasSet;
   }
 
-  public String getConsoleType()
+  public ConsoleType getConsoleType()
   {
     return consoleType;
-  }
-
-  public GameConsole getGameConsole() {
-    return gameConsole;
-  }
-
-  public void setGameConsole(GameConsole aGameConsole) {
-    this.gameConsole = aGameConsole;
   }
 
   public void delete()
@@ -79,4 +68,23 @@ public class Console
     return super.toString() + "["+
             "consoleType" + ":" + getConsoleType()+ "]";
   }
+
+  // ------------------------
+  // MEMBER VARIABLES
+  // ------------------------
+  public enum ConsoleType {
+    PS4,
+    XBOX,
+    Switch,
+    Wii,
+    PC,
+    Other;
+
+    @Override
+    public String toString() {
+      return name();
+    }
+  }
+  
 }
+

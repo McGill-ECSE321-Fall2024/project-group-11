@@ -15,7 +15,7 @@ public class GameService {
     private GameRepository gameRepository;
 
     @Autowired
-    public GameService(GameRepository gameRepository){
+    public void setGameRepository(GameRepository gameRepository){
         this.gameRepository= gameRepository;
     }
 

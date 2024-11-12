@@ -52,6 +52,13 @@ public class Wishlist
     return wasSet;
   }
 
+  public boolean setCustomer(Customer customer){
+    boolean wasSet= false;
+    this.customer= customer;
+    wasSet= true;
+    return wasSet;
+  }
+
   public int getNbOfItems()
   {
     return nbOfItems;

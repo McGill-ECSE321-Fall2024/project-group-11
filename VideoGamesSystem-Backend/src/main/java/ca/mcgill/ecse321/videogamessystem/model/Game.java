@@ -32,7 +32,7 @@ public class Game
   @ManyToOne
   private Wishlist wishlist;
   @ManyToOne
-  private GameConsole gameConsole;
+  private Console console;
   @ManyToOne
   private Promotion promotion;
 
@@ -51,8 +51,8 @@ public class Game
     //Wishlist aWishlist, GameConsole aGameConsole, Promotion aPromotion
     Wishlist wishlist = new Wishlist();
     this.wishlist = wishlist;
-    GameConsole gameConsole = new GameConsole();
-    this.gameConsole = gameConsole;
+    Console console = new Console();
+    this.console = console;
     Promotion promotion = new Promotion();
     this.promotion = promotion;
   }
@@ -135,9 +135,9 @@ public class Game
     return wishlist;
   }
   /* Code from template association_GetOne */
-  public GameConsole getGameConsole()
+  public Console getConsole()
   {
-    return gameConsole;
+    return console;
   }
   /* Code from template association_GetOne */
   public Promotion getPromotion()
@@ -157,12 +157,12 @@ public class Game
     return wasSet;
   }
   /* Code from template association_SetUnidirectionalOne */
-  public boolean setGameConsole(GameConsole aNewGameConsole)
+  public boolean setConsole(Console aNewConsole)
   {
     boolean wasSet = false;
-    if (aNewGameConsole != null)
+    if (aNewConsole != null)
     {
-      gameConsole = aNewGameConsole;
+      console = aNewConsole;
       wasSet = true;
     }
     return wasSet;
@@ -182,7 +182,7 @@ public class Game
   public void delete()
   {
     wishlist = null;
-    gameConsole = null;
+    console = null;
     promotion = null;
   }
 
@@ -196,7 +196,7 @@ public class Game
             "title" + ":" + getTitle()+ "," +
             "category" + ":" + getCategory()+ "]" + System.getProperties().getProperty("line.separator") +
             "  " + "wishlist = "+(getWishlist()!=null?Integer.toHexString(System.identityHashCode(getWishlist())):"null") + System.getProperties().getProperty("line.separator") +
-            "  " + "gameConsole = "+(getGameConsole()!=null?Integer.toHexString(System.identityHashCode(getGameConsole())):"null") + System.getProperties().getProperty("line.separator") +
+            "  " + "gameConsole = "+(getConsole()!=null?Integer.toHexString(System.identityHashCode(getConsole())):"null") + System.getProperties().getProperty("line.separator") +
             "  " + "promotion = "+(getPromotion()!=null?Integer.toHexString(System.identityHashCode(getPromotion())):"null");
   }
 

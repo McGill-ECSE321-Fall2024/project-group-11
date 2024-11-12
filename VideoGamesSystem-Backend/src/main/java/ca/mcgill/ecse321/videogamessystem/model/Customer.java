@@ -76,6 +76,13 @@ public class Customer extends Account
     return wishlist;
   }
 
+  public boolean setWishlist(Wishlist wishlist){
+    boolean wasSet= false;
+    this.wishlist= wishlist;
+    wasSet = true;
+    return wasSet;
+  }
+
   public void delete()
   {
     Wishlist existingWishlist = wishlist;
