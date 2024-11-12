@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import ca.mcgill.ecse321.videogamessystem.model.Console;
 import ca.mcgill.ecse321.videogamessystem.model.Console.ConsoleType;
+import ca.mcgill.ecse321.videogamessystem.model.Game;
 import ca.mcgill.ecse321.videogamessystem.repository.ConsoleRepository;
 
 @Service
@@ -44,18 +45,33 @@ public class ConsoleService {
     }
 
     @Transactional
-    public Console getConsoleByConsoleType(ConsoleType consoleType) {
+    public List<Console> getConsolesByConsoleType(ConsoleType consoleType) {
         if (consoleType == null) {
             throw new IllegalArgumentException("Console type cannot be null.");
         }
 
-        Console console = consoleRepository.findConsoleByConsoleType(consoleType);
-        if (console == null) {
+        List<Console> consoles = consoleRepository.findConsoleByConsoleType(consoleType);
+        if (consoles == null || consoles.isEmpty()) {
+            throw new IllegalArgumentException("No consoles of specified type found.");
+        }
+        return consoles;
+    }
+
+/* 
+    @Transactional
+    public Console getConsoleByGame(Game game) {
+        if (game == null) {
+            throw new IllegalArgumentException("game not found");
+        }
+
+        Game game = gameRepository.findConsoleByGame(game);
+        if (game == null) {
             throw new IllegalArgumentException("Console of specified type not found.");
         }
         return console;
     }
-
+*/
+// we want get console type and not console
     @Transactional
     public Console updateConsoleType(Long id, ConsoleType newConsoleType) {
         Console console = consoleRepository.findConsoleById(id);
@@ -104,5 +120,7 @@ public class ConsoleService {
         }
         return resultList;
     }
+
+    //get consoletype by game : returns the consoletyoe  sur game 
 }
 

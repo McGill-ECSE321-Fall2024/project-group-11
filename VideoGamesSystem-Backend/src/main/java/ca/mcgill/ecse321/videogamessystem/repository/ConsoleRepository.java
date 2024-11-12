@@ -12,7 +12,7 @@ public interface ConsoleRepository extends CrudRepository<Console, Long>{
     
     Console findConsoleById(Long id);
 
-    Console findConsoleByConsoleType(ConsoleType consoleType);
+    List<Console> findConsoleByConsoleType(ConsoleType consoleType);
 
 }
 

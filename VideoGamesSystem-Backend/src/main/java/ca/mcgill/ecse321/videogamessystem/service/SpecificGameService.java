@@ -61,19 +61,27 @@ public class SpecificGameService {
         return specificGameRepository.findSpecificGameByAvailability(availability);
     }
 
-    @Transactional
-    public List<SpecificGame> getSpecificGamesByGame(Long gameId) {
-        Game game = gameRepository.findById(gameId).orElseThrow(() -> 
-            new IllegalArgumentException("Game not found."));
-        return specificGameRepository.findSpecificGameByGame(game); // jsut needs the update 
-    }
+   
 
     @Transactional
-    public List<SpecificGame> getSpecificGamesByOrder(Integer orderId) {
-        Order order = orderRepository.findById(orderId).orElseThrow(() -> 
-            new IllegalArgumentException("Order not found."));
-        return specificGameRepository.findSpecificGameByorder(order);
+public List<SpecificGame> getSpecificGamesByOrder(Integer orderNb) {
+    Order order = orderRepository.findOrderByNumber(orderNb);
+    if (order == null) {
+        throw new IllegalArgumentException("Order not found.");
     }
+    return specificGameRepository.findSpecificGameByorder(order);
+}
+
+
+    @Transactional
+    public List<SpecificGame> getSpecificGamesByGame(Long gameId) {
+        Game game = gameRepository.findGameById(gameId);
+        if (game == null) {
+            throw new IllegalArgumentException("Specific game not found.");
+        }
+        return specificGameRepository.findSpecificGameByGame(game);
+    }
+
 
     @Transactional
     public SpecificGame updateAvailability(int serialNumber, boolean newAvailability) {
@@ -86,22 +94,7 @@ public class SpecificGameService {
         return specificGameRepository.save(specificGame);
     }
 
-    @Transactional
-    public SpecificGame updateOrder(int serialNumber, Integer orderId) {
-        SpecificGame specificGame = specificGameRepository.findSpecificGameBySerialNumber(serialNumber);
-        if (specificGame == null) {
-            throw new IllegalArgumentException("Specific game not found.");
-        }
-
-        Order order = null;
-        if (orderId != null) {
-            order = orderRepository.findById(orderId).orElseThrow(() -> 
-                new IllegalArgumentException("Order not found."));
-        }
-        
-        specificGame.setOrder(order);
-        return specificGameRepository.save(specificGame);
-    }
+   
 
     @Transactional
     public SpecificGame deleteSpecificGame(int serialNumber) {
@@ -132,5 +125,8 @@ public class SpecificGameService {
         }
         return resultList;
     }
-}
+}//find specific game by order 
+// add specific game to order
+// remove specific game to order
+
 

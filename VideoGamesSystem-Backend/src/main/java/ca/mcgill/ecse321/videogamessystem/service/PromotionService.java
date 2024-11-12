@@ -151,7 +151,8 @@ public class PromotionService {
 
 
 
-
+// add promotion to game
+// is promotion available ?
 
     
 }

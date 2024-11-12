@@ -5,6 +5,10 @@ package ca.mcgill.ecse321.videogamessystem.model;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
+
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import jakarta.persistence.Entity;
 
 
@@ -25,7 +29,9 @@ public class SpecificGame
   private boolean availability;
 
   //SpecificGame Associations
-  @OneToOne
+
+  @ManyToOne
+  @OnDelete(action = OnDeleteAction.CASCADE)
   private Game game;
   @ManyToOne
   private Order order;

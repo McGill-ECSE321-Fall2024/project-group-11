@@ -21,7 +21,7 @@ public interface GameRepository extends CrudRepository<Game, Long>{
 
     List<Game> findGameByCategory(Category category);
 
-    List<Game> findGameByConsole(Console console);
+    List<Game> findGameByConsole(ca.mcgill.ecse321.videogamessystem.model.Console console);
 
     List<Game> findGameByPromotion(Promotion promotion);
 }

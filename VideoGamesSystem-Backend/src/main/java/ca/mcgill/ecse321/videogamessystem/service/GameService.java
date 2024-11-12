@@ -1,85 +1,130 @@
 package ca.mcgill.ecse321.videogamessystem.service;
-//import static org.mockito.Mockito.description;
-
-import java.io.Console;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import jakarta.transaction.Transactional;
+import java.util.List;
+import java.util.ArrayList;
 
 import ca.mcgill.ecse321.videogamessystem.model.Game;
 import ca.mcgill.ecse321.videogamessystem.model.Game.Category;
+import ca.mcgill.ecse321.videogamessystem.model.Console;
 import ca.mcgill.ecse321.videogamessystem.model.Promotion;
 import ca.mcgill.ecse321.videogamessystem.repository.GameRepository;
-import jakarta.transaction.Transactional;
+import ca.mcgill.ecse321.videogamessystem.repository.ConsoleRepository;
+import ca.mcgill.ecse321.videogamessystem.repository.PromotionRepository;
+
 @Service
 public class GameService {
 
-    @Autowired
     private GameRepository gameRepository;
+    private ConsoleRepository consoleRepository;
+    private PromotionRepository promotionRepository;
 
     @Autowired
-    private void setGameRepository(GameRepository gameRepository) {
+    public GameService(GameRepository gameRepository, ConsoleRepository consoleRepository, PromotionRepository promotionRepository) {
         this.gameRepository = gameRepository;
+        this.consoleRepository = consoleRepository;
+        this.promotionRepository = promotionRepository;
     }
 
     @Transactional
-    public Game createGame(String description, int stockQantity, int price, String title, ca.mcgill.ecse321.videogamessystem.model.Game.Category category) {
-
-        if (price < 0 || title.length() < 1 ) {
-            throw new IllegalArgumentException("Invalid Input brotha");
+    public Game createGame(String description, int stockQuantity, int price, String title, Category category, Long consoleId, Long promotionId) {
+        if (description == null || description.trim().isEmpty()) {
+            throw new IllegalArgumentException("Description cannot be empty.");
+        }
+        if (stockQuantity < 0) {
+            throw new IllegalArgumentException("Stock quantity cannot be negative.");
+        }
+        if (price < 0) {
+            throw new IllegalArgumentException("Price cannot be negative.");
+        }
+        if (title == null || title.trim().isEmpty()) {
+            throw new IllegalArgumentException("Title cannot be empty.");
+        }
+        if (category == null) {
+            throw new IllegalArgumentException("Category cannot be null.");
         }
 
-        Game game = new Game(); // change in model the mapping to not have too many arguments
-        game.setDescription(description);
-        game.setStockQuantity(stockQantity);
-        game.setPrice(price);
-        game.setTitle(title);
-        game.setCategory(category);
+        Console console = null;
+        if (consoleId != null) {
+            console = consoleRepository.findById(consoleId).orElseThrow(() -> 
+                new IllegalArgumentException("Console not found."));
+        }
 
+        Promotion promotion = null;
+        if (promotionId != null) {
+            promotion = promotionRepository.findById(promotionId).orElseThrow(() -> 
+                new IllegalArgumentException("Promotion not found."));
+        }
+
+        Game game = new Game(description, stockQuantity, price, title, category);
+        game.setConsole(console);
+        game.setPromotion(promotion);
         return gameRepository.save(game);
     }
 
-    /**
-     * @param id
-     * @return a game using the id
-     */
     @Transactional
-    public Game getGameById(Long id){
+    public Game getGameById(Long id) {
         Game game = gameRepository.findGameById(id);
         if (game == null) {
-            throw new IllegalArgumentException("There is no game with ID " + id + ".");
+            throw new IllegalArgumentException("Game not found.");
         }
         return game;
     }
 
-    public List<Game> getGameByStockQuantity(int stockQantity){
-        return gameRepository.findGameByStockQuantity(stockQantity);
+    @Transactional
+    public List<Game> getGamesByStockQuantity(int stockQuantity) {
+        return gameRepository.findGameByStockQuantity(stockQuantity);
     }
 
-    public List<Game> getGameByPrice(int price){
+    @Transactional
+    public List<Game> getGamesByPrice(int price) {
         return gameRepository.findGameByprice(price);
     }
 
-    public List<Game> getGameByTitle(String title){
+    @Transactional
+    public List<Game> getGamesByTitle(String title) {
+        if (title == null || title.trim().isEmpty()) {
+            throw new IllegalArgumentException("Title cannot be empty.");
+        }
         return gameRepository.findGameByTitle(title);
     }
 
-
-    public List<Game> getGameBycategory(ca.mcgill.ecse321.videogamessystem.model.Game.Category category){
+    @Transactional
+    public List<Game> getGamesByCategory(Category category) {
+        if (category == null) {
+            throw new IllegalArgumentException("Category cannot be null.");
+        }
         return gameRepository.findGameByCategory(category);
     }
-    
 
-    public List<Game> getGameByConsole(Console console){
+    @Transactional
+    public List<Game> getGamesByConsole(Long consoleId) {
+        Console console = consoleRepository.findById(consoleId).orElseThrow(() -> 
+            new IllegalArgumentException("Console not found."));
         return gameRepository.findGameByConsole(console);
     }
-    
 
-    public List<Game> getGameByPromotion(Promotion promotion){
+    @Transactional
+    public List<Game> getGamesByPromotion(Long promotionId) {
+        Promotion promotion = promotionRepository.findById(promotionId).orElseThrow(() -> 
+            new IllegalArgumentException("Promotion not found."));
         return gameRepository.findGameByPromotion(promotion);
     }
 
+    @Transactional
+    public Game updateCategory(Long id, Category category) {
+        Game game = gameRepository.findGameById(id);
+        if (game == null) {
+            throw new IllegalArgumentException("invalid id to update description");
+        }
+        game.setCategory(category);
+        return game;
+
+    }
+
+    @Transactional
     public Game updateGame(long id, String description, int stockQuantity, int price, String title, Category category){
         Game game = gameRepository.findGameById(id);
         if (game == null) {
@@ -91,81 +136,102 @@ public class GameService {
         game.setDescription(title);
         game.setCategory(category);
         return game;
-
     }
 
-    public Game updateGameDescription(Long id, String description){
-        Game game = gameRepository.findGameById(id);
-        if(game == null){
-            throw new IllegalArgumentException("invalid id to update description");
-        }
-        game.setDescription(description);
-        return game;
 
-    }
 
-    public Game updateGamestockQuantity(Long id, int stockQuantity){
+    @Transactional
+    public Game updateStockQuantity(Long id, int newStockQuantity) {
         Game game = gameRepository.findGameById(id);
         if (game == null) {
-            throw new IllegalArgumentException("invalid id to update description");
-            
+            throw new IllegalArgumentException("Game not found.");
         }
-        game.setStockQuantity(stockQuantity);
-        return game;
+        if (newStockQuantity < 0) {
+            throw new IllegalArgumentException("Stock quantity cannot be negative.");
+        }
 
+        game.setStockQuantity(newStockQuantity);
+        return gameRepository.save(game);
     }
 
-    public Game updateGameprice(Long id, int price) {
+    @Transactional
+    public Game updatePrice(Long id, int newPrice) {
         Game game = gameRepository.findGameById(id);
         if (game == null) {
-            throw new IllegalArgumentException("invalid id to update description");
-
+            throw new IllegalArgumentException("Game not found.");
+        }
+        if (newPrice < 0) {
+            throw new IllegalArgumentException("Price cannot be negative.");
         }
 
-        if (price < 0 ) {
-            throw new IllegalArgumentException("price needs to be positive");
-
-        }
-
-        game.setPrice(price);
-        return game;
-
+        game.setPrice(newPrice);
+        return gameRepository.save(game);
     }
 
-    public Game updateGameTitle(Long id, String title) {
+    @Transactional
+    public Game updateDescription(Long id, String newDescription) {
         Game game = gameRepository.findGameById(id);
         if (game == null) {
-            throw new IllegalArgumentException("invalid id to update description");
+            throw new IllegalArgumentException("Game not found.");
         }
-        game.setDescription(title);
-        return game;
+        if (newDescription == null || newDescription.trim().isEmpty()) {
+            throw new IllegalArgumentException("Description cannot be empty.");
+        }
 
+        game.setDescription(newDescription);
+        return gameRepository.save(game);
     }
 
-    public Game updateCategory(Long id, Category category) {
+    @Transactional
+    public Game updateTitle(Long id, String newTitle) {
         Game game = gameRepository.findGameById(id);
         if (game == null) {
-            throw new IllegalArgumentException("invalid id to update description");
+            throw new IllegalArgumentException("Game not found.");
         }
-        game.setCategory(category);
-        return game;
+        if (newTitle == null || newTitle.trim().isEmpty()) {
+            throw new IllegalArgumentException("Title cannot be empty.");
+        }
 
+        game.setTitle(newTitle);
+        return gameRepository.save(game);
     }
 
+    @Transactional
+    public Game deleteGame(Long id) {
+        Game game = gameRepository.findGameById(id);
+        if (game == null) {
+            throw new IllegalArgumentException("Game not found.");
+        }
+
+        gameRepository.delete(game);
+        return game;
+    }
     
 
-
-    public Game deleteGame(Long id){
-        Game exsistingGame = gameRepository.findGameById(id);
-/*
- * if (game == null) {
- * throw new IllegalArgumentException("invalid id to update description");
- * }
- * 
- */ 
- //List<SpecificGame> specificgame = Game.findAllspecificgame();
-
-        return exsistingGame;
+    @Transactional
+    public List<Game> getAllGames() {
+        return toList(gameRepository.findAll());
     }
 
+    /**
+     * Converts an {@code Iterable} to a {@code List}.
+     * @param iterable the {@code Iterable} to convert
+     * @param <T>      the type of elements in the iterable
+     * @return a {@code List} containing the elements of the {@code Iterable}
+     */
+    private <T> List<T> toList(Iterable<T> iterable) {
+        List<T> resultList = new ArrayList<>();
+        for (T t : iterable) {
+            resultList.add(t);
+        }
+        return resultList;
+    }
+
+    //is game available , fsire par rapport a quantity
+    // does game have promoition
+    // add game to promo 
+    // add game to wishlist
+    // set consoletype to game
+    // get price with promo 
+     
 }

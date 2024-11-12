@@ -1,6 +1,10 @@
 package ca.mcgill.ecse321.videogamessystem.model;
 
 import jakarta.persistence.Id;
+
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -27,6 +31,7 @@ public class SpecificReviewRating {
 
   // SpecificReviewRating Associations
   @ManyToOne
+  @OnDelete(action = OnDeleteAction.CASCADE)
   private Review review;
   
   @ManyToOne

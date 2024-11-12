@@ -2,6 +2,9 @@
 /*This code was generated using the UMPLE 1.35.0.7523.c616a4dce modeling language!*/
 package ca.mcgill.ecse321.videogamessystem.model;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -27,6 +30,7 @@ public class Wishlist
 
   //Wishlist Associations
   @OneToOne
+  @OnDelete(action = OnDeleteAction.CASCADE)
   private Customer customer;
 
   //------------------------
