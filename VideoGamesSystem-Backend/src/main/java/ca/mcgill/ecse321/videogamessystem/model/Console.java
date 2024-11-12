@@ -5,6 +5,7 @@ package ca.mcgill.ecse321.videogamessystem.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Column;
@@ -25,22 +26,27 @@ public class Console
   private Long id;
 
   @Column(unique = true)
-  private String consoleType;
+  private ConsoleType consoleType;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public Console(String aConsoleType)
+  public Console(ConsoleType aConsoleType)
   {
     consoleType = aConsoleType;
+
+  }
+
+  public Console(){
+
   }
 
   //------------------------
   // INTERFACE
   //------------------------
 
-  public boolean setConsoleType(String aConsoleType)
+  public boolean setConsoleType(ConsoleType aConsoleType)
   {
     boolean wasSet = false;
     consoleType = aConsoleType;
@@ -48,7 +54,7 @@ public class Console
     return wasSet;
   }
 
-  public String getConsoleType()
+  public ConsoleType getConsoleType()
   {
     return consoleType;
   }
@@ -62,4 +68,23 @@ public class Console
     return super.toString() + "["+
             "consoleType" + ":" + getConsoleType()+ "]";
   }
+
+  // ------------------------
+  // MEMBER VARIABLES
+  // ------------------------
+  public enum ConsoleType {
+    PS4,
+    XBOX,
+    Switch,
+    Wii,
+    PC,
+    Other;
+
+    @Override
+    public String toString() {
+      return name();
+    }
+  }
+  
 }
+

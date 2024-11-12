@@ -33,20 +33,11 @@ public class Wishlist
   // CONSTRUCTOR
   //------------------------
 
-  public Wishlist(int aNbOfItems, Customer aCustomer)
+  public Wishlist()
   {
-    nbOfItems = aNbOfItems;
-    if (aCustomer == null || aCustomer.getWishlist() != null)
-    {
-      throw new RuntimeException("Unable to create Wishlist due to aCustomer. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-    }
-    customer = aCustomer;
-  }
-
-  public Wishlist(int aNbOfItems, String aUserNameForCustomer, String aEmailForCustomer, String aPasswordForCustomer, int aPhoneNumberForCustomer, String aAdressForCustomer)
-  {
-    nbOfItems = aNbOfItems;
-    customer = new Customer(aUserNameForCustomer, aEmailForCustomer, aPasswordForCustomer, aPhoneNumberForCustomer, aAdressForCustomer, this);
+    nbOfItems = 0;
+    Customer customer = new Customer();
+    this.customer = customer;
   }
 
   //------------------------
@@ -58,6 +49,13 @@ public class Wishlist
     boolean wasSet = false;
     nbOfItems = aNbOfItems;
     wasSet = true;
+    return wasSet;
+  }
+
+  public boolean setCustomer(Customer customer){
+    boolean wasSet= false;
+    this.customer= customer;
+    wasSet= true;
     return wasSet;
   }
 

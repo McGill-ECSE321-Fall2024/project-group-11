@@ -13,7 +13,6 @@ import jakarta.persistence.ManyToOne;
 @Entity
 public class Game
 {
-
   //------------------------
   // MEMBER VARIABLES
   //------------------------
@@ -24,7 +23,7 @@ public class Game
   private Long id;
 
   private String description;
-  private int stockQantity;
+  private int stockQuantity;
   private int price;
   private String title;
   private Category category;
@@ -33,7 +32,7 @@ public class Game
   @ManyToOne
   private Wishlist wishlist;
   @ManyToOne
-  private GameConsole gameConsole;
+  private Console console;
   @ManyToOne
   private Promotion promotion;
 
@@ -41,25 +40,25 @@ public class Game
   // CONSTRUCTOR
   //------------------------
 
-  public Game(String aDescription, int aStockQantity, int aPrice, String aTitle, Category aCategory, Wishlist aWishlist, GameConsole aGameConsole, Promotion aPromotion)
+  public Game(String aDescription, int aStockQuantity, int aPrice, String aTitle, Category aCategory)
   {
     description = aDescription;
-    stockQantity = aStockQantity;
+    stockQuantity = aStockQuantity;
     price = aPrice;
     title = aTitle;
     category = aCategory;
-    if (!setWishlist(aWishlist))
-    {
-      throw new RuntimeException("Unable to create Game due to aWishlist. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-    }
-    if (!setGameConsole(aGameConsole))
-    {
-      throw new RuntimeException("Unable to create Game due to aGameConsole. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-    }
-    if (!setPromotion(aPromotion))
-    {
-      throw new RuntimeException("Unable to create Game due to aPromotion. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-    }
+
+    //Wishlist aWishlist, GameConsole aGameConsole, Promotion aPromotion
+    Wishlist wishlist = new Wishlist();
+    this.wishlist = wishlist;
+    Console console = new Console();
+    this.console = console;
+    Promotion promotion = new Promotion();
+    this.promotion = promotion;
+  }
+  
+  public Game(){
+    
   }
 
   //------------------------
@@ -74,10 +73,10 @@ public class Game
     return wasSet;
   }
 
-  public boolean setStockQantity(int aStockQantity)
+  public boolean setStockQuantity(int aStockQuantity)
   {
     boolean wasSet = false;
-    stockQantity = aStockQantity;
+    stockQuantity = aStockQuantity;
     wasSet = true;
     return wasSet;
   }
@@ -98,10 +97,10 @@ public class Game
     return wasSet;
   }
 
-  public boolean setCategory(Category aCategory)
+  public boolean setCategory(Category category2)
   {
     boolean wasSet = false;
-    category = aCategory;
+    category = category2;
     wasSet = true;
     return wasSet;
   }
@@ -111,9 +110,9 @@ public class Game
     return description;
   }
 
-  public int getStockQantity()
+  public int getStockQuantity()
   {
-    return stockQantity;
+    return stockQuantity;
   }
 
   public int getPrice()
@@ -136,15 +135,16 @@ public class Game
     return wishlist;
   }
   /* Code from template association_GetOne */
-  public GameConsole getGameConsole()
+  public Console getConsole()
   {
-    return gameConsole;
+    return console;
   }
   /* Code from template association_GetOne */
   public Promotion getPromotion()
   {
     return promotion;
   }
+
   /* Code from template association_SetUnidirectionalOne */
   public boolean setWishlist(Wishlist aNewWishlist)
   {
@@ -157,12 +157,12 @@ public class Game
     return wasSet;
   }
   /* Code from template association_SetUnidirectionalOne */
-  public boolean setGameConsole(GameConsole aNewGameConsole)
+  public boolean setConsole(Console aNewConsole)
   {
     boolean wasSet = false;
-    if (aNewGameConsole != null)
+    if (aNewConsole != null)
     {
-      gameConsole = aNewGameConsole;
+      console = aNewConsole;
       wasSet = true;
     }
     return wasSet;
@@ -182,7 +182,7 @@ public class Game
   public void delete()
   {
     wishlist = null;
-    gameConsole = null;
+    console = null;
     promotion = null;
   }
 
@@ -191,12 +191,33 @@ public class Game
   {
     return super.toString() + "["+
             "description" + ":" + getDescription()+ "," +
-            "stockQantity" + ":" + getStockQantity()+ "," +
+            "stockQuantity" + ":" + getStockQuantity()+ "," +
             "price" + ":" + getPrice()+ "," +
             "title" + ":" + getTitle()+ "," +
             "category" + ":" + getCategory()+ "]" + System.getProperties().getProperty("line.separator") +
             "  " + "wishlist = "+(getWishlist()!=null?Integer.toHexString(System.identityHashCode(getWishlist())):"null") + System.getProperties().getProperty("line.separator") +
-            "  " + "gameConsole = "+(getGameConsole()!=null?Integer.toHexString(System.identityHashCode(getGameConsole())):"null") + System.getProperties().getProperty("line.separator") +
+            "  " + "gameConsole = "+(getConsole()!=null?Integer.toHexString(System.identityHashCode(getConsole())):"null") + System.getProperties().getProperty("line.separator") +
             "  " + "promotion = "+(getPromotion()!=null?Integer.toHexString(System.identityHashCode(getPromotion())):"null");
   }
+
+  // ------------------------
+  // MEMBER VARIABLES
+  // ------------------------
+  public enum Category {
+    Adventure,
+    Action,
+    Sports,
+    Strategy,
+    Puzzle,
+    Party,
+    Survival,
+    Arcade,
+    Other;
+
+    @Override
+    public String toString() {
+      return name();
+    }
+  }
+  
 }

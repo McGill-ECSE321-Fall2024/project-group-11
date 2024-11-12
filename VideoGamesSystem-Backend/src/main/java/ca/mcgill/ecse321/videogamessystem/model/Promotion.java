@@ -38,6 +38,10 @@ public class Promotion
     endDate = aEndDate;
   }
 
+  public Promotion(){
+    
+  }
+
   //------------------------
   // INTERFACE
   //------------------------

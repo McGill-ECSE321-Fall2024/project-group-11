@@ -23,30 +23,22 @@ public class Customer extends Account
   //Customer Associations
   @OneToOne
   private Wishlist wishlist;
-  
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public Customer(String aUserName, String aEmail, String aPassword, int aPhoneNumber, String aAdress, Wishlist aWishlist)
+  public Customer(String aUserName, String aEmail, String aPassword, int aPhoneNumber, String aAdress)
   {
     super(aUserName, aEmail, aPassword);
     phoneNumber = aPhoneNumber;
     adress = aAdress;
-    if (aWishlist == null || aWishlist.getCustomer() != null)
-    {
-      throw new RuntimeException("Unable to create Customer due to aWishlist. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-    }
-    wishlist = aWishlist;
+    Wishlist whishlist = new Wishlist();
+    this.wishlist = whishlist;
   }
 
-  public Customer(String aUserName, String aEmail, String aPassword, int aPhoneNumber, String aAdress, int aNbOfItemsForWishlist)
-  {
-    super(aUserName, aEmail, aPassword);
-    phoneNumber = aPhoneNumber;
-    adress = aAdress;
-    wishlist = new Wishlist(aNbOfItemsForWishlist, this);
+  public Customer(){
+
   }
 
   //------------------------
@@ -82,6 +74,13 @@ public class Customer extends Account
   public Wishlist getWishlist()
   {
     return wishlist;
+  }
+
+  public boolean setWishlist(Wishlist wishlist){
+    boolean wasSet= false;
+    this.wishlist= wishlist;
+    wasSet = true;
+    return wasSet;
   }
 
   public void delete()

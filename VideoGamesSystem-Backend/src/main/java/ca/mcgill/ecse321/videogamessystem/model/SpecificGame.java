@@ -34,14 +34,14 @@ public class SpecificGame
   // CONSTRUCTOR
   //------------------------
 
-  public SpecificGame(int aSerialNumber, boolean aAvailability, Game aGame)
+  public SpecificGame(int aSerialNumber, boolean aAvailability)
   {
     serialNumber = aSerialNumber;
     availability = aAvailability;
-    if (!setGame(aGame))
-    {
-      throw new RuntimeException("Unable to create SpecificGame due to aGame. See https://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-    }
+    Game game = new Game();
+    this.game = game;
+    Order order = new Order();
+    this.order = order;
   }
 
   //------------------------
@@ -103,50 +103,10 @@ public class SpecificGame
   /* Code from template association_SetOptionalOneToMandatoryMany */
   public boolean setOrder(Order aOrder)
   {
-    //
-    // This source of this source generation is association_SetOptionalOneToMandatoryMany.jet
-    // This set file assumes the generation of a maximumNumberOfXXX method does not exist because 
-    // it's not required (No upper bound)
-    //   
     boolean wasSet = false;
-    Order existingOrder = order;
-
-    if (existingOrder == null)
-    {
-      if (aOrder != null)
-      {
-        if (aOrder.addSpecificGame(this))
-        {
-          existingOrder = aOrder;
-          wasSet = true;
-        }
-      }
-    } 
-    else if (existingOrder != null)
-    {
-      if (aOrder == null)
-      {
-        if (Order.minimumNumberOfSpecificGames() < existingOrder.numberOfSpecificGames())
-        {
-          existingOrder.removeSpecificGame(this);
-          existingOrder = aOrder;  // aOrder == null
-          wasSet = true;
-        }
-      } 
-      else
-      {
-        if (Order.minimumNumberOfSpecificGames() < existingOrder.numberOfSpecificGames())
-        {
-          existingOrder.removeSpecificGame(this);
-          aOrder.addSpecificGame(this);
-          existingOrder = aOrder;
-          wasSet = true;
-        }
-      }
-    }
-    if (wasSet)
-    {
-      order = existingOrder;
+    if (aOrder != null) {
+      order = aOrder;
+      wasSet = true;
     }
     return wasSet;
   }
@@ -154,19 +114,7 @@ public class SpecificGame
   public void delete()
   {
     game = null;
-    if (order != null)
-    {
-      if (order.numberOfSpecificGames() <= 1)
-      {
-        order.delete();
-      }
-      else
-      {
-        Order placeholderOrder = order;
-        this.order = null;
-        placeholderOrder.removeSpecificGame(this);
-      }
-    }
+    order = null;
   }
 
   
