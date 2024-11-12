@@ -12,8 +12,12 @@ import jakarta.transaction.Transactional;
 @Service
 public class GameService {
 
-    @Autowired
     private GameRepository gameRepository;
+
+    @Autowired
+    public GameService(GameRepository gameRepository){
+        this.gameRepository= gameRepository;
+    }
 
     public Game getGameById(Long gameId) {
         Game game = gameRepository.findGameById(gameId);
