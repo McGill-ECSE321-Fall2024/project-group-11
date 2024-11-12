@@ -24,6 +24,11 @@ public class CustomerService {
         if (customerRepository.findCustomerByEmail(email) != null) {
             throw new IllegalArgumentException("Email already exists");
         }
+
+        if (password == null || password.length() < 8) {
+            throw new IllegalArgumentException("Password too short.");
+        }
+        
         Customer customer = new Customer(userName, email, password, phoneNumber, address);
         return customerRepository.save(customer);
     }
