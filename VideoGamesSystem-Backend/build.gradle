@@ -2,6 +2,7 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.3.4'
 	id 'io.spring.dependency-management' version '1.1.6'
+    id 'jacoco'
 }
 
 group = 'ca.mcgill.321'
@@ -34,4 +35,16 @@ tasks.named('test') {
         // You can also add other configurations, for example:
         events "passed", "skipped", "failed"
     }
+	finalizedBy jacocoTestReport
+}
+
+tasks.named('jacocoTestCoverageVerification') {
+	violationRules {
+		rule {
+			limit {
+				minimum = 0.6
+			}
+		}
+	}
+	dependsOn test // tests are required to run before checking code coverage.
 }
