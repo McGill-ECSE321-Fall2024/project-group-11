@@ -65,6 +65,10 @@ public class SpecificReviewRating {
     return reviewRating;
   }
 
+  public Long getId(){
+    return id;
+  }
+
   public Review getReview() {
     return review;
   }

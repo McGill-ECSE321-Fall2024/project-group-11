@@ -63,6 +63,10 @@ public class Wishlist
     return wasSet;
   }
 
+  public Long getId(){
+    return id;
+  }
+
   public int getNbOfItems()
   {
     return nbOfItems;

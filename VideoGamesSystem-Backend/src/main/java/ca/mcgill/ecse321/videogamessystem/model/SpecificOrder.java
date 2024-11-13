@@ -74,6 +74,11 @@ public class SpecificOrder
     wasSet = true;
     return wasSet;
   }
+  
+  //also returns order number
+  public int getId(){
+    return number;
+  }
 
   public int getNumber()
   {

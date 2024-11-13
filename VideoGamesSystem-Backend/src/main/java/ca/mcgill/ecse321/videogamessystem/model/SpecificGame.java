@@ -69,6 +69,10 @@ public class SpecificGame
     return wasSet;
   }
 
+  public int getId() {
+    return serialNumber;
+  }
+  //also gets id
   public int getSerialNumber()
   {
     return serialNumber;

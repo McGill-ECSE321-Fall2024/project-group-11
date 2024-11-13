@@ -88,6 +88,10 @@ public class Review
     return wasSet;
   }
 
+  public Long getId() {
+    return id;
+  }
+  
   public int getGameRating()
   {
     return gameRating;

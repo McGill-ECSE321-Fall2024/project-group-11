@@ -165,6 +165,5 @@ public boolean promotionAvailable(Long id){
     }
     return valid;
 }
-
     
 }

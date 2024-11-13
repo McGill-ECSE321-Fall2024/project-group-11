@@ -111,6 +111,9 @@ public class Game
     return wasSet;
   }
 
+  public Long getId(){
+    return id;
+  }
   public String getDescription()
   {
     return description;
