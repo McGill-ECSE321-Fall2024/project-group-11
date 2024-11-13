@@ -1,3 +1,5 @@
+package ca.mcgill.ecse321.videogamessystem.service_tests;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 

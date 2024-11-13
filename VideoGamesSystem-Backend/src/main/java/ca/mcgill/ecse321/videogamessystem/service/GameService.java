@@ -23,22 +23,15 @@ import ca.mcgill.ecse321.videogamessystem.repository.SpecificGameRepository;
 public class GameService {
 
     private GameRepository gameRepository;
-<<<<<<< HEAD
     private SpecificGameRepository specificGameRepository;
-=======
-    private PromotionRepository promotionRepository;
     private WishlistRepository wishlistRepository;
->>>>>>> more-service-tests-paolo
 
     @Autowired
-    public GameService(GameRepository gameRepository, SpecificGameRepository specificGameRepository) {
+    public GameService(GameRepository gameRepository, SpecificGameRepository specificGameRepository, WishlistRepository wishlistRepository) {
         this.gameRepository = gameRepository;
-<<<<<<< HEAD
         this.specificGameRepository = specificGameRepository;
-=======
-        this.promotionRepository = promotionRepository;
         this.wishlistRepository = wishlistRepository;
->>>>>>> more-service-tests-paolo
+
     }
 
     @Transactional

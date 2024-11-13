@@ -1,3 +1,5 @@
+package ca.mcgill.ecse321.integration_tests;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import ca.mcgill.ecse321.videogamessystem.model.Promotion;
