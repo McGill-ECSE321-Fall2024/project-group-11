@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.data.repository.CrudRepository;
 
 import ca.mcgill.ecse321.videogamessystem.model.Game;
-import ca.mcgill.ecse321.videogamessystem.model.Order;
+import ca.mcgill.ecse321.videogamessystem.model.SpecificOrder;
 import ca.mcgill.ecse321.videogamessystem.model.SpecificGame;
 
 public interface SpecificGameRepository extends CrudRepository<SpecificGame, Integer>{
@@ -16,5 +16,5 @@ public interface SpecificGameRepository extends CrudRepository<SpecificGame, Int
 
     List<SpecificGame> findSpecificGameByGame(Game game);
 
-    List<SpecificGame> findSpecificGameByorder(Order order);
+    List<SpecificGame> findSpecificGameBySpecificOrder(SpecificOrder specificOrder);
 }

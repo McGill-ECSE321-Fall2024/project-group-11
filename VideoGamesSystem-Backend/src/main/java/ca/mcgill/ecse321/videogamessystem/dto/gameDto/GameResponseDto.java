@@ -1,7 +1,7 @@
 package ca.mcgill.ecse321.videogamessystem.dto.gameDto;
 
 import ca.mcgill.ecse321.videogamessystem.model.Game.Category;
-import ca.mcgill.ecse321.videogamessystem.model.Console.ConsoleType;
+import ca.mcgill.ecse321.videogamessystem.model.Game.ConsoleType;
 import ca.mcgill.ecse321.videogamessystem.model.Game;
 import ca.mcgill.ecse321.videogamessystem.dto.promotionDto.PromotionResponseDto;
 import ca.mcgill.ecse321.videogamessystem.dto.WishlistDto.WishlistResponseDto;

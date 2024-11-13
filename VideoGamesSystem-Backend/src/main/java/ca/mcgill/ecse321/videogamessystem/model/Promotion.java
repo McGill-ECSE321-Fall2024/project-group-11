@@ -70,6 +70,10 @@ public class Promotion
     return wasSet;
   }
 
+  public Long getId() {
+    return id;
+  }
+
   public int getPercentage()
   {
     return percentage;

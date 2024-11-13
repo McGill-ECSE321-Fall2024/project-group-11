@@ -32,6 +32,10 @@ public class Staff extends Account
   // INTERFACE
   //------------------------
 
+  public Long getId() {
+    return super.getId();
+  }
+
   public boolean setStaffType(boolean isAdmin)
   {
     boolean wasSet = false;

@@ -61,6 +61,10 @@ public class Customer extends Account
     return wasSet;
   }
 
+  public Long getId(){
+    return super.getId();
+  }
+
   public int getPhoneNumber()
   {
     return phoneNumber;

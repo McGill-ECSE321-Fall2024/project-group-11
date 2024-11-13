@@ -12,7 +12,7 @@ import jakarta.persistence.ManyToOne;
 // line 33 "model.ump"
 // line 132 "model.ump"
 @Entity
-public class Order
+public class SpecificOrder
 {
 
   //------------------------
@@ -34,7 +34,7 @@ public class Order
   // CONSTRUCTOR
   //------------------------
 
-  public Order(int aNumber, Date aOrderDate, int aCardNumber)
+  public SpecificOrder(int aNumber, Date aOrderDate, int aCardNumber)
   {
     number = aNumber;
     orderDate = aOrderDate;
@@ -43,7 +43,7 @@ public class Order
     this.customer = customer;
   }
 
-  public Order(){
+  public SpecificOrder(){
 
   }
 
@@ -73,6 +73,11 @@ public class Order
     cardNumber = aCardNumber;
     wasSet = true;
     return wasSet;
+  }
+  
+  //also returns order number
+  public int getId(){
+    return number;
   }
 
   public int getNumber()
