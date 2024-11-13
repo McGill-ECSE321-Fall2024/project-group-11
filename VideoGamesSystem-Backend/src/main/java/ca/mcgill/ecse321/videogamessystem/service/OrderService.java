@@ -125,7 +125,7 @@ public class OrderService {
 
     // assign order to customer
     @Transactional
-    public SpecificOrder placeNewOrder( int orderID, Customer customer){
+    public SpecificOrder placeNewOrder(int orderID, Customer customer){
         SpecificOrder order = specificOrderRepository.findOrderByNumber(orderID);
         if (order == null){
             throw new IllegalArgumentException("order not found");

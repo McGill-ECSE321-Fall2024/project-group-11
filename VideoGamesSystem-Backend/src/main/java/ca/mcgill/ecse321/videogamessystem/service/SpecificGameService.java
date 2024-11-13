@@ -41,6 +41,9 @@ public class SpecificGameService {
         if (orderId != null) {
             order = specificOrderRepository.findById(orderId).orElse(null);
         }
+        else{
+            new IllegalArgumentException("order cannot be null.");
+        }
 
         SpecificGame specificGame = new SpecificGame(serialNumber, availability);
         specificGame.setGame(game);

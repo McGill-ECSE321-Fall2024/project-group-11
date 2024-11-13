@@ -28,6 +28,10 @@ public class Staff extends Account
     admin = isAdmin;
   }
 
+  public Staff(){
+    super();
+  }
+
   //------------------------
   // INTERFACE
   //------------------------

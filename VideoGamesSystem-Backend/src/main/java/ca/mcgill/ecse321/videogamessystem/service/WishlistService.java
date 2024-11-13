@@ -12,9 +12,9 @@ import ca.mcgill.ecse321.videogamessystem.repository.WishlistRepository;
 
 @Service
 public class WishlistService {
+    
     @Autowired
     private WishlistRepository wishlistRepository;
-
 
     @Autowired
     public WishlistService(WishlistRepository wishlistRepository) {

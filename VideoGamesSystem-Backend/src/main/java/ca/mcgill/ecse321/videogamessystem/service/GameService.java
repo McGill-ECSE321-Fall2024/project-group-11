@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import jakarta.transaction.Transactional;
 import java.util.List;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 import ca.mcgill.ecse321.videogamessystem.model.Game;
@@ -14,18 +16,18 @@ import ca.mcgill.ecse321.videogamessystem.model.SpecificGame;
 import ca.mcgill.ecse321.videogamessystem.model.SpecificOrder;
 import ca.mcgill.ecse321.videogamessystem.model.Wishlist;
 import ca.mcgill.ecse321.videogamessystem.repository.GameRepository;
-import ca.mcgill.ecse321.videogamessystem.repository.PromotionRepository;
+import ca.mcgill.ecse321.videogamessystem.repository.SpecificGameRepository;
 
 @Service
 public class GameService {
 
     private GameRepository gameRepository;
-    private PromotionRepository promotionRepository;
+    private SpecificGameRepository specificGameRepository;
 
     @Autowired
-    public GameService(GameRepository gameRepository, PromotionRepository promotionRepository) {
+    public GameService(GameRepository gameRepository, SpecificGameRepository specificGameRepository) {
         this.gameRepository = gameRepository;
-        this.promotionRepository = promotionRepository;
+        this.specificGameRepository = specificGameRepository;
     }
 
     @Transactional
@@ -49,7 +51,7 @@ public class GameService {
             throw new IllegalArgumentException("consoleType cannot be null.");
         }
 
-        Game game = new Game(description, stockQuantity, price, title, category, consoleType);
+        Game game = new Game(description, price, title, category, consoleType);
         return gameRepository.save(game);
     }
 
@@ -62,10 +64,6 @@ public class GameService {
         return game;
     }
 
-    @Transactional
-    public List<Game> getGamesByStockQuantity(int stockQuantity) {
-        return gameRepository.findGameByStockQuantity(stockQuantity);
-    }
 
     @Transactional
     public List<Game> getGamesByPrice(int price) {
@@ -132,28 +130,13 @@ public class GameService {
             throw new IllegalArgumentException("invalid id to update description");
         }
         game.setDescription(description);
-        game.setStockQuantity(stockQuantity);
         game.setPrice(price);
         game.setDescription(title);
         game.setCategory(category);
+
         return gameRepository.save(game);
     }
 
-
-
-    @Transactional
-    public Game updateStockQuantity(Long id, int newStockQuantity) {
-        Game game = gameRepository.findGameById(id);
-        if (game == null) {
-            throw new IllegalArgumentException("Game not found.");
-        }
-        if (newStockQuantity < 0) {
-            throw new IllegalArgumentException("Stock quantity cannot be negative.");
-        }
-
-        game.setStockQuantity(newStockQuantity);
-        return gameRepository.save(game);
-    }
 
     @Transactional
     public Game updatePrice(Long id, int newPrice) {
@@ -235,16 +218,141 @@ public class GameService {
         return gameRepository.findGameByWishlist(wishlist);
     }
 
-    //is game available , fsire par rapport a quantity
-    // does game have promoition
-    // add game to promo
-    // add game to wishlist
-    // set consoletype to game
-    // get price with promo
-    // add promotion to game
-     
-    //get all game names by order
-    //public List<SpecificGame> getAllGamesFromOrder(int specificGameID, SpecificOrder order) {
 
-    //}
+    //games with less stock
+    public List<Game> getGamesLowerInstockThan(int n){
+        if(n < 0){
+            throw new IllegalArgumentException("search in stock quantity cannot be lower than 0");
+        }
+        List<Game> allGames = this.getAllGames();
+        ArrayList<Game> games = new ArrayList<>();
+        for(Game game: allGames){
+            if(this.getStockQuantity(game.getId()) <= n){
+                games.add(game);
+            }
+        }
+        return games;
+    }
+    
+    //all available games
+    public List<Game> getAvailableGames() {
+        return this.getGamesLowerInstockThan(0);
+    }
+
+    //if game is available
+    public boolean getGameAvailabilityById(Long id){
+        return (this.getStockQuantity(id) > 0);
+    }
+
+    // does game have promoition
+    public boolean getGamePromotionStatusById(Long id) {
+        Game game = this.getGameById(id);
+        Promotion promotion = game.getPromotion();
+        if (promotion == null){
+            return false;
+        }
+        Date endDate = promotion.getEndDate();
+        Date startDate = promotion.getStartDate();
+        Date now = Date.valueOf(LocalDate.now());
+        if (endDate.after(now) && startDate.before(now)){
+            return true;
+        }
+        if (endDate.equals(now) || startDate.equals(now)){
+            return true;
+        }
+    return false;
+    }
+    
+    // add game to promo
+    public Game updatePromotion(Long id, Promotion promo){
+        Game game = this.getGameById(id);
+        game.setPromotion(promo);
+        return gameRepository.save(game);
+    }
+
+    // add game to wishlist
+    public Game updateWishlist(Long id, Wishlist wishlist) {
+
+        Game game = this.getGameById(id);
+        game.setWishlist(wishlist);
+        return gameRepository.save(game);
+    }
+    
+
+    // get price with promo
+    public int getPriceAfterPromoWithId(Long id){
+        Game game = this.getGameById(id);
+        int priceAfter = game.getPrice();
+        if (!this.getGamePromotionStatusById(id)){
+            return priceAfter;
+        }
+        
+        int discount = game.getPromotion().getPercentage();
+        priceAfter = priceAfter * (1 - discount);
+        return priceAfter;
+    }
+
+    //get all game names by order
+    public List<Game> getGameByOrder(SpecificOrder order){
+        if (order == null){
+            throw new IllegalArgumentException("order cannot be null");
+        }
+        List<Game> games = new ArrayList<>();
+        List<SpecificGame> copies = specificGameRepository.findSpecificGameBySpecificOrder(order);
+        for (SpecificGame copy: copies){
+            Game game = copy.getGame();
+            if (games.contains(game)){
+                continue;
+            }
+            games.add(game);
+        }
+
+        return games;
+    }
+
+    public List<Game> getGamesBetweenPrices(int min, int max){
+        List<Game> allGames = this.getAllGames();
+        List<Game> games = new ArrayList<>();
+        int price = 0;
+        for (Game game: allGames){
+            price = game.getPrice();
+            if(price >= min || price<= max){
+                games.add(game);
+            }
+        }
+        return games;
+    }
+
+    //filter by Promotion percentage
+    public List<Game> getGamesAbovePromotion(int min){
+        List<Game> allGames = this.getAllGames();
+        List<Game> games = new ArrayList<>();
+        int discount = 0;
+        for (Game game: allGames){
+            if(!this.getGamePromotionStatusById(game.getId())){
+                continue;
+            }
+            else{
+                discount = game.getPromotion().getPercentage();
+                if (discount >= min){
+                    games.add(game);
+                }
+            }
+        }
+        return games;
+    }
+
+    //get stock quantity by id
+    public int getStockQuantity(Long id){
+        List<SpecificGame> copies = specificGameRepository.findSpecificGameByGame(this.getGameById(id));
+        int stockQuantity = 0;
+        for (SpecificGame copy: copies){
+            if (!copy.hasOrder()){
+                stockQuantity += 1;
+            }
+        }
+        return stockQuantity;
+    }
+
+    
 }
