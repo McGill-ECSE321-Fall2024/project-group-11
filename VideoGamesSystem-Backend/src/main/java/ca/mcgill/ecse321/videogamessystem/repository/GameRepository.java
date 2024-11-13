@@ -27,4 +27,5 @@ public interface GameRepository extends CrudRepository<Game, Long>{
     List<Game> findGameByPromotion(Promotion promotion);
 
     List<Game> findGameByWishlist(Wishlist wishlist);
+
 }
