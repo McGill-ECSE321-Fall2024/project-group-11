@@ -1,17 +1,37 @@
 package ca.mcgill.ecse321.videogamessystem.dto.CustomerDto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+
+
+
 public class CustomerRequestDto {
+
+// add the null blamk and everuthing
+
+    @NotBlank(message = "Customer username cannot be empty")
     private String userName;
+
+    @NotBlank(message = "Customer email cannot be empty")
     private String email;
+
+    @NotBlank(message = "Customer password cannot be empty")
     private String password;
+
+    @NotNull(message = "Game ID cannot be null")
+    @Positive(message = "Game ID must be positive") 
     private int phoneNumber;
+
+    @NotBlank(message = "Customer adress cannot be empty")
     private String adress;
+
 
 
     protected CustomerRequestDto(){}
 
 
-    public CustomerRequestDto(String userName, String email, String password, int phoneNumber, String adress) {
+    public CustomerRequestDto(String userName, String email, String password, int phoneNumber, String adress,Long wishlistId) {
         this.userName = userName;
         this.email = email;
         this.password = password;
@@ -58,5 +78,7 @@ public class CustomerRequestDto {
     public void setAdress(String adress) {
         this.adress = adress;
 
-}
+    }
+// pas besoin de get et set wishlist apparemment :
+
 }

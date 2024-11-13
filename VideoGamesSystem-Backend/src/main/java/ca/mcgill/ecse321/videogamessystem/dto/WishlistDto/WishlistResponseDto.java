@@ -1,6 +1,6 @@
 package ca.mcgill.ecse321.videogamessystem.dto.WishlistDto;
 import ca.mcgill.ecse321.videogamessystem.dto.CustomerDto.CustomerResponseDto;
-
+import ca.mcgill.ecse321.videogamessystem.dto.GameDto.GameListDto;
 import ca.mcgill.ecse321.videogamessystem.model.Customer;
 import ca.mcgill.ecse321.videogamessystem.model.Wishlist;
 
@@ -8,7 +8,8 @@ public class WishlistResponseDto {
     private Long id;
     private int nbOfItems;
 
-    private CustomerResponseDto customer;
+    private Customer customer;
+ //   private GameListDto games;
 
     protected WishlistResponseDto(){} 
 
@@ -17,7 +18,8 @@ public class WishlistResponseDto {
         this.id = wishlist.getId();
         this.nbOfItems = wishlist.getNbOfItems();
         
-        this.customer = CustomerResponseDto.convertToCustomerResponseDto(wishlist.getCustomer());
+        this.customer = wishlist.getCustomer();
+//        this.games= GameListDto.convertToGameListDto(wishlist.getGame());
     }
 
     // Getter and setter methods
@@ -37,24 +39,7 @@ public class WishlistResponseDto {
         this.nbOfItems = nbOfItems;
     }
 
-    public CustomerResponseDto getCustomerResponseDto(){
+    public Customer getCustomerResponseDto(){
         return this.customer;
-    }
-
-    public static WishlistResponseDto convertToWishlistResponseDto(Wishlist wishlist) {
-        if (wishlist == null) {
-            throw new IllegalArgumentException("Wishlist cannot be null.");
-        }
-    
-        WishlistResponseDto dto = new WishlistResponseDto(wishlist);
-        dto.setId(wishlist.getId());
-        dto.setNbOfItems(wishlist.getNbOfItems());
-    
-        Customer customer = wishlist.getCustomer();
-        if (customer == null) {
-            throw new IllegalArgumentException("Customer cannot be null.");
-        }
-    
-        return dto;
     }
 }

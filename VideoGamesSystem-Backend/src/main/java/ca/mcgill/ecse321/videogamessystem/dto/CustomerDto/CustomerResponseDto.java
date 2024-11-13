@@ -12,7 +12,6 @@ public class CustomerResponseDto {
     private String email;
     private int phoneNumber;
     private String adress;
-    private WishlistResponseDto wishlist;
 
 
 
@@ -26,7 +25,6 @@ public class CustomerResponseDto {
         this.email = model.getEmail();
         this.phoneNumber = model.getPhoneNumber();
         this.adress = model.getAdress();
-        this.wishlist= WishlistResponseDto.convertToWishlistResponseDto(model.getWishlist());
         
     }
 
@@ -69,30 +67,6 @@ public class CustomerResponseDto {
 
     public void setAdress(String adress){
         this.adress= adress;
-    }
-
-    public WishlistResponseDto getWishlistResponseDto(){
-        return wishlist;
-    }
-
-    public static CustomerResponseDto convertToCustomerResponseDto(Customer customer){
-        if (customer == null){
-            throw new IllegalArgumentException("Customer cannot be null");
-        }
-
-        CustomerResponseDto dto = new CustomerResponseDto(customer);
-        dto.setId(customer.getId());
-        dto.setPhoneNumber(customer.getPhoneNumber());
-        dto.setAdress(customer.getAdress());
-        dto.setEmail(customer.getEmail());
-        dto.setUserName(customer.getUserName());
-    
-        Wishlist wishlist = customer.getWishlist();
-        if (wishlist == null) {
-            throw new IllegalArgumentException("Wishlist cannot be null.");
-        }
-    
-        return dto;
     }
 
 }

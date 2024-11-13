@@ -1,17 +1,40 @@
 package ca.mcgill.ecse321.videogamessystem.dto.ReviewDto;
 
 import java.sql.Date;
-
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import ca.mcgill.ecse321.videogamessystem.model.Review;
 
 public class ReviewRequestDto {
+
+    @NotBlank(message = "Review content cannot be blank")
     private String reviewContent;
+
+    @NotNull(message = "Game rating cannot be null")
+    @Min(value = 1, message = "Game rating must be at least 1")
+    @Max(value = 5, message = "Game rating must be no more than 5")
     private int gameRating;
+
+    @NotNull(message = "Review date cannot be null")
     private Date reviewDate;
+
+    @NotNull(message = "Customer ID cannot be null")
+    @Positive(message = "Customer ID must be positive")
     private Long customerId;
+
+    @NotBlank(message = "Customer username cannot be blank")
     private String customerUserName;
+
     private Review parentReview;
+
+    @NotNull(message = "Game ID cannot be null")
+    @Positive(message = "Game ID must be positive")
     private Long gameId;
+
+    @NotBlank(message = "Game title cannot be blank")
     private String gameTitle;
 
     // Constructor with all attributes
@@ -67,11 +90,11 @@ public class ReviewRequestDto {
         this.customerUserName = customerUserName;
     }
 
-    public Review getParent() {
+    public Review getParentReview() {
         return parentReview;
     }
 
-    public void setParent(Review parentReview) {
+    public void setParentReview(Review parentReview) {
         this.parentReview = parentReview;
     }
 

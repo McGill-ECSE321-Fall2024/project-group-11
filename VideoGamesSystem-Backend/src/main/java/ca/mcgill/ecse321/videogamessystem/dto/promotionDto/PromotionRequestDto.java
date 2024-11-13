@@ -1,12 +1,24 @@
 package ca.mcgill.ecse321.videogamessystem.dto.PromotionDto;
 
 import java.sql.Date;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.FutureOrPresent;
 
 public class PromotionRequestDto {
+
+    @NotNull(message = "Percentage cannot be null")
+    @Positive(message = "Percentage must be positive")
     private int percentage;
+
+    @NotNull(message = "Start date cannot be null")
+    @FutureOrPresent(message = "Start date must be today or in the future")
     private Date startDate;
+
+    @FutureOrPresent(message = "End date must be today or in the future")
     private Date endDate;
 
+    // Constructor
     public PromotionRequestDto(int percentage, Date startDate, Date endDate) {
         this.percentage = percentage;
         this.startDate = startDate;
@@ -38,4 +50,3 @@ public class PromotionRequestDto {
         this.endDate = endDate;
     }
 }
-

@@ -9,7 +9,6 @@ import ca.mcgill.ecse321.videogamessystem.dto.WishlistDto.WishlistResponseDto;
 public class GameResponseDto {
     private Long id;
     private String description;
-    private int stockQuantity;
     private int price;
     private String title;
     private Category category;
