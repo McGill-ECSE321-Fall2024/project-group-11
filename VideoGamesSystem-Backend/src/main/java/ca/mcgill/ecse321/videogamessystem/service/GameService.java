@@ -237,10 +237,10 @@ public class GameService {
 
     //is game available , fsire par rapport a quantity
     // does game have promoition
-    // add game to promo 
+    // add game to promo
     // add game to wishlist
     // set consoletype to game
-    // get price with promo 
+    // get price with promo
     // add promotion to game
      
     //get all game names by order
