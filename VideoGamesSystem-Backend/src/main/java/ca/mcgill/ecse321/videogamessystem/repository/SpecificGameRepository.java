@@ -16,5 +16,5 @@ public interface SpecificGameRepository extends CrudRepository<SpecificGame, Int
 
     List<SpecificGame> findSpecificGameByGame(Game game);
 
-    List<SpecificGame> findSpecificGameByOrder(SpecificOrder specificOrder);
+    List<SpecificGame> findSpecificGameBySpecificOrder(SpecificOrder specificOrder);
 }

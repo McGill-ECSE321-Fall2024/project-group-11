@@ -56,7 +56,7 @@ public class CustomerService {
 
         //Address check
         if (address == null || address.trim().length() == 0) {
-            throw new IllegalArgumentException("invalid email");
+            throw new IllegalArgumentException("invalid address");
         }
 
         Customer customer = new Customer(userName, email, password, phoneNumber, address);

@@ -44,7 +44,7 @@ public class SpecificGameService {
 
         SpecificGame specificGame = new SpecificGame(serialNumber, availability);
         specificGame.setGame(game);
-        specificGame.setOrder(order);
+        specificGame.setSpecificOrder(order);
         return specificGameRepository.save(specificGame);
     }
 
@@ -70,7 +70,7 @@ public class SpecificGameService {
         if (order == null) {
             throw new IllegalArgumentException("Order not found.");
         }
-        return specificGameRepository.findSpecificGameByOrder(order);
+        return specificGameRepository.findSpecificGameBySpecificOrder(order);
     }
 
 
@@ -129,7 +129,7 @@ public class SpecificGameService {
 
     // find specific game by order
     public List<SpecificGame> getSpecificGameByOrder(SpecificOrder order){
-        return specificGameRepository.findSpecificGameByOrder(order);
+        return specificGameRepository.findSpecificGameBySpecificOrder(order);
     }
 
     // add specific game to order
@@ -141,8 +141,8 @@ public class SpecificGameService {
         if (order == null){
             throw new IllegalArgumentException("order cannot be null");
         }
-        specificGame.setOrder(order);
-        return specificGameRepository.findSpecificGameByOrder(order);
+        specificGame.setSpecificOrder(order);
+        return specificGameRepository.findSpecificGameBySpecificOrder(order);
     }
 
     // remove specific game from order
@@ -154,12 +154,12 @@ public class SpecificGameService {
         if (order == null) {
             throw new IllegalArgumentException("order cannot be null");
         }
-        List<SpecificGame> allCopies = specificGameRepository.findSpecificGameByOrder(order);
+        List<SpecificGame> allCopies = specificGameRepository.findSpecificGameBySpecificOrder(order);
         if (allCopies.size() == 0 || !allCopies.contains(specificCopy)){
             throw new IllegalArgumentException("the specific game was not in the order provided.");
         }
-        specificCopy.setOrder(order);
-        return specificGameRepository.findSpecificGameByOrder(order);
+        specificCopy.setSpecificOrder(order);
+        return specificGameRepository.findSpecificGameBySpecificOrder(order);
     }
 
 }

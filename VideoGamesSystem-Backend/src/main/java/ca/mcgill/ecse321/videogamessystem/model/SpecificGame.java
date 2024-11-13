@@ -110,7 +110,7 @@ public class SpecificGame
     return wasSet;
   }
   /* Code from template association_SetOptionalOneToMandatoryMany */
-  public boolean setOrder(SpecificOrder aSpecificOrder)
+  public boolean setSpecificOrder(SpecificOrder aSpecificOrder)
   {
     boolean wasSet = false;
     if (aSpecificOrder != null) {
