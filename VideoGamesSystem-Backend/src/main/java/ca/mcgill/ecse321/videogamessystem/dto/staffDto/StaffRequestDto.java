@@ -1,4 +1,4 @@
-package ca.mcgill.ecse321.videogamessystem.dto.staffDto;
+package ca.mcgill.ecse321.videogamessystem.dto.StaffDto;
 
 public class StaffRequestDto {
     private String userName;

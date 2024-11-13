@@ -1,9 +1,9 @@
-package ca.mcgill.ecse321.videogamessystem.dto.gameDto;
+package ca.mcgill.ecse321.videogamessystem.dto.GameDto;
 
 import ca.mcgill.ecse321.videogamessystem.model.Game.Category;
 import ca.mcgill.ecse321.videogamessystem.model.Game.ConsoleType;
 import ca.mcgill.ecse321.videogamessystem.model.Game;
-import ca.mcgill.ecse321.videogamessystem.dto.promotionDto.PromotionResponseDto;
+import ca.mcgill.ecse321.videogamessystem.dto.PromotionDto.PromotionResponseDto;
 import ca.mcgill.ecse321.videogamessystem.dto.WishlistDto.WishlistResponseDto;
 
 public class GameResponseDto {
@@ -24,7 +24,6 @@ public class GameResponseDto {
     public GameResponseDto(Game game) {
         this.id = game.getId();
         this.description = game.getDescription();
-        this.stockQuantity = game.getStockQuantity();
         this.price = game.getPrice();
         this.title = game.getTitle();
         this.category = game.getCategory();
@@ -44,9 +43,6 @@ public class GameResponseDto {
         return description;
     }
 
-    public int getStockQuantity() {
-        return stockQuantity;
-    }
 
     public int getPrice() {
         return price;

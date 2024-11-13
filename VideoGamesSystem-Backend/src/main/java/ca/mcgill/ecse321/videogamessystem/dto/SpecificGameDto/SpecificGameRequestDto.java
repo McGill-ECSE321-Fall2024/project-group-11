@@ -1,16 +1,29 @@
 package ca.mcgill.ecse321.videogamessystem.dto.SpecificGameDto;
 
+import ca.mcgill.ecse321.videogamessystem.model.Game;
 
 public class SpecificGameRequestDto {
 
     private boolean availability;
-    private int serialNumber;  // ID of the associated Game
+    private int serialNumber;  
+    private Game game;
+    private Long gameId;
+    private String title;
+    private String description;
+    private int price;
+    private Game.Category category;
+    private Game.ConsoleType consoleType;
 
-    // Constructor
-    public SpecificGameRequestDto(boolean availability, int serialNumber) {
+    // Constructor with all attributes
+    public SpecificGameRequestDto(boolean availability, int serialNumber, Long gameId, String title, String description, int price, Game.Category category, Game.ConsoleType consoleType) {
         this.availability = availability;
         this.serialNumber = serialNumber;
-        
+        this.gameId = gameId;
+        this.title = title;
+        this.description = description;
+        this.price = price;
+        this.category = category;
+        this.consoleType = consoleType;
     }
 
     // Getters and Setters
@@ -22,13 +35,68 @@ public class SpecificGameRequestDto {
         this.availability = availability;
     }
 
-    public int getserialNumber() {
+    public int getSerialNumber() {
         return serialNumber;
     }
 
-    public void setGameId(int serialNumber) {
+    public void setSerialNumber(int serialNumber) {
         this.serialNumber = serialNumber;
     }
 
-}
+    public Game getGame() {
+        return game;
+    }
 
+    public void setGame(Game game) {
+        this.game = game;
+    }
+
+    public Long getGameId() {
+        return gameId;
+    }
+
+
+    public void setGameId(Long gameId) {
+        this.gameId = gameId;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
+
+    public Game.Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Game.Category category) {
+        this.category = category;
+    }
+
+    public Game.ConsoleType getConsoleType() {
+        return consoleType;
+    }
+
+    public void setConsoleType(Game.ConsoleType consoleType) {
+        this.consoleType = consoleType;
+    }
+}

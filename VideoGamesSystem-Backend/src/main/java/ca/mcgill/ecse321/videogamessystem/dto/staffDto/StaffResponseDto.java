@@ -1,4 +1,4 @@
-package ca.mcgill.ecse321.videogamessystem.dto.staffDto;
+package ca.mcgill.ecse321.videogamessystem.dto.StaffDto;
 
 import ca.mcgill.ecse321.videogamessystem.model.Staff;
 
@@ -7,6 +7,15 @@ public class StaffResponseDto {
     private String userName;
     private String email;
     private Boolean admin;
+
+    public StaffResponseDto(){}
+
+    public StaffResponseDto(Long id,String userName, String email, Boolean admin){
+        this.id =id;
+        this.userName = userName;
+        this.email = email;
+        this.admin = admin;
+    }
 
     public StaffResponseDto(Staff staff) {
         this.id = staff.getId();

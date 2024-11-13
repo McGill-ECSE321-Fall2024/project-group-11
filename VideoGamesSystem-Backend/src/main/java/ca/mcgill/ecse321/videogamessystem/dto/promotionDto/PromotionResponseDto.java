@@ -1,4 +1,4 @@
-package ca.mcgill.ecse321.videogamessystem.dto.promotionDto;
+package ca.mcgill.ecse321.videogamessystem.dto.PromotionDto;
 
 import ca.mcgill.ecse321.videogamessystem.model.Promotion;
 

@@ -1,32 +1,22 @@
-package ca.mcgill.ecse321.videogamessystem.dto.gameDto;
+package ca.mcgill.ecse321.videogamessystem.dto.GameDto;
 
 import ca.mcgill.ecse321.videogamessystem.model.Game.Category;
 import ca.mcgill.ecse321.videogamessystem.model.Game.ConsoleType;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
 
+//import jakarta.validation.constraints.NotBlank;
 
 public class GameRequestDto {
-
-    @NotBlank(message = "Game description is required.")
+    //@NotBlank(message="Cannot be blank")
     private String description;
-    @NotNull(message = "Game stock quantity is required.")
-    private int stockQuantity;
-    @NotBlank(message = "Game price is required.")
     private int price;
-    @NotBlank(message = "Game title is required.")
     private String title;
-    @NotBlank(message = "Game category is required.")
     private Category category;
-    @NotBlank(message = "Game console type is required.")
     private ConsoleType consoleType;
 
     //maybe add fo
 
-    public GameRequestDto(String description, int stockQuantity, int price, String title, Category category, ConsoleType consoleType) {
+    public GameRequestDto(String description, int price, String title, Category category, ConsoleType consoleType) {
         this.description = description;
-        this.stockQuantity = stockQuantity;
         this.price = price;
         this.title = title;
         this.category = category;
@@ -42,13 +32,6 @@ public class GameRequestDto {
         this.description = description;
     }
 
-    public int getStockQuantity() {
-        return stockQuantity;
-    }
-
-    public void setStockQuantity(int stockQuantity) {
-        this.stockQuantity = stockQuantity;
-    }
 
     public int getPrice() {
         return price;
