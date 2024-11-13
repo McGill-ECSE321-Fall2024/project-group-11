@@ -1,15 +1,16 @@
 package ca.mcgill.ecse321.videogamessystem.dto.WishlistDto;
 import java.util.List;
 
-public class WishlistRequestDto {
-    private int nbOfItems;
-    private Long customerId; // Reference to the associated customer
-    private List<Long> gamesId;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
-    public WishlistRequestDto(int nbOfItems, Long customerId) {
-        this.nbOfItems = nbOfItems;
-        this.customerId = customerId;
-    }
+public class WishlistRequestDto {
+
+    @Positive(message = "Number of items must be positive.")
+    private int nbOfItems;
+
+    @NotNull(message = "Customer ID cannot be null.")
+    private Long customerId; // Reference to the associated customer
 
     public int getNbOfItems() {
         return nbOfItems;
@@ -19,14 +20,6 @@ public class WishlistRequestDto {
         this.nbOfItems = nbOfItems;
     }
 
-    public void setListOfGamesId(List<Long> gamesId){
-        this.gamesId = gamesId;
-    }
-
-    public List<Long> getListOfGamesId(){
-        return this.gamesId;
-    }
-    
     public Long getCustomerId() {
         return customerId;
     }

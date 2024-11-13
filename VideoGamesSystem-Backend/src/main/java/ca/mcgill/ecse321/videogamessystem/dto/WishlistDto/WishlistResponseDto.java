@@ -9,7 +9,6 @@ public class WishlistResponseDto {
     private int nbOfItems;
 
     private Customer customer;
- //   private GameListDto games;
 
     protected WishlistResponseDto(){} 
 
@@ -19,7 +18,6 @@ public class WishlistResponseDto {
         this.nbOfItems = wishlist.getNbOfItems();
         
         this.customer = wishlist.getCustomer();
-//        this.games= GameListDto.convertToGameListDto(wishlist.getGame());
     }
 
     // Getter and setter methods
@@ -39,7 +37,8 @@ public class WishlistResponseDto {
         this.nbOfItems = nbOfItems;
     }
 
-    public Customer getCustomerResponseDto(){
+    public Customer getCustomer(){
         return this.customer;
     }
+
 }
