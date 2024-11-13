@@ -15,6 +15,7 @@ import ca.mcgill.ecse321.videogamessystem.model.Promotion;
 import ca.mcgill.ecse321.videogamessystem.model.SpecificGame;
 import ca.mcgill.ecse321.videogamessystem.model.SpecificOrder;
 import ca.mcgill.ecse321.videogamessystem.model.Wishlist;
+import ca.mcgill.ecse321.videogamessystem.repository.WishlistRepository;
 import ca.mcgill.ecse321.videogamessystem.repository.GameRepository;
 import ca.mcgill.ecse321.videogamessystem.repository.SpecificGameRepository;
 
@@ -22,12 +23,22 @@ import ca.mcgill.ecse321.videogamessystem.repository.SpecificGameRepository;
 public class GameService {
 
     private GameRepository gameRepository;
+<<<<<<< HEAD
     private SpecificGameRepository specificGameRepository;
+=======
+    private PromotionRepository promotionRepository;
+    private WishlistRepository wishlistRepository;
+>>>>>>> more-service-tests-paolo
 
     @Autowired
     public GameService(GameRepository gameRepository, SpecificGameRepository specificGameRepository) {
         this.gameRepository = gameRepository;
+<<<<<<< HEAD
         this.specificGameRepository = specificGameRepository;
+=======
+        this.promotionRepository = promotionRepository;
+        this.wishlistRepository = wishlistRepository;
+>>>>>>> more-service-tests-paolo
     }
 
     @Transactional
@@ -195,6 +206,20 @@ public class GameService {
     @Transactional
     public List<Game> getAllGames() {
         return toList(gameRepository.findAll());
+    }
+
+    @Transactional
+    public Game addGameToWishlist(Long gameId, Long wishlistId) {
+        Game game = gameRepository.findGameById(gameId);
+        if (game == null) {
+            throw new IllegalArgumentException("Game not found.");
+        }
+
+        Wishlist wishlist = wishlistRepository.findById(wishlistId)
+            .orElseThrow(() -> new IllegalArgumentException("Wishlist not found."));
+        
+        game.setWishlist(wishlist);
+        return gameRepository.save(game);
     }
 
     /**

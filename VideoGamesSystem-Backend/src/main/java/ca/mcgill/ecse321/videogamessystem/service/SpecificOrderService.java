@@ -13,13 +13,13 @@ import ca.mcgill.ecse321.videogamessystem.repository.SpecificOrderRepository;
 import ca.mcgill.ecse321.videogamessystem.repository.CustomerRepository;
 
 @Service
-public class OrderService {
+public class SpecificOrderService {
 
     private SpecificOrderRepository specificOrderRepository;
     private CustomerRepository customerRepository;
 
     @Autowired
-    public OrderService(SpecificOrderRepository specificOrderRepository, CustomerRepository customerRepository) {
+    public SpecificOrderService(SpecificOrderRepository specificOrderRepository, CustomerRepository customerRepository) {
         this.specificOrderRepository = specificOrderRepository;
         this.customerRepository = customerRepository;
     }
