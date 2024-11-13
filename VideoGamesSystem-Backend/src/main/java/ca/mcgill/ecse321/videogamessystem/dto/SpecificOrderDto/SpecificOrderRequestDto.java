@@ -1,11 +1,20 @@
 package ca.mcgill.ecse321.videogamessystem.dto.SpecificOrderDto;
 
 import java.sql.Date;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PastOrPresent;
 
 public class SpecificOrderRequestDto {
 
+    @NotNull(message = "Order date cannot be null.")
+    @PastOrPresent(message = "Order date cannot be in the future.")
     private Date orderDate;
+
+    @Positive(message = "Card number must be a positive number.")
     private int cardNumber;
+
+    @Positive(message = "Customer ID must be a positive number.")
     private int customerId; // Assuming we use customer ID to associate an order with a customer
 
     // Constructors

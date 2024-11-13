@@ -1,9 +1,19 @@
 package ca.mcgill.ecse321.videogamessystem.dto.StaffDto;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public class StaffRequestDto {
+
+    @NotBlank(message = "Username cannot be blank.")
     private String userName;
+
+    @NotBlank(message = "Email cannot be blank.")
     private String email;
+
+    @NotBlank(message = "Password cannot be blank.")
     private String password;
+
+    @NotNull(message = "Admin status must be specified.")
     private Boolean admin;
     
 

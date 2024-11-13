@@ -1,17 +1,38 @@
 package ca.mcgill.ecse321.videogamessystem.dto.SpecificGameDto;
 
 import ca.mcgill.ecse321.videogamessystem.model.Game;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
 public class SpecificGameRequestDto {
 
+    @NotNull(message = "Availability status must be specified.")
     private boolean availability;
+
+    @Positive(message = "Serial number must be positive.")
     private int serialNumber;  
+
+    @NotNull(message = "Game object cannot be null.")
     private Game game;
+
+    @NotNull(message = "Game ID cannot be null.")
+    @Positive(message = "Game ID must be a positive number.")
     private Long gameId;
+
+    @NotBlank(message = "Title cannot be blank.")
     private String title;
+
+    @NotBlank(message = "Description cannot be blank.")
     private String description;
+
+    @Positive(message = "Price must be a positive number.")
     private int price;
+
+    @NotNull(message = "Category cannot be null.")
     private Game.Category category;
+
+    @NotNull(message = "Console type cannot be null.")
     private Game.ConsoleType consoleType;
 
     // Constructor with all attributes

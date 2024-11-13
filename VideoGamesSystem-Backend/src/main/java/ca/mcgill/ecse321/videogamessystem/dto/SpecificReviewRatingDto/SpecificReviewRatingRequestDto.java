@@ -4,13 +4,26 @@ import ca.mcgill.ecse321.videogamessystem.model.SpecificReviewRating.ReviewRatin
 import ca.mcgill.ecse321.videogamessystem.model.Review;
 import ca.mcgill.ecse321.videogamessystem.model.Customer;
 
+import jakarta.validation.constraints.NotNull;
+
 public class SpecificReviewRatingRequestDto {
 
+    @NotNull(message = "Review rating cannot be null.")
     private ReviewRating reviewRating;
+
+    @NotNull(message = "Review cannot be null.")
     private Review review;
+
+    @NotNull(message = "Review ID cannot be null.")
     private Long reviewId;
+
+    @NotNull(message = "Customer cannot be null.")
     private Customer customer;
+
+    @NotNull(message = "Customer ID cannot be null.")
     private Long customerId;
+
+    @NotNull(message = "Customer username cannot be null.")
     private String customerUserName;
 
     // Constructor with all attributes
