@@ -1,4 +1,4 @@
-package ca.mcgill.ecse321.videogamessystem.dto;
+package ca.mcgill.ecse321.videogamessystem.dto.CustomerDto;
 
 public class CustomerRequestDto {
     private String userName;
@@ -6,6 +6,10 @@ public class CustomerRequestDto {
     private String password;
     private int phoneNumber;
     private String adress;
+
+
+    protected CustomerRequestDto(){}
+
 
     public CustomerRequestDto(String userName, String email, String password, int phoneNumber, String adress) {
         this.userName = userName;
