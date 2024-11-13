@@ -8,6 +8,7 @@ import ca.mcgill.ecse321.videogamessystem.model.Game;
 import ca.mcgill.ecse321.videogamessystem.model.Game.Category;
 import ca.mcgill.ecse321.videogamessystem.model.Game.ConsoleType;
 import ca.mcgill.ecse321.videogamessystem.model.Promotion;
+import ca.mcgill.ecse321.videogamessystem.model.Wishlist;
 
 public interface GameRepository extends CrudRepository<Game, Long>{
 
@@ -24,4 +25,6 @@ public interface GameRepository extends CrudRepository<Game, Long>{
     List<Game> findGameByConsoleType(ConsoleType consoleType);
 
     List<Game> findGameByPromotion(Promotion promotion);
+
+    List<Game> findGameByWishlist(Wishlist wishlist);
 }

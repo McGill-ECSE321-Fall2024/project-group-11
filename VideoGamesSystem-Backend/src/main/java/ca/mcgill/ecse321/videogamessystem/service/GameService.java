@@ -12,6 +12,7 @@ import ca.mcgill.ecse321.videogamessystem.model.Game.ConsoleType;
 import ca.mcgill.ecse321.videogamessystem.model.Promotion;
 import ca.mcgill.ecse321.videogamessystem.model.SpecificGame;
 import ca.mcgill.ecse321.videogamessystem.model.SpecificOrder;
+import ca.mcgill.ecse321.videogamessystem.model.Wishlist;
 import ca.mcgill.ecse321.videogamessystem.repository.GameRepository;
 import ca.mcgill.ecse321.videogamessystem.repository.PromotionRepository;
 
@@ -96,12 +97,10 @@ public class GameService {
     }
 
     @Transactional
-    public List<Game> getGamesByPromotion(Long promotionId) {
-        if(promotionId == 0){
-            new IllegalArgumentException("id shouldn't be 0");
+    public List<Game> getGamesByPromotion(Promotion promotion) {
+        if(promotion == null){
+            new IllegalArgumentException("promotion is null");
         }
-        Promotion promotion = promotionRepository.findById(promotionId).orElseThrow(() -> 
-            new IllegalArgumentException("Promotion not found."));
         return gameRepository.findGameByPromotion(promotion);
     }
 
@@ -227,6 +226,13 @@ public class GameService {
             resultList.add(t);
         }
         return resultList;
+    }
+
+    public List<Game> getGameByWishlist(Wishlist wishlist){
+        if (wishlist == null){
+            throw new IllegalArgumentException("wishlist is null");
+        }
+        return gameRepository.findGameByWishlist(wishlist);
     }
 
     //is game available , fsire par rapport a quantity
