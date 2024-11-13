@@ -162,6 +162,6 @@ public class ReviewService {
         return resultList;
     }
 
-    // findreviews by cistomer 
+    // findreviews by customer 
 }
 

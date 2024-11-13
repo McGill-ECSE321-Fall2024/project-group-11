@@ -9,18 +9,16 @@ import java.util.ArrayList;
 import ca.mcgill.ecse321.videogamessystem.model.Customer;
 import ca.mcgill.ecse321.videogamessystem.model.Wishlist;
 import ca.mcgill.ecse321.videogamessystem.repository.WishlistRepository;
-import ca.mcgill.ecse321.videogamessystem.repository.CustomerRepository;
 
 @Service
 public class WishlistService {
-    
+    @Autowired
     private WishlistRepository wishlistRepository;
-    private CustomerRepository customerRepository;
+
 
     @Autowired
-    public WishlistService(WishlistRepository wishlistRepository, CustomerRepository customerRepository) {
+    public WishlistService(WishlistRepository wishlistRepository) {
         this.wishlistRepository = wishlistRepository;
-        this.customerRepository = customerRepository;
     }
 
     @Transactional

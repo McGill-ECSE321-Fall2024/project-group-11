@@ -147,12 +147,24 @@ public class PromotionService {
     }
 
 
-
-
-
-
-// add promotion to game
 // is promotion available ?
+public boolean promotionAvailable(Long id){
+    boolean valid = false;
+    Promotion promotion = promotionRepository.findPromotionById(id);
+    if (promotion == null){
+        throw new IllegalArgumentException("promotion not found");
+    }
+    Date endDate = promotion.getEndDate();
+    Date startDate = promotion.getStartDate();
+    Date now = Date.valueOf(LocalDate.now());
+    if (endDate.after(now) && startDate.before(now)){
+        valid = true;
+    }
+    if (endDate.equals(now) || startDate.equals(now)){
+        valid = true;
+    }
+    return valid;
+}
 
     
 }

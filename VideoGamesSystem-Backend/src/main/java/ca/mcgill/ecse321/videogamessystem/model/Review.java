@@ -6,6 +6,9 @@ package ca.mcgill.ecse321.videogamessystem.model;
 
 import java.sql.Date;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -32,8 +35,10 @@ public class Review
 
   //Review Associations
   @ManyToOne
+  @OnDelete(action = OnDeleteAction.CASCADE)
   private Review parentReview;
   @ManyToOne
+  @OnDelete(action = OnDeleteAction.CASCADE)
   private Customer customer;
 
   //------------------------

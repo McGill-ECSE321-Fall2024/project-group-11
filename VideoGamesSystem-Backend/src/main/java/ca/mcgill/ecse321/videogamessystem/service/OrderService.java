@@ -8,24 +8,24 @@ import java.util.List;
 import java.util.ArrayList;
 
 import ca.mcgill.ecse321.videogamessystem.model.Customer;
-import ca.mcgill.ecse321.videogamessystem.model.Order;
-import ca.mcgill.ecse321.videogamessystem.repository.OrderRepository;
+import ca.mcgill.ecse321.videogamessystem.model.SpecificOrder;
+import ca.mcgill.ecse321.videogamessystem.repository.SpecificOrderRepository;
 import ca.mcgill.ecse321.videogamessystem.repository.CustomerRepository;
 
 @Service
 public class OrderService {
 
-    private OrderRepository orderRepository;
+    private SpecificOrderRepository specificOrderRepository;
     private CustomerRepository customerRepository;
 
     @Autowired
-    public OrderService(OrderRepository orderRepository, CustomerRepository customerRepository) {
-        this.orderRepository = orderRepository;
+    public OrderService(SpecificOrderRepository specificOrderRepository, CustomerRepository customerRepository) {
+        this.specificOrderRepository = specificOrderRepository;
         this.customerRepository = customerRepository;
     }
 
     @Transactional
-    public Order createOrder(Date orderDate, int cardNumber, Long customerId) {
+    public SpecificOrder createSpecificOrder(Date orderDate, int cardNumber, Long customerId) {
         if (orderDate == null || orderDate.after(new Date(System.currentTimeMillis()))) {
             throw new IllegalArgumentException("Order date cannot be in the future.");
         }
@@ -36,16 +36,16 @@ public class OrderService {
         Customer customer = customerRepository.findById(customerId).orElseThrow(() -> 
             new IllegalArgumentException("Customer not found."));
         
-        Order order = new Order();
-        order.setOrderDate(orderDate);
-        order.setCardNumber(cardNumber);
-        order.setCustomer(customer);
-        return orderRepository.save(order);
+        SpecificOrder specificOrder = new SpecificOrder();
+        specificOrder.setOrderDate(orderDate);
+        specificOrder.setCardNumber(cardNumber);
+        specificOrder.setCustomer(customer);
+        return specificOrderRepository.save(specificOrder);
     }
 
     @Transactional
-    public Order getOrderById(int number) {
-        Order order = orderRepository.findOrderByNumber(number);
+    public SpecificOrder getOrderById(int number) {
+        SpecificOrder order = specificOrderRepository.findOrderByNumber(number);
         if (order == null) {
             throw new IllegalArgumentException("Order not found.");
         }
@@ -53,20 +53,20 @@ public class OrderService {
     }
 
     @Transactional
-    public List<Order> getOrdersByOrderDate(Date orderDate) {
-        return orderRepository.findOrderByOrderDate(orderDate);
+    public List<SpecificOrder> getOrdersByOrderDate(Date orderDate) {
+        return specificOrderRepository.findOrderByOrderDate(orderDate);
     }
 
     @Transactional
-    public List<Order> getOrdersByCustomer(Long customerId) {
+    public List<SpecificOrder> getOrdersByCustomer(Long customerId) {
         Customer customer = customerRepository.findById(customerId).orElseThrow(() -> 
             new IllegalArgumentException("Customer not found."));
-        return orderRepository.findOrderByCustomer(customer);
+        return specificOrderRepository.findOrderByCustomer(customer);
     }
 
     @Transactional
-    public Order updateOrderDate(int number, Date newOrderDate) {
-        Order order = orderRepository.findOrderByNumber(number);
+    public SpecificOrder updateOrderDate(int number, Date newOrderDate) {
+        SpecificOrder order = specificOrderRepository.findOrderByNumber(number);
         if (order == null) {
             throw new IllegalArgumentException("Order not found.");
         }
@@ -75,12 +75,12 @@ public class OrderService {
         }
 
         order.setOrderDate(newOrderDate);
-        return orderRepository.save(order);
+        return specificOrderRepository.save(order);
     }
 
     @Transactional
-    public Order updateCardNumber(int number, int newCardNumber) {
-        Order order = orderRepository.findOrderByNumber(number);
+    public SpecificOrder updateCardNumber(int number, int newCardNumber) {
+        SpecificOrder order = specificOrderRepository.findOrderByNumber(number);
         if (order == null) {
             throw new IllegalArgumentException("Order not found.");
         }
@@ -89,24 +89,25 @@ public class OrderService {
         }
 
         order.setCardNumber(newCardNumber);
-        return orderRepository.save(order);
+        return specificOrderRepository.save(order);
     }
 
     @Transactional
-    public Order deleteOrder(int number) {
-        Order order = orderRepository.findOrderByNumber(number);
+    public SpecificOrder deleteOrder(int number) {
+        SpecificOrder order = specificOrderRepository.findOrderByNumber(number);
         if (order == null) {
             throw new IllegalArgumentException("Order not found.");
         }
 
-        orderRepository.delete(order);
+        specificOrderRepository.delete(order);
         return order;
     }
 
     @Transactional
-    public List<Order> getAllOrders() {
-        return toList(orderRepository.findAll());
+    public List<SpecificOrder> getAllOrders() {
+        return toList(specificOrderRepository.findAll());
     }
+
 
     /**
      * Converts an {@code Iterable} to a {@code List}.
@@ -121,7 +122,21 @@ public class OrderService {
         }
         return resultList;
     }
-// assign order to customer
+
+    // assign order to customer
+    @Transactional
+    public SpecificOrder placeNewOrder( int orderID, Customer customer){
+        SpecificOrder order = specificOrderRepository.findOrderByNumber(orderID);
+        if (order == null){
+            throw new IllegalArgumentException("order not found");
+        }
+        if(customer == null){
+            throw new IllegalArgumentException("customer not found");
+        }
+        order.setCustomer(customer);
+        return specificOrderRepository.save(order);
+    }
+    
     
 }
 

@@ -27,12 +27,11 @@ public class Game
   private int price;
   private String title;
   private Category category;
+  private ConsoleType consoleType;
 
   //Game Associations
   @ManyToOne
   private Wishlist wishlist;
-  @ManyToOne
-  private Console console;
   @ManyToOne
   private Promotion promotion;
 
@@ -40,19 +39,19 @@ public class Game
   // CONSTRUCTOR
   //------------------------
 
-  public Game(String aDescription, int aStockQuantity, int aPrice, String aTitle, Category aCategory)
+  public Game(String aDescription, int aStockQuantity, int aPrice, String aTitle, Category aCategory, 
+      ConsoleType aConsoleType)
   {
     description = aDescription;
     stockQuantity = aStockQuantity;
     price = aPrice;
     title = aTitle;
     category = aCategory;
+    consoleType = aConsoleType;
 
     //Wishlist aWishlist, GameConsole aGameConsole, Promotion aPromotion
     Wishlist wishlist = new Wishlist();
     this.wishlist = wishlist;
-    Console console = new Console();
-    this.console = console;
     Promotion promotion = new Promotion();
     this.promotion = promotion;
   }
@@ -105,6 +104,13 @@ public class Game
     return wasSet;
   }
 
+  public boolean setConsoleType(ConsoleType consoleType) {
+    boolean wasSet = false;
+    this.consoleType = consoleType;
+    wasSet = true;
+    return wasSet;
+  }
+
   public String getDescription()
   {
     return description;
@@ -129,16 +135,18 @@ public class Game
   {
     return category;
   }
+
+  public ConsoleType getConsoleType()
+  {
+    return consoleType;
+  }
+
   /* Code from template association_GetOne */
   public Wishlist getWishlist()
   {
     return wishlist;
   }
-  /* Code from template association_GetOne */
-  public Console getConsole()
-  {
-    return console;
-  }
+
   /* Code from template association_GetOne */
   public Promotion getPromotion()
   {
@@ -156,17 +164,7 @@ public class Game
     }
     return wasSet;
   }
-  /* Code from template association_SetUnidirectionalOne */
-  public boolean setConsole(Console aNewConsole)
-  {
-    boolean wasSet = false;
-    if (aNewConsole != null)
-    {
-      console = aNewConsole;
-      wasSet = true;
-    }
-    return wasSet;
-  }
+
   /* Code from template association_SetUnidirectionalOne */
   public boolean setPromotion(Promotion aNewPromotion)
   {
@@ -182,7 +180,6 @@ public class Game
   public void delete()
   {
     wishlist = null;
-    console = null;
     promotion = null;
   }
 
@@ -194,9 +191,10 @@ public class Game
             "stockQuantity" + ":" + getStockQuantity()+ "," +
             "price" + ":" + getPrice()+ "," +
             "title" + ":" + getTitle()+ "," +
-            "category" + ":" + getCategory()+ "]" + System.getProperties().getProperty("line.separator") +
+            "category" + ":" + getCategory()+ 
+            "consoleType" + ":" + getConsoleType()+
+            "]" + System.getProperties().getProperty("line.separator") +
             "  " + "wishlist = "+(getWishlist()!=null?Integer.toHexString(System.identityHashCode(getWishlist())):"null") + System.getProperties().getProperty("line.separator") +
-            "  " + "gameConsole = "+(getConsole()!=null?Integer.toHexString(System.identityHashCode(getConsole())):"null") + System.getProperties().getProperty("line.separator") +
             "  " + "promotion = "+(getPromotion()!=null?Integer.toHexString(System.identityHashCode(getPromotion())):"null");
   }
 
@@ -212,6 +210,20 @@ public class Game
     Party,
     Survival,
     Arcade,
+    Other;
+    
+    @Override
+    public String toString() {
+      return name();
+    }
+  }
+    
+  public enum ConsoleType {
+    PS4,
+    XBOX,
+    Switch,
+    Wii,
+    PC,
     Other;
 
     @Override

@@ -1,7 +1,7 @@
 package ca.mcgill.ecse321.videogamessystem.service;
 
 import ca.mcgill.ecse321.videogamessystem.model.Customer;
-import ca.mcgill.ecse321.videogamessystem.model.Wishlist;
+import ca.mcgill.ecse321.videogamessystem.model.Review;
 import ca.mcgill.ecse321.videogamessystem.repository.CustomerRepository;
 import jakarta.transaction.Transactional;
 
@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 @Service
 public class CustomerService {
@@ -17,16 +18,47 @@ public class CustomerService {
     @Autowired
     private CustomerRepository customerRepository;
 
+    // regex for email validation
+    String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\." +
+            "[a-zA-Z0-9_+&*-]+)*@" +
+            "(?:[a-zA-Z0-9-]+\\.)+[a-z" +
+            "A-Z]{2,7}$";
+    
     // Create a new customer
     @Transactional
     public Customer createCustomer(String userName, String email, String password, int phoneNumber, String address) {
         // Validation logic can be added here (e.g., check if email or username is already taken)
+        //username check
         if (customerRepository.findCustomerByUserName(userName) != null) {
             throw new IllegalArgumentException("Username already exists");
+        }
+
+        //email check
+        if (email == null || email.trim().length() == 0){
+            throw new IllegalArgumentException("no empty email");
+        }
+        if (!Pattern.compile(emailRegex).matcher(email).matches()) {
+            throw new IllegalArgumentException("invalid email");
         }
         if (customerRepository.findCustomerByEmail(email) != null) {
             throw new IllegalArgumentException("Email already exists");
         }
+        //password check
+        if (password == null || password.trim().length() < 4){
+            
+        }
+        //phoneNumber check
+        if (phoneNumber < 1111)
+            throw new IllegalArgumentException("more digits is needed for phone number");
+        if (customerRepository.findCustomerByPhoneNumber(phoneNumber) != null) {
+            throw new IllegalArgumentException("phone number already exists");
+        }
+
+        //Address check
+        if (address == null || address.trim().length() == 0) {
+            throw new IllegalArgumentException("invalid email");
+        }
+
         Customer customer = new Customer(userName, email, password, phoneNumber, address);
         return customerRepository.save(customer);
     }
@@ -137,4 +169,13 @@ public class CustomerService {
     }
 
     // get customer by review
+    @Transactional
+    public Customer getCustomerByReview(Review review) {
+        Customer customer = review.getCustomer();
+        if (customer == null){
+            throw new RuntimeException("the review shouldn't exsist");
+        }
+        return customer;
+    }
+
 }

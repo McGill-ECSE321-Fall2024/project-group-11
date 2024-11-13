@@ -8,28 +8,27 @@ import java.util.ArrayList;
 
 import ca.mcgill.ecse321.videogamessystem.model.Game;
 import ca.mcgill.ecse321.videogamessystem.model.Game.Category;
-import ca.mcgill.ecse321.videogamessystem.model.Console;
+import ca.mcgill.ecse321.videogamessystem.model.Game.ConsoleType;
 import ca.mcgill.ecse321.videogamessystem.model.Promotion;
+import ca.mcgill.ecse321.videogamessystem.model.SpecificGame;
+import ca.mcgill.ecse321.videogamessystem.model.SpecificOrder;
 import ca.mcgill.ecse321.videogamessystem.repository.GameRepository;
-import ca.mcgill.ecse321.videogamessystem.repository.ConsoleRepository;
 import ca.mcgill.ecse321.videogamessystem.repository.PromotionRepository;
 
 @Service
 public class GameService {
 
     private GameRepository gameRepository;
-    private ConsoleRepository consoleRepository;
     private PromotionRepository promotionRepository;
 
     @Autowired
-    public GameService(GameRepository gameRepository, ConsoleRepository consoleRepository, PromotionRepository promotionRepository) {
+    public GameService(GameRepository gameRepository, PromotionRepository promotionRepository) {
         this.gameRepository = gameRepository;
-        this.consoleRepository = consoleRepository;
         this.promotionRepository = promotionRepository;
     }
 
     @Transactional
-    public Game createGame(String description, int stockQuantity, int price, String title, Category category, Long consoleId, Long promotionId) {
+    public Game createGame(String description, int stockQuantity, int price, String title, Category category, ConsoleType consoleType) {
         if (description == null || description.trim().isEmpty()) {
             throw new IllegalArgumentException("Description cannot be empty.");
         }
@@ -45,22 +44,11 @@ public class GameService {
         if (category == null) {
             throw new IllegalArgumentException("Category cannot be null.");
         }
-
-        Console console = null;
-        if (consoleId != null) {
-            console = consoleRepository.findById(consoleId).orElseThrow(() -> 
-                new IllegalArgumentException("Console not found."));
+        if (consoleType == null) {
+            throw new IllegalArgumentException("consoleType cannot be null.");
         }
 
-        Promotion promotion = null;
-        if (promotionId != null) {
-            promotion = promotionRepository.findById(promotionId).orElseThrow(() -> 
-                new IllegalArgumentException("Promotion not found."));
-        }
-
-        Game game = new Game(description, stockQuantity, price, title, category);
-        game.setConsole(console);
-        game.setPromotion(promotion);
+        Game game = new Game(description, stockQuantity, price, title, category, consoleType);
         return gameRepository.save(game);
     }
 
@@ -100,14 +88,18 @@ public class GameService {
     }
 
     @Transactional
-    public List<Game> getGamesByConsole(Long consoleId) {
-        Console console = consoleRepository.findById(consoleId).orElseThrow(() -> 
-            new IllegalArgumentException("Console not found."));
-        return gameRepository.findGameByConsole(console);
+    public List<Game> getGamesByConsoleType(ConsoleType consoleType) {
+        if (consoleType == null) {
+            throw new IllegalArgumentException("consoleType cannot be null.");
+        }
+        return gameRepository.findGameByConsoleType(consoleType);
     }
 
     @Transactional
     public List<Game> getGamesByPromotion(Long promotionId) {
+        if(promotionId == 0){
+            new IllegalArgumentException("id shouldn't be 0");
+        }
         Promotion promotion = promotionRepository.findById(promotionId).orElseThrow(() -> 
             new IllegalArgumentException("Promotion not found."));
         return gameRepository.findGameByPromotion(promotion);
@@ -117,11 +109,21 @@ public class GameService {
     public Game updateCategory(Long id, Category category) {
         Game game = gameRepository.findGameById(id);
         if (game == null) {
-            throw new IllegalArgumentException("invalid id to update description");
+            throw new IllegalArgumentException("invalid id to update category");
         }
         game.setCategory(category);
-        return game;
+        return gameRepository.save(game);
 
+    }
+
+    @Transactional
+    public Game updateConsoleType(Long id, ConsoleType consoleType) {
+        Game game = gameRepository.findGameById(id);
+        if (game == null) {
+            throw new IllegalArgumentException("invalid id to update consoleType");
+        }
+        game.setConsoleType(consoleType);
+        return gameRepository.save(game);
     }
 
     @Transactional
@@ -135,7 +137,7 @@ public class GameService {
         game.setPrice(price);
         game.setDescription(title);
         game.setCategory(category);
-        return game;
+        return gameRepository.save(game);
     }
 
 
@@ -233,5 +235,10 @@ public class GameService {
     // add game to wishlist
     // set consoletype to game
     // get price with promo 
+    // add promotion to game
      
+    //get all game names by order
+    //public List<SpecificGame> getAllGamesFromOrder(int specificGameID, SpecificOrder order) {
+
+    //}
 }

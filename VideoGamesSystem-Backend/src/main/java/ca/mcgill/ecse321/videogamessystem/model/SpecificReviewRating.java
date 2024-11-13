@@ -35,6 +35,7 @@ public class SpecificReviewRating {
   private Review review;
   
   @ManyToOne
+  @OnDelete(action = OnDeleteAction.CASCADE)
   private Customer customer;
 
   //------------------------
