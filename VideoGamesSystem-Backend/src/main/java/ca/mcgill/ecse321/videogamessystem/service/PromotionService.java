@@ -53,9 +53,14 @@ public class PromotionService {
 
 
     @Transactional
-    public Promotion getPromotionById(Long id){
-        return this.promotionRepository.findPromotionById(id);
+    public Promotion getPromotionById(Long id) {
+        Promotion promotion = this.promotionRepository.findPromotionById(id);
+        if (promotion == null) {
+            throw new IllegalArgumentException("Promotion not found");
+        }
+        return promotion;
     }
+    
 
     @Transactional
     public List<Promotion> getPromotionByStartdate(Date startDate){
