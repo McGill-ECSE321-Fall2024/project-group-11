@@ -2,13 +2,24 @@ package ca.mcgill.ecse321.videogamessystem.dto.gameDto;
 
 import ca.mcgill.ecse321.videogamessystem.model.Game.Category;
 import ca.mcgill.ecse321.videogamessystem.model.Game.ConsoleType;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+
 
 public class GameRequestDto {
+
+    @NotBlank(message = "Game description is required.")
     private String description;
+    @NotNull(message = "Game stock quantity is required.")
     private int stockQuantity;
+    @NotBlank(message = "Game price is required.")
     private int price;
+    @NotBlank(message = "Game title is required.")
     private String title;
+    @NotBlank(message = "Game category is required.")
     private Category category;
+    @NotBlank(message = "Game console type is required.")
     private ConsoleType consoleType;
 
     //maybe add fo
