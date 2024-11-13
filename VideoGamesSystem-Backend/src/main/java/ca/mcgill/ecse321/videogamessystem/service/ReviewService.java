@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 import ca.mcgill.ecse321.videogamessystem.model.Customer;
+import ca.mcgill.ecse321.videogamessystem.model.Game;
 import ca.mcgill.ecse321.videogamessystem.model.Review;
 import ca.mcgill.ecse321.videogamessystem.repository.ReviewRepository;
 import ca.mcgill.ecse321.videogamessystem.repository.CustomerRepository;
@@ -162,6 +163,11 @@ public class ReviewService {
         return resultList;
     }
 
-    // findreviews by customer 
+    public List<Review> getReviewsByGame(Game game){
+        if (game == null){
+            throw new IllegalArgumentException("game cannot be null");
+        }
+        return this.reviewRepository.findReviewByGame(game);
+    }
 }
 

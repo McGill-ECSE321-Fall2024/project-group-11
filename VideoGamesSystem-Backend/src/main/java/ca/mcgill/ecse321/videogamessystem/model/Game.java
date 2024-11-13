@@ -23,7 +23,6 @@ public class Game
   private Long id;
 
   private String description;
-  private int stockQuantity;
   private int price;
   private String title;
   private Category category;
@@ -39,11 +38,10 @@ public class Game
   // CONSTRUCTOR
   //------------------------
 
-  public Game(String aDescription, int aStockQuantity, int aPrice, String aTitle, Category aCategory, 
+  public Game(String aDescription, int aPrice, String aTitle, Category aCategory, 
       ConsoleType aConsoleType)
   {
     description = aDescription;
-    stockQuantity = aStockQuantity;
     price = aPrice;
     title = aTitle;
     category = aCategory;
@@ -72,13 +70,6 @@ public class Game
     return wasSet;
   }
 
-  public boolean setStockQuantity(int aStockQuantity)
-  {
-    boolean wasSet = false;
-    stockQuantity = aStockQuantity;
-    wasSet = true;
-    return wasSet;
-  }
 
   public boolean setPrice(int aPrice)
   {
@@ -117,11 +108,6 @@ public class Game
   public String getDescription()
   {
     return description;
-  }
-
-  public int getStockQuantity()
-  {
-    return stockQuantity;
   }
 
   public int getPrice()
@@ -191,7 +177,6 @@ public class Game
   {
     return super.toString() + "["+
             "description" + ":" + getDescription()+ "," +
-            "stockQuantity" + ":" + getStockQuantity()+ "," +
             "price" + ":" + getPrice()+ "," +
             "title" + ":" + getTitle()+ "," +
             "category" + ":" + getCategory()+ 

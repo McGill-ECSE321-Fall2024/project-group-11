@@ -40,6 +40,9 @@ public class Review
   @ManyToOne
   @OnDelete(action = OnDeleteAction.CASCADE)
   private Customer customer;
+  @ManyToOne
+  @OnDelete(action = OnDeleteAction.CASCADE)
+  private Game game;
 
   //------------------------
   // CONSTRUCTOR
@@ -50,10 +53,6 @@ public class Review
     gameRating = aGameRating;
     reviewContent = aReviewContent;
     reviewDate = aReviewDate;
-    Customer customer = new Customer();
-    this.customer = customer;
-    Review parentReview = new Review();
-    this.parentReview = parentReview;
   }
 
   public Review(){
@@ -122,6 +121,11 @@ public class Review
   {
     return customer;
   }
+
+  public Game getGame() {
+    return game;
+  }
+
   /* Code from template association_SetUnidirectionalOptionalOne */
   public boolean setParentReview(Review aNewParentReview)
   {
@@ -143,10 +147,20 @@ public class Review
     return wasSet;
   }
 
+  public boolean setGame(Game agame) {
+    boolean wasSet = false;
+    if (agame != null) {
+      game = agame;
+      wasSet = true;
+    }
+    return wasSet;
+  }
+
   public void delete()
   {
     parentReview = null;
     customer = null;
+    game = null;
   }
 
 

@@ -41,6 +41,9 @@ public class SpecificGameService {
         if (orderId != null) {
             order = specificOrderRepository.findById(orderId).orElse(null);
         }
+        else{
+            new IllegalArgumentException("order cannot be null.");
+        }
 
         SpecificGame specificGame = new SpecificGame(serialNumber, availability);
         specificGame.setGame(game);
@@ -62,7 +65,6 @@ public class SpecificGameService {
         return specificGameRepository.findSpecificGameByAvailability(availability);
     }
 
-   
 
     @Transactional
     public List<SpecificGame> getSpecificGamesByOrder(Integer orderNb) {
@@ -132,21 +134,29 @@ public class SpecificGameService {
         return specificGameRepository.findSpecificGameBySpecificOrder(order);
     }
 
+
     // add specific game to order
     public List<SpecificGame> addSpecificGameToOrder(int specificGameID, SpecificOrder order) {
         SpecificGame specificGame = specificGameRepository.findSpecificGameBySerialNumber(specificGameID);
-        if (specificGame == null){
+        if (specificGame == null) {
             throw new IllegalArgumentException("specific game not found");
         }
-        if (order == null){
+        if (order == null) {
             throw new IllegalArgumentException("order cannot be null");
         }
+
+        // Set the specific order for the game
         specificGame.setSpecificOrder(order);
+
+        // Save the updated specific game with the new order
+        specificGameRepository.save(specificGame);
+
+        // Return the list of specific games associated with the order
         return specificGameRepository.findSpecificGameBySpecificOrder(order);
     }
 
-    // remove specific game from order
-    public List<SpecificGame> removeGameFromOrder(int specificGameID, SpecificOrder order) {
+    public List<SpecificGame> removeSpecificGameFromOrder(int specificGameID, SpecificOrder order) {
+        // Retrieve the specific game by serial number
         SpecificGame specificCopy = specificGameRepository.findSpecificGameBySerialNumber(specificGameID);
         if (specificCopy == null) {
             throw new IllegalArgumentException("specific game not found");
@@ -154,11 +164,18 @@ public class SpecificGameService {
         if (order == null) {
             throw new IllegalArgumentException("order cannot be null");
         }
-        List<SpecificGame> allCopies = specificGameRepository.findSpecificGameBySpecificOrder(order);
-        if (allCopies.size() == 0 || !allCopies.contains(specificCopy)){
+
+        // Check if the specific game is indeed associated with the given order
+        if (!order.equals(specificCopy.getSpecificOrder())) {
             throw new IllegalArgumentException("the specific game was not in the order provided.");
         }
-        specificCopy.setSpecificOrder(order);
+
+        // Unset the order from the specific game and save the change
+        specificCopy.setSpecificOrder(null);
+        specificGameRepository.save(specificCopy);
+
+        // Return the updated list of games associated with the order (should no longer
+        // include this game)
         return specificGameRepository.findSpecificGameBySpecificOrder(order);
     }
 
