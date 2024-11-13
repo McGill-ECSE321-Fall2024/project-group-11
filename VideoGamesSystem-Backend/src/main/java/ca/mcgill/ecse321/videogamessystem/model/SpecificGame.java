@@ -49,6 +49,10 @@ public class SpecificGame
     this.specificOrder = specificOrder;
   }
 
+  public SpecificGame(){
+    
+  }
+
   //------------------------
   // INTERFACE
   //------------------------

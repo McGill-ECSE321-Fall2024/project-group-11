@@ -147,7 +147,7 @@ public class PromotionService {
     }
 
 
-// is promotion available ?
+// is promotion available
 public boolean promotionAvailable(Long id){
     boolean valid = false;
     Promotion promotion = promotionRepository.findPromotionById(id);
