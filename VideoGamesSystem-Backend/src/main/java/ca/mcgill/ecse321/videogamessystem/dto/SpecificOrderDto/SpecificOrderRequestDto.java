@@ -1,18 +1,18 @@
-package ca.mcgill.ecse321.videogamessystem.dto;
+package ca.mcgill.ecse321.videogamessystem.dto.SpecificOrderDto;
 
 import java.sql.Date;
 
-public class OrderRequestDto {
+public class SpecificOrderRequestDto {
 
     private Date orderDate;
     private int cardNumber;
     private int customerId; // Assuming we use customer ID to associate an order with a customer
 
     // Constructors
-    public OrderRequestDto() {
+    public SpecificOrderRequestDto() {
     }
 
-    public OrderRequestDto(Date orderDate, int cardNumber, int customerId) {
+    public SpecificOrderRequestDto(Date orderDate, int cardNumber, int customerId) {
         this.orderDate = orderDate;
         this.cardNumber = cardNumber;
         this.customerId = customerId;
