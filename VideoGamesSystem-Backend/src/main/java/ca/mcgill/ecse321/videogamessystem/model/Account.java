@@ -82,6 +82,7 @@ public abstract class Account
   public Long getId(){
     return id;
   }
+  
   public String getUserName()
   {
     return userName;

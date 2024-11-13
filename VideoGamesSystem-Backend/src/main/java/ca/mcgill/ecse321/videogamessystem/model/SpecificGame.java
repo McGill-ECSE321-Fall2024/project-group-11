@@ -4,7 +4,10 @@ package ca.mcgill.ecse321.videogamessystem.model;
 
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
+
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import jakarta.persistence.Entity;
 
 
@@ -25,10 +28,12 @@ public class SpecificGame
   private boolean availability;
 
   //SpecificGame Associations
-  @OneToOne
+
+  @ManyToOne
+  @OnDelete(action = OnDeleteAction.CASCADE)
   private Game game;
   @ManyToOne
-  private Order order;
+  private SpecificOrder specificOrder;
 
   //------------------------
   // CONSTRUCTOR
@@ -40,8 +45,8 @@ public class SpecificGame
     availability = aAvailability;
     Game game = new Game();
     this.game = game;
-    Order order = new Order();
-    this.order = order;
+    SpecificOrder specificOrder = new SpecificOrder();
+    this.specificOrder = specificOrder;
   }
 
   //------------------------
@@ -64,6 +69,10 @@ public class SpecificGame
     return wasSet;
   }
 
+  public int getId() {
+    return serialNumber;
+  }
+  //also gets id
   public int getSerialNumber()
   {
     return serialNumber;
@@ -79,14 +88,14 @@ public class SpecificGame
     return game;
   }
   /* Code from template association_GetOne */
-  public Order getOrder()
+  public SpecificOrder getSpecificOrder()
   {
-    return order;
+    return specificOrder;
   }
 
   public boolean hasOrder()
   {
-    boolean has = order != null;
+    boolean has = specificOrder != null;
     return has;
   }
   /* Code from template association_SetUnidirectionalOne */
@@ -101,11 +110,11 @@ public class SpecificGame
     return wasSet;
   }
   /* Code from template association_SetOptionalOneToMandatoryMany */
-  public boolean setOrder(Order aOrder)
+  public boolean setSpecificOrder(SpecificOrder aSpecificOrder)
   {
     boolean wasSet = false;
-    if (aOrder != null) {
-      order = aOrder;
+    if (aSpecificOrder != null) {
+      specificOrder = aSpecificOrder;
       wasSet = true;
     }
     return wasSet;
@@ -114,7 +123,7 @@ public class SpecificGame
   public void delete()
   {
     game = null;
-    order = null;
+    specificOrder = null;
   }
 
   
@@ -124,6 +133,6 @@ public class SpecificGame
         "  " + "availability" + "=" + getAvailability() + System.getProperties().getProperty("line.separator") +
         "  " + "game = " + (getGame() != null ? Integer.toHexString(System.identityHashCode(getGame())) : "null")
         + System.getProperties().getProperty("line.separator") +
-        "  " + "order = " + (getOrder() != null ? Integer.toHexString(System.identityHashCode(getOrder())) : "null");
+        "  " + "order = " + (getSpecificOrder() != null ? Integer.toHexString(System.identityHashCode(getSpecificOrder())) : "null");
   }
 }
