@@ -22,25 +22,25 @@ import ca.mcgill.ecse321.videogamessystem.repository.SpecificGameRepository;
 @Service
 public class GameService {
 
+    @Autowired
     private GameRepository gameRepository;
+    @Autowired
     private SpecificGameRepository specificGameRepository;
+    @Autowired
     private WishlistRepository wishlistRepository;
 
-    @Autowired
-    public GameService(GameRepository gameRepository, SpecificGameRepository specificGameRepository, WishlistRepository wishlistRepository) {
-        this.gameRepository = gameRepository;
-        this.specificGameRepository = specificGameRepository;
-        this.wishlistRepository = wishlistRepository;
-
-    }
-
+    /**
+     * @param description
+     * @param price
+     * @param title
+     * @param category
+     * @param consoleType
+     * @return
+     */
     @Transactional
-    public Game createGame(String description, int stockQuantity, int price, String title, Category category, ConsoleType consoleType) {
+    public Game createGame(String description, int price, String title, Category category, ConsoleType consoleType) {
         if (description == null || description.trim().isEmpty()) {
             throw new IllegalArgumentException("Description cannot be empty.");
-        }
-        if (stockQuantity < 0) {
-            throw new IllegalArgumentException("Stock quantity cannot be negative.");
         }
         if (price < 0) {
             throw new IllegalArgumentException("Price cannot be negative.");
@@ -59,6 +59,10 @@ public class GameService {
         return gameRepository.save(game);
     }
 
+    /**
+     * @param id
+     * @return
+     */
     @Transactional
     public Game getGameById(Long id) {
         Game game = gameRepository.findGameById(id);
@@ -69,6 +73,10 @@ public class GameService {
     }
 
 
+    /**
+     * @param price
+     * @return
+     */
     @Transactional
     public List<Game> getGamesByPrice(int price) {
         return gameRepository.findGameByprice(price);
@@ -82,6 +90,10 @@ public class GameService {
         return gameRepository.findGameByTitle(title);
     }
 
+    /**
+     * @param category
+     * @return
+     */
     @Transactional
     public List<Game> getGamesByCategory(Category category) {
         if (category == null) {
@@ -90,6 +102,10 @@ public class GameService {
         return gameRepository.findGameByCategory(category);
     }
 
+    /**
+     * @param consoleType
+     * @return
+     */
     @Transactional
     public List<Game> getGamesByConsoleType(ConsoleType consoleType) {
         if (consoleType == null) {
@@ -98,6 +114,10 @@ public class GameService {
         return gameRepository.findGameByConsoleType(consoleType);
     }
 
+    /**
+     * @param promotion
+     * @return
+     */
     @Transactional
     public List<Game> getGamesByPromotion(Promotion promotion) {
         if(promotion == null){
@@ -106,6 +126,11 @@ public class GameService {
         return gameRepository.findGameByPromotion(promotion);
     }
 
+    /**
+     * @param id
+     * @param category
+     * @return
+     */
     @Transactional
     public Game updateCategory(Long id, Category category) {
         Game game = gameRepository.findGameById(id);
@@ -117,6 +142,11 @@ public class GameService {
 
     }
 
+    /**
+     * @param id
+     * @param consoleType
+     * @return
+     */
     @Transactional
     public Game updateConsoleType(Long id, ConsoleType consoleType) {
         Game game = gameRepository.findGameById(id);
@@ -127,8 +157,16 @@ public class GameService {
         return gameRepository.save(game);
     }
 
+    /**
+     * @param id
+     * @param description
+     * @param price
+     * @param title
+     * @param category
+     * @return
+     */
     @Transactional
-    public Game updateGame(long id, String description, int stockQuantity, int price, String title, Category category){
+    public Game updateGame(long id, String description, int price, String title, Category category){
         Game game = gameRepository.findGameById(id);
         if (game == null) {
             throw new IllegalArgumentException("invalid id to update description");
@@ -142,6 +180,11 @@ public class GameService {
     }
 
 
+    /**
+     * @param id
+     * @param newPrice
+     * @return
+     */
     @Transactional
     public Game updatePrice(Long id, int newPrice) {
         Game game = gameRepository.findGameById(id);
@@ -156,6 +199,11 @@ public class GameService {
         return gameRepository.save(game);
     }
 
+    /**
+     * @param id
+     * @param newDescription
+     * @return
+     */
     @Transactional
     public Game updateDescription(Long id, String newDescription) {
         Game game = gameRepository.findGameById(id);
@@ -170,6 +218,11 @@ public class GameService {
         return gameRepository.save(game);
     }
 
+    /**
+     * @param id
+     * @param newTitle
+     * @return
+     */
     @Transactional
     public Game updateTitle(Long id, String newTitle) {
         Game game = gameRepository.findGameById(id);
@@ -184,6 +237,10 @@ public class GameService {
         return gameRepository.save(game);
     }
 
+    /**
+     * @param id
+     * @return
+     */
     @Transactional
     public Game deleteGame(Long id) {
         Game game = gameRepository.findGameById(id);
@@ -196,11 +253,19 @@ public class GameService {
     }
     
 
+    /**
+     * @return
+     */
     @Transactional
     public List<Game> getAllGames() {
         return toList(gameRepository.findAll());
     }
 
+    /**
+     * @param gameId
+     * @param wishlistId
+     * @return
+     */
     @Transactional
     public Game addGameToWishlist(Long gameId, Long wishlistId) {
         Game game = gameRepository.findGameById(gameId);
@@ -229,6 +294,10 @@ public class GameService {
         return resultList;
     }
 
+    /**
+     * @param wishlist
+     * @return
+     */
     public List<Game> getGameByWishlist(Wishlist wishlist){
         if (wishlist == null){
             throw new IllegalArgumentException("wishlist is null");
@@ -238,6 +307,10 @@ public class GameService {
 
 
     //games with less stock
+    /**
+     * @param n
+     * @return
+     */
     public List<Game> getGamesLowerInstockThan(int n){
         if(n < 0){
             throw new IllegalArgumentException("search in stock quantity cannot be lower than 0");
@@ -253,16 +326,27 @@ public class GameService {
     }
     
     //all available games
+    /**
+     * @return
+     */
     public List<Game> getAvailableGames() {
         return this.getGamesLowerInstockThan(0);
     }
 
     //if game is available
+    /**
+     * @param id
+     * @return
+     */
     public boolean getGameAvailabilityById(Long id){
         return (this.getStockQuantity(id) > 0);
     }
 
     // does game have promoition
+    /**
+     * @param id
+     * @return
+     */
     public boolean getGamePromotionStatusById(Long id) {
         Game game = this.getGameById(id);
         Promotion promotion = game.getPromotion();
@@ -282,6 +366,11 @@ public class GameService {
     }
     
     // add game to promo
+    /**
+     * @param id
+     * @param promo
+     * @return
+     */
     public Game updatePromotion(Long id, Promotion promo){
         Game game = this.getGameById(id);
         game.setPromotion(promo);
@@ -289,6 +378,11 @@ public class GameService {
     }
 
     // add game to wishlist
+    /**
+     * @param id
+     * @param wishlist
+     * @return
+     */
     public Game updateWishlist(Long id, Wishlist wishlist) {
 
         Game game = this.getGameById(id);
@@ -298,6 +392,10 @@ public class GameService {
     
 
     // get price with promo
+    /**
+     * @param id
+     * @return
+     */
     public int getPriceAfterPromoWithId(Long id){
         Game game = this.getGameById(id);
         int priceAfter = game.getPrice();
@@ -311,6 +409,10 @@ public class GameService {
     }
 
     //get all game names by order
+    /**
+     * @param order
+     * @return
+     */
     public List<Game> getGameByOrder(SpecificOrder order){
         if (order == null){
             throw new IllegalArgumentException("order cannot be null");
@@ -328,6 +430,11 @@ public class GameService {
         return games;
     }
 
+    /**
+     * @param min
+     * @param max
+     * @return
+     */
     public List<Game> getGamesBetweenPrices(int min, int max){
         List<Game> allGames = this.getAllGames();
         List<Game> games = new ArrayList<>();
@@ -342,6 +449,10 @@ public class GameService {
     }
 
     //filter by Promotion percentage
+    /**
+     * @param min
+     * @return
+     */
     public List<Game> getGamesAbovePromotion(int min){
         List<Game> allGames = this.getAllGames();
         List<Game> games = new ArrayList<>();
@@ -361,6 +472,10 @@ public class GameService {
     }
 
     //get stock quantity by id
+    /**
+     * @param id
+     * @return
+     */
     public int getStockQuantity(Long id){
         List<SpecificGame> copies = specificGameRepository.findSpecificGameByGame(this.getGameById(id));
         int stockQuantity = 0;
@@ -370,6 +485,21 @@ public class GameService {
             }
         }
         return stockQuantity;
+    }
+
+    /**
+     * @param id
+     * @return
+     */
+    public Game getGameBySpecificGameID(int id){
+        if (id == 0){
+            throw new IllegalArgumentException("specific game id cannot be 0");
+        }
+        SpecificGame specificGame = specificGameRepository.findSpecificGameBySerialNumber(id);
+        if (specificGame == null){
+            throw new IllegalArgumentException("the specific game cannot be null");
+        }
+        return specificGame.getGame();
     }
 
     

@@ -16,41 +16,38 @@ import ca.mcgill.ecse321.videogamessystem.repository.GameRepository;
 @Service
 public class SpecificGameService {
 
+    @Autowired
     private SpecificGameRepository specificGameRepository;
+    @Autowired
     private GameRepository gameRepository;
+    @Autowired
     private SpecificOrderRepository specificOrderRepository;
 
-    @Autowired
-    public SpecificGameService(SpecificGameRepository specificGameRepository, GameRepository gameRepository, 
-            SpecificOrderRepository specificOrderRepository) {
-        this.specificGameRepository = specificGameRepository;
-        this.gameRepository = gameRepository;
-        this.specificOrderRepository = specificOrderRepository;
-    }
 
+    /**
+     * @param serialNumber
+     * @param availability
+     * @param gameId
+     * @return
+     */
     @Transactional
-    public SpecificGame createSpecificGame(int serialNumber, boolean availability, Long gameId, Integer orderId) {
+    public SpecificGame createSpecificGame(int serialNumber, boolean availability, Long gameId) {
         if (specificGameRepository.findSpecificGameBySerialNumber(serialNumber) != null) {
             throw new IllegalArgumentException("A specific game with this serial number already exists.");
         }
 
         Game game = gameRepository.findById(gameId).orElseThrow(() -> 
             new IllegalArgumentException("Game not found."));
-        
-        SpecificOrder order = null;
-        if (orderId != null) {
-            order = specificOrderRepository.findById(orderId).orElse(null);
-        }
-        else{
-            new IllegalArgumentException("order cannot be null.");
-        }
 
         SpecificGame specificGame = new SpecificGame(serialNumber, availability);
         specificGame.setGame(game);
-        specificGame.setSpecificOrder(order);
         return specificGameRepository.save(specificGame);
     }
 
+    /**
+     * @param serialNumber
+     * @return
+     */
     @Transactional
     public SpecificGame getSpecificGameBySerialNumber(int serialNumber) {
         SpecificGame specificGame = specificGameRepository.findSpecificGameBySerialNumber(serialNumber);
@@ -60,12 +57,20 @@ public class SpecificGameService {
         return specificGame;
     }
 
+    /**
+     * @param availability
+     * @return
+     */
     @Transactional
     public List<SpecificGame> getSpecificGamesByAvailability(boolean availability) {
         return specificGameRepository.findSpecificGameByAvailability(availability);
     }
 
 
+    /**
+     * @param orderNb
+     * @return
+     */
     @Transactional
     public List<SpecificGame> getSpecificGamesByOrder(Integer orderNb) {
         SpecificOrder order = specificOrderRepository.findOrderByNumber(orderNb);
@@ -76,6 +81,10 @@ public class SpecificGameService {
     }
 
 
+    /**
+     * @param gameId
+     * @return
+     */
     @Transactional
     public List<SpecificGame> getSpecificGamesByGame(Long gameId) {
         Game game = gameRepository.findGameById(gameId);
@@ -86,6 +95,11 @@ public class SpecificGameService {
     }
 
 
+    /**
+     * @param serialNumber
+     * @param newAvailability
+     * @return
+     */
     @Transactional
     public SpecificGame updateAvailability(int serialNumber, boolean newAvailability) {
         SpecificGame specificGame = specificGameRepository.findSpecificGameBySerialNumber(serialNumber);
@@ -99,6 +113,10 @@ public class SpecificGameService {
 
    
 
+    /**
+     * @param serialNumber
+     * @return
+     */
     @Transactional
     public SpecificGame deleteSpecificGame(int serialNumber) {
         SpecificGame specificGame = specificGameRepository.findSpecificGameBySerialNumber(serialNumber);
@@ -110,6 +128,9 @@ public class SpecificGameService {
         return specificGame;
     }
 
+    /**
+     * @return
+     */
     @Transactional
     public List<SpecificGame> getAllSpecificGames() {
         return toList(specificGameRepository.findAll());
@@ -130,12 +151,21 @@ public class SpecificGameService {
     }
 
     // find specific game by order
+    /**
+     * @param order
+     * @return
+     */
     public List<SpecificGame> getSpecificGameByOrder(SpecificOrder order){
         return specificGameRepository.findSpecificGameBySpecificOrder(order);
     }
 
 
     // add specific game to order
+    /**
+     * @param specificGameID
+     * @param order
+     * @return
+     */
     public List<SpecificGame> addSpecificGameToOrder(int specificGameID, SpecificOrder order) {
         SpecificGame specificGame = specificGameRepository.findSpecificGameBySerialNumber(specificGameID);
         if (specificGame == null) {
@@ -155,6 +185,63 @@ public class SpecificGameService {
         return specificGameRepository.findSpecificGameBySpecificOrder(order);
     }
 
+    // add specific games to order
+    /**
+     * @param specificGameID
+     * @param order
+     * @return
+     */
+    public List<SpecificGame> addSpecificGamesToOrder(List<Integer> specificGameID, SpecificOrder order) {
+        if (order == null) {
+            throw new IllegalArgumentException("order cannot be null");
+        }
+        for (int id :specificGameID){
+            SpecificGame specificGame = specificGameRepository.findSpecificGameBySerialNumber(id);
+            if (specificGame == null) {
+                throw new IllegalArgumentException("some specific game is null");
+            }
+            specificGame.setSpecificOrder(order);
+            // Save the updated specific game with the new order
+            specificGameRepository.save(specificGame);
+        }
+        // Return the list of specific games associated with the order
+        return specificGameRepository.findSpecificGameBySpecificOrder(order);
+    }
+
+
+    /**
+     * @param gameID
+     * @param number_needed
+     * @return
+     */
+    public List<SpecificGame> getSpecificGamesFromGame(Long gameID, int number_needed){
+        if (number_needed < 0) {
+            throw new IllegalArgumentException("can only retrieve positive number of games");
+        }
+        List<SpecificGame> games = this.getSpecificGamesByGame(gameID);
+        if (games.size() < number_needed){
+            throw new IllegalArgumentException("not enough in stock for game" + gameID);
+        }
+        int i = 0;
+        List <SpecificGame> first_few = new ArrayList<>();
+        for (SpecificGame each_game: games){
+            if (each_game == null){
+                continue;
+            }
+            first_few.add(each_game);
+            i++;
+            if(i==number_needed){
+                break;
+            }
+        }
+        return first_few;
+    }
+
+    /**
+     * @param specificGameID
+     * @param order
+     * @return
+     */
     public List<SpecificGame> removeSpecificGameFromOrder(int specificGameID, SpecificOrder order) {
         // Retrieve the specific game by serial number
         SpecificGame specificCopy = specificGameRepository.findSpecificGameBySerialNumber(specificGameID);

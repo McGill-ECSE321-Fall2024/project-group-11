@@ -15,15 +15,17 @@ import ca.mcgill.ecse321.videogamessystem.repository.CustomerRepository;
 @Service
 public class SpecificOrderService {
 
+    @Autowired
     private SpecificOrderRepository specificOrderRepository;
+    @Autowired
     private CustomerRepository customerRepository;
 
-    @Autowired
-    public SpecificOrderService(SpecificOrderRepository specificOrderRepository, CustomerRepository customerRepository) {
-        this.specificOrderRepository = specificOrderRepository;
-        this.customerRepository = customerRepository;
-    }
-
+    /**
+     * @param orderDate
+     * @param cardNumber
+     * @param customerId
+     * @return
+     */
     @Transactional
     public SpecificOrder createSpecificOrder(Date orderDate, int cardNumber, Long customerId) {
         if (orderDate == null || orderDate.after(new Date(System.currentTimeMillis()))) {
@@ -43,6 +45,10 @@ public class SpecificOrderService {
         return specificOrderRepository.save(specificOrder);
     }
 
+    /**
+     * @param number
+     * @return
+     */
     @Transactional
     public SpecificOrder getOrderById(int number) {
         SpecificOrder order = specificOrderRepository.findOrderByNumber(number);
@@ -52,11 +58,19 @@ public class SpecificOrderService {
         return order;
     }
 
+    /**
+     * @param orderDate
+     * @return
+     */
     @Transactional
     public List<SpecificOrder> getOrdersByOrderDate(Date orderDate) {
         return specificOrderRepository.findOrderByOrderDate(orderDate);
     }
 
+    /**
+     * @param customerId
+     * @return
+     */
     @Transactional
     public List<SpecificOrder> getOrdersByCustomer(Long customerId) {
         Customer customer = customerRepository.findById(customerId).orElseThrow(() -> 
@@ -64,6 +78,11 @@ public class SpecificOrderService {
         return specificOrderRepository.findOrderByCustomer(customer);
     }
 
+    /**
+     * @param number
+     * @param newOrderDate
+     * @return
+     */
     @Transactional
     public SpecificOrder updateOrderDate(int number, Date newOrderDate) {
         SpecificOrder order = specificOrderRepository.findOrderByNumber(number);
@@ -78,6 +97,11 @@ public class SpecificOrderService {
         return specificOrderRepository.save(order);
     }
 
+    /**
+     * @param number
+     * @param newCardNumber
+     * @return
+     */
     @Transactional
     public SpecificOrder updateCardNumber(int number, int newCardNumber) {
         SpecificOrder order = specificOrderRepository.findOrderByNumber(number);
@@ -92,6 +116,10 @@ public class SpecificOrderService {
         return specificOrderRepository.save(order);
     }
 
+    /**
+     * @param number
+     * @return
+     */
     @Transactional
     public SpecificOrder deleteOrder(int number) {
         SpecificOrder order = specificOrderRepository.findOrderByNumber(number);
@@ -103,6 +131,9 @@ public class SpecificOrderService {
         return order;
     }
 
+    /**
+     * @return
+     */
     @Transactional
     public List<SpecificOrder> getAllOrders() {
         return toList(specificOrderRepository.findAll());
@@ -124,6 +155,11 @@ public class SpecificOrderService {
     }
 
     // assign order to customer
+    /**
+     * @param orderID
+     * @param customer
+     * @return
+     */
     @Transactional
     public SpecificOrder placeNewOrder(int orderID, Customer customer){
         SpecificOrder order = specificOrderRepository.findOrderByNumber(orderID);

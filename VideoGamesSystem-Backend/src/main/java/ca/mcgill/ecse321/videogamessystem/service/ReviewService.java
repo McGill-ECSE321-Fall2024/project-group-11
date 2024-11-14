@@ -17,15 +17,18 @@ import ca.mcgill.ecse321.videogamessystem.repository.CustomerRepository;
 @Service
 public class ReviewService {
 
+    @Autowired
     private ReviewRepository reviewRepository;
+    @Autowired
     private CustomerRepository customerRepository;
 
-    @Autowired
-    public ReviewService(ReviewRepository reviewRepository, CustomerRepository customerRepository) {
-        this.reviewRepository = reviewRepository;
-        this.customerRepository = customerRepository;
-    }
-
+    /**
+     * @param gameRating
+     * @param reviewContent
+     * @param customerId
+     * @param parentReviewId
+     * @return
+     */
     @Transactional
     public Review createReview(int gameRating, String reviewContent, Long customerId, Long parentReviewId) {
         if (gameRating < 1 || gameRating > 5) {
@@ -43,18 +46,19 @@ public class ReviewService {
         Review parentReview = null;
         if (parentReviewId != null) {
             parentReview = reviewRepository.findReviewById(parentReviewId);
-            if (parentReview == null) {
-                throw new IllegalArgumentException("Parent review not found.");
-            }
         }
 
         Review review = new Review(gameRating, reviewContent, reviewDate);
         review.setCustomer(customer);
         review.setParentReview(parentReview);
-
+        
         return reviewRepository.save(review);
     }
 
+    /**
+     * @param id
+     * @return
+     */
     @Transactional
     public Review getReviewById(Long id) {
         Review review = reviewRepository.findReviewById(id);
@@ -64,17 +68,29 @@ public class ReviewService {
         return review;
     }
 
+    /**
+     * @param reviewDate
+     * @return
+     */
     @Transactional
     public List<Review> getReviewsByReviewDate(Date reviewDate) {
         return reviewRepository.findReviewByReviewDate(reviewDate);
     }
 
+    /**
+     * @param gameRating
+     * @return
+     */
     @Transactional
     public List<Review> getReviewsByGameRating(int gameRating) {
         return reviewRepository.findReviewByGameRating(gameRating);
     }
 
 
+    /**
+     * @param parentReviewId
+     * @return
+     */
     @Transactional
     public List<Review> getReviewsByParentReview(Long parentReviewId) {
         Review parentReview = reviewRepository.findReviewById(parentReviewId);
@@ -84,6 +100,10 @@ public class ReviewService {
         return reviewRepository.findReviewByParentReview(parentReview);
     }
 
+    /**
+     * @param customerId
+     * @return
+     */
     @Transactional
     public List<Review> getReviewsByCustomer(Long customerId) {
         Customer customer = customerRepository.findById(customerId).orElseThrow(() -> 
@@ -91,6 +111,11 @@ public class ReviewService {
         return reviewRepository.findReviewByCustomer(customer);
     }
 
+    /**
+     * @param id
+     * @param newContent
+     * @return
+     */
     @Transactional
     public Review updateReviewContent(Long id, String newContent) {
         Review review = reviewRepository.findReviewById(id);
@@ -105,6 +130,11 @@ public class ReviewService {
         return reviewRepository.save(review);
     }
 
+    /**
+     * @param id
+     * @param newDate
+     * @return
+     */
     @Transactional
     public Review updateReviewDate(Long id, Date newDate) {
         Review review = reviewRepository.findReviewById(id);
@@ -119,6 +149,11 @@ public class ReviewService {
         return reviewRepository.save(review);
     }
 
+    /**
+     * @param id
+     * @param newRating
+     * @return
+     */
     @Transactional
     public Review updateGameRating(Long id, int newRating) {
         Review review = reviewRepository.findReviewById(id);
@@ -133,6 +168,10 @@ public class ReviewService {
         return reviewRepository.save(review);
     }
 
+    /**
+     * @param id
+     * @return
+     */
     @Transactional
     public Review deleteReview(Long id) {
         Review review = reviewRepository.findReviewById(id);
@@ -144,6 +183,9 @@ public class ReviewService {
         return review;
     }
 
+    /**
+     * @return
+     */
     @Transactional
     public List<Review> getAllReviews() {
         return toList(reviewRepository.findAll());
@@ -163,6 +205,10 @@ public class ReviewService {
         return resultList;
     }
 
+    /**
+     * @param game
+     * @return
+     */
     public List<Review> getReviewsByGame(Game game){
         if (game == null){
             throw new IllegalArgumentException("game cannot be null");

@@ -17,19 +17,19 @@ import ca.mcgill.ecse321.videogamessystem.repository.CustomerRepository;
 @Service
 public class SpecificReviewRatingService {
 
+    @Autowired
     private SpecificReviewRatingRepository specificReviewRatingRepository;
+    @Autowired
     private ReviewRepository reviewRepository;
+    @Autowired
     private CustomerRepository customerRepository;
 
-    @Autowired
-    public SpecificReviewRatingService(SpecificReviewRatingRepository specificReviewRatingRepository,
-                                       ReviewRepository reviewRepository,
-                                       CustomerRepository customerRepository) {
-        this.specificReviewRatingRepository = specificReviewRatingRepository;
-        this.reviewRepository = reviewRepository;
-        this.customerRepository = customerRepository;
-    }
-
+    /**
+     * @param reviewRating
+     * @param reviewId
+     * @param customerId
+     * @return
+     */
     @Transactional
     public SpecificReviewRating createSpecificReviewRating(ReviewRating reviewRating, Long reviewId, Long customerId) {
         if (reviewRating == null) {
@@ -49,6 +49,10 @@ public class SpecificReviewRatingService {
         return specificReviewRatingRepository.save(specificReviewRating);
     }
 
+    /**
+     * @param id
+     * @return
+     */
     @Transactional
     public SpecificReviewRating getSpecificReviewRatingById(Long id) {
         SpecificReviewRating specificReviewRating = specificReviewRatingRepository.findSpecificReviewRatingById(id);
@@ -58,6 +62,10 @@ public class SpecificReviewRatingService {
         return specificReviewRating;
     }
 
+    /**
+     * @param reviewId
+     * @return
+     */
     @Transactional
     public List<SpecificReviewRating> getSpecificReviewRatingsByReview(Long reviewId) {
         Review review = reviewRepository.findById(reviewId).orElseThrow(() -> 
@@ -65,6 +73,11 @@ public class SpecificReviewRatingService {
         return specificReviewRatingRepository.findSpecificReviewRatingByReview(review);
     }
 
+    /**
+     * @param id
+     * @param newReviewRating
+     * @return
+     */
     @Transactional
     public SpecificReviewRating updateReviewRating(Long id, ReviewRating newReviewRating) {
         SpecificReviewRating specificReviewRating = specificReviewRatingRepository.findSpecificReviewRatingById(id);
@@ -79,6 +92,10 @@ public class SpecificReviewRatingService {
         return specificReviewRatingRepository.save(specificReviewRating);
     }
 
+    /**
+     * @param id
+     * @return
+     */
     @Transactional
     public SpecificReviewRating deleteSpecificReviewRating(Long id) {
         SpecificReviewRating specificReviewRating = specificReviewRatingRepository.findSpecificReviewRatingById(id);
@@ -90,6 +107,9 @@ public class SpecificReviewRatingService {
         return specificReviewRating;
     }
 
+    /**
+     * @return
+     */
     @Transactional
     public List<SpecificReviewRating> getAllSpecificReviewRatings() {
         return toList(specificReviewRatingRepository.findAll());
