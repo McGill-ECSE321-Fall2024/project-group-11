@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.sql.Date;
 import java.util.List;
 import java.util.stream.Collectors;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/orders")
@@ -32,7 +33,7 @@ public class SpecificOrderController {
      * @return ResponseEntity containing the created order data in a response DTO format.
      */
     @PostMapping
-    public ResponseEntity<SpecificOrderResponseDto> createSpecificOrder(@RequestBody SpecificOrderRequestDto orderRequestDto) {
+    public ResponseEntity<SpecificOrderResponseDto> createSpecificOrder(@Valid @RequestBody SpecificOrderRequestDto orderRequestDto) {
         SpecificOrder order = specificOrderService.createSpecificOrder(
                 orderRequestDto.getOrderDate(),
                 orderRequestDto.getCardNumber(),

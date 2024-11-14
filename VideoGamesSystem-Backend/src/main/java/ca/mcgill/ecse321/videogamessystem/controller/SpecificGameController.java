@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,26 +29,39 @@ public class SpecificGameController {
     @Autowired
     private SpecificOrderService specificOrderService;
 
-    // Create a new specific game
+    /**
+     * Creates a new specific game instance with provided details.
+     *
+     * @param specificGameRequestDto the DTO containing specific game data
+     * @return a ResponseEntity with the created SpecificGameResponseDto
+     */
     @PostMapping
-    public ResponseEntity<SpecificGameResponseDto> createSpecificGame(@RequestBody SpecificGameRequestDto specificGameRequestDto) {
+    public ResponseEntity<SpecificGameResponseDto> createSpecificGame(@Valid @RequestBody SpecificGameRequestDto specificGameRequestDto) {
         SpecificGame specificGame = specificGameService.createSpecificGame(
                 specificGameRequestDto.getSerialNumber(),
                 specificGameRequestDto.isAvailability(),
-                specificGameRequestDto.getGameId(),
-                specificGameRequestDto.getSpecificOrderId() // Pass order ID if specified, can be null
+                specificGameRequestDto.getGameId()
         );
         return ResponseEntity.ok(convertToDto(specificGame));
     }
 
-    // Get specific game by serial number
+    /**
+     * Retrieves a specific game by its serial number.
+     *
+     * @param serialNumber the serial number of the specific game to retrieve
+     * @return a ResponseEntity with the retrieved SpecificGameResponseDto
+     */
     @GetMapping("/{serialNumber}")
     public ResponseEntity<SpecificGameResponseDto> getSpecificGameBySerialNumber(@PathVariable int serialNumber) {
         SpecificGame specificGame = specificGameService.getSpecificGameBySerialNumber(serialNumber);
         return ResponseEntity.ok(convertToDto(specificGame));
     }
 
-    // Get all specific games
+    /**
+     * Retrieves all specific games.
+     *
+     * @return a ResponseEntity containing a list of all SpecificGameResponseDtos
+     */
     @GetMapping
     public ResponseEntity<List<SpecificGameResponseDto>> getAllSpecificGames() {
         List<SpecificGameResponseDto> specificGames = specificGameService.getAllSpecificGames()
@@ -57,7 +71,13 @@ public class SpecificGameController {
         return ResponseEntity.ok(specificGames);
     }
 
-    // Update specific game availability
+    /**
+     * Updates the availability status of a specific game.
+     *
+     * @param serialNumber   the serial number of the specific game to update
+     * @param newAvailability the new availability status to set
+     * @return a ResponseEntity with the updated SpecificGameResponseDto
+     */
     @PutMapping("/{serialNumber}/availability")
     public ResponseEntity<SpecificGameResponseDto> updateAvailability(
             @PathVariable int serialNumber,
@@ -66,12 +86,18 @@ public class SpecificGameController {
         return ResponseEntity.ok(convertToDto(specificGame));
     }
 
-    // Add a specific game to an order
+    /**
+     * Adds a specific game to an order.
+     *
+     * @param serialNumber the serial number of the specific game to add to the order
+     * @param orderId the ID of the order to add the specific game to
+     * @return a ResponseEntity containing a list of SpecificGameResponseDtos associated with the updated order
+     */
     @PutMapping("/{serialNumber}/addToOrder")
     public ResponseEntity<List<SpecificGameResponseDto>> addSpecificGameToOrder(
             @PathVariable int serialNumber,
             @RequestParam int orderId) {
-        SpecificOrder order = specificOrderService.getSpecificOrderById(orderId);
+        SpecificOrder order = specificOrderService.getOrderById(orderId);
         List<SpecificGame> updatedSpecificGames = specificGameService.addSpecificGameToOrder(serialNumber, order);
         List<SpecificGameResponseDto> responseDtos = updatedSpecificGames.stream()
                 .map(this::convertToDto)
@@ -79,12 +105,18 @@ public class SpecificGameController {
         return ResponseEntity.ok(responseDtos);
     }
 
-    // Remove a specific game from an order
+    /**
+     * Removes a specific game from an order.
+     *
+     * @param serialNumber the serial number of the specific game to remove from the order
+     * @param orderId the ID of the order from which to remove the specific game
+     * @return a ResponseEntity containing a list of SpecificGameResponseDtos associated with the updated order
+     */
     @PutMapping("/{serialNumber}/removeFromOrder")
     public ResponseEntity<List<SpecificGameResponseDto>> removeSpecificGameFromOrder(
             @PathVariable int serialNumber,
             @RequestParam int orderId) {
-        SpecificOrder order = specificOrderService.getSpecificOrderById(orderId);
+        SpecificOrder order = specificOrderService.getOrderById(orderId);
         List<SpecificGame> updatedSpecificGames = specificGameService.removeSpecificGameFromOrder(serialNumber, order);
         List<SpecificGameResponseDto> responseDtos = updatedSpecificGames.stream()
                 .map(this::convertToDto)
@@ -92,14 +124,24 @@ public class SpecificGameController {
         return ResponseEntity.ok(responseDtos);
     }
 
-    // Delete a specific game by serial number
+    /**
+     * Deletes a specific game by its serial number.
+     *
+     * @param serialNumber the serial number of the specific game to delete
+     * @return a ResponseEntity with no content after successful deletion
+     */
     @DeleteMapping("/{serialNumber}")
     public ResponseEntity<Void> deleteSpecificGame(@PathVariable int serialNumber) {
         specificGameService.deleteSpecificGame(serialNumber);
         return ResponseEntity.noContent().build();
     }
 
-    // Helper method to convert SpecificGame to SpecificGameResponseDto
+    /**
+     * Helper method to convert a SpecificGame entity to a SpecificGameResponseDto.
+     *
+     * @param specificGame the SpecificGame entity to convert
+     * @return the converted SpecificGameResponseDto
+     */
     private SpecificGameResponseDto convertToDto(SpecificGame specificGame) {
         return new SpecificGameResponseDto(
                 specificGame.getAvailability(),

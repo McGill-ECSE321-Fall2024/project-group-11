@@ -8,7 +8,7 @@ import ca.mcgill.ecse321.videogamessystem.service.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,7 +29,6 @@ public class GameController {
     public GameResponseDto createGame(@Valid @RequestBody GameRequestDto gameRequestDto) {
         Game game = gameService.createGame(
                 gameRequestDto.getDescription(),
-                0,  // Stock quantity is initially set to 0 or can be managed separately.
                 gameRequestDto.getPrice(),
                 gameRequestDto.getTitle(),
                 gameRequestDto.getCategory(),
@@ -73,7 +72,6 @@ public class GameController {
         Game updatedGame = gameService.updateGame(
                 id,
                 gameRequestDto.getDescription(),
-                0,  // Assuming stock quantity management is handled separately.
                 gameRequestDto.getPrice(),
                 gameRequestDto.getTitle(),
                 gameRequestDto.getCategory()

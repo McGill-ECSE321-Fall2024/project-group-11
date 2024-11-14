@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/staff")
@@ -25,7 +26,7 @@ public class StaffController {
      * @return a StaffResponseDto containing the created staff's information.
      */
     @PostMapping
-    public StaffResponseDto createStaff(@RequestBody StaffRequestDto staffRequestDto) {
+    public StaffResponseDto createStaff(@Valid @RequestBody StaffRequestDto staffRequestDto) {
         Staff staff = staffService.createStaff(
                 staffRequestDto.getUserName(),
                 staffRequestDto.getEmail(),
