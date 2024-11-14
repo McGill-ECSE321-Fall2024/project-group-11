@@ -12,13 +12,16 @@ import ca.mcgill.ecse321.videogamessystem.repository.StaffRepository;
 @Service
 public class StaffService {
 
+    @Autowired
     private StaffRepository staffRepository;
 
-    @Autowired
-    public StaffService(StaffRepository staffRepository) {
-        this.staffRepository = staffRepository;
-    }
-
+    /**
+     * @param userName
+     * @param email
+     * @param password
+     * @param isAdmin
+     * @return
+     */
     @Transactional
     public Staff createStaff(String userName, String email, String password, boolean isAdmin) {
         if (userName == null || userName.trim().isEmpty()) {
@@ -41,6 +44,10 @@ public class StaffService {
         return staffRepository.save(staff);
     }
 
+    /**
+     * @param id
+     * @return
+     */
     @Transactional
     public Staff getStaffById(Long id) {
         Staff staff = staffRepository.findStaffById(id);
@@ -50,6 +57,10 @@ public class StaffService {
         return staff;
     }
 
+    /**
+     * @param userName
+     * @return
+     */
     @Transactional
     public Staff getStaffByUserName(String userName) {
         if (userName == null || userName.trim().isEmpty()) {
@@ -58,6 +69,10 @@ public class StaffService {
         return staffRepository.findStaffByUserName(userName);
     }
 
+    /**
+     * @param email
+     * @return
+     */
     @Transactional
     public Staff getStaffByEmail(String email) {
         if (email == null || email.trim().isEmpty()) {
@@ -66,11 +81,20 @@ public class StaffService {
         return staffRepository.findStaffByEmail(email);
     }
 
+    /**
+     * @param isAdmin
+     * @return
+     */
     @Transactional
     public List<Staff> getStaffByAdmin(boolean isAdmin) {
         return staffRepository.findStaffByAdmin(isAdmin);
     }
 
+    /**
+     * @param id
+     * @param newUserName
+     * @return
+     */
     @Transactional
     public Staff updateStaffUserName(Long id, String newUserName) {
         Staff staff = staffRepository.findStaffById(id);
@@ -88,6 +112,11 @@ public class StaffService {
         return staffRepository.save(staff);
     }
 
+    /**
+     * @param id
+     * @param newEmail
+     * @return
+     */
     @Transactional
     public Staff updateStaffEmail(Long id, String newEmail) {
         Staff staff = staffRepository.findStaffById(id);
@@ -105,6 +134,10 @@ public class StaffService {
         return staffRepository.save(staff);
     }
 
+    /**
+     * @param id
+     * @return
+     */
     @Transactional
     public Staff deleteStaff(Long id) {
         Staff staff = staffRepository.findStaffById(id);
@@ -116,6 +149,9 @@ public class StaffService {
         return staff;
     }
 
+    /**
+     * @return
+     */
     @Transactional
     public List<Staff> getAllStaff() {
         return toList(staffRepository.findAll());

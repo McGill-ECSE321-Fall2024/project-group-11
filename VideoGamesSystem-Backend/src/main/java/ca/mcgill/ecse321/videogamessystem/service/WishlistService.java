@@ -16,11 +16,10 @@ public class WishlistService {
     @Autowired
     private WishlistRepository wishlistRepository;
 
-    @Autowired
-    public WishlistService(WishlistRepository wishlistRepository) {
-        this.wishlistRepository = wishlistRepository;
-    }
-
+    /**
+     * @param customer
+     * @return
+     */
     @Transactional
     public Wishlist createWishlist(Customer customer) {
         if (customer == null) {
@@ -36,6 +35,10 @@ public class WishlistService {
         return wishlistRepository.save(wishlist);
     }
 
+    /**
+     * @param id
+     * @return
+     */
     @Transactional
     public Wishlist getWishlistById(Long id) {
         Wishlist wishlist = wishlistRepository.findWishlistById(id);
@@ -45,6 +48,10 @@ public class WishlistService {
         return wishlist;
     }
 
+    /**
+     * @param customer
+     * @return
+     */
     @Transactional
     public Wishlist getWishlistByCustomer(Customer customer) {
         if (customer == null) {
@@ -53,6 +60,11 @@ public class WishlistService {
         return wishlistRepository.findWishlistByCustomer(customer);
     }
 
+    /**
+     * @param id
+     * @param nbOfItems
+     * @return
+     */
     @Transactional
     public Wishlist updateWishlistNbOfItems(Long id, int nbOfItems) {
         if (nbOfItems < 0) {
@@ -68,6 +80,10 @@ public class WishlistService {
         return wishlistRepository.save(wishlist);
     }
 
+    /**
+     * @param id
+     * @return
+     */
     @Transactional
     public Wishlist deleteWishlist(Long id) {
         Wishlist wishlist = wishlistRepository.findWishlistById(id);
@@ -80,6 +96,9 @@ public class WishlistService {
         return wishlist;
     }
 
+    /**
+     * @return
+     */
     @Transactional
     public List<Wishlist> getAllWishlists() {
         return toList(wishlistRepository.findAll());

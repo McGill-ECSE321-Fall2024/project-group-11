@@ -25,6 +25,14 @@ public class CustomerService {
             "A-Z]{2,7}$";
     
     // Create a new customer
+    /**
+     * @param userName
+     * @param email
+     * @param password
+     * @param phoneNumber
+     * @param address
+     * @return 
+     */
     @Transactional
     public Customer createCustomer(String userName, String email, String password, int phoneNumber, String address) {
         // Validation logic can be added here (e.g., check if email or username is already taken)
@@ -64,6 +72,10 @@ public class CustomerService {
     }
 
     // Retrieve customer by ID
+    /**
+     * @param id
+     * @return
+     */
     @Transactional
     public Customer getCustomerById(Long id) {
         Optional<Customer> customer = customerRepository.findById(id);
@@ -71,30 +83,54 @@ public class CustomerService {
     }
 
     // Retrieve customer by username
+    /**
+     * @param userName
+     * @return
+     */
     @Transactional
     public Customer getCustomerByUserName(String userName) {
         return customerRepository.findCustomerByUserName(userName);
     }
 
     // Retrieve customer by email
+    /**
+     * @param email
+     * @return
+     */
     @Transactional
     public Customer getCustomerByEmail(String email) {
         return customerRepository.findCustomerByEmail(email);
     }
 
     // Retrieve customer by phone number
+    /**
+     * @param phoneNumber
+     * @return
+     */
     @Transactional
     public Customer getCustomerByPhoneNumber(int phoneNumber) {
         return customerRepository.findCustomerByPhoneNumber(phoneNumber);
     }
 
     // Retrieve customers by address
+    /**
+     * @param address
+     * @return
+     */
     @Transactional
     public List<Customer> getCustomersByAddress(String address) {
         return customerRepository.findCustomerByAdress(address);
     }
 
     // Update customer details
+    /**
+     * @param id
+     * @param newUserName
+     * @param newEmail
+     * @param newPhoneNumber
+     * @param newAddress
+     * @return
+     */
     @Transactional
     public Customer updateCustomer(Long id, String newUserName, String newEmail, int newPhoneNumber, String newAddress) {
         Customer customer = getCustomerById(id);
@@ -111,8 +147,14 @@ public class CustomerService {
         return customerRepository.save(customer);
     }
 
+    
      // Update customer username
-     @Transactional
+     /**
+     * @param id
+     * @param newUserName
+     * @return
+     */
+    @Transactional
      public Customer updateCustomerUserName(Long id, String newUserName) {
         Customer customer = getCustomerById(id);
         if (newUserName == null || newUserName.trim().isEmpty()) {
@@ -125,7 +167,13 @@ public class CustomerService {
         return customerRepository.save(customer);
     }
 
+    
     // Update customer email
+    /**
+     * @param id
+     * @param newEmail
+     * @return
+     */
     @Transactional
     public Customer updateCustomerEmail(Long id, String newEmail) {
         Customer customer = getCustomerById(id);
@@ -140,6 +188,11 @@ public class CustomerService {
     }
 
     // Update customer phone number
+    /**
+     * @param id
+     * @param newPhoneNumber
+     * @return
+     */
     @Transactional
     public Customer updateCustomerPhoneNumber(Long id, int newPhoneNumber) {
         Customer customer = getCustomerById(id);
@@ -148,6 +201,11 @@ public class CustomerService {
     }
 
     // Update customer address
+    /**
+     * @param id
+     * @param newAddress
+     * @return
+     */
     @Transactional
     public Customer updateCustomerAddress(Long id, String newAddress) {
         Customer customer = getCustomerById(id);
@@ -156,6 +214,9 @@ public class CustomerService {
     }
 
     // Delete a customer by ID
+    /**
+     * @param id
+     */
     @Transactional
     public void deleteCustomer(Long id) {
         Customer customer = getCustomerById(id);
@@ -163,12 +224,19 @@ public class CustomerService {
     }
 
     // Retrieve all customers
+    /**
+     * @return
+     */
     @Transactional
     public List<Customer> getAllCustomers() {
         return (List<Customer>) customerRepository.findAll();
     }
 
     // get customer by review
+    /**
+     * @param review
+     * @return
+     */
     @Transactional
     public Customer getCustomerByReview(Review review) {
         Customer customer = review.getCustomer();
