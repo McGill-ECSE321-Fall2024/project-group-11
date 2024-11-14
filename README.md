@@ -55,3 +55,24 @@ This deliverable includes:
 
 Each team member contributed to the project through their assigned roles, ensuring that all tasks for Deliverable 1 were completed efficiently and on time.
 
+
+
+# Deliverable 2: Backend Services, Behaviour Modelling, and Testin
+
+You can see the Deliverable Report here: [Deliverable2](https://github.com/McGill-ECSE321-Fall2024/project-group-11/wiki/Deliverable2)
+
+
+For Deliverable 2, we will implement backend services using Java Spring to provide RESTful HTTP endpoints for all use cases, supported by a persistence layer from Deliverable 1. This includes creating a software quality assurance plan, achieving high test coverage through unit and integration testing with JUnit, and documenting our testing and quality assurance practices. A build system will be set up to automate compilation, testing, and coverage reporting. We’ll use GitHub’s issue tracking for project management and document our progress, team roles, and key design decisions in a project report linked in the README file.
+
+## Team Members and Roles
+
+| Name            | Role                 | Hours                            | Contribution|
+|-----------------|----------------------|----------------------------------|----------------------------------|
+| Emile Labrunie   | Management and Development | 32hours  | Manage Wiki pages,manage table of contents,Re did the UML diagram,implemented repository , DTo and Controller Files|
+|  Paolo Lahoud| Development and Testing  | 28 hours |Schedule meetings, Unit testing ,Integration Testing, Dto files correction   |
+| Rami El Nawam | Development and Testing    | 29 hours | Meeting Minutes, Re did Umple code, Services files correction, Unit Testing, Integration Testing|
+| Jeffrey Nahas  | Development and Testing     | 33 hours | created data base again, and ran Tests, implemented servoces , DTo and Controller Files,testing |
+|  Yanzhe Zhang|Development and Testing    | 35 hours | Persistence Layer with model files and repository files, did and debugged services files, Testing |
+
+Each team member contributed to the project through their assigned roles, ensuring that all tasks for Deliverable 1 were completed efficiently and on time.
+
