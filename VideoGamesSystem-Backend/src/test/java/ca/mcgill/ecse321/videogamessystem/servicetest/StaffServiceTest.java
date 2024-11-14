@@ -49,9 +49,9 @@ public class StaffServiceTest {
     @Test
     public void testCreateStaffInvalidEmail() {
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            staffService.createStaff("staff2", "", "password123", true);
+            staffService.createStaff("staff2", " ", "password123", false);
         });
-        assertEquals("Email cannot be empty.", exception.getMessage());
+        assertEquals("no empty email", exception.getMessage());
     }
 
     @Test
@@ -100,7 +100,7 @@ public class StaffServiceTest {
 
     @Test
     public void testDeleteStaff() {
-        Staff staff = staffService.createStaff("staff6", "staff6@example.com", "password123", true);
+        Staff staff = staffService.createStaff("staff6", "staff6@example.com", "password123", false);
         Long id = staff.getId();
 
         Staff deletedStaff = staffService.deleteStaff(id);
@@ -127,6 +127,6 @@ public class StaffServiceTest {
             staffService.createStaff("employee3", "anotheremail@example.com", "newpass123", false);
         });
 
-        assertEquals("Username already exists.", exception.getMessage());
+        assertEquals("Username already exists", exception.getMessage());
     }
 }

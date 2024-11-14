@@ -52,6 +52,9 @@ public class StaffService {
         if (staffRepository.findStaffByEmail(email) != null) {
             throw new IllegalArgumentException("Email already exists");
         }
+        if (staffRepository.findStaffByUserName(userName) != null) {
+            throw new IllegalArgumentException("UserName already exists");
+        }
         //password check
         if (password == null || password.trim().length() < 4){
             throw new IllegalArgumentException("password must be more than 4 characters");
