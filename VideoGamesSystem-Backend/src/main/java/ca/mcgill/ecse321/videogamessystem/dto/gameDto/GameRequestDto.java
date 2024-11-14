@@ -2,15 +2,25 @@ package ca.mcgill.ecse321.videogamessystem.dto.GameDto;
 
 import ca.mcgill.ecse321.videogamessystem.model.Game.Category;
 import ca.mcgill.ecse321.videogamessystem.model.Game.ConsoleType;
-
-//import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
 public class GameRequestDto {
-    //@NotBlank(message="Cannot be blank")
+
+    @NotBlank(message = "Description cannot be blank.")
     private String description;
+
+    @Positive(message = "Price must be a positive number.")
     private int price;
+
+    @NotBlank(message = "Title cannot be blank.")
     private String title;
+
+    @NotNull(message = "Category must be specified.")
     private Category category;
+
+    @NotNull(message = "Console type must be specified.")
     private ConsoleType consoleType;
 
     //maybe add fo
