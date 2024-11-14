@@ -192,7 +192,7 @@ public class StaffService {
         boss.setStaffType(false);
         staff.setStaffType(true);
         staffRepository.save(boss);
-        return staffRepository.save(staff);;
+        return staffRepository.save(staff);
     }
 
     /**

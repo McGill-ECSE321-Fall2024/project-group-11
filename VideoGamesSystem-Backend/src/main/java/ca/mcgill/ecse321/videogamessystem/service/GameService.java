@@ -31,7 +31,6 @@ public class GameService {
 
     /**
      * @param description
-     * @param stockQuantity
      * @param price
      * @param title
      * @param category
@@ -39,12 +38,9 @@ public class GameService {
      * @return
      */
     @Transactional
-    public Game createGame(String description, int stockQuantity, int price, String title, Category category, ConsoleType consoleType) {
+    public Game createGame(String description, int price, String title, Category category, ConsoleType consoleType) {
         if (description == null || description.trim().isEmpty()) {
             throw new IllegalArgumentException("Description cannot be empty.");
-        }
-        if (stockQuantity < 0) {
-            throw new IllegalArgumentException("Stock quantity cannot be negative.");
         }
         if (price < 0) {
             throw new IllegalArgumentException("Price cannot be negative.");
@@ -164,14 +160,13 @@ public class GameService {
     /**
      * @param id
      * @param description
-     * @param stockQuantity
      * @param price
      * @param title
      * @param category
      * @return
      */
     @Transactional
-    public Game updateGame(long id, String description, int stockQuantity, int price, String title, Category category){
+    public Game updateGame(long id, String description, int price, String title, Category category){
         Game game = gameRepository.findGameById(id);
         if (game == null) {
             throw new IllegalArgumentException("invalid id to update description");
