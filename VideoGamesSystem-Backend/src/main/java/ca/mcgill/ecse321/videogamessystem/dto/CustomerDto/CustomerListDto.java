@@ -10,8 +10,8 @@ public class CustomerListDto {
         this.customers = customers;
     }
 
-    // Default protected constructor (for potential use by frameworks)
-    protected CustomerListDto() {
+    public CustomerListDto() {
+        super();
     }
 
     // Getter for the list of games
