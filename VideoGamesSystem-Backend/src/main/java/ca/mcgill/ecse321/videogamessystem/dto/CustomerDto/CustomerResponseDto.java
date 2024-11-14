@@ -15,7 +15,8 @@ public class CustomerResponseDto {
 
 
 
-    protected CustomerResponseDto() {
+    public CustomerResponseDto() {
+        super();
     }
 
     public CustomerResponseDto(Customer model) {
