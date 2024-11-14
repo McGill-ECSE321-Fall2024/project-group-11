@@ -1,10 +1,6 @@
-package ca.mcgill.ecse321.videogamessystem;
+package ca.mcgill.ecse321.videogamessystem.servicetest;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
+import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -111,7 +107,7 @@ public class StaffServiceTest {
 
         assertNotNull(deletedStaff);
         assertEquals("staff6", deletedStaff.getUserName());
-        assertNull(staffRepository.findStaffById(id)); // Ensure staff is deleted from the repository
+        assertNull(staffRepository.findStaffById(id));
     }
 
     @Test
@@ -120,5 +116,17 @@ public class StaffServiceTest {
             staffService.deleteStaff(9999L);
         });
         assertEquals("Staff not found.", exception.getMessage());
+    }
+
+    // New test for creating duplicate employee based on username
+    @Test
+    public void testCreateDuplicateEmployee() {
+        Staff existingEmployee = staffService.createStaff("employee3", "employee3@example.com", "password123", false);
+        
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            staffService.createStaff("employee3", "anotheremail@example.com", "newpass123", false);
+        });
+
+        assertEquals("Username already exists.", exception.getMessage());
     }
 }

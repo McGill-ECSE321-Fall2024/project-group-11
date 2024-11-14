@@ -1,4 +1,4 @@
-package ca.mcgill.ecse321.videogamessystem;
+package ca.mcgill.ecse321.videogamessystem.servicetest;
 
 import ca.mcgill.ecse321.videogamessystem.model.Customer;
 import ca.mcgill.ecse321.videogamessystem.model.Review;

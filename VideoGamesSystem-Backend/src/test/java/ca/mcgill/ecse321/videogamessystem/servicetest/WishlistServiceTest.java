@@ -1,10 +1,6 @@
-package ca.mcgill.ecse321.videogamessystem;
+package ca.mcgill.ecse321.videogamessystem.servicetest;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
+import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,7 +29,6 @@ public class WishlistServiceTest {
 
     @BeforeEach
     public void setUp() {
-        // Clear database and set up a sample customer for testing
         wishlistRepository.deleteAll();
         customerRepository.deleteAll();
 
@@ -52,10 +47,8 @@ public class WishlistServiceTest {
 
     @Test
     public void testCreateWishlist() {
-        // Create wishlist
         Wishlist wishlist = wishlistService.createWishlist(customer);
 
-        // Assertions
         assertNotNull(wishlist);
         assertEquals(customer.getId(), wishlist.getCustomer().getId());
         assertEquals(0, wishlist.getNbOfItems());
@@ -63,38 +56,27 @@ public class WishlistServiceTest {
 
     @Test
     public void testCreateWishlistForCustomerWithExistingWishlist() {
-        // Create an initial wishlist for the customer
         wishlistService.createWishlist(customer);
 
-        // Attempt to create another wishlist for the same customer
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             wishlistService.createWishlist(customer);
         });
-
-        // Verify the exception message
         assertEquals("Customer already has a wishlist.", exception.getMessage());
     }
 
     @Test
     public void testCreateWishlistWithNullCustomer() {
-        // Attempt to create a wishlist with a null customer
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             wishlistService.createWishlist(null);
         });
-
-        // Verify the exception message
         assertEquals("Customer cannot be null.", exception.getMessage());
     }
 
     @Test
     public void testGetWishlistById() {
-        // Create and save a wishlist to retrieve
         Wishlist wishlist = wishlistService.createWishlist(customer);
-
-        // Retrieve wishlist by ID
         Wishlist retrievedWishlist = wishlistService.getWishlistById(wishlist.getId());
 
-        // Assertions
         assertNotNull(retrievedWishlist);
         assertEquals(wishlist.getNbOfItems(), retrievedWishlist.getNbOfItems());
         assertEquals(customer.getId(), retrievedWishlist.getCustomer().getId());
@@ -102,71 +84,117 @@ public class WishlistServiceTest {
 
     @Test
     public void testGetWishlistByCustomer() {
-        // Create and save a wishlist
         wishlistService.createWishlist(customer);
-
-        // Retrieve wishlist by customer
         Wishlist retrievedWishlist = wishlistService.getWishlistByCustomer(customer);
 
-        // Assertions
         assertNotNull(retrievedWishlist);
         assertEquals(customer.getId(), retrievedWishlist.getCustomer().getId());
     }
 
     @Test
     public void testUpdateWishlistNbOfItems() {
-        // Create and save a wishlist
         Wishlist wishlist = wishlistService.createWishlist(customer);
-
-        // Update number of items
         int newNbOfItems = 5;
         Wishlist updatedWishlist = wishlistService.updateWishlistNbOfItems(wishlist.getId(), newNbOfItems);
 
-        // Assertions
         assertNotNull(updatedWishlist);
         assertEquals(newNbOfItems, updatedWishlist.getNbOfItems());
     }
 
     @Test
     public void testUpdateWishlistNbOfItemsWithNegativeValue() {
-        // Create and save a wishlist
         Wishlist wishlist = wishlistService.createWishlist(customer);
 
-        // Attempt to update number of items with a negative value
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             wishlistService.updateWishlistNbOfItems(wishlist.getId(), -1);
         });
-
-        // Verify the exception message
         assertEquals("Number of items cannot be negative.", exception.getMessage());
     }
 
     @Test
     public void testDeleteExistingWishlist() {
-        // Create and save a wishlist to delete
         Wishlist wishlist = wishlistService.createWishlist(customer);
-
-        // Delete the wishlist
         Wishlist deletedWishlist = wishlistService.deleteWishlist(wishlist.getId());
 
-        // Assertions
-        assertNotNull(deletedWishlist); // Check that we have a non-null return
-        assertEquals(wishlist.getId(), deletedWishlist.getId()); // Confirm the correct wishlist was deleted
-        assertNull(deletedWishlist.getCustomer()); // Customer should be null after deletion
-        assertEquals(wishlist.getNbOfItems(), deletedWishlist.getNbOfItems()); // Check that number of items matches
-}
+        assertNotNull(deletedWishlist);
+        assertEquals(wishlist.getId(), deletedWishlist.getId());
+        assertNull(wishlistRepository.findById(wishlist.getId()).orElse(null));
+    }
 
     @Test
     public void testDeleteNonExistingWishlist() {
-        // Attempt to delete a non-existing wishlist
         Long nonExistingId = 9999L;
 
-        // Expect an exception due to non-existing wishlist
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             wishlistService.deleteWishlist(nonExistingId);
         });
-
-        // Verify the exception message
         assertEquals("Wishlist not found.", exception.getMessage());
+    }
+
+    // Additional Tests
+
+    @Test
+    public void testAddItemsToWishlist() {
+        Wishlist wishlist = wishlistService.createWishlist(customer);
+        Wishlist updatedWishlist = wishlistService.updateWishlistNbOfItems(wishlist.getId(), 3);
+
+        assertEquals(3, updatedWishlist.getNbOfItems());
+    }
+
+    @Test
+    public void testRemoveItemsFromWishlist() {
+        Wishlist wishlist = wishlistService.createWishlist(customer);
+        wishlistService.updateWishlistNbOfItems(wishlist.getId(), 5); // Add items
+        Wishlist updatedWishlist = wishlistService.updateWishlistNbOfItems(wishlist.getId(), 2); // Reduce items
+
+        assertEquals(2, updatedWishlist.getNbOfItems());
+    }
+
+    @Test
+    public void testGetWishlistByInvalidCustomer() {
+        Customer newCustomer = new Customer();
+        newCustomer.setUserName("Another User");
+        newCustomer.setEmail("another.user@gmail.com");
+        newCustomer.setPassword("password123");
+        newCustomer = customerRepository.save(newCustomer); // Save the new customer
+
+        // Attempt to retrieve a wishlist that doesn't exist for this customer
+        Wishlist retrievedWishlist = wishlistService.getWishlistByCustomer(newCustomer);
+        assertNull(retrievedWishlist, "Expected null as the customer has no wishlist.");
+    }
+
+    @Test
+    public void testExcessiveNbOfItemsInWishlist() {
+        Wishlist wishlist = wishlistService.createWishlist(customer);
+        int largeNbOfItems = 1000;
+        Wishlist updatedWishlist = wishlistService.updateWishlistNbOfItems(wishlist.getId(), largeNbOfItems);
+
+        assertEquals(largeNbOfItems, updatedWishlist.getNbOfItems(), "NbOfItems should be updated without limits");
+    }
+
+    @Test
+    public void testCreateWishlistForMultipleCustomers() {
+        Wishlist wishlist1 = wishlistService.createWishlist(customer);
+        
+        Customer anotherCustomer = new Customer();
+        anotherCustomer.setUserName("Second User");
+        anotherCustomer.setEmail("second.user@gmail.com");
+        anotherCustomer.setPassword("password123");
+        anotherCustomer = customerRepository.save(anotherCustomer);
+        
+        Wishlist wishlist2 = wishlistService.createWishlist(anotherCustomer);
+
+        assertNotNull(wishlist1);
+        assertNotNull(wishlist2);
+        assertNotEquals(wishlist1.getId(), wishlist2.getId());
+    }
+
+    @Test
+    public void testClearWishlist() {
+        Wishlist wishlist = wishlistService.createWishlist(customer);
+        wishlistService.updateWishlistNbOfItems(wishlist.getId(), 5);
+        
+        Wishlist clearedWishlist = wishlistService.updateWishlistNbOfItems(wishlist.getId(), 0); // Set to 0 to clear
+        assertEquals(0, clearedWishlist.getNbOfItems());
     }
 }

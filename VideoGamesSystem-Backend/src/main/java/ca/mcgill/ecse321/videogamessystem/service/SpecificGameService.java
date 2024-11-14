@@ -152,8 +152,7 @@ public class SpecificGameService {
         return specificGameRepository.findSpecificGameBySpecificOrder(order);
     }
 
-    // remove specific game from order
-    public List<SpecificGame> removeGameFromOrder(int specificGameID, SpecificOrder order) {
+    public List<SpecificGame> removeSpecificGameFromOrder(int specificGameID, SpecificOrder order) {
         // Retrieve the specific game by serial number
         SpecificGame specificCopy = specificGameRepository.findSpecificGameBySerialNumber(specificGameID);
         if (specificCopy == null) {
@@ -162,17 +161,18 @@ public class SpecificGameService {
         if (order == null) {
             throw new IllegalArgumentException("order cannot be null");
         }
-    
+
         // Check if the specific game is indeed associated with the given order
         if (!order.equals(specificCopy.getSpecificOrder())) {
             throw new IllegalArgumentException("the specific game was not in the order provided.");
         }
-    
+
         // Unset the order from the specific game and save the change
         specificCopy.setSpecificOrder(null);
         specificGameRepository.save(specificCopy);
-    
-        // Return the updated list of games associated with the order (should no longer include this game)
+
+        // Return the updated list of games associated with the order (should no longer
+        // include this game)
         return specificGameRepository.findSpecificGameBySpecificOrder(order);
     }
 
