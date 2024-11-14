@@ -127,6 +127,6 @@ public class StaffServiceTest {
             staffService.createStaff("employee3", "anotheremail@example.com", "newpass123", false);
         });
 
-        assertEquals("Username already exists", exception.getMessage());
+        assertEquals("UserName already exists", exception.getMessage());
     }
 }
