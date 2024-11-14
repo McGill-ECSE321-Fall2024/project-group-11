@@ -37,7 +37,7 @@ public class SpecificGame
 
   //------------------------
   // CONSTRUCTOR
-  //------------------------
+  
 
   public SpecificGame(int aSerialNumber, boolean aAvailability)
   {

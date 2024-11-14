@@ -25,11 +25,12 @@ public class PromotionService {
     @Autowired
     private GameRepository gameRepository;
 
-    @Autowired
-    private void setPromotionRepository(PromotionRepository promotionRepository) {
-        this.promotionRepository = promotionRepository;
-    }
-
+    /**
+     * @param percentage
+     * @param startDate
+     * @param endDate
+     * @return
+     */
     @Transactional
     public Promotion createPromotion(int percentage, Date startDate, Date endDate){
         Date now = Date.valueOf(LocalDate.now());
@@ -52,6 +53,10 @@ public class PromotionService {
     }
 
 
+    /**
+     * @param id
+     * @return
+     */
     @Transactional
     public Promotion getPromotionById(Long id) {
         Promotion promotion = this.promotionRepository.findPromotionById(id);
@@ -62,29 +67,49 @@ public class PromotionService {
     }
     
 
+    /**
+     * @param startDate
+     * @return
+     */
     @Transactional
     public List<Promotion> getPromotionByStartdate(Date startDate){
         return this.promotionRepository.findPromotionByStartDate(startDate);
     }
 
 
+    /**
+     * @param endDate
+     * @return
+     */
     @Transactional
     public List<Promotion> getPromotionByEnddate(Date endDate){
         return this.promotionRepository.findPromotionByEndDate(endDate);
     }
 
 
+    /**
+     * @param percentage
+     * @return
+     */
     @Transactional
     public List<Promotion> getPromotionbyPercentage(int percentage){
         return this.promotionRepository.findPromotionByPercentage(percentage);
     }
 
 
+    /**
+     * @return
+     */
     @Transactional
     public List<Promotion> getAllPromotion() {
         return toList(this.promotionRepository.findAll());
     }
 
+    /**
+     * @param id
+     * @param percentage
+     * @return
+     */
     @Transactional
     public Promotion updatePromotioPercentage(Long id, int percentage){
         Promotion promotion = promotionRepository.findPromotionById(id);
@@ -96,6 +121,11 @@ public class PromotionService {
         return promotionRepository.save(promotion);
     }
 
+    /**
+     * @param id
+     * @param startDate
+     * @return
+     */
     @Transactional
     public Promotion updatePromotionStartDate(Long id, Date startDate){
         Promotion promotion = promotionRepository.findPromotionById(id);
@@ -108,6 +138,11 @@ public class PromotionService {
         return promotionRepository.save(promotion);
     }
 
+    /**
+     * @param id
+     * @param endDate
+     * @return
+     */
     @Transactional
     public Promotion updatePromotionEndDate(Long id, Date endDate){
         Promotion promotion = promotionRepository.findPromotionById(id);
@@ -121,6 +156,10 @@ public class PromotionService {
     }
 
     
+    /**
+     * @param id
+     * @return
+     */
     @Transactional
     public Promotion deletePromotion(Long id){
         Promotion exsistingpromotion = this.getPromotionById(id);
@@ -153,6 +192,10 @@ public class PromotionService {
 
 
 // is promotion available
+/**
+ * @param id
+ * @return
+ */
 public boolean promotionAvailable(Long id){
     boolean valid = false;
     Promotion promotion = promotionRepository.findPromotionById(id);

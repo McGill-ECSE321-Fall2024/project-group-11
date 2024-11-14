@@ -21,15 +21,15 @@ public class Staff extends Account
   //------------------------
   // CONSTRUCTOR
   //------------------------
+  
+    public Staff() {
+      super();
+  }
 
   public Staff(String aUserName, String aEmail, String aPassword, boolean isAdmin)
   {
     super(aUserName, aEmail, aPassword);
     admin = isAdmin;
-  }
-
-  public Staff(){
-    super();
   }
 
   //------------------------

@@ -28,7 +28,9 @@ public class CustomerRequestDto {
 
 
 
-    protected CustomerRequestDto(){}
+    public CustomerRequestDto(){
+        super();
+    }
 
 
     public CustomerRequestDto(String userName, String email, String password, int phoneNumber, String adress,Long wishlistId) {
