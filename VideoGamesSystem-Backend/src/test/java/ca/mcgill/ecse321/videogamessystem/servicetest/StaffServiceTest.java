@@ -103,12 +103,12 @@ public class StaffServiceTest {
         Staff staff = staffService.createStaff("staff6", "staff6@example.com", "password123", false);
         Long id = staff.getId();
 
-    //     Staff deletedStaff = staffService.deleteStaff(id);
+         Staff deletedStaff = staffService.deleteStaff(id);
 
-    //     assertNotNull(deletedStaff);
-    //     assertEquals("staff6", deletedStaff.getUserName());
-    //     assertNull(staffRepository.findStaffById(id));
-    // }
+         assertNotNull(deletedStaff);
+         assertEquals("staff6", deletedStaff.getUserName());
+         assertNull(staffRepository.findStaffById(id));
+    }
 
     @Test
     public void testDeleteNonExistentStaff() {
@@ -119,13 +119,13 @@ public class StaffServiceTest {
     }
 
     // New test for creating duplicate employee based on username
-    // @Test
-    // public void testCreateDuplicateEmployee() {
-    //     Staff existingEmployee = staffService.createStaff("employee3", "employee3@example.com", "password123", false);
+     @Test
+     public void testCreateDuplicateEmployee() {
+         Staff existingEmployee = staffService.createStaff("employee3", "employee3@example.com", "password123", false);
         
-    //     Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-    //         staffService.createStaff("employee3", "anotheremail@example.com", "newpass123", false);
-    //     });
+         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+             staffService.createStaff("employee3", "anotheremail@example.com", "newpass123", false);
+         });
 
         assertEquals("UserName already exists", exception.getMessage());
     }
