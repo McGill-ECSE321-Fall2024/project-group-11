@@ -32,10 +32,10 @@ class GameServiceTest {
 
     @Test
     public void testCreateGame_Success() {
-        Game mockGame = new Game("Adventure Game", 10, 50, "Mystic Quest", Category.Adventure, ConsoleType.PS4);
+        Game mockGame = new Game("Adventure Game", 50, "Mystic Quest", Category.Adventure, ConsoleType.PS4);
         when(gameRepository.save(any(Game.class))).thenReturn(mockGame);
 
-        Game createdGame = gameService.createGame("Adventure Game", 10, 50, "Mystic Quest", Category.Adventure, ConsoleType.PS4);
+        Game createdGame = gameService.createGame("Adventure Game", 50, "Mystic Quest", Category.Adventure, ConsoleType.PS4);
 
         assertNotNull(createdGame);
         assertEquals("Mystic Quest", createdGame.getTitle());
@@ -53,7 +53,7 @@ class GameServiceTest {
 
     @Test
     public void testGetGameById_Found() {
-        Game mockGame = new Game("Puzzle Game", 5, 30, "Puzzle Master", Category.Puzzle, ConsoleType.Switch);
+        Game mockGame = new Game("Puzzle Game", 30, "Puzzle Master", Category.Puzzle, ConsoleType.Switch);
         when(gameRepository.findGameById(1L)).thenReturn(mockGame);
 
         Game fetchedGame = gameService.getGameById(1L);
@@ -74,33 +74,33 @@ class GameServiceTest {
         assertEquals("Game not found.", exception.getMessage());
     }
 
-    @Test
-    public void testUpdateStockQuantity_Success() {
-        Game mockGame = new Game("Strategy Game", 5, 60, "War Tactics", Category.Strategy, ConsoleType.PC);
-        when(gameRepository.findGameById(1L)).thenReturn(mockGame);
-        when(gameRepository.save(any(Game.class))).thenReturn(mockGame);
+    // @Test
+    // public void testUpdateStockQuantity_Success() {
+    //     Game mockGame = new Game("Strategy Game", 60, "War Tactics", Category.Strategy, ConsoleType.PC);
+    //     when(gameRepository.findGameById(1L)).thenReturn(mockGame);
+    //     when(gameRepository.save(any(Game.class))).thenReturn(mockGame);
 
-        Game updatedGame = gameService.updateStockQuantity(1L, 8);
+    //     Game updatedGame = gameService.updateStockQuantity(1L, 8);
 
-        assertNotNull(updatedGame);
-        assertEquals(8, updatedGame.getStockQuantity());
-    }
+    //     assertNotNull(updatedGame);
+    //     assertEquals(8, updatedGame.getStockQuantity());
+    // }
 
-    @Test
-    public void testUpdateStockQuantity_Invalid() {
-        Game mockGame = new Game("Strategy Game", 5, 60, "War Tactics", Category.Strategy, ConsoleType.PC);
-        when(gameRepository.findGameById(1L)).thenReturn(mockGame);
+    // @Test
+    // public void testUpdateStockQuantity_Invalid() {
+    //     Game mockGame = new Game("Strategy Game", 60, "War Tactics", Category.Strategy, ConsoleType.PC);
+    //     when(gameRepository.findGameById(1L)).thenReturn(mockGame);
 
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            gameService.updateStockQuantity(1L, -10);
-        });
-        assertEquals("Stock quantity cannot be negative.", exception.getMessage());
-    }
+    //     Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+    //         gameService.updateStockQuantity(1L, -10);
+    //     });
+    //     assertEquals("Stock quantity cannot be negative.", exception.getMessage());
+    // }
 
     @Test
     public void testGetGamesByCategory() {
-        Game game1 = new Game("Racing Game", 10, 40, "Fast Lane", Category.Sports, ConsoleType.XBOX);
-        Game game2 = new Game("Basketball Game", 15, 35, "Hoops Hero", Category.Sports, ConsoleType.Switch);
+        Game game1 = new Game("Racing Game", 40, "Fast Lane", Category.Sports, ConsoleType.XBOX);
+        Game game2 = new Game("Basketball Game", 35, "Hoops Hero", Category.Sports, ConsoleType.Switch);
         
         when(gameRepository.findGameByCategory(Category.Sports)).thenReturn(List.of(game1, game2));
 
@@ -123,7 +123,7 @@ class GameServiceTest {
 
     @Test
     public void testUpdatePrice_Success() {
-        Game mockGame = new Game("Action Game", 20, 45, "Battlefield", Category.Action, ConsoleType.PC);
+        Game mockGame = new Game("Action Game", 45, "Battlefield", Category.Action, ConsoleType.PC);
         when(gameRepository.findGameById(1L)).thenReturn(mockGame);
         when(gameRepository.save(any(Game.class))).thenReturn(mockGame);
 
@@ -146,7 +146,7 @@ class GameServiceTest {
  
     @Test
     public void testDeleteGame_Success() {
-        Game mockGame = new Game("Party Game", 12, 20, "Party Stars", Category.Party, ConsoleType.Wii);
+        Game mockGame = new Game("Party Game", 20, "Party Stars", Category.Party, ConsoleType.Wii);
         when(gameRepository.findGameById(1L)).thenReturn(mockGame);
         doNothing().when(gameRepository).delete(mockGame);
 
@@ -167,29 +167,29 @@ class GameServiceTest {
         assertEquals("Game not found.", exception.getMessage());
     }
 
-    @Test
-    public void testCreateGame_WithLowStock() {
-        Game mockGame = new Game("Rare Game", 1, 100, "Rare Quest", Category.Adventure, ConsoleType.PS4);
-        when(gameRepository.save(any(Game.class))).thenReturn(mockGame);
+    // @Test
+    // public void testCreateGame_WithLowStock() {
+    //     Game mockGame = new Game("Rare Game", 100, "Rare Quest", Category.Adventure, ConsoleType.PS4);
+    //     when(gameRepository.save(any(Game.class))).thenReturn(mockGame);
 
-        Game createdGame = gameService.createGame("Rare Game", 1, 100, "Rare Quest", Category.Adventure, ConsoleType.PS4);
+    //     Game createdGame = gameService.createGame("Rare Game", 1, 100, "Rare Quest", Category.Adventure, ConsoleType.PS4);
 
-        assertNotNull(createdGame);
-        assertEquals(1, createdGame.getStockQuantity(), "Stock quantity should be set to 1 for limited games.");
-    }
+    //     assertNotNull(createdGame);
+    //     assertEquals(1, createdGame.getStockQuantity(), "Stock quantity should be set to 1 for limited games.");
+    // }
 
-    @Test
-    public void testCreateGame_InvalidStockQuantity() {
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            gameService.createGame("Negative Stock Game", -3, 25, "Impossible Quest", Category.Adventure, ConsoleType.PC);
-        });
-        assertEquals("Stock quantity cannot be negative.", exception.getMessage());
-    }
+    // @Test
+    // public void testCreateGame_InvalidStockQuantity() {
+    //     Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+    //         gameService.createGame("Negative Stock Game", 25, "Impossible Quest", Category.Adventure, ConsoleType.PC);
+    //     });
+    //     assertEquals("Stock quantity cannot be negative.", exception.getMessage());
+    // }
 
     @Test
     public void testGetAllGames() {
-        Game game1 = new Game("Action Game", 15, 40, "Battle Quest", Category.Action, ConsoleType.PS4);
-        Game game2 = new Game("Mystery Game", 8, 30, "Mystery Manor", Category.Adventure, ConsoleType.PC);
+        Game game1 = new Game("Action Game", 40, "Battle Quest", Category.Action, ConsoleType.PS4);
+        Game game2 = new Game("Mystery Game", 30, "Mystery Manor", Category.Adventure, ConsoleType.PC);
         
         when(gameRepository.findAll()).thenReturn(List.of(game1, game2));
 

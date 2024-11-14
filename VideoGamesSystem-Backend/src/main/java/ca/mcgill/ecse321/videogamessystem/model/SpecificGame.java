@@ -38,9 +38,6 @@ public class SpecificGame
   //------------------------
   // CONSTRUCTOR
   
-  public SpecificGame() {
-    // Leave empty; required by Hibernate
-  }
 
   public SpecificGame(int aSerialNumber, boolean aAvailability)
   {
