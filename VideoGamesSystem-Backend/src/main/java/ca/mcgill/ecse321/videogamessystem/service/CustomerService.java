@@ -53,7 +53,7 @@ public class CustomerService {
         }
         //password check
         if (password == null || password.trim().length() < 4){
-            
+            throw new IllegalArgumentException("password must be more than 4 characters");
         }
         //phoneNumber check
         if (phoneNumber < 1111)
