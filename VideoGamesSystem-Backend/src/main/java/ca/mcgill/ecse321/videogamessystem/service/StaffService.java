@@ -38,9 +38,6 @@ public class StaffService {
         }
         // Validation logic can be added here (e.g., check if email or username is already taken)
         //username check
-        if (staffRepository.findStaffByUserName(userName) != null) {
-            throw new IllegalArgumentException("Username already exists");
-        }
 
         //email check
         if (email == null || email.trim().length() == 0){
@@ -51,6 +48,9 @@ public class StaffService {
         }
         if (staffRepository.findStaffByEmail(email) != null) {
             throw new IllegalArgumentException("Email already exists");
+        }
+        if (staffRepository.findStaffByUserName(userName) != null) {
+            throw new IllegalArgumentException("UserName already exists");
         }
         //password check
         if (password == null || password.trim().length() < 4){
