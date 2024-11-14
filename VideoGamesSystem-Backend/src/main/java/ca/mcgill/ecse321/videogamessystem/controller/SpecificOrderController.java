@@ -25,7 +25,12 @@ public class SpecificOrderController {
     @Autowired
     private CustomerService customerService;
 
-    // Create a new order
+    /**
+     * Creates a new specific order based on the provided request DTO.
+     *
+     * @param orderRequestDto Data transfer object containing order details such as date, card number, and customer ID.
+     * @return ResponseEntity containing the created order data in a response DTO format.
+     */
     @PostMapping
     public ResponseEntity<SpecificOrderResponseDto> createSpecificOrder(@RequestBody SpecificOrderRequestDto orderRequestDto) {
         SpecificOrder order = specificOrderService.createSpecificOrder(
@@ -36,14 +41,23 @@ public class SpecificOrderController {
         return ResponseEntity.ok(convertToDto(order));
     }
 
-    // Get order by order number
+    /**
+     * Retrieves a specific order by its unique order number.
+     *
+     * @param orderNumber The unique number of the order to retrieve.
+     * @return ResponseEntity containing the retrieved order data in a response DTO format.
+     */
     @GetMapping("/{orderNumber}")
     public ResponseEntity<SpecificOrderResponseDto> getOrderById(@PathVariable int orderNumber) {
         SpecificOrder order = specificOrderService.getOrderById(orderNumber);
         return ResponseEntity.ok(convertToDto(order));
     }
 
-    // Get all orders
+    /**
+     * Retrieves all specific orders available in the system.
+     *
+     * @return ResponseEntity containing a list of all orders in response DTO format.
+     */
     @GetMapping
     public ResponseEntity<List<SpecificOrderResponseDto>> getAllOrders() {
         List<SpecificOrderResponseDto> orders = specificOrderService.getAllOrders()
@@ -53,7 +67,13 @@ public class SpecificOrderController {
         return ResponseEntity.ok(orders);
     }
 
-    // Update order date
+    /**
+     * Updates the date of an existing specific order.
+     *
+     * @param orderNumber   The unique number of the order to update.
+     * @param newOrderDate  The new date to set for the order.
+     * @return ResponseEntity containing the updated order data in a response DTO format.
+     */
     @PutMapping("/{orderNumber}/date")
     public ResponseEntity<SpecificOrderResponseDto> updateOrderDate(
             @PathVariable int orderNumber,
@@ -62,7 +82,13 @@ public class SpecificOrderController {
         return ResponseEntity.ok(convertToDto(order));
     }
 
-    // Update card number
+    /**
+     * Updates the card number associated with a specific order.
+     *
+     * @param orderNumber   The unique number of the order to update.
+     * @param newCardNumber The new card number to associate with the order.
+     * @return ResponseEntity containing the updated order data in a response DTO format.
+     */
     @PutMapping("/{orderNumber}/cardNumber")
     public ResponseEntity<SpecificOrderResponseDto> updateCardNumber(
             @PathVariable int orderNumber,
@@ -71,14 +97,24 @@ public class SpecificOrderController {
         return ResponseEntity.ok(convertToDto(order));
     }
 
-    // Delete an order
+    /**
+     * Deletes a specific order by its unique order number.
+     *
+     * @param orderNumber The unique number of the order to delete.
+     * @return ResponseEntity with a status indicating the order has been deleted.
+     */
     @DeleteMapping("/{orderNumber}")
     public ResponseEntity<Void> deleteOrder(@PathVariable int orderNumber) {
         specificOrderService.deleteOrder(orderNumber);
         return ResponseEntity.noContent().build();
     }
 
-    // Get orders by customer ID
+    /**
+     * Retrieves all orders associated with a specific customer by customer ID.
+     *
+     * @param customerId The ID of the customer whose orders are to be retrieved.
+     * @return ResponseEntity containing a list of the customer's orders in response DTO format.
+     */
     @GetMapping("/customer/{customerId}")
     public ResponseEntity<List<SpecificOrderResponseDto>> getOrdersByCustomer(@PathVariable Long customerId) {
         List<SpecificOrder> orders = specificOrderService.getOrdersByCustomer(customerId);
@@ -88,7 +124,13 @@ public class SpecificOrderController {
         return ResponseEntity.ok(responseDtos);
     }
 
-    // Assign order to customer
+    /**
+     * Assigns a specific order to a customer.
+     *
+     * @param orderNumber The unique number of the order to assign.
+     * @param customerId  The ID of the customer to assign the order to.
+     * @return ResponseEntity containing the assigned order data in a response DTO format.
+     */
     @PutMapping("/{orderNumber}/assignCustomer/{customerId}")
     public ResponseEntity<SpecificOrderResponseDto> assignOrderToCustomer(
             @PathVariable int orderNumber,
@@ -98,7 +140,12 @@ public class SpecificOrderController {
         return ResponseEntity.ok(convertToDto(order));
     }
 
-    // Helper method to convert SpecificOrder to SpecificOrderResponseDto
+    /**
+     * Helper method to convert a SpecificOrder model object to its corresponding DTO.
+     *
+     * @param order The SpecificOrder object to be converted.
+     * @return SpecificOrderResponseDto containing the data from the order object.
+     */
     private SpecificOrderResponseDto convertToDto(SpecificOrder order) {
         return new SpecificOrderResponseDto(
                 order.getNumber(),
@@ -108,4 +155,3 @@ public class SpecificOrderController {
         );
     }
 }
-
