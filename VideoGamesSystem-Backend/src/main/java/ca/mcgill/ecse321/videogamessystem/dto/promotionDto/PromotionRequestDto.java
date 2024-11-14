@@ -25,6 +25,10 @@ public class PromotionRequestDto {
         this.endDate = endDate;
     }
 
+    public PromotionRequestDto() {
+        super();
+    }
+
     // Getters and Setters
     public int getPercentage() {
         return percentage;

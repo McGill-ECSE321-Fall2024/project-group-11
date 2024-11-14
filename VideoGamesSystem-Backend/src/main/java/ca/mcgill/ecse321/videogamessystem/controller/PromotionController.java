@@ -6,6 +6,7 @@ import ca.mcgill.ecse321.videogamessystem.model.Promotion;
 import ca.mcgill.ecse321.videogamessystem.service.PromotionService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
@@ -157,5 +158,11 @@ public class PromotionController {
     public boolean isPromotionAvailable(@PathVariable Long id) {
         return promotionService.promotionAvailable(id);
     }
+    // @GetMapping("/{id}/available")
+    // public ResponseEntity<Boolean> isPromotionAvailable(@PathVariable Long id) {
+    //     boolean isAvailable = promotionService.promotionAvailable(id);
+    //     return ResponseEntity.ok(isAvailable);
+// }
+
 }
 
