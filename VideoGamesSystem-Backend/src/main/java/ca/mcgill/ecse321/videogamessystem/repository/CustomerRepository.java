@@ -13,7 +13,7 @@ public interface CustomerRepository extends CrudRepository<Customer, Long>{
 
     Customer findCustomerByEmail(String email);
 
-    Customer findCustomerByPhoneNumber(int phoneNumber);
+    // Customer findCustomerByPhoneNumber(int phoneNumber);
 
-    List<Customer> findCustomerByAddress(String adress);
+    // List<Customer> findCustomerByAddress(String adress);
 }

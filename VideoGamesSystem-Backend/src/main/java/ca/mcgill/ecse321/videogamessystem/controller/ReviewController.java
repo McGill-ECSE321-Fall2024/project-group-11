@@ -59,29 +59,29 @@ public class ReviewController {
         return reviews.stream().map(ReviewResponseDto::new).collect(Collectors.toList());
     }
 
-    /**
-     * Retrieve reviews by review date.
-     * 
-     * @param reviewDate the date of the reviews to retrieve
-     * @return a list of response DTOs with the details of the reviews
-     */
-    @GetMapping("/date/{reviewDate}")
-    public List<ReviewResponseDto> getReviewsByReviewDate(@PathVariable Date reviewDate) {
-        List<Review> reviews = reviewService.getReviewsByReviewDate(reviewDate);
-        return reviews.stream().map(ReviewResponseDto::new).collect(Collectors.toList());
-    }
+    // /**
+    //  * Retrieve reviews by review date.
+    //  * 
+    //  * @param reviewDate the date of the reviews to retrieve
+    //  * @return a list of response DTOs with the details of the reviews
+    //  */
+    // @GetMapping("/date/{reviewDate}")
+    // public List<ReviewResponseDto> getReviewsByReviewDate(@PathVariable Date reviewDate) {
+    //     List<Review> reviews = reviewService.getReviewsByReviewDate(reviewDate);
+    //     return reviews.stream().map(ReviewResponseDto::new).collect(Collectors.toList());
+    // }
 
-    /**
-     * Retrieve reviews by game rating.
-     * 
-     * @param gameRating the game rating of the reviews to retrieve
-     * @return a list of response DTOs with the details of the reviews
-     */
-    @GetMapping("/rating/{gameRating}")
-    public List<ReviewResponseDto> getReviewsByGameRating(@PathVariable int gameRating) {
-        List<Review> reviews = reviewService.getReviewsByGameRating(gameRating);
-        return reviews.stream().map(ReviewResponseDto::new).collect(Collectors.toList());
-    }
+    // /**
+    //  * Retrieve reviews by game rating.
+    //  * 
+    //  * @param gameRating the game rating of the reviews to retrieve
+    //  * @return a list of response DTOs with the details of the reviews
+    //  */
+    // @GetMapping("/rating/{gameRating}")
+    // public List<ReviewResponseDto> getReviewsByGameRating(@PathVariable int gameRating) {
+    //     List<Review> reviews = reviewService.getReviewsByGameRating(gameRating);
+    //     return reviews.stream().map(ReviewResponseDto::new).collect(Collectors.toList());
+    // }
 
     /**
      * Retrieve reviews by customer ID.
@@ -107,44 +107,44 @@ public class ReviewController {
         return reviews.stream().map(ReviewResponseDto::new).collect(Collectors.toList());
     }
 
-    /**
-     * Update the content of a review.
-     * 
-     * @param id the ID of the review
-     * @param newContent the new content for the review
-     * @return the response DTO with the updated review details
-     */
-    @PutMapping("/{id}/content")
-    public ReviewResponseDto updateReviewContent(@PathVariable Long id, @RequestParam String newContent) {
-        Review updatedReview = reviewService.updateReviewContent(id, newContent);
-        return new ReviewResponseDto(updatedReview);
-    }
+    // /**
+    //  * Update the content of a review.
+    //  * 
+    //  * @param id the ID of the review
+    //  * @param newContent the new content for the review
+    //  * @return the response DTO with the updated review details
+    //  */
+    // @PutMapping("/{id}/content")
+    // public ReviewResponseDto updateReviewContent(@PathVariable Long id, @RequestParam String newContent) {
+    //     Review updatedReview = reviewService.updateReviewContent(id, newContent);
+    //     return new ReviewResponseDto(updatedReview);
+    // }
 
-    /**
-     * Update the review date.
-     * 
-     * @param id the ID of the review
-     * @param newDate the new date for the review
-     * @return the response DTO with the updated review details
-     */
-    @PutMapping("/{id}/date")
-    public ReviewResponseDto updateReviewDate(@PathVariable Long id, @RequestParam Date newDate) {
-        Review updatedReview = reviewService.updateReviewDate(id, newDate);
-        return new ReviewResponseDto(updatedReview);
-    }
+    // /**
+    //  * Update the review date.
+    //  * 
+    //  * @param id the ID of the review
+    //  * @param newDate the new date for the review
+    //  * @return the response DTO with the updated review details
+    //  */
+    // @PutMapping("/{id}/date")
+    // public ReviewResponseDto updateReviewDate(@PathVariable Long id, @RequestParam Date newDate) {
+    //     Review updatedReview = reviewService.updateReviewDate(id, newDate);
+    //     return new ReviewResponseDto(updatedReview);
+    // }
 
-    /**
-     * Update the game rating of a review.
-     * 
-     * @param id the ID of the review
-     * @param newRating the new rating for the review
-     * @return the response DTO with the updated review details
-     */
-    @PutMapping("/{id}/rating")
-    public ReviewResponseDto updateGameRating(@PathVariable Long id, @RequestParam int newRating) {
-        Review updatedReview = reviewService.updateGameRating(id, newRating);
-        return new ReviewResponseDto(updatedReview);
-    }
+    // /**
+    //  * Update the game rating of a review.
+    //  * 
+    //  * @param id the ID of the review
+    //  * @param newRating the new rating for the review
+    //  * @return the response DTO with the updated review details
+    //  */
+    // @PutMapping("/{id}/rating")
+    // public ReviewResponseDto updateGameRating(@PathVariable Long id, @RequestParam int newRating) {
+    //     Review updatedReview = reviewService.updateGameRating(id, newRating);
+    //     return new ReviewResponseDto(updatedReview);
+    // }
 
     /**
      * Delete a review by its ID.

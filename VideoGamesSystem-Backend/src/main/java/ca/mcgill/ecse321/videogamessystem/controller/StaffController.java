@@ -84,31 +84,31 @@ public class StaffController {
         return staffList.stream().map(StaffResponseDto::new).collect(Collectors.toList());
     }
 
-    /**
-     * Updates the username of a specific staff member.
-     *
-     * @param id          the ID of the staff member to update.
-     * @param newUserName the new username for the staff member.
-     * @return a StaffResponseDto containing the updated staff member's information.
-     */
-    @PutMapping("/{id}/username")
-    public StaffResponseDto updateStaffUserName(@PathVariable Long id, @RequestParam String newUserName) {
-        Staff updatedStaff = staffService.updateStaffUserName(id, newUserName);
-        return new StaffResponseDto(updatedStaff);
-    }
+    // /**
+    //  * Updates the username of a specific staff member.
+    //  *
+    //  * @param id          the ID of the staff member to update.
+    //  * @param newUserName the new username for the staff member.
+    //  * @return a StaffResponseDto containing the updated staff member's information.
+    //  */
+    // @PutMapping("/{id}/username")
+    // public StaffResponseDto updateStaffUserName(@PathVariable Long id, @RequestParam String newUserName) {
+    //     Staff updatedStaff = staffService.updateStaffUserName(id, newUserName);
+    //     return new StaffResponseDto(updatedStaff);
+    // }
 
-    /**
-     * Updates the email of a specific staff member.
-     *
-     * @param id       the ID of the staff member to update.
-     * @param newEmail the new email for the staff member.
-     * @return a StaffResponseDto containing the updated staff member's information.
-     */
-    @PutMapping("/{id}/email")
-    public StaffResponseDto updateStaffEmail(@PathVariable Long id, @RequestParam String newEmail) {
-        Staff updatedStaff = staffService.updateStaffEmail(id, newEmail);
-        return new StaffResponseDto(updatedStaff);
-    }
+    // /**
+    //  * Updates the email of a specific staff member.
+    //  *
+    //  * @param id       the ID of the staff member to update.
+    //  * @param newEmail the new email for the staff member.
+    //  * @return a StaffResponseDto containing the updated staff member's information.
+    //  */
+    // @PutMapping("/{id}/email")
+    // public StaffResponseDto updateStaffEmail(@PathVariable Long id, @RequestParam String newEmail) {
+    //     Staff updatedStaff = staffService.updateStaffEmail(id, newEmail);
+    //     return new StaffResponseDto(updatedStaff);
+    // }
 
     /**
      * Deletes a staff member by their ID.

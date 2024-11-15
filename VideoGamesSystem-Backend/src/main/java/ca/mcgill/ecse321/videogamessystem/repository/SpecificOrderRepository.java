@@ -12,7 +12,7 @@ public interface SpecificOrderRepository extends CrudRepository<SpecificOrder, I
     
     SpecificOrder findOrderByNumber(int number);
 
-    List<SpecificOrder> findOrderByOrderDate(Date orderDate);
+    // List<SpecificOrder> findOrderByOrderDate(Date orderDate);
 
     List<SpecificOrder> findOrderByCustomer(Customer customer);
 }

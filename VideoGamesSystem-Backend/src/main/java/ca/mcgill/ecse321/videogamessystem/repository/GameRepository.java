@@ -14,7 +14,7 @@ public interface GameRepository extends CrudRepository<Game, Long>{
 
     Game findGameById(Long id);
 
-    List<Game> findGameByprice(int price);
+    // List<Game> findGameByprice(int price);
 
     List<Game> findGameByTitle(String title);
 

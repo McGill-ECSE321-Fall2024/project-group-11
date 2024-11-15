@@ -58,14 +58,14 @@ public class SpecificOrderService {
         return order;
     }
 
-    /**
-     * @param orderDate
-     * @return
-     */
-    @Transactional
-    public List<SpecificOrder> getOrdersByOrderDate(Date orderDate) {
-        return specificOrderRepository.findOrderByOrderDate(orderDate);
-    }
+    // /**
+    //  * @param orderDate
+    //  * @return
+    //  */
+    // @Transactional
+    // public List<SpecificOrder> getOrdersByOrderDate(Date orderDate) {
+    //     return specificOrderRepository.findOrderByOrderDate(orderDate);
+    // }
 
     /**
      * @param customerId
@@ -78,24 +78,24 @@ public class SpecificOrderService {
         return specificOrderRepository.findOrderByCustomer(customer);
     }
 
-    /**
-     * @param number
-     * @param newOrderDate
-     * @return
-     */
-    @Transactional
-    public SpecificOrder updateOrderDate(int number, Date newOrderDate) {
-        SpecificOrder order = specificOrderRepository.findOrderByNumber(number);
-        if (order == null) {
-            throw new IllegalArgumentException("Order not found.");
-        }
-        if (newOrderDate == null || newOrderDate.after(new Date(System.currentTimeMillis()))) {
-            throw new IllegalArgumentException("Order date cannot be in the future.");
-        }
+    // /**
+    //  * @param number
+    //  * @param newOrderDate
+    //  * @return
+    //  */
+    // @Transactional
+    // public SpecificOrder updateOrderDate(int number, Date newOrderDate) {
+    //     SpecificOrder order = specificOrderRepository.findOrderByNumber(number);
+    //     if (order == null) {
+    //         throw new IllegalArgumentException("Order not found.");
+    //     }
+    //     if (newOrderDate == null || newOrderDate.after(new Date(System.currentTimeMillis()))) {
+    //         throw new IllegalArgumentException("Order date cannot be in the future.");
+    //     }
 
-        order.setOrderDate(newOrderDate);
-        return specificOrderRepository.save(order);
-    }
+    //     order.setOrderDate(newOrderDate);
+    //     return specificOrderRepository.save(order);
+    // }
 
     /**
      * @param number
@@ -170,8 +170,13 @@ public class SpecificOrderService {
             throw new IllegalArgumentException("customer not found");
         }
         order.setCustomer(customer);
+        // ADD HERE
         return specificOrderRepository.save(order);
     }
+
+    // specific game repo -> findspecififc game by order
+    // for each specific game in list of specific game
+    // update availability
     
     
 }

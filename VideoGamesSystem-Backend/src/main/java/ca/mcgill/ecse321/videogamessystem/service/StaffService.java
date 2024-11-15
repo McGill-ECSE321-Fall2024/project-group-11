@@ -107,49 +107,49 @@ public class StaffService {
         return staffRepository.findStaffByAdmin(isAdmin);
     }
 
-    /**
-     * @param id
-     * @param newUserName
-     * @return
-     */
-    @Transactional
-    public Staff updateStaffUserName(Long id, String newUserName) {
-        Staff staff = staffRepository.findStaffById(id);
-        if (staff == null) {
-            throw new IllegalArgumentException("Staff not found.");
-        }
-        if (newUserName == null || newUserName.trim().isEmpty()) {
-            throw new IllegalArgumentException("Username cannot be empty.");
-        }
-        if (staffRepository.findStaffByUserName(newUserName) != null) {
-            throw new IllegalArgumentException("Username already exists.");
-        }
+    // /**
+    //  * @param id
+    //  * @param newUserName
+    //  * @return
+    //  */
+    // @Transactional
+    // public Staff updateStaffUserName(Long id, String newUserName) {
+    //     Staff staff = staffRepository.findStaffById(id);
+    //     if (staff == null) {
+    //         throw new IllegalArgumentException("Staff not found.");
+    //     }
+    //     if (newUserName == null || newUserName.trim().isEmpty()) {
+    //         throw new IllegalArgumentException("Username cannot be empty.");
+    //     }
+    //     if (staffRepository.findStaffByUserName(newUserName) != null) {
+    //         throw new IllegalArgumentException("Username already exists.");
+    //     }
 
-        staff.setUserName(newUserName);  // Assuming `setUserName` exists in the Account superclass
-        return staffRepository.save(staff);
-    }
+    //     staff.setUserName(newUserName);  // Assuming `setUserName` exists in the Account superclass
+    //     return staffRepository.save(staff);
+    // }
 
-    /**
-     * @param id
-     * @param newEmail
-     * @return
-     */
-    @Transactional
-    public Staff updateStaffEmail(Long id, String newEmail) {
-        Staff staff = staffRepository.findStaffById(id);
-        if (staff == null) {
-            throw new IllegalArgumentException("Staff not found.");
-        }
-        if (newEmail == null || newEmail.trim().isEmpty()) {
-            throw new IllegalArgumentException("Email cannot be empty.");
-        }
-        if (staffRepository.findStaffByEmail(newEmail) != null) {
-            throw new IllegalArgumentException("Email already exists.");
-        }
+    // /**
+    //  * @param id
+    //  * @param newEmail
+    //  * @return
+    //  */
+    // @Transactional
+    // public Staff updateStaffEmail(Long id, String newEmail) {
+    //     Staff staff = staffRepository.findStaffById(id);
+    //     if (staff == null) {
+    //         throw new IllegalArgumentException("Staff not found.");
+    //     }
+    //     if (newEmail == null || newEmail.trim().isEmpty()) {
+    //         throw new IllegalArgumentException("Email cannot be empty.");
+    //     }
+    //     if (staffRepository.findStaffByEmail(newEmail) != null) {
+    //         throw new IllegalArgumentException("Email already exists.");
+    //     }
 
-        staff.setEmail(newEmail);  // Assuming `setEmail` exists in the Account superclass
-        return staffRepository.save(staff);
-    }
+    //     staff.setEmail(newEmail);  // Assuming `setEmail` exists in the Account superclass
+    //     return staffRepository.save(staff);
+    // }
 
     /**
      * @param id

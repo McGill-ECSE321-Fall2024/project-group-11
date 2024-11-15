@@ -60,83 +60,83 @@ public class PromotionController {
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Retrieve promotions by start date.
-     *
-     * @param startDate the start date of the promotions to retrieve
-     * @return a list of response DTOs with the details of the promotions
-     */
-    @GetMapping("/startDate/{startDate}")
-    public List<PromotionResponseDto> getPromotionsByStartDate(@PathVariable Date startDate) {
-        return promotionService.getPromotionByStartdate(startDate).stream()
-                .map(PromotionResponseDto::new)
-                .collect(Collectors.toList());
-    }
+    // /**
+    //  * Retrieve promotions by start date.
+    //  *
+    //  * @param startDate the start date of the promotions to retrieve
+    //  * @return a list of response DTOs with the details of the promotions
+    //  */
+    // @GetMapping("/startDate/{startDate}")
+    // public List<PromotionResponseDto> getPromotionsByStartDate(@PathVariable Date startDate) {
+    //     return promotionService.getPromotionByStartdate(startDate).stream()
+    //             .map(PromotionResponseDto::new)
+    //             .collect(Collectors.toList());
+    // }
 
-    /**
-     * Retrieve promotions by end date.
-     *
-     * @param endDate the end date of the promotions to retrieve
-     * @return a list of response DTOs with the details of the promotions
-     */
-    @GetMapping("/endDate/{endDate}")
-    public List<PromotionResponseDto> getPromotionsByEndDate(@PathVariable Date endDate) {
-        return promotionService.getPromotionByEnddate(endDate).stream()
-                .map(PromotionResponseDto::new)
-                .collect(Collectors.toList());
-    }
+    // /**
+    //  * Retrieve promotions by end date.
+    //  *
+    //  * @param endDate the end date of the promotions to retrieve
+    //  * @return a list of response DTOs with the details of the promotions
+    //  */
+    // @GetMapping("/endDate/{endDate}")
+    // public List<PromotionResponseDto> getPromotionsByEndDate(@PathVariable Date endDate) {
+    //     return promotionService.getPromotionByEnddate(endDate).stream()
+    //             .map(PromotionResponseDto::new)
+    //             .collect(Collectors.toList());
+    // }
 
-    /**
-     * Retrieve promotions by percentage.
-     *
-     * @param percentage the percentage of the promotions to retrieve
-     * @return a list of response DTOs with the details of the promotions
-     */
-    @GetMapping("/percentage/{percentage}")
-    public List<PromotionResponseDto> getPromotionsByPercentage(@PathVariable int percentage) {
-        return promotionService.getPromotionbyPercentage(percentage).stream()
-                .map(PromotionResponseDto::new)
-                .collect(Collectors.toList());
-    }
+    // /**
+    //  * Retrieve promotions by percentage.
+    //  *
+    //  * @param percentage the percentage of the promotions to retrieve
+    //  * @return a list of response DTOs with the details of the promotions
+    //  */
+    // @GetMapping("/percentage/{percentage}")
+    // public List<PromotionResponseDto> getPromotionsByPercentage(@PathVariable int percentage) {
+    //     return promotionService.getPromotionbyPercentage(percentage).stream()
+    //             .map(PromotionResponseDto::new)
+    //             .collect(Collectors.toList());
+    // }
 
-    /**
-     * Update the percentage of a promotion.
-     *
-     * @param id the ID of the promotion
-     * @param percentage the new percentage for the promotion
-     * @return the response DTO with the updated promotion details
-     */
-    @PutMapping("/{id}/percentage")
-    public PromotionResponseDto updatePromotionPercentage(@PathVariable Long id, @RequestParam int percentage) {
-        Promotion promotion = promotionService.updatePromotioPercentage(id, percentage);
-        return new PromotionResponseDto(promotion);
-    }
+    // /**
+    //  * Update the percentage of a promotion.
+    //  *
+    //  * @param id the ID of the promotion
+    //  * @param percentage the new percentage for the promotion
+    //  * @return the response DTO with the updated promotion details
+    //  */
+    // @PutMapping("/{id}/percentage")
+    // public PromotionResponseDto updatePromotionPercentage(@PathVariable Long id, @RequestParam int percentage) {
+    //     Promotion promotion = promotionService.updatePromotioPercentage(id, percentage);
+    //     return new PromotionResponseDto(promotion);
+    // }
 
-    /**
-     * Update the start date of a promotion.
-     *
-     * @param id the ID of the promotion
-     * @param startDate the new start date for the promotion
-     * @return the response DTO with the updated promotion details
-     */
-    @PutMapping("/{id}/startDate")
-    public PromotionResponseDto updatePromotionStartDate(@PathVariable Long id, @RequestParam Date startDate) {
-        Promotion promotion = promotionService.updatePromotionStartDate(id, startDate);
-        return new PromotionResponseDto(promotion);
-    }
+    // /**
+    //  * Update the start date of a promotion.
+    //  *
+    //  * @param id the ID of the promotion
+    //  * @param startDate the new start date for the promotion
+    //  * @return the response DTO with the updated promotion details
+    //  */
+    // @PutMapping("/{id}/startDate")
+    // public PromotionResponseDto updatePromotionStartDate(@PathVariable Long id, @RequestParam Date startDate) {
+    //     Promotion promotion = promotionService.updatePromotionStartDate(id, startDate);
+    //     return new PromotionResponseDto(promotion);
+    // }
 
-    /**
-     * Update the end date of a promotion.
-     *
-     * @param id the ID of the promotion
-     * @param endDate the new end date for the promotion
-     * @return the response DTO with the updated promotion details
-     */
-    @PutMapping("/{id}/endDate")
-    public PromotionResponseDto updatePromotionEndDate(@PathVariable Long id, @RequestParam Date endDate) {
-        Promotion promotion = promotionService.updatePromotionEndDate(id, endDate);
-        return new PromotionResponseDto(promotion);
-    }
+    // /**
+    //  * Update the end date of a promotion.
+    //  *
+    //  * @param id the ID of the promotion
+    //  * @param endDate the new end date for the promotion
+    //  * @return the response DTO with the updated promotion details
+    //  */
+    // @PutMapping("/{id}/endDate")
+    // public PromotionResponseDto updatePromotionEndDate(@PathVariable Long id, @RequestParam Date endDate) {
+    //     Promotion promotion = promotionService.updatePromotionEndDate(id, endDate);
+    //     return new PromotionResponseDto(promotion);
+    // }
 
     /**
      * Delete a promotion by its ID.

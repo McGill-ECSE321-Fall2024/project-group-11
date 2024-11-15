@@ -150,14 +150,14 @@ public class SpecificGameService {
         return resultList;
     }
 
-    // find specific game by order
-    /**
-     * @param order
-     * @return
-     */
-    public List<SpecificGame> getSpecificGameByOrder(SpecificOrder order){
-        return specificGameRepository.findSpecificGameBySpecificOrder(order);
-    }
+    // // find specific game by order
+    // /**
+    //  * @param order
+    //  * @return
+    //  */
+    // public List<SpecificGame> getSpecificGameByOrder(SpecificOrder order){
+    //     return specificGameRepository.findSpecificGameBySpecificOrder(order);
+    // }
 
 
     // add specific game to order
@@ -185,28 +185,28 @@ public class SpecificGameService {
         return specificGameRepository.findSpecificGameBySpecificOrder(order);
     }
 
-    // add specific games to order
-    /**
-     * @param specificGameID
-     * @param order
-     * @return
-     */
-    public List<SpecificGame> addSpecificGamesToOrder(List<Integer> specificGameID, SpecificOrder order) {
-        if (order == null) {
-            throw new IllegalArgumentException("order cannot be null");
-        }
-        for (int id :specificGameID){
-            SpecificGame specificGame = specificGameRepository.findSpecificGameBySerialNumber(id);
-            if (specificGame == null) {
-                throw new IllegalArgumentException("some specific game is null");
-            }
-            specificGame.setSpecificOrder(order);
-            // Save the updated specific game with the new order
-            specificGameRepository.save(specificGame);
-        }
-        // Return the list of specific games associated with the order
-        return specificGameRepository.findSpecificGameBySpecificOrder(order);
-    }
+    // // add specific games to order
+    // /**
+    //  * @param specificGameID
+    //  * @param order
+    //  * @return
+    //  */
+    // public List<SpecificGame> addSpecificGamesToOrder(List<Integer> specificGameID, SpecificOrder order) {
+    //     if (order == null) {
+    //         throw new IllegalArgumentException("order cannot be null");
+    //     }
+    //     for (int id :specificGameID){
+    //         SpecificGame specificGame = specificGameRepository.findSpecificGameBySerialNumber(id);
+    //         if (specificGame == null) {
+    //             throw new IllegalArgumentException("some specific game is null");
+    //         }
+    //         specificGame.setSpecificOrder(order);
+    //         // Save the updated specific game with the new order
+    //         specificGameRepository.save(specificGame);
+    //     }
+    //     // Return the list of specific games associated with the order
+    //     return specificGameRepository.findSpecificGameBySpecificOrder(order);
+    // }
 
 
     /**
@@ -265,6 +265,8 @@ public class SpecificGameService {
         // include this game)
         return specificGameRepository.findSpecificGameBySpecificOrder(order);
     }
+
+    
 
 }
 

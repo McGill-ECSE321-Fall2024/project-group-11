@@ -14,9 +14,9 @@ public interface ReviewRepository extends CrudRepository<Review, Long>{
 
     Review findReviewById(Long id);
 
-    List<Review> findReviewByReviewDate(Date reviewDate);
+    // List<Review> findReviewByReviewDate(Date reviewDate);
 
-    List<Review> findReviewByGameRating(int gameRating);
+    // List<Review> findReviewByGameRating(int gameRating);
 
     List<Review> findReviewByParentReview(Review parentReview);
 

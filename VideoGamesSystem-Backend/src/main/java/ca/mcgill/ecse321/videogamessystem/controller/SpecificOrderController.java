@@ -75,13 +75,13 @@ public class SpecificOrderController {
      * @param newOrderDate  The new date to set for the order.
      * @return ResponseEntity containing the updated order data in a response DTO format.
      */
-    @PutMapping("/{orderNumber}/date")
-    public ResponseEntity<SpecificOrderResponseDto> updateOrderDate(
-            @PathVariable int orderNumber,
-            @RequestParam Date newOrderDate) {
-        SpecificOrder order = specificOrderService.updateOrderDate(orderNumber, newOrderDate);
-        return ResponseEntity.ok(convertToDto(order));
-    }
+    // @PutMapping("/{orderNumber}/date")
+    // public ResponseEntity<SpecificOrderResponseDto> updateOrderDate(
+    //         @PathVariable int orderNumber,
+    //         @RequestParam Date newOrderDate) {
+    //     SpecificOrder order = specificOrderService.updateOrderDate(orderNumber, newOrderDate);
+    //     return ResponseEntity.ok(convertToDto(order));
+    // }
 
     /**
      * Updates the card number associated with a specific order.

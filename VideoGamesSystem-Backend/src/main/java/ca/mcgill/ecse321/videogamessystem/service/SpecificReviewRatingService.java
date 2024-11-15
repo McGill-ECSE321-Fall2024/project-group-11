@@ -114,6 +114,7 @@ public class SpecificReviewRatingService {
     public List<SpecificReviewRating> getAllSpecificReviewRatings() {
         return toList(specificReviewRatingRepository.findAll());
     }
+    // GET ALL LIKES AND DISLIKES INSTEAD OF ALL 
 
     /**
      * Converts an {@code Iterable} to a {@code List}.

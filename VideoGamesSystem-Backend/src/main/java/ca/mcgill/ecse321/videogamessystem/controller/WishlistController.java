@@ -49,18 +49,18 @@ public class WishlistController {
         return new WishlistResponseDto(wishlist);
     }
 
-    /**
-     * Get all wishlists.
-     * 
-     * @return List of WishlistResponseDto with details of all wishlists.
-     */
-    @GetMapping
-    public List<WishlistResponseDto> getAllWishlists() {
-        List<Wishlist> wishlists = wishlistService.getAllWishlists();
-        return wishlists.stream()
-            .map(WishlistResponseDto::new)
-            .collect(Collectors.toList());
-    }
+    // /**
+    //  * Get all wishlists.
+    //  * 
+    //  * @return List of WishlistResponseDto with details of all wishlists.
+    //  */
+    // @GetMapping
+    // public List<WishlistResponseDto> getAllWishlists() {
+    //     List<Wishlist> wishlists = wishlistService.getAllWishlists();
+    //     return wishlists.stream()
+    //         .map(WishlistResponseDto::new)
+    //         .collect(Collectors.toList());
+    // }
 
     /**
      * Get a wishlist by customer ID.
@@ -88,15 +88,15 @@ public class WishlistController {
         return new WishlistResponseDto(wishlist);
     }
 
-    /**
-     * Delete a wishlist by its ID.
-     * 
-     * @param id the ID of the wishlist to delete.
-     * @return WishlistResponseDto with the details of the deleted wishlist.
-     */
-    @DeleteMapping("/{id}")
-    public WishlistResponseDto deleteWishlist(@PathVariable Long id) {
-        Wishlist wishlist = wishlistService.deleteWishlist(id);
-        return new WishlistResponseDto(wishlist);
-    }
+    // /**
+    //  * Delete a wishlist by its ID.
+    //  * 
+    //  * @param id the ID of the wishlist to delete.
+    //  * @return WishlistResponseDto with the details of the deleted wishlist.
+    //  */
+    // @DeleteMapping("/{id}")
+    // public WishlistResponseDto deleteWishlist(@PathVariable Long id) {
+    //     Wishlist wishlist = wishlistService.deleteWishlist(id);
+    //     return new WishlistResponseDto(wishlist);
+    // }
 }

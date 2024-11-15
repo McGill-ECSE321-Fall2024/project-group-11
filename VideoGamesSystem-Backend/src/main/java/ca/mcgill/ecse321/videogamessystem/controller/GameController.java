@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/games")
+@RequestMapping("/games")
 public class GameController {
 
     @Autowired
@@ -60,24 +60,24 @@ public class GameController {
         return games.stream().map(GameResponseDto::new).collect(Collectors.toList());
     }
 
-    /**
-     * Updates details of an existing game.
-     *
-     * @param id the ID of the game to update.
-     * @param gameRequestDto the data transfer object containing updated game details.
-     * @return a GameResponseDto with the updated game details.
-     */
-    @PutMapping("/{id}")
-    public GameResponseDto updateGame(@PathVariable Long id, @Valid @RequestBody GameRequestDto gameRequestDto) {
-        Game updatedGame = gameService.updateGame(
-                id,
-                gameRequestDto.getDescription(),
-                gameRequestDto.getPrice(),
-                gameRequestDto.getTitle(),
-                gameRequestDto.getCategory()
-        );
-        return new GameResponseDto(updatedGame);
-    }
+    // /**
+    //  * Updates details of an existing game.
+    //  *
+    //  * @param id the ID of the game to update.
+    //  * @param gameRequestDto the data transfer object containing updated game details.
+    //  * @return a GameResponseDto with the updated game details.
+    //  */
+    // @PutMapping("/{id}")
+    // public GameResponseDto updateGame(@PathVariable Long id, @Valid @RequestBody GameRequestDto gameRequestDto) {
+    //     Game updatedGame = gameService.updateGame(
+    //             id,
+    //             gameRequestDto.getDescription(),
+    //             gameRequestDto.getPrice(),
+    //             gameRequestDto.getTitle(),
+    //             gameRequestDto.getCategory()
+    //     );
+    //     return new GameResponseDto(updatedGame);
+    // }
 
     /**
      * Deletes a game by its unique ID.
@@ -91,17 +91,17 @@ public class GameController {
         return new GameResponseDto(deletedGame);
     }
 
-    /**
-     * Retrieves games based on a specified price.
-     *
-     * @param price the price to filter games by.
-     * @return a list of GameResponseDto containing details of games with the specified price.
-     */
-    @GetMapping("/price/{price}")
-    public List<GameResponseDto> getGamesByPrice(@PathVariable int price) {
-        List<Game> games = gameService.getGamesByPrice(price);
-        return games.stream().map(GameResponseDto::new).collect(Collectors.toList());
-    }
+    // /**
+    //  * Retrieves games based on a specified price.
+    //  *
+    //  * @param price the price to filter games by.
+    //  * @return a list of GameResponseDto containing details of games with the specified price.
+    //  */
+    // @GetMapping("/price/{price}")
+    // public List<GameResponseDto> getGamesByPrice(@PathVariable int price) {
+    //     List<Game> games = gameService.getGamesByPrice(price);
+    //     return games.stream().map(GameResponseDto::new).collect(Collectors.toList());
+    // }
 
     /**
      * Retrieves games based on their title.
@@ -165,15 +165,15 @@ public class GameController {
         return games.stream().map(GameResponseDto::new).collect(Collectors.toList());
     }
 
-    /**
-     * Retrieves games with a promotion above a certain percentage.
-     *
-     * @param min the minimum promotion percentage.
-     * @return a list of GameResponseDto containing details of games with a promotion percentage greater than or equal to the specified minimum.
-     */
-    @GetMapping("/promotion/{min}")
-    public List<GameResponseDto> getGamesAbovePromotion(@PathVariable int min) {
-        List<Game> games = gameService.getGamesAbovePromotion(min);
-        return games.stream().map(GameResponseDto::new).collect(Collectors.toList());
-    }
+    // /**
+    //  * Retrieves games with a promotion above a certain percentage.
+    //  *
+    //  * @param min the minimum promotion percentage.
+    //  * @return a list of GameResponseDto containing details of games with a promotion percentage greater than or equal to the specified minimum.
+    //  */
+    // @GetMapping("/promotion/{min}")
+    // public List<GameResponseDto> getGamesAbovePromotion(@PathVariable int min) {
+    //     List<Game> games = gameService.getGamesAbovePromotion(min);
+    //     return games.stream().map(GameResponseDto::new).collect(Collectors.toList());
+    // }
 }

@@ -80,29 +80,29 @@ public class WishlistService {
         return wishlistRepository.save(wishlist);
     }
 
-    /**
-     * @param id
-     * @return
-     */
-    @Transactional
-    public Wishlist deleteWishlist(Long id) {
-        Wishlist wishlist = wishlistRepository.findWishlistById(id);
-        if (wishlist == null) {
-            throw new IllegalArgumentException("Wishlist not found.");
-        }
+    // /**
+    //  * @param id
+    //  * @return
+    //  */
+    // @Transactional
+    // public Wishlist deleteWishlist(Long id) {
+    //     Wishlist wishlist = wishlistRepository.findWishlistById(id);
+    //     if (wishlist == null) {
+    //         throw new IllegalArgumentException("Wishlist not found.");
+    //     }
 
-        wishlist.setCustomer(null);  // Removing association with Customer
-        wishlistRepository.delete(wishlist);
-        return wishlist;
-    }
+    //     wishlist.setCustomer(null);  // Removing association with Customer
+    //     wishlistRepository.delete(wishlist);
+    //     return wishlist;
+    // }
 
-    /**
-     * @return
-     */
-    @Transactional
-    public List<Wishlist> getAllWishlists() {
-        return toList(wishlistRepository.findAll());
-    }
+    // /**
+    //  * @return
+    //  */
+    // @Transactional
+    // public List<Wishlist> getAllWishlists() {
+    //     return toList(wishlistRepository.findAll());
+    // }
 
     /**
      * Converts an {@code Iterable} to a {@code List}.

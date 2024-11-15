@@ -67,34 +67,34 @@ public class PromotionService {
     }
     
 
-    /**
-     * @param startDate
-     * @return
-     */
-    @Transactional
-    public List<Promotion> getPromotionByStartdate(Date startDate){
-        return this.promotionRepository.findPromotionByStartDate(startDate);
-    }
+    // /**
+    //  * @param startDate
+    //  * @return
+    //  */
+    // @Transactional
+    // public List<Promotion> getPromotionByStartdate(Date startDate){
+    //     return this.promotionRepository.findPromotionByStartDate(startDate);
+    // }
 
 
-    /**
-     * @param endDate
-     * @return
-     */
-    @Transactional
-    public List<Promotion> getPromotionByEnddate(Date endDate){
-        return this.promotionRepository.findPromotionByEndDate(endDate);
-    }
+    // /**
+    //  * @param endDate
+    //  * @return
+    //  */
+    // @Transactional
+    // public List<Promotion> getPromotionByEnddate(Date endDate){
+    //     return this.promotionRepository.findPromotionByEndDate(endDate);
+    // }
 
 
-    /**
-     * @param percentage
-     * @return
-     */
-    @Transactional
-    public List<Promotion> getPromotionbyPercentage(int percentage){
-        return this.promotionRepository.findPromotionByPercentage(percentage);
-    }
+    // /**
+    //  * @param percentage
+    //  * @return
+    //  */
+    // @Transactional
+    // public List<Promotion> getPromotionbyPercentage(int percentage){
+    //     return this.promotionRepository.findPromotionByPercentage(percentage);
+    // }
 
 
     /**
@@ -105,55 +105,55 @@ public class PromotionService {
         return toList(this.promotionRepository.findAll());
     }
 
-    /**
-     * @param id
-     * @param percentage
-     * @return
-     */
-    @Transactional
-    public Promotion updatePromotioPercentage(Long id, int percentage){
-        Promotion promotion = promotionRepository.findPromotionById(id);
+    // /**
+    //  * @param id
+    //  * @param percentage
+    //  * @return
+    //  */
+    // @Transactional
+    // public Promotion updatePromotioPercentage(Long id, int percentage){
+    //     Promotion promotion = promotionRepository.findPromotionById(id);
 
-        if (percentage <= 0 || percentage > 100) {
-            throw new IllegalArgumentException("invalid percentage to update");
-        }
-        promotion.setPercentage(percentage);
-        return promotionRepository.save(promotion);
-    }
+    //     if (percentage <= 0 || percentage > 100) {
+    //         throw new IllegalArgumentException("invalid percentage to update");
+    //     }
+    //     promotion.setPercentage(percentage);
+    //     return promotionRepository.save(promotion);
+    // }
 
-    /**
-     * @param id
-     * @param startDate
-     * @return
-     */
-    @Transactional
-    public Promotion updatePromotionStartDate(Long id, Date startDate){
-        Promotion promotion = promotionRepository.findPromotionById(id);
+    // /**
+    //  * @param id
+    //  * @param startDate
+    //  * @return
+    //  */
+    // @Transactional
+    // public Promotion updatePromotionStartDate(Long id, Date startDate){
+    //     Promotion promotion = promotionRepository.findPromotionById(id);
 
-        Date now = Date.valueOf(LocalDate.now());
-        if (startDate == null || startDate.before(now)){
-            throw new IllegalArgumentException("update startDate invalid");
-        }
-        promotion.setStartDate(startDate);
-        return promotionRepository.save(promotion);
-    }
+    //     Date now = Date.valueOf(LocalDate.now());
+    //     if (startDate == null || startDate.before(now)){
+    //         throw new IllegalArgumentException("update startDate invalid");
+    //     }
+    //     promotion.setStartDate(startDate);
+    //     return promotionRepository.save(promotion);
+    // }
 
-    /**
-     * @param id
-     * @param endDate
-     * @return
-     */
-    @Transactional
-    public Promotion updatePromotionEndDate(Long id, Date endDate){
-        Promotion promotion = promotionRepository.findPromotionById(id);
+    // /**
+    //  * @param id
+    //  * @param endDate
+    //  * @return
+    //  */
+    // @Transactional
+    // public Promotion updatePromotionEndDate(Long id, Date endDate){
+    //     Promotion promotion = promotionRepository.findPromotionById(id);
 
-        Date now = Date.valueOf(LocalDate.now());
-        if (endDate == null || endDate.before(now)) {
-            throw new IllegalArgumentException("update endDate invalid");
-        }
-        promotion.setEndDate(endDate);
-        return promotionRepository.save(promotion);
-    }
+    //     Date now = Date.valueOf(LocalDate.now());
+    //     if (endDate == null || endDate.before(now)) {
+    //         throw new IllegalArgumentException("update endDate invalid");
+    //     }
+    //     promotion.setEndDate(endDate);
+    //     return promotionRepository.save(promotion);
+    // }
 
     
     /**

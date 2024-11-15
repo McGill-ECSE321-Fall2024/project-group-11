@@ -35,8 +35,8 @@ public class CustomerIntegrationTests {
 	@Autowired
 	private CustomerRepository customerRepository;
 
-	private static final String VALID_USERNAME = "Tim";
-	private static final String VALID_EMAIL = "tim@yahoo.com";
+	private static final String VALID_USERNAME = "qweld";
+	private static final String VALID_EMAIL = "wwwm@yahoo.com";
 	private static final String VALID_PASSWORD = "abcde";
 	private static final int VALID_PHONENUMBER = 1234567;
 	private static final String VALID_ADRESS= "123 Stanley Street";
