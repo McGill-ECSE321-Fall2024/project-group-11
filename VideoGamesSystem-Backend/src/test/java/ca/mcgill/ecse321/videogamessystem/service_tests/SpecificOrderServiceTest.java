@@ -1,6 +1,7 @@
 package ca.mcgill.ecse321.videogamessystem.service_tests;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 import ca.mcgill.ecse321.videogamessystem.model.Customer;
@@ -136,5 +137,145 @@ public class SpecificOrderServiceTest {
         // Assert
         assertNotNull(customerOrders);
         assertEquals(1, customerOrders.size());
+    }
+
+
+
+    @Test
+    public void testGetOrdersByOrderDate_WithExistingOrders() {
+        // Arrange
+        Date orderDate = Date.valueOf("2023-10-15");
+        SpecificOrder order1 = new SpecificOrder(1, orderDate, 123456);
+        SpecificOrder order2 = new SpecificOrder(2, orderDate, 654321);
+        
+        when(specificOrderRepository.findOrderByOrderDate(orderDate)).thenReturn(List.of(order1, order2));
+
+        // Act
+        List<SpecificOrder> orders = orderService.getOrdersByOrderDate(orderDate);
+
+        // Assert
+        assertNotNull(orders);
+        assertEquals(2, orders.size());
+        assertTrue(orders.contains(order1));
+        assertTrue(orders.contains(order2));
+        verify(specificOrderRepository, times(1)).findOrderByOrderDate(orderDate);
+    }
+
+    @Test
+    public void testUpdateCardNumber_Success() {
+        // Arrange
+        int orderNumber = 1;
+        int newCardNumber = 12345678;
+        SpecificOrder order = new SpecificOrder();
+        order.setCardNumber(87654321); // Set initial card number for comparison
+
+        when(specificOrderRepository.findOrderByNumber(orderNumber)).thenReturn(order);
+        when(specificOrderRepository.save(order)).thenReturn(order);
+
+        // Act
+        SpecificOrder updatedOrder = orderService.updateCardNumber(orderNumber, newCardNumber);
+
+        // Assert
+        assertNotNull(updatedOrder);
+        assertEquals(newCardNumber, updatedOrder.getCardNumber());
+        verify(specificOrderRepository, times(1)).save(order);
+    }
+    @Test
+    public void testUpdateCardNumber_OrderNotFound() {
+        // Arrange
+        int orderNumber = 999;
+        int newCardNumber = 12345678;
+
+        when(specificOrderRepository.findOrderByNumber(orderNumber)).thenReturn(null);
+
+        // Act & Assert
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            orderService.updateCardNumber(orderNumber, newCardNumber);
+        });
+        assertEquals("Order not found.", exception.getMessage());
+    }
+
+    @Test
+    public void testUpdateCardNumber_InvalidCardNumber() {
+        // Arrange
+        int orderNumber = 1;
+        int invalidCardNumber = -12345;
+        SpecificOrder order = new SpecificOrder();
+
+        when(specificOrderRepository.findOrderByNumber(orderNumber)).thenReturn(order);
+
+        // Act & Assert
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            orderService.updateCardNumber(orderNumber, invalidCardNumber);
+        });
+        assertEquals("Card number must be valid.", exception.getMessage());
+    }
+
+
+    @Test
+    public void testGetAllOrders_WithOrders() {
+        // Arrange
+        SpecificOrder order1 = new SpecificOrder();
+        SpecificOrder order2 = new SpecificOrder();
+        List<SpecificOrder> orders = List.of(order1, order2);
+
+        when(specificOrderRepository.findAll()).thenReturn(orders);
+
+        // Act
+        List<SpecificOrder> retrievedOrders = orderService.getAllOrders();
+
+        // Assert
+        assertNotNull(retrievedOrders, "The result should not be null.");
+        assertEquals(2, retrievedOrders.size(), "The order list size should match the number of orders.");
+        assertTrue(retrievedOrders.containsAll(orders), "The result should contain all stored orders.");
+    }
+
+    @Test
+    public void testPlaceNewOrder_Success() {
+        // Arrange
+        int orderID = 1;
+        SpecificOrder order = new SpecificOrder();
+        Customer customer = new Customer();
+        
+        when(specificOrderRepository.findOrderByNumber(orderID)).thenReturn(order);
+        when(specificOrderRepository.save(any(SpecificOrder.class))).thenReturn(order);
+
+        // Act
+        SpecificOrder updatedOrder = orderService.placeNewOrder(orderID, customer);
+
+        // Assert
+        assertNotNull(updatedOrder, "The updated order should not be null.");
+        assertEquals(customer, updatedOrder.getCustomer(), "The customer should be assigned to the order.");
+        verify(specificOrderRepository, times(1)).save(order);
+    }
+
+    @Test
+    public void testPlaceNewOrder_OrderNotFound() {
+        // Arrange
+        int orderID = 1;
+        Customer customer = new Customer();
+        
+        when(specificOrderRepository.findOrderByNumber(orderID)).thenReturn(null);
+
+        // Act & Assert
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            orderService.placeNewOrder(orderID, customer);
+        });
+        assertEquals("order not found", exception.getMessage());
+    }
+
+    @Test
+    public void testPlaceNewOrder_CustomerIsNull() {
+        // Arrange
+        int orderID = 1;
+        SpecificOrder order = new SpecificOrder();
+        
+        when(specificOrderRepository.findOrderByNumber(orderID)).thenReturn(order);
+
+        // Act & Assert
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            orderService.placeNewOrder(orderID, null);
+        });
+        assertEquals("customer not found", exception.getMessage());
     }
 }

@@ -1,13 +1,19 @@
 package ca.mcgill.ecse321.videogamessystem.service_tests;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 import ca.mcgill.ecse321.videogamessystem.model.Promotion;
+import ca.mcgill.ecse321.videogamessystem.model.SpecificGame;
 import ca.mcgill.ecse321.videogamessystem.repository.PromotionRepository;
 import ca.mcgill.ecse321.videogamessystem.service.PromotionService;
 import ca.mcgill.ecse321.videogamessystem.model.Game;
+import ca.mcgill.ecse321.videogamessystem.model.Game.ConsoleType;
 import ca.mcgill.ecse321.videogamessystem.repository.GameRepository;
+import ca.mcgill.ecse321.videogamessystem.model.Game.Category;
+import ca.mcgill.ecse321.videogamessystem.repository.SpecificGameRepository;
+import ca.mcgill.ecse321.videogamessystem.service.GameService;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,13 +27,20 @@ import java.util.Optional;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class PromotionServiceTest {
 
     @Mock
     private PromotionRepository promotionRepository;
 
     @Mock
+    private SpecificGameRepository specificGameRepository;
+
+    @Mock
     private GameRepository gameRepository;
+
+    @InjectMocks
+    private GameService gameService;
 
     @InjectMocks
     private PromotionService promotionService;
@@ -134,4 +147,45 @@ public class PromotionServiceTest {
         assertNotNull(deletedPromotion);
         verify(promotionRepository, times(1)).delete(promotion);
     }
+    // @Test
+    // public void testUpdatePromotionStartDate_Success() {
+    //     // Arrange
+    //     Long promoId = 1L;
+    //     Date newStartDate = Date.valueOf(LocalDate.now().minusDays(10));
+    //     Date endDate = Date.valueOf(LocalDate.now().plusDays(5));
+    //     Promotion promotion = new Promotion(20, Date.valueOf(LocalDate.now().minusDays(5)), endDate);
+
+    //     when(promotionRepository.findPromotionById(promoId)).thenReturn(promotion);
+    //     when(promotionRepository.save(promotion)).thenReturn(promotion);
+
+    //     // Act
+    //     Promotion updatedPromotion = promotionService.updatePromotionStartDate(promoId, newStartDate);
+
+    //     // Assert
+    //     assertNotNull(updatedPromotion);
+    //     assertEquals(newStartDate, updatedPromotion.getStartDate());
+    //     assertEquals(endDate, updatedPromotion.getEndDate()); // Ensure endDate remains the same
+    //     verify(promotionRepository, times(1)).save(promotion);
+    // }
+
+    @Test
+    public void testUpdatePromotionEndDate_Success() {
+        // Arrange
+        Long promoId = 1L;
+        Date newEndDate = Date.valueOf(LocalDate.now().plusDays(15));
+        Promotion promotion = new Promotion(20, Date.valueOf(LocalDate.now().minusDays(5)), Date.valueOf(LocalDate.now().plusDays(5)));
+
+        when(promotionRepository.findPromotionById(promoId)).thenReturn(promotion);
+        when(promotionRepository.save(promotion)).thenReturn(promotion);
+
+        // Act
+        Promotion updatedPromotion = promotionService.updatePromotionEndDate(promoId, newEndDate);
+
+        // Assert
+        assertNotNull(updatedPromotion);
+        assertEquals(newEndDate, updatedPromotion.getEndDate());
+        verify(promotionRepository, times(1)).save(promotion);
+    }
+    
+
 }
