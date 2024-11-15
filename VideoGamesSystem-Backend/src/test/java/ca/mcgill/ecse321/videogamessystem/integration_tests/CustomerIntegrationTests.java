@@ -1,4 +1,4 @@
-package ca.mcgill.ecse321.videogamessystem;
+package ca.mcgill.ecse321.videogamessystem.integration_tests;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -20,6 +20,7 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import ca.mcgill.ecse321.videogamessystem.VideogamessystemApplication;
 import ca.mcgill.ecse321.videogamessystem.dto.CustomerDto.CustomerRequestDto;
 import ca.mcgill.ecse321.videogamessystem.dto.CustomerDto.CustomerResponseDto;
 import ca.mcgill.ecse321.videogamessystem.model.Customer;
