@@ -1,4 +1,4 @@
-package ca.mcgill.ecse321.videogamessystem.service_tests;
+package ca.mcgill.ecse321.videogamessystem.servicetest;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
