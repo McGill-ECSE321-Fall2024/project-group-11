@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/games")
+@CrossOrigin(origins = "http://localhost:8080")
 public class GameController {
 
     @Autowired
