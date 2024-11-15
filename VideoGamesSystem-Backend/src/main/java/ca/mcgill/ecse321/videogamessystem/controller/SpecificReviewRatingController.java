@@ -4,6 +4,7 @@ import ca.mcgill.ecse321.videogamessystem.dto.SpecificReviewRatingDto.SpecificRe
 import ca.mcgill.ecse321.videogamessystem.dto.SpecificReviewRatingDto.SpecificReviewRatingResponseDto;
 import ca.mcgill.ecse321.videogamessystem.model.SpecificReviewRating;
 import ca.mcgill.ecse321.videogamessystem.service.SpecificReviewRatingService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,7 +13,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/specificReviewRatings")
+@CrossOrigin(origins = "http://localhost:8080")
 public class SpecificReviewRatingController {
 
     @Autowired
@@ -24,7 +25,7 @@ public class SpecificReviewRatingController {
      * @param requestDto SpecificReviewRatingRequestDto containing rating, review, and customer information.
      * @return SpecificReviewRatingResponseDto with the created review rating details.
      */
-    @PostMapping
+    @PostMapping("/specificReviewRatings")
     public SpecificReviewRatingResponseDto createSpecificReviewRating(@Valid @RequestBody SpecificReviewRatingRequestDto requestDto) {
         SpecificReviewRating specificReviewRating = specificReviewRatingService.createSpecificReviewRating(
             requestDto.getReviewRating(), requestDto.getReviewId(), requestDto.getCustomerId()
@@ -38,7 +39,7 @@ public class SpecificReviewRatingController {
      * @param id the ID of the specific review rating.
      * @return SpecificReviewRatingResponseDto with the requested review rating details.
      */
-    @GetMapping("/{id}")
+    @GetMapping("/specificReviewRatings/{id}")
     public SpecificReviewRatingResponseDto getSpecificReviewRatingById(@PathVariable Long id) {
         SpecificReviewRating specificReviewRating = specificReviewRatingService.getSpecificReviewRatingById(id);
         return new SpecificReviewRatingResponseDto(specificReviewRating);
@@ -49,7 +50,7 @@ public class SpecificReviewRatingController {
      * 
      * @return List of SpecificReviewRatingResponseDto with details of all specific review ratings.
      */
-    @GetMapping
+    @GetMapping("/specificReviewRatings")
     public List<SpecificReviewRatingResponseDto> getAllSpecificReviewRatings() {
         List<SpecificReviewRating> specificReviewRatings = specificReviewRatingService.getAllSpecificReviewRatings();
         return specificReviewRatings.stream()
@@ -63,7 +64,7 @@ public class SpecificReviewRatingController {
      * @param reviewId the ID of the review.
      * @return List of SpecificReviewRatingResponseDto with details of specific review ratings for the review.
      */
-    @GetMapping("/review/{reviewId}")
+    @GetMapping("/specificReviewRatings/review/{reviewId}")
     public List<SpecificReviewRatingResponseDto> getSpecificReviewRatingsByReview(@PathVariable Long reviewId) {
         List<SpecificReviewRating> specificReviewRatings = specificReviewRatingService.getSpecificReviewRatingsByReview(reviewId);
         return specificReviewRatings.stream()
@@ -78,7 +79,7 @@ public class SpecificReviewRatingController {
      * @param newReviewRating the new review rating.
      * @return SpecificReviewRatingResponseDto with the updated review rating details.
      */
-    @PutMapping("/{id}")
+    @PutMapping("/specificReviewRatings/{id}")
     public SpecificReviewRatingResponseDto updateSpecificReviewRating(
         @PathVariable Long id, @RequestParam SpecificReviewRating.ReviewRating newReviewRating
     ) {
@@ -92,10 +93,9 @@ public class SpecificReviewRatingController {
      * @param id the ID of the specific review rating to delete.
      * @return SpecificReviewRatingResponseDto with the details of the deleted review rating.
      */
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/specificReviewRatings/{id}")
     public SpecificReviewRatingResponseDto deleteSpecificReviewRating(@PathVariable Long id) {
         SpecificReviewRating specificReviewRating = specificReviewRatingService.deleteSpecificReviewRating(id);
         return new SpecificReviewRatingResponseDto(specificReviewRating);
     }
 }
-
