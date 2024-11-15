@@ -1,4 +1,4 @@
-package ca.mcgill.ecse321.videogamessystem.exception;
+package ca.mcgill.ecse321.videogamessystem.Exception;
 
 import java.util.ArrayList;
 

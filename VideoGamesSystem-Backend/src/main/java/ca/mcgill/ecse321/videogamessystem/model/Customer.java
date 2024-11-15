@@ -3,7 +3,6 @@
 package ca.mcgill.ecse321.videogamessystem.model;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.OneToOne;
 
 // line 76 "model.ump"
 // line 163 "model.ump"
@@ -20,10 +19,6 @@ public class Customer extends Account
   private int phoneNumber;
   private String adress;
 
-  //Customer Associations
-  @OneToOne
-  private Wishlist wishlist;
-
   //------------------------
   // CONSTRUCTOR
   //------------------------
@@ -33,8 +28,6 @@ public class Customer extends Account
     super(aUserName, aEmail, aPassword);
     phoneNumber = aPhoneNumber;
     adress = aAdress;
-    Wishlist whishlist = new Wishlist();
-    this.wishlist = whishlist;
   }
 
   public Customer(){
@@ -74,27 +67,9 @@ public class Customer extends Account
   {
     return adress;
   }
-  /* Code from template association_GetOne */
-  public Wishlist getWishlist()
-  {
-    return wishlist;
-  }
-
-  public boolean setWishlist(Wishlist wishlist){
-    boolean wasSet= false;
-    this.wishlist= wishlist;
-    wasSet = true;
-    return wasSet;
-  }
 
   public void delete()
   {
-    Wishlist existingWishlist = wishlist;
-    wishlist = null;
-    if (existingWishlist != null)
-    {
-      existingWishlist.delete();
-    }
     super.delete();
   }
 
@@ -103,7 +78,6 @@ public class Customer extends Account
   {
     return super.toString() + "["+
             "phoneNumber" + ":" + getPhoneNumber()+ "," +
-            "adress" + ":" + getAdress()+ "]" + System.getProperties().getProperty("line.separator") +
-            "  " + "wishlist = "+(getWishlist()!=null?Integer.toHexString(System.identityHashCode(getWishlist())):"null");
+            "adress" + ":" + getAdress()+ "]" + System.getProperties().getProperty("line.separator");
   }
 }

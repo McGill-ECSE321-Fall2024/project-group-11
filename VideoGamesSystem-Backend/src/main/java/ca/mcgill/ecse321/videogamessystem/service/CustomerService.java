@@ -5,7 +5,7 @@ import ca.mcgill.ecse321.videogamessystem.model.Wishlist;
 import ca.mcgill.ecse321.videogamessystem.model.Review;
 import ca.mcgill.ecse321.videogamessystem.repository.CustomerRepository;
 import ca.mcgill.ecse321.videogamessystem.repository.WishlistRepository;
-import ca.mcgill.ecse321.videogamessystem.exception.VideoGamesSystemException;
+import ca.mcgill.ecse321.videogamessystem.Exception.VideoGamesSystemException;
 import jakarta.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ public class CustomerService {
     @Autowired
     private CustomerRepository customerRepository;
 
-    @Autowired 
+    @Autowired
     private WishlistRepository wishlistRepository;
 
     private static final String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\." +
@@ -63,9 +63,9 @@ public class CustomerService {
 
         Customer customer = new Customer(userName, email, password, phoneNumber, address);
 
-        // Wishlist newWishlist = new Wishlist();
-        // customer.setWishlist(newWishlist);
-        // wishlistRepository.save(newWishlist);
+        Wishlist newWishlist = new Wishlist();
+        newWishlist.setCustomer(customer);
+        wishlistRepository.save(newWishlist);
 
         return customerRepository.save(customer);
     }
@@ -171,4 +171,17 @@ public class CustomerService {
         }
         return customer;
     }
+
+    @Transactional
+    public Customer getCustomerByWishlist(Long whishlistID) {
+        Wishlist wishlist = wishlistRepository.findWishlistById(whishlistID);
+
+        Customer customer = wishlist.getCustomer();
+        if (customer == null){
+            throw new IllegalArgumentException("the wishlist has no associated customer");
+        }
+        return customer;
+    }
+
+
 }
