@@ -25,7 +25,7 @@ public class CustomerResponseDto {
         this.userName = model.getUserName();
         this.email = model.getEmail();
         this.phoneNumber = model.getPhoneNumber();
-        this.adress = model.getAdress();
+        this.adress = model.getAddress();
         
     }
 

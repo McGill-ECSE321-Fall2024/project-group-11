@@ -58,7 +58,7 @@ public class CustomerServiceTest {
         assertEquals(userName, createdCustomer.getUserName());
         assertEquals(email, createdCustomer.getEmail());
         assertEquals(phoneNumber, createdCustomer.getPhoneNumber());
-        assertEquals(address, createdCustomer.getAdress());
+        assertEquals(address, createdCustomer.getAddress());
     }
 
     @Test
@@ -108,7 +108,7 @@ public class CustomerServiceTest {
         assertEquals("newUser", updatedCustomer.getUserName());
         assertEquals("new@example.com", updatedCustomer.getEmail());
         assertEquals(5678, updatedCustomer.getPhoneNumber());
-        assertEquals("New Address", updatedCustomer.getAdress());
+        assertEquals("New Address", updatedCustomer.getAddress());
         verify(customerRepository, times(1)).save(customer);
     }
     
