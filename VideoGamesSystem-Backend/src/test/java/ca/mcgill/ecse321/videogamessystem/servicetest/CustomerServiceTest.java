@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+import ca.mcgill.ecse321.videogamessystem.exception.VideoGamesSystemException;
 import ca.mcgill.ecse321.videogamessystem.model.Customer;
 import ca.mcgill.ecse321.videogamessystem.repository.CustomerRepository;
 import ca.mcgill.ecse321.videogamessystem.repository.WishlistRepository;
@@ -82,9 +83,10 @@ public class CustomerServiceTest {
         when(customerRepository.findById(customerId)).thenReturn(Optional.empty());
 
         // Act & Assert
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        Exception exception = assertThrows(VideoGamesSystemException.class, () -> {
             customerService.getCustomerById(customerId);
         });
+        
         assertEquals("Customer with ID 1 not found", exception.getMessage());
     }
 

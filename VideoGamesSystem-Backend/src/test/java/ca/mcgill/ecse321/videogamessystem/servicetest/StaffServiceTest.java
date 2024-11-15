@@ -32,13 +32,16 @@ public class StaffServiceTest {
 
     @Test
     public void testCreateStaff() {
+        // Arrange
         String userName = "staff1";
         String email = "staff1@example.com";
         String password = "password123";
         boolean isAdmin = true;
 
+        // Act
         Staff staff = staffService.createStaff(userName, email, password, isAdmin);
 
+        // Assert
         assertNotNull(staff);
         assertEquals(userName, staff.getUserName());
         assertEquals(email, staff.getEmail());
@@ -129,4 +132,5 @@ public class StaffServiceTest {
 
         assertEquals("UserName already exists", exception.getMessage());
     }
+    
 }

@@ -47,6 +47,7 @@ public class CustomerIntegrationTests {
 		customerRepository.deleteAll();
 	}
 
+	@SuppressWarnings("null")
 	@Test
 	@Order(1)
 	public void testCreateValidPerson() {
@@ -65,8 +66,6 @@ public class CustomerIntegrationTests {
 		assertEquals(VALID_EMAIL, response.getBody().getEmail());
 		assertEquals(VALID_PHONENUMBER, response.getBody().getPhoneNumber());
 		assertEquals(VALID_ADRESS, response.getBody().getAdress());
-
-
 	}
 }
 

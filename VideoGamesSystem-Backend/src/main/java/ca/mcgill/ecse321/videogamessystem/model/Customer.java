@@ -2,11 +2,15 @@
 /*This code was generated using the UMPLE 1.35.0.7523.c616a4dce modeling language!*/
 package ca.mcgill.ecse321.videogamessystem.model;
 
+import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
 
 // line 76 "model.ump"
 // line 163 "model.ump"
 @Entity
+@DiscriminatorValue("CUSTOMER")
 public class Customer extends Account
 {
 

@@ -24,7 +24,7 @@ public class CustomerController {
      * @param request the customer request DTO containing the customer details
      * @return the response DTO with the created customer details
      */
-    @PostMapping("/customers")
+    @PostMapping("/")
     public CustomerResponseDto createCustomer(@Valid @RequestBody CustomerRequestDto request) {
 
         Customer customer = customerService.createCustomer(
