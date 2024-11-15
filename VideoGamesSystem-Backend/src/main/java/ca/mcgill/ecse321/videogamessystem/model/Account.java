@@ -19,7 +19,7 @@ import jakarta.persistence.DiscriminatorType;
 // line 3 "model.ump"
 // line 122 "model.ump"
 @Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE) // Change to SINGLE_TABLE instead of JOINED
+@Inheritance(strategy = InheritanceType.JOINED) // Change to SINGLE_TABLE instead of JOINED
 @DiscriminatorColumn(name = "dtype", discriminatorType = DiscriminatorType.STRING)
 public abstract class Account
 {

@@ -97,7 +97,7 @@ public class CustomerService {
 
     @Transactional
     public List<Customer> getCustomersByAddress(String address) {
-        return customerRepository.findCustomerByAdress(address);
+        return customerRepository.findCustomerByAddress(address);
     }
 
     @Transactional
@@ -111,7 +111,7 @@ public class CustomerService {
             customer.setEmail(newEmail);
         }
         customer.setPhoneNumber(newPhoneNumber);
-        customer.setAdress(newAddress);
+        customer.setAddress(newAddress);
 
         return customerRepository.save(customer);
     }
@@ -152,7 +152,7 @@ public class CustomerService {
     @Transactional
     public Customer updateCustomerAddress(Long id, String newAddress) {
         Customer customer = getCustomerById(id);
-        customer.setAdress(newAddress);
+        customer.setAddress(newAddress);
         return customerRepository.save(customer);
     }
 
