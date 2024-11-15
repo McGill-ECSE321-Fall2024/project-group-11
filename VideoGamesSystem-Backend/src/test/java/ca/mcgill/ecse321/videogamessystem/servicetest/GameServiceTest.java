@@ -15,7 +15,6 @@ import org.mockito.MockitoAnnotations;
 import ca.mcgill.ecse321.videogamessystem.model.Game;
 import ca.mcgill.ecse321.videogamessystem.model.Game.Category;
 import ca.mcgill.ecse321.videogamessystem.model.Game.ConsoleType;
-import ca.mcgill.ecse321.videogamessystem.model.Promotion;
 import ca.mcgill.ecse321.videogamessystem.repository.GameRepository;
 import ca.mcgill.ecse321.videogamessystem.service.GameService;
 
