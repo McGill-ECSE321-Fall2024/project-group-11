@@ -22,7 +22,7 @@ public class Staff extends Account
   // CONSTRUCTOR
   //------------------------
   
-    public Staff() {
+  public Staff() {
       super();
   }
 

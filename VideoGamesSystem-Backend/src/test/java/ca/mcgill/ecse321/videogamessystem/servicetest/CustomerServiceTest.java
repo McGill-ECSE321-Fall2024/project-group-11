@@ -1,10 +1,12 @@
-package ca.mcgill.ecse321.videogamessystem.service_tests;
+package ca.mcgill.ecse321.videogamessystem.servicetest;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 import ca.mcgill.ecse321.videogamessystem.model.Customer;
 import ca.mcgill.ecse321.videogamessystem.repository.CustomerRepository;
+import ca.mcgill.ecse321.videogamessystem.repository.WishlistRepository;
 import ca.mcgill.ecse321.videogamessystem.service.CustomerService;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -19,6 +21,9 @@ public class CustomerServiceTest {
 
     @Mock
     private CustomerRepository customerRepository;
+
+    @Mock
+    private WishlistRepository wishlistRepository;
 
     @InjectMocks
     private CustomerService customerService;

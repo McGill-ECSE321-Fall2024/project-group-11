@@ -5,7 +5,7 @@ import ca.mcgill.ecse321.videogamessystem.model.Wishlist;
 import ca.mcgill.ecse321.videogamessystem.model.Review;
 import ca.mcgill.ecse321.videogamessystem.repository.CustomerRepository;
 import ca.mcgill.ecse321.videogamessystem.repository.WishlistRepository;
-import ca.mcgill.ecse321.videogamessystem.Exception.VideoGamesSystemException;
+import ca.mcgill.ecse321.videogamessystem.exception.VideoGamesSystemException;
 import jakarta.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,9 +63,13 @@ public class CustomerService {
 
         Customer customer = new Customer(userName, email, password, phoneNumber, address);
 
+        System.out.println("1");
         Wishlist newWishlist = new Wishlist();
+        System.out.println("2");
         newWishlist.setCustomer(customer);
+
         wishlistRepository.save(newWishlist);
+        System.out.println('4');
 
         return customerRepository.save(customer);
     }

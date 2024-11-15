@@ -1,4 +1,4 @@
-package ca.mcgill.ecse321.videogamessystem.Exception;
+package ca.mcgill.ecse321.videogamessystem.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
