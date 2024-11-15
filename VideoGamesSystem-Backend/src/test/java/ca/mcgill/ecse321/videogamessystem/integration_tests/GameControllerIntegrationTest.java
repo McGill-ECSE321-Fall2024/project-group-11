@@ -1,3 +1,4 @@
+package ca.mcgill.ecse321.videogamessystem.integration_tests;
 // package ca.mcgill.ecse321.integration_tests;
 
 // import ca.mcgill.ecse321.videogamessystem.VideogamessystemApplication;
