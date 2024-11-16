@@ -1,4 +1,4 @@
-package ca.mcgill.ecse321.videogamessystem.dto.gamedto;
+package ca.mcgill.ecse321.videogamessystem.dto.GameDto;
 
 import java.util.List;
 
