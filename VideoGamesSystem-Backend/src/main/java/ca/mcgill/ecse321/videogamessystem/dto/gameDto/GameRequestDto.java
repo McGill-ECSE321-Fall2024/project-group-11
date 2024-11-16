@@ -12,6 +12,7 @@ public class GameRequestDto {
     private String description;
 
     @Positive(message = "Price must be a positive number.")
+    @NotNull(message= "Price must be specified.")
     private int price;
 
     @NotBlank(message = "Title cannot be blank.")

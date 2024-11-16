@@ -4,8 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.time.LocalDate;
-
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
@@ -23,70 +21,114 @@ import org.springframework.http.ResponseEntity;
 import ca.mcgill.ecse321.videogamessystem.VideogamessystemApplication;
 import ca.mcgill.ecse321.videogamessystem.dto.CustomerDto.CustomerRequestDto;
 import ca.mcgill.ecse321.videogamessystem.dto.CustomerDto.CustomerResponseDto;
-import ca.mcgill.ecse321.videogamessystem.model.Customer;
 import ca.mcgill.ecse321.videogamessystem.repository.CustomerRepository;
 
 @SpringBootTest(classes = VideogamessystemApplication.class, webEnvironment = WebEnvironment.RANDOM_PORT)
 @TestMethodOrder(OrderAnnotation.class)
 @TestInstance(Lifecycle.PER_CLASS)
 public class CustomerIntegrationTests {
-	@Autowired
-	private TestRestTemplate restTemplate;
-	@Autowired
-	private CustomerRepository customerRepository;
 
-	private static final String VALID_USERNAME = "qweld";
-	private static final String VALID_EMAIL = "wwwm@yahoo.com";
-	private static final String VALID_PASSWORD = "abcde";
-	private static final int VALID_PHONENUMBER = 1234567;
-	private static final String VALID_ADRESS= "123 Stanley Street";
-	private Long customerId;
+    @Autowired
+    private TestRestTemplate restTemplate;
 
-	@AfterAll
-	public void clearDatabase() {
-		customerRepository.deleteAll();
-	}
+    @Autowired
+    private CustomerRepository customerRepository;
 
-	@SuppressWarnings("null")
-	@Test
-	@Order(1)
-	public void testCreateValidPerson() {
-		// Arrange
-		CustomerRequestDto request = new CustomerRequestDto(VALID_USERNAME, VALID_EMAIL, VALID_PASSWORD, VALID_PHONENUMBER, VALID_ADRESS);
+    private static final String VALID_USERNAME = "testuser";
+    private static final String VALID_EMAIL = "testuser@example.com";
+    private static final String VALID_PASSWORD = "securepassword";
+    private static final int VALID_PHONENUMBER = 123456789;
+    private static final String VALID_ADRESS = "123 Test Street";
 
-		// Act
-		ResponseEntity<CustomerResponseDto> response = restTemplate.postForEntity("/customers", request, CustomerResponseDto.class);
+    private static final String UPDATED_USERNAME = "updateduser";
+    private static final String UPDATED_EMAIL = "updateduser@example.com";
+    private static final int UPDATED_PHONENUMBER = 987654321;
+    private static final String UPDATED_ADRESS = "456 Updated Street";
 
-		// Assert
-		assertNotNull(response);
-		assertEquals(HttpStatus.OK, response.getStatusCode());
-		assertTrue(response.getBody().getId() > 0, "The ID should be positive.");
-		this.customerId = response.getBody().getId();
-		assertEquals(VALID_USERNAME, response.getBody().getUserName());
-		assertEquals(VALID_EMAIL, response.getBody().getEmail());
-		assertEquals(VALID_PHONENUMBER, response.getBody().getPhoneNumber());
-		assertEquals(VALID_ADRESS, response.getBody().getAdress());
-	}
+    private Long customerId;
+
+    @AfterAll
+    public void clearDatabase() {
+        customerRepository.deleteAll();
+    }
+
+    @Test
+    @Order(1)
+    public void testCreateCustomer() {
+        // Arrange
+        CustomerRequestDto request = new CustomerRequestDto(VALID_USERNAME, VALID_EMAIL, VALID_PASSWORD, VALID_PHONENUMBER, VALID_ADRESS);
+
+        // Act
+        ResponseEntity<CustomerResponseDto> response = restTemplate.postForEntity("/customers", request, CustomerResponseDto.class);
+
+        // Assert
+        assertNotNull(response);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertTrue(response.getBody().getId() > 0, "The ID should be positive.");
+        this.customerId = response.getBody().getId();
+        assertEquals(VALID_USERNAME, response.getBody().getUserName());
+        assertEquals(VALID_EMAIL, response.getBody().getEmail());
+        assertEquals(VALID_PHONENUMBER, response.getBody().getPhoneNumber());
+        assertEquals(VALID_ADRESS, response.getBody().getAdress());
+    }
+
+    @Test
+    @Order(2)
+    public void testGetCustomerById() {
+        // Arrange
+        String url = String.format("/customers/%d", this.customerId);
+
+        // Act
+        ResponseEntity<CustomerResponseDto> response = restTemplate.getForEntity(url, CustomerResponseDto.class);
+
+        // Assert
+        assertNotNull(response);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals(this.customerId, response.getBody().getId());
+        assertEquals(VALID_USERNAME, response.getBody().getUserName());
+        assertEquals(VALID_EMAIL, response.getBody().getEmail());
+        assertEquals(VALID_PHONENUMBER, response.getBody().getPhoneNumber());
+        assertEquals(VALID_ADRESS, response.getBody().getAdress());
+    }
+
+    @Test
+    @Order(3)
+    public void testUpdateCustomerDetails() {
+        // Update username
+        String updateUsernameUrl = String.format("/customers/%d/userName?newUserName=%s", this.customerId, UPDATED_USERNAME);
+        restTemplate.put(updateUsernameUrl, null);
+        ResponseEntity<CustomerResponseDto> responseAfterUsernameUpdate = restTemplate.getForEntity(String.format("/customers/%d", this.customerId), CustomerResponseDto.class);
+        assertEquals(UPDATED_USERNAME, responseAfterUsernameUpdate.getBody().getUserName());
+
+        // Update email
+        String updateEmailUrl = String.format("/customers/%d/email?newEmail=%s", this.customerId, UPDATED_EMAIL);
+        restTemplate.put(updateEmailUrl, null);
+        ResponseEntity<CustomerResponseDto> responseAfterEmailUpdate = restTemplate.getForEntity(String.format("/customers/%d", this.customerId), CustomerResponseDto.class);
+        assertEquals(UPDATED_EMAIL, responseAfterEmailUpdate.getBody().getEmail());
+
+        // Update phone number
+        String updatePhoneNumberUrl = String.format("/customers/%d/phoneNumber?newPhoneNumber=%d", this.customerId, UPDATED_PHONENUMBER);
+        restTemplate.put(updatePhoneNumberUrl, null);
+        ResponseEntity<CustomerResponseDto> responseAfterPhoneNumberUpdate = restTemplate.getForEntity(String.format("/customers/%d", this.customerId), CustomerResponseDto.class);
+        assertEquals(UPDATED_PHONENUMBER, responseAfterPhoneNumberUpdate.getBody().getPhoneNumber());
+
+        // Update address
+        String updateAddressUrl = String.format("/customers/%d/adress?newAddress=%s", this.customerId, UPDATED_ADRESS);
+        restTemplate.put(updateAddressUrl, null);
+        ResponseEntity<CustomerResponseDto> responseAfterAddressUpdate = restTemplate.getForEntity(String.format("/customers/%d", this.customerId), CustomerResponseDto.class);
+        assertEquals(UPDATED_ADRESS, responseAfterAddressUpdate.getBody().getAdress());
+    }
+
+    @Test
+    @Order(4)
+    public void testDeleteCustomer() {
+        // Act
+        restTemplate.delete(String.format("/customers/%d", this.customerId));
+
+        // Assert
+        ResponseEntity<CustomerResponseDto> response = restTemplate.getForEntity(String.format("/customers/%d", this.customerId), CustomerResponseDto.class);
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
 }
-
-// 	@Test
-// 	@Order(2)
-// 	public void testGetValidPersonById() {
-// 		// Arrange
-// 		String url = String.format("/people/%d", this.personId);
-
-// 		System.out.println(String.format("URL: %s", url));
-
-// 		// Act
-// 		ResponseEntity<PersonResponseDto> response = client.getForEntity(url, PersonResponseDto.class);
-
-// 		// Assert
-// 		assertNotNull(response);
-// 		assertEquals(HttpStatus.OK, response.getStatusCode());
-// 		assertEquals(this.personId, response.getBody().getId());
-// 		assertEquals(VALID_NAME, response.getBody().getName());
-// 		assertEquals(VALID_EMAIL, response.getBody().getEmailAddress());
-// 		LocalDate today = LocalDate.now();
-// 		assertEquals(today, response.getBody().getCreationDate());
-// 	}
-// }

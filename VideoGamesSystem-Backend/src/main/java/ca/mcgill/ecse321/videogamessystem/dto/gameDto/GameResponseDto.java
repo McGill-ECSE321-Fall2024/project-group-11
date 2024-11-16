@@ -20,6 +20,9 @@ public class GameResponseDto {
 */
     //maybe add associations
 
+    public GameResponseDto() {
+    }
+
     public GameResponseDto(Game game) {
         this.id = game.getId();
         this.description = game.getDescription();

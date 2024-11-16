@@ -27,6 +27,7 @@ public class GameController {
      */
     @PostMapping("/games")
     public GameResponseDto createGame(@Valid @RequestBody GameRequestDto gameRequestDto) {
+        System.out.println("arrived here!!!!");
         Game game = gameService.createGame(
                 gameRequestDto.getDescription(),
                 gameRequestDto.getPrice(),
