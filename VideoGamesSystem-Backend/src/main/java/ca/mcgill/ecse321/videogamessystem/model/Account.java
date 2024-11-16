@@ -4,17 +4,23 @@ package ca.mcgill.ecse321.videogamessystem.model;
 
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
-import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Id;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
 import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorColumn;
+import jakarta.persistence.Entity;
+import jakarta.persistence.DiscriminatorType;
 
 /**
  * Unable to update umple code due to error at [26,2]
  */
 // line 3 "model.ump"
 // line 122 "model.ump"
-@MappedSuperclass
+@Entity
+@Inheritance(strategy = InheritanceType.JOINED) // Change to SINGLE_TABLE instead of JOINED
+@DiscriminatorColumn(name = "dtype", discriminatorType = DiscriminatorType.STRING)
 public abstract class Account
 {
 

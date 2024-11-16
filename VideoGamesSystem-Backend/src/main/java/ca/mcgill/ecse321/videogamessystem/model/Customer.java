@@ -2,12 +2,15 @@
 /*This code was generated using the UMPLE 1.35.0.7523.c616a4dce modeling language!*/
 package ca.mcgill.ecse321.videogamessystem.model;
 
+import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
 
 // line 76 "model.ump"
 // line 163 "model.ump"
 @Entity
+@DiscriminatorValue("CUSTOMER")
 public class Customer extends Account
 {
 
@@ -18,23 +21,17 @@ public class Customer extends Account
   //Customer Attributes
 
   private int phoneNumber;
-  private String adress;
-
-  //Customer Associations
-  @OneToOne
-  private Wishlist wishlist;
+  private String address;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public Customer(String aUserName, String aEmail, String aPassword, int aPhoneNumber, String aAdress)
+  public Customer(String aUserName, String aEmail, String aPassword, int aPhoneNumber, String aAddress)
   {
     super(aUserName, aEmail, aPassword);
     phoneNumber = aPhoneNumber;
-    adress = aAdress;
-    Wishlist whishlist = new Wishlist();
-    this.wishlist = whishlist;
+    address = aAddress;
   }
 
   public Customer(){
@@ -53,10 +50,10 @@ public class Customer extends Account
     return wasSet;
   }
 
-  public boolean setAdress(String aAdress)
+  public boolean setAddress(String aAddress)
   {
     boolean wasSet = false;
-    adress = aAdress;
+    address = aAddress;
     wasSet = true;
     return wasSet;
   }
@@ -70,31 +67,13 @@ public class Customer extends Account
     return phoneNumber;
   }
 
-  public String getAdress()
+  public String getAddress()
   {
-    return adress;
-  }
-  /* Code from template association_GetOne */
-  public Wishlist getWishlist()
-  {
-    return wishlist;
-  }
-
-  public boolean setWishlist(Wishlist wishlist){
-    boolean wasSet= false;
-    this.wishlist= wishlist;
-    wasSet = true;
-    return wasSet;
+    return address;
   }
 
   public void delete()
   {
-    Wishlist existingWishlist = wishlist;
-    wishlist = null;
-    if (existingWishlist != null)
-    {
-      existingWishlist.delete();
-    }
     super.delete();
   }
 
@@ -103,7 +82,6 @@ public class Customer extends Account
   {
     return super.toString() + "["+
             "phoneNumber" + ":" + getPhoneNumber()+ "," +
-            "adress" + ":" + getAdress()+ "]" + System.getProperties().getProperty("line.separator") +
-            "  " + "wishlist = "+(getWishlist()!=null?Integer.toHexString(System.identityHashCode(getWishlist())):"null");
+            "adress" + ":" + getAddress()+ "]" + System.getProperties().getProperty("line.separator");
   }
 }

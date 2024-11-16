@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/specificGames")
+@CrossOrigin(origins = "http://localhost:8080")
 public class SpecificGameController {
 
     @Autowired
@@ -35,7 +35,7 @@ public class SpecificGameController {
      * @param specificGameRequestDto the DTO containing specific game data
      * @return a ResponseEntity with the created SpecificGameResponseDto
      */
-    @PostMapping
+    @PostMapping("/specificGames")
     public ResponseEntity<SpecificGameResponseDto> createSpecificGame(@Valid @RequestBody SpecificGameRequestDto specificGameRequestDto) {
         SpecificGame specificGame = specificGameService.createSpecificGame(
                 specificGameRequestDto.getSerialNumber(),
@@ -51,7 +51,7 @@ public class SpecificGameController {
      * @param serialNumber the serial number of the specific game to retrieve
      * @return a ResponseEntity with the retrieved SpecificGameResponseDto
      */
-    @GetMapping("/{serialNumber}")
+    @GetMapping("/specificGames/{serialNumber}")
     public ResponseEntity<SpecificGameResponseDto> getSpecificGameBySerialNumber(@PathVariable int serialNumber) {
         SpecificGame specificGame = specificGameService.getSpecificGameBySerialNumber(serialNumber);
         return ResponseEntity.ok(convertToDto(specificGame));
@@ -62,7 +62,7 @@ public class SpecificGameController {
      *
      * @return a ResponseEntity containing a list of all SpecificGameResponseDtos
      */
-    @GetMapping
+    @GetMapping("/specificGames")
     public ResponseEntity<List<SpecificGameResponseDto>> getAllSpecificGames() {
         List<SpecificGameResponseDto> specificGames = specificGameService.getAllSpecificGames()
                 .stream()
@@ -78,7 +78,7 @@ public class SpecificGameController {
      * @param newAvailability the new availability status to set
      * @return a ResponseEntity with the updated SpecificGameResponseDto
      */
-    @PutMapping("/{serialNumber}/availability")
+    @PutMapping("/specificGames/{serialNumber}/availability")
     public ResponseEntity<SpecificGameResponseDto> updateAvailability(
             @PathVariable int serialNumber,
             @RequestParam boolean newAvailability) {
@@ -93,7 +93,7 @@ public class SpecificGameController {
      * @param orderId the ID of the order to add the specific game to
      * @return a ResponseEntity containing a list of SpecificGameResponseDtos associated with the updated order
      */
-    @PutMapping("/{serialNumber}/addToOrder")
+    @PutMapping("/specificGames/{serialNumber}/addToOrder")
     public ResponseEntity<List<SpecificGameResponseDto>> addSpecificGameToOrder(
             @PathVariable int serialNumber,
             @RequestParam int orderId) {
@@ -112,7 +112,7 @@ public class SpecificGameController {
      * @param orderId the ID of the order from which to remove the specific game
      * @return a ResponseEntity containing a list of SpecificGameResponseDtos associated with the updated order
      */
-    @PutMapping("/{serialNumber}/removeFromOrder")
+    @PutMapping("/specificGames/{serialNumber}/removeFromOrder")
     public ResponseEntity<List<SpecificGameResponseDto>> removeSpecificGameFromOrder(
             @PathVariable int serialNumber,
             @RequestParam int orderId) {
@@ -130,7 +130,7 @@ public class SpecificGameController {
      * @param serialNumber the serial number of the specific game to delete
      * @return a ResponseEntity with no content after successful deletion
      */
-    @DeleteMapping("/{serialNumber}")
+    @DeleteMapping("/specificGames/{serialNumber}")
     public ResponseEntity<Void> deleteSpecificGame(@PathVariable int serialNumber) {
         specificGameService.deleteSpecificGame(serialNumber);
         return ResponseEntity.noContent().build();

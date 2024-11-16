@@ -15,7 +15,7 @@ public class CustomerSummaryDto {
         this.email = customer.getEmail();
         this.password = customer.getPassword();
         this.phoneNumber = customer.getPhoneNumber();
-        this.adress = customer.getAdress();
+        this.adress = customer.getAddress();
     }
     protected CustomerSummaryDto() {}
 

@@ -56,18 +56,18 @@ public class SpecificGameServiceTest {
         specificGame.setSpecificOrder(specificOrder);
     }
 
-    // @Test
-    // public void testAddSpecificGameToOrder_Success() {
-    //     when(specificGameRepository.findSpecificGameBySerialNumber(123)).thenReturn(specificGame);
-    //     when(specificGameRepository.findSpecificGameBySpecificOrder(specificOrder))
-    //         .thenReturn(Collections.singletonList(specificGame));
+    @Test
+    public void testAddSpecificGameToOrder_Success() {
+        when(specificGameRepository.findSpecificGameBySerialNumber(123)).thenReturn(specificGame);
+        when(specificGameRepository.findSpecificGameBySpecificOrder(specificOrder))
+            .thenReturn(Collections.singletonList(specificGame));
 
-    //     List<SpecificGame> result = specificGameService.addSpecificGameToOrder(123, specificOrder);
+        List<SpecificGame> result = specificGameService.addSpecificGameToOrder(123, specificOrder);
 
-    //     assertNotNull(result, "Result should not be null");
-    //     assertEquals(1, result.size(), "The list should contain one game after adding to the order.");
-    //     assertEquals(specificOrder, specificGame.getSpecificOrder(), "The game's order should be set.");
-    // }
+        assertNotNull(result, "Result should not be null");
+        assertEquals(1, result.size(), "The list should contain one game after adding to the order.");
+        assertEquals(specificOrder, specificGame.getSpecificOrder(), "The game's order should be set.");
+    }
 
     // @Test
     // public void testRemoveSpecificGameFromOrder_Success() {

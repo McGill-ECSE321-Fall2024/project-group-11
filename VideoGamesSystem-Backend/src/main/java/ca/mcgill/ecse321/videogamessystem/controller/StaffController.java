@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/api/staff")
+@CrossOrigin(origins = "http://localhost:8080")
 public class StaffController {
 
     @Autowired
@@ -22,10 +22,10 @@ public class StaffController {
     /**
      * Creates a new staff member.
      *
-     * @param staffRequestDto the data transfer object containing the new staff's information.
-     * @return a StaffResponseDto containing the created staff's information.
+     * @param staffRequestDto the DTO containing the new staff's information.
+     * @return a StaffResponseDto with the created staff's information.
      */
-    @PostMapping
+    @PostMapping("/staff")
     public StaffResponseDto createStaff(@Valid @RequestBody StaffRequestDto staffRequestDto) {
         Staff staff = staffService.createStaff(
                 staffRequestDto.getUserName(),
@@ -40,9 +40,9 @@ public class StaffController {
      * Retrieves a staff member by their ID.
      *
      * @param id the ID of the staff member to retrieve.
-     * @return a StaffResponseDto containing the staff member's information.
+     * @return a StaffResponseDto with the staff member's information.
      */
-    @GetMapping("/{id}")
+    @GetMapping("/staff/{id}")
     public StaffResponseDto getStaffById(@PathVariable Long id) {
         Staff staff = staffService.getStaffById(id);
         return new StaffResponseDto(staff);
@@ -52,9 +52,9 @@ public class StaffController {
      * Retrieves a staff member by their username.
      *
      * @param userName the username of the staff member to retrieve.
-     * @return a StaffResponseDto containing the staff member's information.
+     * @return a StaffResponseDto with the staff member's information.
      */
-    @GetMapping("/username/{userName}")
+    @GetMapping("/staff/username/{userName}")
     public StaffResponseDto getStaffByUserName(@PathVariable String userName) {
         Staff staff = staffService.getStaffByUserName(userName);
         return new StaffResponseDto(staff);
@@ -64,9 +64,9 @@ public class StaffController {
      * Retrieves a staff member by their email.
      *
      * @param email the email of the staff member to retrieve.
-     * @return a StaffResponseDto containing the staff member's information.
+     * @return a StaffResponseDto with the staff member's information.
      */
-    @GetMapping("/email/{email}")
+    @GetMapping("/staff/email/{email}")
     public StaffResponseDto getStaffByEmail(@PathVariable String email) {
         Staff staff = staffService.getStaffByEmail(email);
         return new StaffResponseDto(staff);
@@ -75,48 +75,22 @@ public class StaffController {
     /**
      * Retrieves all staff members with a specific admin status.
      *
-     * @param isAdmin the admin status (true for admin, false for non-admin) to filter by.
-     * @return a list of StaffResponseDto containing the information of matching staff members.
+     * @param isAdmin the admin status to filter by (true for admin, false for non-admin).
+     * @return a list of StaffResponseDto with matching staff members.
      */
-    @GetMapping("/admin/{isAdmin}")
+    @GetMapping("/staff/admin/{isAdmin}")
     public List<StaffResponseDto> getStaffByAdmin(@PathVariable boolean isAdmin) {
         List<Staff> staffList = staffService.getStaffByAdmin(isAdmin);
         return staffList.stream().map(StaffResponseDto::new).collect(Collectors.toList());
     }
 
     /**
-     * Updates the username of a specific staff member.
-     *
-     * @param id          the ID of the staff member to update.
-     * @param newUserName the new username for the staff member.
-     * @return a StaffResponseDto containing the updated staff member's information.
-     */
-    @PutMapping("/{id}/username")
-    public StaffResponseDto updateStaffUserName(@PathVariable Long id, @RequestParam String newUserName) {
-        Staff updatedStaff = staffService.updateStaffUserName(id, newUserName);
-        return new StaffResponseDto(updatedStaff);
-    }
-
-    /**
-     * Updates the email of a specific staff member.
-     *
-     * @param id       the ID of the staff member to update.
-     * @param newEmail the new email for the staff member.
-     * @return a StaffResponseDto containing the updated staff member's information.
-     */
-    @PutMapping("/{id}/email")
-    public StaffResponseDto updateStaffEmail(@PathVariable Long id, @RequestParam String newEmail) {
-        Staff updatedStaff = staffService.updateStaffEmail(id, newEmail);
-        return new StaffResponseDto(updatedStaff);
-    }
-
-    /**
      * Deletes a staff member by their ID.
      *
      * @param id the ID of the staff member to delete.
-     * @return a StaffResponseDto containing the deleted staff member's information.
+     * @return a StaffResponseDto with the deleted staff member's information.
      */
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/staff/{id}")
     public StaffResponseDto deleteStaff(@PathVariable Long id) {
         Staff deletedStaff = staffService.deleteStaff(id);
         return new StaffResponseDto(deletedStaff);
@@ -125,12 +99,11 @@ public class StaffController {
     /**
      * Retrieves all staff members in the system.
      *
-     * @return a list of StaffResponseDto containing information for all staff members.
+     * @return a list of StaffResponseDto containing all staff members' information.
      */
-    @GetMapping
+    @GetMapping("/staff")
     public List<StaffResponseDto> getAllStaff() {
         List<Staff> staffList = staffService.getAllStaff();
         return staffList.stream().map(StaffResponseDto::new).collect(Collectors.toList());
     }
 }
-

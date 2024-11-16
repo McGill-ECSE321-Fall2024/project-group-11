@@ -53,13 +53,16 @@ public class StaffServiceTest {
 
     @Test
     public void testCreateStaff() {
+        // Arrange
         String userName = "staff1";
         String email = "staff1@example.com";
         String password = "password123";
         boolean isAdmin = true;
 
+        // Act
         Staff staff = staffService.createStaff(userName, email, password, isAdmin);
 
+        // Assert
         assertNotNull(staff);
         assertEquals(userName, staff.getUserName());
         assertEquals(email, staff.getEmail());
@@ -110,6 +113,18 @@ public class StaffServiceTest {
         assertNotNull(updatedStaff);
         assertEquals(newEmail, updatedStaff.getEmail());
     }
+
+    // @Test
+    // public void testDeleteStaff() {
+    //     Staff staff = staffService.createStaff("staff6", "staff6@example.com", "password123", true);
+    //     Long id = staff.getId();
+
+    //     Staff deletedStaff = staffService.deleteStaff(id);
+
+    //     assertNotNull(deletedStaff);
+    //     assertEquals("staff6", deletedStaff.getUserName());
+    //     assertNull(staffRepository.findStaffById(id));
+    // }
 
     @Test
     public void testDeleteNonExistentStaff() {

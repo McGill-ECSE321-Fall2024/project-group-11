@@ -1,11 +1,15 @@
 package ca.mcgill.ecse321.videogamessystem.service;
 
 import ca.mcgill.ecse321.videogamessystem.model.Customer;
+import ca.mcgill.ecse321.videogamessystem.model.Wishlist;
 import ca.mcgill.ecse321.videogamessystem.model.Review;
 import ca.mcgill.ecse321.videogamessystem.repository.CustomerRepository;
+import ca.mcgill.ecse321.videogamessystem.repository.WishlistRepository;
+import ca.mcgill.ecse321.videogamessystem.exception.VideoGamesSystemException;
 import jakarta.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,181 +22,126 @@ public class CustomerService {
     @Autowired
     private CustomerRepository customerRepository;
 
-    // regex for email validation
-    String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\." +
+    @Autowired
+    private WishlistRepository wishlistRepository;
+
+    private static final String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\." +
             "[a-zA-Z0-9_+&*-]+)*@" +
             "(?:[a-zA-Z0-9-]+\\.)+[a-z" +
             "A-Z]{2,7}$";
-    
-    // Create a new customer
-    /**
-     * @param userName
-     * @param email
-     * @param password
-     * @param phoneNumber
-     * @param address
-     * @return 
-     */
+
     @Transactional
     public Customer createCustomer(String userName, String email, String password, int phoneNumber, String address) {
-        // Validation logic can be added here (e.g., check if email or username is already taken)
-        //username check
         if (customerRepository.findCustomerByUserName(userName) != null) {
-            throw new IllegalArgumentException("Username already exists");
+            throw new VideoGamesSystemException(HttpStatus.CONFLICT, "Username already exists");
         }
 
-        //email check
-        if (email == null || email.trim().length() == 0){
-            throw new IllegalArgumentException("no empty email");
+        if (email == null || email.trim().isEmpty()) {
+            throw new VideoGamesSystemException(HttpStatus.BAD_REQUEST, "Email cannot be empty");
         }
         if (!Pattern.compile(emailRegex).matcher(email).matches()) {
-            throw new IllegalArgumentException("invalid email");
+            throw new VideoGamesSystemException(HttpStatus.BAD_REQUEST, "Invalid email format");
         }
         if (customerRepository.findCustomerByEmail(email) != null) {
-            throw new IllegalArgumentException("Email already exists");
-        }
-        //password check
-        if (password == null || password.trim().length() < 4){
-            throw new IllegalArgumentException("password must be more than 4 characters");
-        }
-        //phoneNumber check
-        if (phoneNumber < 1111)
-            throw new IllegalArgumentException("more digits is needed for phone number");
-        if (customerRepository.findCustomerByPhoneNumber(phoneNumber) != null) {
-            throw new IllegalArgumentException("phone number already exists");
+            throw new VideoGamesSystemException(HttpStatus.CONFLICT, "Email already exists");
         }
 
-        //Address check
-        if (address == null || address.trim().length() == 0) {
-            throw new IllegalArgumentException("invalid address");
+        if (password == null || password.trim().length() < 4) {
+            throw new VideoGamesSystemException(HttpStatus.BAD_REQUEST, "Password must be at least 4 characters");
+        }
+
+        if (phoneNumber < 1111) {
+            throw new VideoGamesSystemException(HttpStatus.BAD_REQUEST, "Phone number must contain more digits");
+        }
+        // if (customerRepository.findCustomerByPhoneNumber(phoneNumber) != null) {
+        //     throw new VideoGamesSystemException(HttpStatus.CONFLICT, "Phone number already exists");
+        // }
+
+        if (address == null || address.trim().isEmpty()) {
+            throw new VideoGamesSystemException(HttpStatus.BAD_REQUEST, "Address cannot be empty");
         }
 
         Customer customer = new Customer(userName, email, password, phoneNumber, address);
+
+        System.out.println("1");
+        Wishlist newWishlist = new Wishlist();
+        System.out.println("2");
+        newWishlist.setCustomer(customer);
+
+        wishlistRepository.save(newWishlist);
+        System.out.println('4');
+
         return customerRepository.save(customer);
     }
 
-    // Retrieve customer by ID
-    /**
-     * @param id
-     * @return
-     */
     @Transactional
     public Customer getCustomerById(Long id) {
         Optional<Customer> customer = customerRepository.findById(id);
-        return customer.orElseThrow(() -> new IllegalArgumentException("Customer with ID " + id + " not found"));
+        return customer.orElseThrow(() -> new VideoGamesSystemException(HttpStatus.NOT_FOUND, "Customer with ID " + id + " not found"));
     }
 
-    // Retrieve customer by username
-    /**
-     * @param userName
-     * @return
-     */
     @Transactional
     public Customer getCustomerByUserName(String userName) {
         return customerRepository.findCustomerByUserName(userName);
     }
 
-    // Retrieve customer by email
-    /**
-     * @param email
-     * @return
-     */
     @Transactional
     public Customer getCustomerByEmail(String email) {
         return customerRepository.findCustomerByEmail(email);
     }
 
-    // Retrieve customer by phone number
-    /**
-     * @param phoneNumber
-     * @return
-     */
-    @Transactional
-    public Customer getCustomerByPhoneNumber(int phoneNumber) {
-        return customerRepository.findCustomerByPhoneNumber(phoneNumber);
-    }
+    // @Transactional
+    // public Customer getCustomerByPhoneNumber(int phoneNumber) {
+    //     return customerRepository.findCustomerByPhoneNumber(phoneNumber);
+    // }
 
-    // Retrieve customers by address
-    /**
-     * @param address
-     * @return
-     */
-    @Transactional
-    public List<Customer> getCustomersByAddress(String address) {
-        return customerRepository.findCustomerByAdress(address);
-    }
+    // @Transactional
+    // public List<Customer> getCustomersByAddress(String address) {
+    //     return customerRepository.findCustomerByAddress(address);
+    // }
 
-    // Update customer details
-    /**
-     * @param id
-     * @param newUserName
-     * @param newEmail
-     * @param newPhoneNumber
-     * @param newAddress
-     * @return
-     */
-    @Transactional
-    public Customer updateCustomer(Long id, String newUserName, String newEmail, int newPhoneNumber, String newAddress) {
-        Customer customer = getCustomerById(id);
-        
-        if (newUserName != null && !newUserName.isEmpty()) {
-            customer.setUserName(newUserName);
-        }
-        if (newEmail != null && !newEmail.isEmpty()) {
-            customer.setEmail(newEmail);
-        }
-        customer.setPhoneNumber(newPhoneNumber);
-        customer.setAdress(newAddress);
-        
-        return customerRepository.save(customer);
-    }
+    // @Transactional
+    // public Customer updateCustomer(Long id, String newUserName, String newEmail, int newPhoneNumber, String newAddress) {
+    //     Customer customer = getCustomerById(id);
 
-    
-     // Update customer username
-     /**
-     * @param id
-     * @param newUserName
-     * @return
-     */
+    //     if (newUserName != null && !newUserName.isEmpty()) {
+    //         customer.setUserName(newUserName);
+    //     }
+    //     if (newEmail != null && !newEmail.isEmpty()) {
+    //         customer.setEmail(newEmail);
+    //     }
+    //     customer.setPhoneNumber(newPhoneNumber);
+    //     customer.setAddress(newAddress);
+
+    //     return customerRepository.save(customer);
+    // }
+
     @Transactional
-     public Customer updateCustomerUserName(Long id, String newUserName) {
+    public Customer updateCustomerUserName(Long id, String newUserName) {
         Customer customer = getCustomerById(id);
         if (newUserName == null || newUserName.trim().isEmpty()) {
-            throw new IllegalArgumentException("Username cannot be empty.");
+            throw new VideoGamesSystemException(HttpStatus.BAD_REQUEST, "Username cannot be empty");
         }
         if (customerRepository.findCustomerByUserName(newUserName) != null) {
-            throw new IllegalArgumentException("Username already exists");
+            throw new VideoGamesSystemException(HttpStatus.CONFLICT, "Username already exists");
         }
         customer.setUserName(newUserName);
         return customerRepository.save(customer);
     }
 
-    
-    // Update customer email
-    /**
-     * @param id
-     * @param newEmail
-     * @return
-     */
     @Transactional
     public Customer updateCustomerEmail(Long id, String newEmail) {
         Customer customer = getCustomerById(id);
         if (newEmail == null || newEmail.trim().isEmpty()) {
-            throw new IllegalArgumentException("Email cannot be empty.");
+            throw new VideoGamesSystemException(HttpStatus.BAD_REQUEST, "Email cannot be empty");
         }
         if (customerRepository.findCustomerByEmail(newEmail) != null) {
-            throw new IllegalArgumentException("Email already exists");
+            throw new VideoGamesSystemException(HttpStatus.CONFLICT, "Email already exists");
         }
         customer.setEmail(newEmail);
         return customerRepository.save(customer);
     }
 
-    // Update customer phone number
-    /**
-     * @param id
-     * @param newPhoneNumber
-     * @return
-     */
     @Transactional
     public Customer updateCustomerPhoneNumber(Long id, int newPhoneNumber) {
         Customer customer = getCustomerById(id);
@@ -200,50 +149,43 @@ public class CustomerService {
         return customerRepository.save(customer);
     }
 
-    // Update customer address
-    /**
-     * @param id
-     * @param newAddress
-     * @return
-     */
     @Transactional
     public Customer updateCustomerAddress(Long id, String newAddress) {
         Customer customer = getCustomerById(id);
-        customer.setAdress(newAddress);
+        customer.setAddress(newAddress);
         return customerRepository.save(customer);
     }
 
-    // Delete a customer by ID
-    /**
-     * @param id
-     */
     @Transactional
     public void deleteCustomer(Long id) {
         Customer customer = getCustomerById(id);
         customerRepository.delete(customer);
     }
 
-    // Retrieve all customers
-    /**
-     * @return
-     */
     @Transactional
     public List<Customer> getAllCustomers() {
         return (List<Customer>) customerRepository.findAll();
     }
 
-    // get customer by review
-    /**
-     * @param review
-     * @return
-     */
     @Transactional
     public Customer getCustomerByReview(Review review) {
         Customer customer = review.getCustomer();
-        if (customer == null){
-            throw new RuntimeException("the review shouldn't exsist");
+        if (customer == null) {
+            throw new VideoGamesSystemException(HttpStatus.NOT_FOUND, "Review does not belong to any customer");
         }
         return customer;
     }
+
+    @Transactional
+    public Customer getCustomerByWishlist(Long whishlistID) {
+        Wishlist wishlist = wishlistRepository.findWishlistById(whishlistID);
+
+        Customer customer = wishlist.getCustomer();
+        if (customer == null){
+            throw new IllegalArgumentException("the wishlist has no associated customer");
+        }
+        return customer;
+    }
+
 
 }

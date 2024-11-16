@@ -6,15 +6,15 @@ import java.util.List;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import ca.mcgill.ecse321.videogamessystem.exception.VideoGamesSystemException;
 import ca.mcgill.ecse321.videogamessystem.model.Game;
 import ca.mcgill.ecse321.videogamessystem.model.Promotion;
 import ca.mcgill.ecse321.videogamessystem.repository.GameRepository;
 import ca.mcgill.ecse321.videogamessystem.repository.PromotionRepository;
 import jakarta.transaction.Transactional;
-
-
 
 @Service
 public class PromotionService {
@@ -26,23 +26,25 @@ public class PromotionService {
     private GameRepository gameRepository;
 
     /**
-     * @param percentage
-     * @param startDate
-     * @param endDate
-     * @return
+     * Creates a new promotion.
+     * 
+     * @param percentage the discount percentage for the promotion
+     * @param startDate the start date of the promotion
+     * @param endDate the end date of the promotion
+     * @return the created promotion
      */
     @Transactional
-    public Promotion createPromotion(int percentage, Date startDate, Date endDate){
+    public Promotion createPromotion(int percentage, Date startDate, Date endDate) {
         Date now = Date.valueOf(LocalDate.now());
-        if (endDate == null || startDate == null){
-            throw new IllegalArgumentException("not this buddy");
+        if (endDate == null || startDate == null) {
+            throw new VideoGamesSystemException(HttpStatus.BAD_REQUEST, "Start and end dates must be provided.");
         }
-        if (startDate.before(now) || endDate.before(now)){
-            throw new IllegalArgumentException("date have to today and afterwards");
+        if (startDate.before(now) || endDate.before(now)) {
+            throw new VideoGamesSystemException(HttpStatus.CONFLICT, "Dates must be today or in the future.");
         }
 
-        if(percentage <= 0 || percentage > 100){
-            throw new IllegalArgumentException("invalid percentage");
+        if (percentage <= 0 || percentage > 100) {
+            throw new VideoGamesSystemException(HttpStatus.CONFLICT, "Percentage must be between 1 and 100.");
         }
 
         Promotion promotion = new Promotion();
@@ -52,53 +54,25 @@ public class PromotionService {
         return promotionRepository.save(promotion);
     }
 
-
     /**
-     * @param id
-     * @return
+     * Retrieves a promotion by its ID.
+     * 
+     * @param id the ID of the promotion
+     * @return the promotion with the specified ID
      */
     @Transactional
     public Promotion getPromotionById(Long id) {
         Promotion promotion = this.promotionRepository.findPromotionById(id);
         if (promotion == null) {
-            throw new IllegalArgumentException("Promotion not found");
+            throw new VideoGamesSystemException(HttpStatus.NOT_FOUND, "Promotion not found.");
         }
         return promotion;
     }
-    
 
     /**
-     * @param startDate
-     * @return
-     */
-    @Transactional
-    public List<Promotion> getPromotionByStartdate(Date startDate){
-        return this.promotionRepository.findPromotionByStartDate(startDate);
-    }
-
-
-    /**
-     * @param endDate
-     * @return
-     */
-    @Transactional
-    public List<Promotion> getPromotionByEnddate(Date endDate){
-        return this.promotionRepository.findPromotionByEndDate(endDate);
-    }
-
-
-    /**
-     * @param percentage
-     * @return
-     */
-    @Transactional
-    public List<Promotion> getPromotionbyPercentage(int percentage){
-        return this.promotionRepository.findPromotionByPercentage(percentage);
-    }
-
-
-    /**
-     * @return
+     * Retrieves all promotions.
+     * 
+     * @return a list of all promotions
      */
     @Transactional
     public List<Promotion> getAllPromotion() {
@@ -106,82 +80,49 @@ public class PromotionService {
     }
 
     /**
-     * @param id
-     * @param percentage
-     * @return
+     * Deletes a promotion by its ID and removes its association with any games.
+     * 
+     * @param id the ID of the promotion to delete
+     * @return the deleted promotion
      */
     @Transactional
-    public Promotion updatePromotioPercentage(Long id, int percentage){
-        Promotion promotion = promotionRepository.findPromotionById(id);
-
-        if (percentage <= 0 || percentage > 100) {
-            throw new IllegalArgumentException("invalid percentage to update");
-        }
-        promotion.setPercentage(percentage);
-        return promotionRepository.save(promotion);
-    }
-
-    /**
-     * @param id
-     * @param startDate
-     * @return
-     */
-    @Transactional
-    public Promotion updatePromotionStartDate(Long id, Date startDate){
-        Promotion promotion = promotionRepository.findPromotionById(id);
-
-        Date now = Date.valueOf(LocalDate.now());
-        if (startDate == null || startDate.before(now)){
-            throw new IllegalArgumentException("update startDate invalid");
-        }
-        promotion.setStartDate(startDate);
-        return promotionRepository.save(promotion);
-    }
-
-    /**
-     * @param id
-     * @param endDate
-     * @return
-     */
-    @Transactional
-    public Promotion updatePromotionEndDate(Long id, Date endDate){
-        Promotion promotion = promotionRepository.findPromotionById(id);
-
-        Date now = Date.valueOf(LocalDate.now());
-        if (endDate == null || endDate.before(now)) {
-            throw new IllegalArgumentException("update endDate invalid");
-        }
-        promotion.setEndDate(endDate);
-        return promotionRepository.save(promotion);
-    }
-
-    
-    /**
-     * @param id
-     * @return
-     */
-    @Transactional
-    public Promotion deletePromotion(Long id){
-        Promotion exsistingpromotion = this.getPromotionById(id);
-        List<Game> games = gameRepository.findGameByPromotion(exsistingpromotion);
-        for(Game game: games){
+    public Promotion deletePromotion(Long id) {
+        Promotion existingPromotion = this.getPromotionById(id);
+        List<Game> games = gameRepository.findGameByPromotion(existingPromotion);
+        for (Game game : games) {
             game.setPromotion(null);
             gameRepository.save(game);
         }
-        promotionRepository.delete(exsistingpromotion);
-        return exsistingpromotion;
+        promotionRepository.delete(existingPromotion);
+        return existingPromotion;
     }
 
     /**
-     * Converts an {@code Iterable} to a {@code List}. Utility method to allow
-     * easier manipulation
-     * of the results of repository queries.
-     *
+     * Checks if a promotion is currently active.
+     * 
+     * @param id the ID of the promotion
+     * @return true if the promotion is active, false otherwise
+     */
+    public boolean promotionAvailable(Long id) {
+        Promotion promotion = promotionRepository.findPromotionById(id);
+        if (promotion == null) {
+            throw new VideoGamesSystemException(HttpStatus.NOT_FOUND, "Promotion not found.");
+        }
+
+        Date endDate = promotion.getEndDate();
+        Date startDate = promotion.getStartDate();
+        Date now = Date.valueOf(LocalDate.now());
+
+        return (startDate.before(now) && endDate.after(now)) || startDate.equals(now) || endDate.equals(now);
+    }
+
+    /**
+     * Converts an {@code Iterable} to a {@code List}.
+     * 
      * @param iterable the {@code Iterable} to convert
-     * @param <T>      the type of elements in the iterable
+     * @param <T> the type of elements in the iterable
      * @return a {@code List} containing the elements of the {@code Iterable}
      */
-
     private <T> List<T> toList(Iterable<T> iterable) {
         List<T> resultList = new ArrayList<>();
         for (T t : iterable) {
@@ -189,29 +130,4 @@ public class PromotionService {
         }
         return resultList;
     }
-
-
-// is promotion available
-/**
- * @param id
- * @return
- */
-public boolean promotionAvailable(Long id){
-    boolean valid = false;
-    Promotion promotion = promotionRepository.findPromotionById(id);
-    if (promotion == null){
-        throw new IllegalArgumentException("promotion not found");
-    }
-    Date endDate = promotion.getEndDate();
-    Date startDate = promotion.getStartDate();
-    Date now = Date.valueOf(LocalDate.now());
-    if (endDate.after(now) && startDate.before(now)){
-        valid = true;
-    }
-    if (endDate.equals(now) || startDate.equals(now)){
-        valid = true;
-    }
-    return valid;
-}
-    
 }

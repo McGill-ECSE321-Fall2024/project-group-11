@@ -1,45 +1,25 @@
 package ca.mcgill.ecse321.videogamessystem.dto.ReviewDto;
 
+import ca.mcgill.ecse321.videogamessystem.model.Review;
 import java.sql.Date;
 
-import ca.mcgill.ecse321.videogamessystem.model.Customer;
-import ca.mcgill.ecse321.videogamessystem.model.Review;
-
 public class ReviewResponseDto {
+
     private Long id;
-    private String reviewContent;
     private int gameRating;
+    private String reviewContent;
     private Date reviewDate;
-    private Customer customer;
     private Long customerId;
-    private Review parentReview;
+    private Long gameId;
     private Long parentReviewId;
 
-    // Default constructor for frameworks
-    public ReviewResponseDto() {
-    }
-
-    // Constructor with all attributes
-    public ReviewResponseDto(Long id, String reviewContent, int gameRating, Date reviewDate, Customer customer, Review parentReview) {
-        this.id = id;
-        this.reviewContent = reviewContent;
-        this.gameRating = gameRating;
-        this.reviewDate = reviewDate;
-        this.customer = customer;
-        //this.customerId = customer != null ? customer.getId() : null;
-        this.parentReview = parentReview;
-        //this.parentReviewId = parentReview != null ? parentReview.getId() : null;
-    }
-
-    // Constructor that accepts a Review model object
     public ReviewResponseDto(Review review) {
         this.id = review.getId();
-        this.reviewContent = review.getReviewContent();
         this.gameRating = review.getGameRating();
+        this.reviewContent = review.getReviewContent();
         this.reviewDate = review.getReviewDate();
-        this.customer = review.getCustomer();
         this.customerId = review.getCustomer() != null ? review.getCustomer().getId() : null;
-        this.parentReview = review.getParentReview();
+        this.gameId = review.getGame() != null ? review.getGame().getId() : null;
         this.parentReviewId = review.getParentReview() != null ? review.getParentReview().getId() : null;
     }
 
@@ -48,33 +28,27 @@ public class ReviewResponseDto {
         return id;
     }
 
-    public String getReviewContent() {
-        return reviewContent;
-    }
-
     public int getGameRating() {
         return gameRating;
+    }
+
+    public String getReviewContent() {
+        return reviewContent;
     }
 
     public Date getReviewDate() {
         return reviewDate;
     }
 
-    public Customer getCustomer() {
-        return customer;
-    }
-
     public Long getCustomerId() {
         return customerId;
     }
 
-    public Review getParentReview() {
-        return parentReview;
+    public Long getGameId() {
+        return gameId;
     }
 
     public Long getParentReviewId() {
         return parentReviewId;
     }
-
-   
 }

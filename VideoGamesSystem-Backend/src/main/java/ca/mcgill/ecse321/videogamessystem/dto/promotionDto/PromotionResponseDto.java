@@ -10,6 +10,10 @@ public class PromotionResponseDto {
     private Date startDate;
     private Date endDate;
 
+    public PromotionResponseDto() {
+        super();
+    }
+
     public PromotionResponseDto(Promotion promotion) {
         this.id = promotion.getId();
         this.percentage = promotion.getPercentage();

@@ -1,11 +1,13 @@
 package ca.mcgill.ecse321.videogamessystem.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.ArrayList;
 
+import ca.mcgill.ecse321.videogamessystem.exception.VideoGamesSystemException;
 import ca.mcgill.ecse321.videogamessystem.model.Game;
 import ca.mcgill.ecse321.videogamessystem.model.SpecificOrder;
 import ca.mcgill.ecse321.videogamessystem.model.SpecificGame;
@@ -33,11 +35,11 @@ public class SpecificGameService {
     @Transactional
     public SpecificGame createSpecificGame(int serialNumber, boolean availability, Long gameId) {
         if (specificGameRepository.findSpecificGameBySerialNumber(serialNumber) != null) {
-            throw new IllegalArgumentException("A specific game with this serial number already exists.");
+            throw new VideoGamesSystemException(HttpStatus.NOT_FOUND, "A specific game with this serial number already exists.");
         }
 
         Game game = gameRepository.findById(gameId).orElseThrow(() -> 
-            new IllegalArgumentException("Game not found."));
+            new VideoGamesSystemException(HttpStatus.NOT_FOUND,"Game not found."));
 
         SpecificGame specificGame = new SpecificGame(serialNumber, availability);
         specificGame.setGame(game);
@@ -52,7 +54,7 @@ public class SpecificGameService {
     public SpecificGame getSpecificGameBySerialNumber(int serialNumber) {
         SpecificGame specificGame = specificGameRepository.findSpecificGameBySerialNumber(serialNumber);
         if (specificGame == null) {
-            throw new IllegalArgumentException("Specific game not found.");
+            throw new VideoGamesSystemException(HttpStatus.NOT_FOUND,"Specific game not found.");
         }
         return specificGame;
     }
@@ -75,7 +77,7 @@ public class SpecificGameService {
     public List<SpecificGame> getSpecificGamesByOrder(Integer orderNb) {
         SpecificOrder order = specificOrderRepository.findOrderByNumber(orderNb);
         if (order == null) {
-            throw new IllegalArgumentException("Order not found.");
+            throw new VideoGamesSystemException(HttpStatus.NOT_FOUND,"Order not found.");
         }
         return specificGameRepository.findSpecificGameBySpecificOrder(order);
     }
@@ -89,7 +91,7 @@ public class SpecificGameService {
     public List<SpecificGame> getSpecificGamesByGame(Long gameId) {
         Game game = gameRepository.findGameById(gameId);
         if (game == null) {
-            throw new IllegalArgumentException("Specific game not found.");
+            throw new VideoGamesSystemException(HttpStatus.NOT_FOUND,"Specific game not found.");
         }
         return specificGameRepository.findSpecificGameByGame(game);
     }
@@ -104,7 +106,7 @@ public class SpecificGameService {
     public SpecificGame updateAvailability(int serialNumber, boolean newAvailability) {
         SpecificGame specificGame = specificGameRepository.findSpecificGameBySerialNumber(serialNumber);
         if (specificGame == null) {
-            throw new IllegalArgumentException("Specific game not found.");
+            throw new VideoGamesSystemException(HttpStatus.NOT_FOUND,"Specific game not found.");
         }
 
         specificGame.setAvailability(newAvailability);
@@ -121,7 +123,7 @@ public class SpecificGameService {
     public SpecificGame deleteSpecificGame(int serialNumber) {
         SpecificGame specificGame = specificGameRepository.findSpecificGameBySerialNumber(serialNumber);
         if (specificGame == null) {
-            throw new IllegalArgumentException("Specific game not found.");
+            throw new VideoGamesSystemException(HttpStatus.NOT_FOUND,"Specific game not found.");
         }
 
         specificGameRepository.delete(specificGame);
@@ -150,14 +152,14 @@ public class SpecificGameService {
         return resultList;
     }
 
-    // find specific game by order
-    /**
-     * @param order
-     * @return
-     */
-    public List<SpecificGame> getSpecificGameByOrder(SpecificOrder order){
-        return specificGameRepository.findSpecificGameBySpecificOrder(order);
-    }
+    // // find specific game by order
+    // /**
+    //  * @param order
+    //  * @return
+    //  */
+    // public List<SpecificGame> getSpecificGameByOrder(SpecificOrder order){
+    //     return specificGameRepository.findSpecificGameBySpecificOrder(order);
+    // }
 
 
     // add specific game to order
@@ -169,10 +171,10 @@ public class SpecificGameService {
     public List<SpecificGame> addSpecificGameToOrder(int specificGameID, SpecificOrder order) {
         SpecificGame specificGame = specificGameRepository.findSpecificGameBySerialNumber(specificGameID);
         if (specificGame == null) {
-            throw new IllegalArgumentException("specific game not found");
+            throw new VideoGamesSystemException(HttpStatus.NOT_FOUND,"specific game not found");
         }
         if (order == null) {
-            throw new IllegalArgumentException("order cannot be null");
+            throw new VideoGamesSystemException(HttpStatus.NOT_FOUND,"order cannot be null");
         }
 
         // Set the specific order for the game
@@ -185,28 +187,28 @@ public class SpecificGameService {
         return specificGameRepository.findSpecificGameBySpecificOrder(order);
     }
 
-    // add specific games to order
-    /**
-     * @param specificGameID
-     * @param order
-     * @return
-     */
-    public List<SpecificGame> addSpecificGamesToOrder(List<Integer> specificGameID, SpecificOrder order) {
-        if (order == null) {
-            throw new IllegalArgumentException("order cannot be null");
-        }
-        for (int id :specificGameID){
-            SpecificGame specificGame = specificGameRepository.findSpecificGameBySerialNumber(id);
-            if (specificGame == null) {
-                throw new IllegalArgumentException("some specific game is null");
-            }
-            specificGame.setSpecificOrder(order);
-            // Save the updated specific game with the new order
-            specificGameRepository.save(specificGame);
-        }
-        // Return the list of specific games associated with the order
-        return specificGameRepository.findSpecificGameBySpecificOrder(order);
-    }
+    // // add specific games to order
+    // /**
+    //  * @param specificGameID
+    //  * @param order
+    //  * @return
+    //  */
+    // public List<SpecificGame> addSpecificGamesToOrder(List<Integer> specificGameID, SpecificOrder order) {
+    //     if (order == null) {
+    //         throw new IllegalArgumentException("order cannot be null");
+    //     }
+    //     for (int id :specificGameID){
+    //         SpecificGame specificGame = specificGameRepository.findSpecificGameBySerialNumber(id);
+    //         if (specificGame == null) {
+    //             throw new IllegalArgumentException("some specific game is null");
+    //         }
+    //         specificGame.setSpecificOrder(order);
+    //         // Save the updated specific game with the new order
+    //         specificGameRepository.save(specificGame);
+    //     }
+    //     // Return the list of specific games associated with the order
+    //     return specificGameRepository.findSpecificGameBySpecificOrder(order);
+    // }
 
 
     /**
@@ -216,11 +218,11 @@ public class SpecificGameService {
      */
     public List<SpecificGame> getSpecificGamesFromGame(Long gameID, int number_needed){
         if (number_needed < 0) {
-            throw new IllegalArgumentException("can only retrieve positive number of games");
+            throw new VideoGamesSystemException(HttpStatus.NOT_FOUND,"can only retrieve positive number of games");
         }
         List<SpecificGame> games = this.getSpecificGamesByGame(gameID);
         if (games.size() < number_needed){
-            throw new IllegalArgumentException("not enough in stock for game" + gameID);
+            throw new VideoGamesSystemException(HttpStatus.NOT_FOUND,"not enough in stock for game" + gameID);
         }
         int i = 0;
         List <SpecificGame> first_few = new ArrayList<>();
@@ -246,15 +248,15 @@ public class SpecificGameService {
         // Retrieve the specific game by serial number
         SpecificGame specificCopy = specificGameRepository.findSpecificGameBySerialNumber(specificGameID);
         if (specificCopy == null) {
-            throw new IllegalArgumentException("specific game not found");
+            throw new VideoGamesSystemException(HttpStatus.NOT_FOUND,"specific game not found");
         }
         if (order == null) {
-            throw new IllegalArgumentException("order cannot be null");
+            throw new VideoGamesSystemException(HttpStatus.NOT_FOUND,"order cannot be null");
         }
 
         // Check if the specific game is indeed associated with the given order
         if (!order.equals(specificCopy.getSpecificOrder())) {
-            throw new IllegalArgumentException("the specific game was not in the order provided.");
+            throw new VideoGamesSystemException(HttpStatus.NOT_FOUND,"the specific game was not in the order provided.");
         }
 
         // Unset the order from the specific game and save the change
@@ -265,6 +267,8 @@ public class SpecificGameService {
         // include this game)
         return specificGameRepository.findSpecificGameBySpecificOrder(order);
     }
+
+    
 
 }
 

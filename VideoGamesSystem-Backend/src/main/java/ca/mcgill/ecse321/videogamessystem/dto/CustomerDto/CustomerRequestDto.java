@@ -33,7 +33,7 @@ public class CustomerRequestDto {
     }
 
 
-    public CustomerRequestDto(String userName, String email, String password, int phoneNumber, String adress,Long wishlistId) {
+    public CustomerRequestDto(String userName, String email, String password, int phoneNumber, String adress) {
         this.userName = userName;
         this.email = email;
         this.password = password;
