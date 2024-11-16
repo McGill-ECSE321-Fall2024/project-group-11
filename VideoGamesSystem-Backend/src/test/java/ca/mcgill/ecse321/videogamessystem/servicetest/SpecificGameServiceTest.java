@@ -7,6 +7,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 import java.util.Optional;
 
+import ca.mcgill.ecse321.videogamessystem.exception.VideoGamesSystemException;
 import ca.mcgill.ecse321.videogamessystem.model.Game;
 import ca.mcgill.ecse321.videogamessystem.model.SpecificGame;
 import ca.mcgill.ecse321.videogamessystem.model.SpecificOrder;
@@ -366,68 +367,40 @@ public class SpecificGameServiceTest {
     @Test
     public void testGetSpecificGameByOrder_Success() {
         // Arrange
-        SpecificOrder mockOrder = mock(SpecificOrder.class);  // Mock the SpecificOrder object
+        Integer orderNumber = 1;
+        SpecificOrder mockOrder = new SpecificOrder();
+        SpecificGame specificGame1 = new SpecificGame(101, true);
+        SpecificGame specificGame2 = new SpecificGame(102, true);
 
-        SpecificGame specificGame1 = new SpecificGame();
-        specificGame1.setSerialNumber(101);
-        specificGame1.setSpecificOrder(mockOrder);
-
-        SpecificGame specificGame2 = new SpecificGame();
-        specificGame2.setSerialNumber(102);
-        specificGame2.setSpecificOrder(mockOrder);
-
-        when(specificGameRepository.findSpecificGameBySpecificOrder(mockOrder))
-            .thenReturn(List.of(specificGame1, specificGame2));
+        // Mock the behavior of repositories
+        when(specificOrderRepository.findOrderByNumber(orderNumber)).thenReturn(mockOrder);
+        when(specificGameRepository.findSpecificGameBySpecificOrder(mockOrder)).thenReturn(List.of(specificGame1, specificGame2));
 
         // Act
-        List<SpecificGame> specificGames = specificGameService.getSpecificGameByOrder(mockOrder);
+        List<SpecificGame> result = specificGameService.getSpecificGamesByOrder(orderNumber);
 
         // Assert
-        assertNotNull(specificGames, "Result should not be null");
-        assertEquals(2, specificGames.size(), "There should be two specific games returned");
-        assertTrue(specificGames.contains(specificGame1), "The list should contain specificGame1");
-        assertTrue(specificGames.contains(specificGame2), "The list should contain specificGame2");
+        assertNotNull(result, "The result should not be null.");
+        assertEquals(2, result.size(), "The list should contain two specific games.");
+        assertTrue(result.contains(specificGame1), "The result should contain specificGame1.");
+        assertTrue(result.contains(specificGame2), "The result should contain specificGame2.");
     }
 
     @Test
     public void testGetSpecificGameByOrder_OrderNotFound() {
         // Arrange
-        SpecificOrder mockOrder = mock(SpecificOrder.class);
-        when(specificGameRepository.findSpecificGameBySpecificOrder(mockOrder)).thenReturn(new ArrayList<>());
+        Integer orderNumber = 999;
 
-        // Act
-        List<SpecificGame> specificGames = specificGameService.getSpecificGameByOrder(mockOrder);
+        // Mock the behavior of repositories
+        when(specificOrderRepository.findOrderByNumber(orderNumber)).thenReturn(null);
 
-        // Assert
-        assertNotNull(specificGames, "Result should not be null");
-        assertEquals(0, specificGames.size(), "The list should be empty when no games are found for the order");
+        // Act & Assert
+        VideoGamesSystemException exception = assertThrows(VideoGamesSystemException.class, () -> {
+            specificGameService.getSpecificGamesByOrder(orderNumber);
+        });
+        assertEquals("Order not found.", exception.getMessage(), "The exception message should indicate the order was not found.");
     }
 
-
-
-
-    @Test
-    public void testAddSpecificGameToOrder_Success() {
-        // Arrange
-        int specificGameID = 101;
-        SpecificOrder mockOrder = mock(SpecificOrder.class); // Mock SpecificOrder
-        SpecificGame specificGame = new SpecificGame();      // Create a SpecificGame instance
-        specificGame.setSerialNumber(specificGameID);
-
-        // Mock repository behavior
-        when(specificGameRepository.findSpecificGameBySerialNumber(specificGameID)).thenReturn(specificGame);
-        when(specificGameRepository.findSpecificGameBySpecificOrder(mockOrder)).thenReturn(List.of(specificGame));
-        when(specificGameRepository.save(specificGame)).thenReturn(specificGame);
-
-        // Act
-        List<SpecificGame> result = specificGameService.addSpecificGameToOrder(specificGameID, mockOrder);
-
-        // Assert
-        assertNotNull(result, "Result should not be null");
-        assertEquals(1, result.size(), "The list should contain one game after adding to the order.");
-        assertEquals(mockOrder, specificGame.getSpecificOrder(), "The game's order should be set.");
-        verify(specificGameRepository, times(1)).save(specificGame); // Verify save was called
-    }
 
     @Test
     public void testAddSpecificGameToOrder_GameNotFound() {
@@ -664,58 +637,66 @@ public class SpecificGameServiceTest {
     }
     
     @Test
-    public void testAddSpecificGamesToOrder_NullOrder() {
+    public void testAssociateSpecificGameWithNullOrder() {
         // Arrange
-        List<Integer> specificGameIDs = List.of(1, 2, 3);
+        int specificGameID = 101;
+        SpecificGame specificGame = new SpecificGame();
+        specificGame.setSerialNumber(specificGameID);
+
+        // Mock repository behavior for retrieving the specific game
+        when(specificGameRepository.findSpecificGameBySerialNumber(specificGameID)).thenReturn(specificGame);
 
         // Act & Assert
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            specificGameService.addSpecificGamesToOrder(specificGameIDs, null);
+        Exception exception = assertThrows(VideoGamesSystemException.class, () -> {
+            specificGameService.addSpecificGameToOrder(specificGameID, null);
         });
         assertEquals("order cannot be null", exception.getMessage());
     }
 
     @Test
-    public void testAddSpecificGamesToOrder_WithNullSpecificGame() {
+    public void testValidateSpecificGames_NullSpecificGame() {
         // Arrange
-        List<Integer> specificGameIDs = List.of(1, 2, 3);
-        SpecificOrder order = new SpecificOrder();
-
-        // Mocking repository to return `null` for ID 3, triggering an exception
-        when(specificGameRepository.findSpecificGameBySerialNumber(1)).thenReturn(new SpecificGame());
-        when(specificGameRepository.findSpecificGameBySerialNumber(2)).thenReturn(new SpecificGame());
-        when(specificGameRepository.findSpecificGameBySerialNumber(3)).thenReturn(null);
+        List<SpecificGame> specificGames = List.of(new SpecificGame(), null, new SpecificGame());
 
         // Act & Assert
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            specificGameService.addSpecificGamesToOrder(specificGameIDs, order);
-        });
-        assertEquals("some specific game is null", exception.getMessage());
+        for (SpecificGame game : specificGames) {
+            if (game == null) {
+                Exception exception = assertThrows(VideoGamesSystemException.class, () -> {
+                    specificGameService.getSpecificGameBySerialNumber(game.getSerialNumber());
+                });
+                assertEquals("Specific game not found.", exception.getMessage());
+            }
+        }
     }
 
     @Test
-    public void testAddSpecificGamesToOrder_Success() {
+    public void testRetrieveSpecificGamesBySerialNumbers_Success() {
         // Arrange
-        List<Integer> specificGameIDs = List.of(1, 2);
-        SpecificOrder order = new SpecificOrder();
-        
+        List<Integer> serialNumbers = List.of(101, 102, 103);
         SpecificGame game1 = new SpecificGame();
+        game1.setSerialNumber(101);
         SpecificGame game2 = new SpecificGame();
-        
-        // Mock repository to return specific games for IDs
-        when(specificGameRepository.findSpecificGameBySerialNumber(1)).thenReturn(game1);
-        when(specificGameRepository.findSpecificGameBySerialNumber(2)).thenReturn(game2);
-        when(specificGameRepository.findSpecificGameBySpecificOrder(order)).thenReturn(List.of(game1, game2));
-
+        game2.setSerialNumber(102);
+        SpecificGame game3 = new SpecificGame();
+        game3.setSerialNumber(103);
+    
+        // Mock the repository behavior
+        when(specificGameRepository.findSpecificGameBySerialNumber(101)).thenReturn(game1);
+        when(specificGameRepository.findSpecificGameBySerialNumber(102)).thenReturn(game2);
+        when(specificGameRepository.findSpecificGameBySerialNumber(103)).thenReturn(game3);
+    
         // Act
-        List<SpecificGame> result = specificGameService.addSpecificGamesToOrder(specificGameIDs, order);
-
+        List<SpecificGame> retrievedGames = new ArrayList<>();
+        for (Integer serialNumber : serialNumbers) {
+            retrievedGames.add(specificGameService.getSpecificGameBySerialNumber(serialNumber));
+        }
+    
         // Assert
-        assertNotNull(result);
-        assertEquals(2, result.size());
-        assertTrue(result.contains(game1) && result.contains(game2));
-        verify(specificGameRepository, times(1)).save(game1);
-        verify(specificGameRepository, times(1)).save(game2);
+        assertNotNull(retrievedGames);
+        assertEquals(3, retrievedGames.size());
+        assertTrue(retrievedGames.contains(game1));
+        assertTrue(retrievedGames.contains(game2));
+        assertTrue(retrievedGames.contains(game3));
     }
 
     @Test

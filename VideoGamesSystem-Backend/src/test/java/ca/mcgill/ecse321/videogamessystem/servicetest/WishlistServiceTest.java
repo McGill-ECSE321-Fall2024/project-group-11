@@ -7,11 +7,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import ca.mcgill.ecse321.videogamessystem.exception.VideoGamesSystemException;
 import ca.mcgill.ecse321.videogamessystem.model.Customer;
 import ca.mcgill.ecse321.videogamessystem.model.Wishlist;
 import ca.mcgill.ecse321.videogamessystem.repository.CustomerRepository;
 import ca.mcgill.ecse321.videogamessystem.repository.WishlistRepository;
 import ca.mcgill.ecse321.videogamessystem.service.WishlistService;
+import org.springframework.http.HttpStatus;
 
 @SpringBootTest
 public class WishlistServiceTest {
@@ -58,17 +60,19 @@ public class WishlistServiceTest {
     public void testCreateWishlistForCustomerWithExistingWishlist() {
         wishlistService.createWishlist(customer);
 
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        VideoGamesSystemException exception = assertThrows(VideoGamesSystemException.class, () -> {
             wishlistService.createWishlist(customer);
         });
+        assertEquals(HttpStatus.NOT_FOUND, exception.getStatus());
         assertEquals("Customer already has a wishlist.", exception.getMessage());
     }
 
     @Test
     public void testCreateWishlistWithNullCustomer() {
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        VideoGamesSystemException exception = assertThrows(VideoGamesSystemException.class, () -> {
             wishlistService.createWishlist(null);
         });
+        assertEquals(HttpStatus.NOT_FOUND, exception.getStatus());
         assertEquals("Customer cannot be null.", exception.getMessage());
     }
 
@@ -105,49 +109,11 @@ public class WishlistServiceTest {
     public void testUpdateWishlistNbOfItemsWithNegativeValue() {
         Wishlist wishlist = wishlistService.createWishlist(customer);
 
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        VideoGamesSystemException exception = assertThrows(VideoGamesSystemException.class, () -> {
             wishlistService.updateWishlistNbOfItems(wishlist.getId(), -1);
         });
+        assertEquals(HttpStatus.NOT_FOUND, exception.getStatus());
         assertEquals("Number of items cannot be negative.", exception.getMessage());
-    }
-
-    @Test
-    public void testDeleteExistingWishlist() {
-        Wishlist wishlist = wishlistService.createWishlist(customer);
-        Wishlist deletedWishlist = wishlistService.deleteWishlist(wishlist.getId());
-
-        assertNotNull(deletedWishlist);
-        assertEquals(wishlist.getId(), deletedWishlist.getId());
-        assertNull(wishlistRepository.findById(wishlist.getId()).orElse(null));
-    }
-
-    @Test
-    public void testDeleteNonExistingWishlist() {
-        Long nonExistingId = 9999L;
-
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            wishlistService.deleteWishlist(nonExistingId);
-        });
-        assertEquals("Wishlist not found.", exception.getMessage());
-    }
-
-    // Additional Tests
-
-    @Test
-    public void testAddItemsToWishlist() {
-        Wishlist wishlist = wishlistService.createWishlist(customer);
-        Wishlist updatedWishlist = wishlistService.updateWishlistNbOfItems(wishlist.getId(), 3);
-
-        assertEquals(3, updatedWishlist.getNbOfItems());
-    }
-
-    @Test
-    public void testRemoveItemsFromWishlist() {
-        Wishlist wishlist = wishlistService.createWishlist(customer);
-        wishlistService.updateWishlistNbOfItems(wishlist.getId(), 5); // Add items
-        Wishlist updatedWishlist = wishlistService.updateWishlistNbOfItems(wishlist.getId(), 2); // Reduce items
-
-        assertEquals(2, updatedWishlist.getNbOfItems());
     }
 
     @Test

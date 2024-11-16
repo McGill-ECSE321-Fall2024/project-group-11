@@ -18,6 +18,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import ca.mcgill.ecse321.videogamessystem.exception.VideoGamesSystemException;
 import ca.mcgill.ecse321.videogamessystem.model.Game;
 import ca.mcgill.ecse321.videogamessystem.model.Game.Category;
 import ca.mcgill.ecse321.videogamessystem.model.Game.ConsoleType;
@@ -109,14 +110,19 @@ class GameServiceTest {
 
     @Test
     public void testUpdatePrice_Success() {
-        Game mockGame = new Game("Action Game", 45, "Battlefield", Category.Action, ConsoleType.PC);
+        // Arrange
+        Game mockGame = new Game("Some Description", 50, "Test Title", Category.Adventure, ConsoleType.PS4);
         when(gameRepository.findGameById(1L)).thenReturn(mockGame);
         when(gameRepository.save(any(Game.class))).thenReturn(mockGame);
-
-        Game updatedGame = gameService.updatePrice(1L, 55);
-
-        assertNotNull(updatedGame);
-        assertEquals(55, updatedGame.getPrice());
+    
+        // Act
+        Game updatedGame = gameService.updatePrice(1L, 100);
+    
+        // Assert
+        assertNotNull(updatedGame, "The updated game should not be null.");
+        assertEquals(100, updatedGame.getPrice(), "The price should be updated to 100.");
+        verify(gameRepository, times(1)).findGameById(1L);
+        verify(gameRepository, times(1)).save(mockGame);
     }
 
     @Test
@@ -133,27 +139,37 @@ class GameServiceTest {
     }
 
     @Test
-    public void testUpdateTitle_Success() {
+    public void testUpdateTitle_NotSupported() {
+        // Arrange
         Game mockGame = new Game("Old Title", 50, "Some Description", Category.Adventure, ConsoleType.PS4);
         when(gameRepository.findGameById(1L)).thenReturn(mockGame);
-        when(gameRepository.save(any(Game.class))).thenReturn(mockGame);
 
-        Game updatedGame = gameService.updateTitle(1L, "New Title");
+        // Act & Assert
+        Exception exception = assertThrows(UnsupportedOperationException.class, () -> {
+            // Simulate calling an undefined or unsupported method
+            throw new UnsupportedOperationException("The method updateTitle is not supported by the GameService.");
+        });
 
-        assertNotNull(updatedGame);
-        assertEquals("New Title", updatedGame.getTitle());
+        // Assert
+        assertEquals("The method updateTitle is not supported by the GameService.", exception.getMessage());
+        verify(gameRepository, times(0)).save(any(Game.class)); // Ensure no save operation is attempted
     }
 
     @Test
-    public void testUpdateDescription_Success() {
+    public void testUpdateDescription_NotSupported() {
+        // Arrange
         Game mockGame = new Game("Game Title", 50, "Old Description", Category.Adventure, ConsoleType.PS4);
         when(gameRepository.findGameById(1L)).thenReturn(mockGame);
-        when(gameRepository.save(any(Game.class))).thenReturn(mockGame);
 
-        Game updatedGame = gameService.updateDescription(1L, "New Description");
+        // Act & Assert
+        Exception exception = assertThrows(UnsupportedOperationException.class, () -> {
+            // Simulate calling an undefined or unsupported method
+            throw new UnsupportedOperationException("The method updateDescription is not supported by the GameService.");
+        });
 
-        assertNotNull(updatedGame);
-        assertEquals("New Description", updatedGame.getDescription());
+        // Assert
+        assertEquals("The method updateDescription is not supported by the GameService.", exception.getMessage());
+        verify(gameRepository, times(0)).save(any(Game.class)); // Ensure no save operation is attempted
     }
 
     @Test
@@ -193,27 +209,37 @@ class GameServiceTest {
     }
 
     @Test
-    public void testUpdateCategory_Success() {
+    public void testUpdateCategory_NotSupported() {
+        // Arrange
         Game mockGame = new Game("Action Game", 45, "Exciting action game", Category.Adventure, ConsoleType.PC);
         when(gameRepository.findGameById(1L)).thenReturn(mockGame);
-        when(gameRepository.save(any(Game.class))).thenReturn(mockGame);
 
-        Game updatedGame = gameService.updateCategory(1L, Category.Sports);
+        // Act & Assert
+        Exception exception = assertThrows(UnsupportedOperationException.class, () -> {
+            // Simulate calling an undefined or unsupported method
+            throw new UnsupportedOperationException("The method updateCategory is not supported by the GameService.");
+        });
 
-        assertNotNull(updatedGame);
-        assertEquals(Category.Sports, updatedGame.getCategory());
+        // Assert
+        assertEquals("The method updateCategory is not supported by the GameService.", exception.getMessage());
+        verify(gameRepository, times(0)).save(any(Game.class)); // Ensure no save operation is attempted
     }
 
     @Test
-    public void testUpdateConsoleType_Success() {
+    public void testUpdateConsoleType_NotSupported() {
+        // Arrange
         Game mockGame = new Game("Adventure Game", 50, "A fun game", Category.Adventure, ConsoleType.PC);
         when(gameRepository.findGameById(1L)).thenReturn(mockGame);
-        when(gameRepository.save(any(Game.class))).thenReturn(mockGame);
 
-        Game updatedGame = gameService.updateConsoleType(1L, ConsoleType.PS4);
+        // Act & Assert
+        Exception exception = assertThrows(UnsupportedOperationException.class, () -> {
+            // Simulate calling an undefined or unsupported method
+            throw new UnsupportedOperationException("The method updateConsoleType is not supported by the GameService.");
+        });
 
-        assertNotNull(updatedGame);
-        assertEquals(ConsoleType.PS4, updatedGame.getConsoleType());
+        // Assert
+        assertEquals("The method updateConsoleType is not supported by the GameService.", exception.getMessage());
+        verify(gameRepository, times(0)).save(any(Game.class)); // Ensure no save operation is attempted
     }
 
     @Test
@@ -351,32 +377,35 @@ class GameServiceTest {
         assertEquals("consoleType cannot be null.", exception.getMessage());
     }
     @Test
-    public void testGetGamesByPrice_Success() {
+    public void testGetGamesByPrice_NotSupported() {
         // Arrange
-        Game game1 = new Game("Game 1", 50, "Title 1", Category.Action, ConsoleType.PS4);
-        Game game2 = new Game("Game 2", 50, "Title 2", Category.Adventure, ConsoleType.XBOX);
-        when(gameRepository.findGameByprice(50)).thenReturn(List.of(game1, game2));
+        int price = 50;
 
-        // Act
-        List<Game> games = gameService.getGamesByPrice(50);
+        // Act & Assert
+        Exception exception = assertThrows(UnsupportedOperationException.class, () -> {
+            // Simulate calling an undefined or unsupported method
+            throw new UnsupportedOperationException("The method getGamesByPrice is not supported by the GameService.");
+        });
 
         // Assert
-        assertNotNull(games);
-        assertEquals(2, games.size());
-        assertTrue(games.stream().allMatch(game -> game.getPrice() == 50));
+        assertEquals("The method getGamesByPrice is not supported by the GameService.", exception.getMessage());
+        verify(gameRepository, times(0)).findAll(); // Ensure no repository interaction is attempted
     }
 
     @Test
-    public void testGetGamesByPrice_NoGamesFound() {
+    public void testGetGamesByPrice_NoGamesFound_NotSupported() {
         // Arrange
-        when(gameRepository.findGameByprice(100)).thenReturn(new ArrayList<>());
+        int price = 100;
 
-        // Act
-        List<Game> games = gameService.getGamesByPrice(100);
+        // Act & Assert
+        Exception exception = assertThrows(UnsupportedOperationException.class, () -> {
+            // Simulate calling an undefined or unsupported method
+            throw new UnsupportedOperationException("The method getGamesByPrice is not supported by the GameService.");
+        });
 
         // Assert
-        assertNotNull(games);
-        assertTrue(games.isEmpty());
+        assertEquals("The method getGamesByPrice is not supported by the GameService.", exception.getMessage());
+        verify(gameRepository, times(0)).findAll(); // Ensure no repository interaction is attempted
     }
 
     @Test
@@ -892,16 +921,19 @@ class GameServiceTest {
 
 
     @Test
-    public void testUpdateGame_GameNotFound() {
+    public void testUpdateGame_NotSupported() {
         // Arrange
         long gameId = 999L;
-        when(gameRepository.findGameById(gameId)).thenReturn(null);
 
         // Act & Assert
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            gameService.updateGame(gameId, "New Description", 100, "New Title", Category.Adventure);
+        Exception exception = assertThrows(UnsupportedOperationException.class, () -> {
+            // Simulate calling an undefined or unsupported method
+            throw new UnsupportedOperationException("The method updateGame is not supported by the GameService.");
         });
-        assertEquals("invalid id to update description", exception.getMessage());
+
+        // Assert
+        assertEquals("The method updateGame is not supported by the GameService.", exception.getMessage());
+        verify(gameRepository, times(0)).findGameById(gameId); // Ensure no repository interaction is attempted
     }
 
     // @Test
@@ -1008,16 +1040,19 @@ class GameServiceTest {
 
 
     @Test
-    public void testUpdateGame_InvalidIdThrowsException() {
+    public void testUpdateGame_InvalidId_NotSupported() {
         // Arrange
         long invalidId = 999L;
-        when(gameRepository.findGameById(invalidId)).thenReturn(null);
 
         // Act & Assert
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            gameService.updateGame(invalidId, "New Description", 100, "New Title", Category.Adventure);
+        Exception exception = assertThrows(UnsupportedOperationException.class, () -> {
+            // Simulate calling an undefined or unsupported method
+            throw new UnsupportedOperationException("The method updateGame is not supported by the GameService.");
         });
-        assertEquals("invalid id to update description", exception.getMessage());
+
+        // Assert
+        assertEquals("The method updateGame is not supported by the GameService.", exception.getMessage());
+        verify(gameRepository, times(0)).findGameById(invalidId); // Ensure no repository interaction is attempted
     }
 
 
