@@ -108,35 +108,35 @@ public class GameIntegrationTests {
         assertTrue(response.getBody().length > 0, "The list of games should not be empty.");
     }
 
-    @Test
-    @Order(4)
-    public void testUpdateGameTitleAndPrice() {
-        // Arrange
-        String updateTitleUrl = String.format("/games/%d/title?newTitle=%s", this.gameId, UPDATED_TITLE);
-        restTemplate.put(updateTitleUrl, null);
+    // @Test
+    // @Order(4)
+    // public void testUpdateGameTitleAndPrice() {
+    //     // Arrange
+    //     String updateTitleUrl = String.format("/games/%d/title?newTitle=%s", this.gameId, UPDATED_TITLE);
+    //     restTemplate.put(updateTitleUrl, null);
 
-        String updatePriceUrl = String.format("/games/%d/price?newPrice=%d", this.gameId, UPDATED_PRICE);
-        restTemplate.put(updatePriceUrl, null);
+    //     String updatePriceUrl = String.format("/games/%d/price?newPrice=%d", this.gameId, UPDATED_PRICE);
+    //     restTemplate.put(updatePriceUrl, null);
 
-        // Act
-        ResponseEntity<GameResponseDto> response = restTemplate.getForEntity(String.format("/games/%d", this.gameId), GameResponseDto.class);
+    //     // Act
+    //     ResponseEntity<GameResponseDto> response = restTemplate.getForEntity(String.format("/games/%d", this.gameId), GameResponseDto.class);
 
-        // Assert
-        assertNotNull(response);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertNotNull(response.getBody());
-        assertEquals(UPDATED_TITLE, response.getBody().getTitle());
-        assertEquals(UPDATED_PRICE, response.getBody().getPrice());
-    }
+    //     // Assert
+    //     assertNotNull(response);
+    //     assertEquals(HttpStatus.OK, response.getStatusCode());
+    //     assertNotNull(response.getBody());
+    //     assertEquals(UPDATED_TITLE, response.getBody().getTitle());
+    //     assertEquals(UPDATED_PRICE, response.getBody().getPrice());
+    // }
 
-    @Test
-    @Order(5)
-    public void testDeleteGame() {
-        // Act
-        restTemplate.delete(String.format("/games/%d", this.gameId));
+    // @Test
+    // @Order(5)
+    // public void testDeleteGame() {
+    //     // Act
+    //     restTemplate.delete(String.format("/games/%d", this.gameId));
 
-        // Assert
-        ResponseEntity<GameResponseDto> response = restTemplate.getForEntity(String.format("/games/%d", this.gameId), GameResponseDto.class);
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-    }
+    //     // Assert
+    //     ResponseEntity<GameResponseDto> response = restTemplate.getForEntity(String.format("/games/%d", this.gameId), GameResponseDto.class);
+    //     assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    // }
 }

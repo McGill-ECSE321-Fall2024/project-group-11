@@ -31,8 +31,8 @@ public class Game
   //Game Associations
   @ManyToOne
   private Wishlist wishlist;
-  @ManyToOne
-  private Promotion promotion;
+  // @ManyToOne
+  // private Promotion promotion;
 
   //------------------------
   // CONSTRUCTOR
@@ -47,11 +47,11 @@ public class Game
     category = aCategory;
     consoleType = aConsoleType;
 
-    //Wishlist aWishlist, GameConsole aGameConsole, Promotion aPromotion
-    Wishlist wishlist = new Wishlist();
-    this.wishlist = wishlist;
-    Promotion promotion = new Promotion();
-    this.promotion = promotion;
+    // //Wishlist aWishlist, GameConsole aGameConsole, Promotion aPromotion
+    // Wishlist wishlist = new Wishlist();
+    // this.wishlist = wishlist;
+    // Promotion promotion = new Promotion();
+    // this.promotion = promotion;
   }
   
   public Game(){
@@ -136,11 +136,11 @@ public class Game
     return wishlist;
   }
 
-  /* Code from template association_GetOne */
-  public Promotion getPromotion()
-  {
-    return promotion;
-  }
+  // /* Code from template association_GetOne */
+  // public Promotion getPromotion()
+  // {
+  //   return promotion;
+  // }
 
   /* Code from template association_SetUnidirectionalOne */
   public boolean setWishlist(Wishlist aNewWishlist)
@@ -154,22 +154,21 @@ public class Game
     return wasSet;
   }
 
-  /* Code from template association_SetUnidirectionalOne */
-  public boolean setPromotion(Promotion aNewPromotion)
-  {
-    boolean wasSet = false;
-    if (aNewPromotion != null)
-    {
-      promotion = aNewPromotion;
-      wasSet = true;
-    }
-    return wasSet;
-  }
+  // /* Code from template association_SetUnidirectionalOne */
+  // public boolean setPromotion(Promotion aNewPromotion)
+  // {
+  //   boolean wasSet = false;
+  //   if (aNewPromotion != null)
+  //   {
+  //     promotion = aNewPromotion;
+  //     wasSet = true;
+  //   }
+  //   return wasSet;
+  // }
 
   public void delete()
   {
     wishlist = null;
-    promotion = null;
   }
 
 
@@ -182,8 +181,7 @@ public class Game
             "category" + ":" + getCategory()+ 
             "consoleType" + ":" + getConsoleType()+
             "]" + System.getProperties().getProperty("line.separator") +
-            "  " + "wishlist = "+(getWishlist()!=null?Integer.toHexString(System.identityHashCode(getWishlist())):"null") + System.getProperties().getProperty("line.separator") +
-            "  " + "promotion = "+(getPromotion()!=null?Integer.toHexString(System.identityHashCode(getPromotion())):"null");
+            "  " + "wishlist = "+(getWishlist()!=null?Integer.toHexString(System.identityHashCode(getWishlist())):"null") + System.getProperties().getProperty("line.separator");
   }
 
   // ------------------------

@@ -63,13 +63,10 @@ public class CustomerService {
 
         Customer customer = new Customer(userName, email, password, phoneNumber, address);
 
-        System.out.println("1");
         Wishlist newWishlist = new Wishlist();
-        System.out.println("2");
         newWishlist.setCustomer(customer);
 
         wishlistRepository.save(newWishlist);
-        System.out.println('4');
 
         return customerRepository.save(customer);
     }

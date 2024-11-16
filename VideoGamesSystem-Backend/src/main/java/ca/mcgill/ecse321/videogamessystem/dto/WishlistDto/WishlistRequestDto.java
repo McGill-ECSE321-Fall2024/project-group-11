@@ -5,20 +5,27 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
 public class WishlistRequestDto {
+    
 
-    @Positive(message = "Number of items must be positive.")
-    private int nbOfItems;
+    // @Positive(message = "Number of items must be positive.")
+    // private int nbOfItems;
 
     @NotNull(message = "Customer ID cannot be null.")
     private Long customerId; // Reference to the associated customer
 
-    public int getNbOfItems() {
-        return nbOfItems;
+    protected WishlistRequestDto(){}
+
+    public WishlistRequestDto(Long customerId) {
+        this.customerId= customerId;
     }
 
-    public void setNbOfItems(int nbOfItems) {
-        this.nbOfItems = nbOfItems;
-    }
+    // public int getNbOfItems() {
+    //     return nbOfItems;
+    // }
+
+    // public void setNbOfItems(int nbOfItems) {
+    //     this.nbOfItems = nbOfItems;
+    // }
 
     public Long getCustomerId() {
         return customerId;

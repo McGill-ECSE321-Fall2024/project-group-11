@@ -26,6 +26,8 @@ public class GameRequestDto {
 
     //maybe add fo
 
+    protected GameRequestDto(){}
+
     public GameRequestDto(String description, int price, String title, Category category, ConsoleType consoleType) {
         this.description = description;
         this.price = price;

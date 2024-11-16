@@ -3,7 +3,6 @@ package ca.mcgill.ecse321.videogamessystem.dto.GameDto;
 import ca.mcgill.ecse321.videogamessystem.model.Game.Category;
 import ca.mcgill.ecse321.videogamessystem.model.Game.ConsoleType;
 import ca.mcgill.ecse321.videogamessystem.model.Game;
-import ca.mcgill.ecse321.videogamessystem.dto.PromotionDto.PromotionResponseDto;
 import ca.mcgill.ecse321.videogamessystem.dto.WishlistDto.WishlistResponseDto;
 
 public class GameResponseDto {
