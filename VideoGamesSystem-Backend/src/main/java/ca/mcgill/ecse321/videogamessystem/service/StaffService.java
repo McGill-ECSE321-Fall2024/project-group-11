@@ -1,12 +1,14 @@
 package ca.mcgill.ecse321.videogamessystem.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.ArrayList;
 
+import ca.mcgill.ecse321.videogamessystem.exception.VideoGamesSystemException;
 import ca.mcgill.ecse321.videogamessystem.model.Staff;
 import ca.mcgill.ecse321.videogamessystem.repository.StaffRepository;
 
@@ -33,7 +35,7 @@ public class StaffService {
         if (isAdmin == true){
             List<Staff> boss = this.getStaffByAdmin(true);
             if (boss.size() != 0){
-                throw new IllegalArgumentException("cannot have 2 owners");
+                throw new VideoGamesSystemException(HttpStatus.NOT_FOUND,"cannot have 2 owners");
             }
         }
         // Validation logic can be added here (e.g., check if email or username is already taken)
@@ -41,20 +43,20 @@ public class StaffService {
 
         //email check
         if (email == null || email.trim().length() == 0){
-            throw new IllegalArgumentException("no empty email");
+            throw new VideoGamesSystemException(HttpStatus.NOT_FOUND,"no empty email");
         }
         if (!Pattern.compile(emailRegex).matcher(email).matches()) {
-            throw new IllegalArgumentException("invalid email");
+            throw new VideoGamesSystemException(HttpStatus.NOT_FOUND,"invalid email");
         }
         if (staffRepository.findStaffByEmail(email) != null) {
-            throw new IllegalArgumentException("Email already exists");
+            throw new VideoGamesSystemException(HttpStatus.NOT_FOUND,"Email already exists");
         }
         if (staffRepository.findStaffByUserName(userName) != null) {
-            throw new IllegalArgumentException("UserName already exists");
+            throw new VideoGamesSystemException(HttpStatus.NOT_FOUND,"UserName already exists");
         }
         //password check
         if (password == null || password.trim().length() < 4){
-            throw new IllegalArgumentException("password must be more than 4 characters");
+            throw new VideoGamesSystemException(HttpStatus.NOT_FOUND,"password must be more than 4 characters");
         }
 
         Staff staff = new Staff(userName, email, password, isAdmin);
@@ -69,7 +71,7 @@ public class StaffService {
     public Staff getStaffById(Long id) {
         Staff staff = staffRepository.findStaffById(id);
         if (staff == null) {
-            throw new IllegalArgumentException("Staff not found.");
+            throw new VideoGamesSystemException(HttpStatus.NOT_FOUND,"Staff not found.");
         }
         return staff;
     }
@@ -81,7 +83,7 @@ public class StaffService {
     @Transactional
     public Staff getStaffByUserName(String userName) {
         if (userName == null || userName.trim().isEmpty()) {
-            throw new IllegalArgumentException("Username cannot be empty.");
+            throw new VideoGamesSystemException(HttpStatus.NOT_FOUND,"Username cannot be empty.");
         }
         return staffRepository.findStaffByUserName(userName);
     }
@@ -93,7 +95,7 @@ public class StaffService {
     @Transactional
     public Staff getStaffByEmail(String email) {
         if (email == null || email.trim().isEmpty()) {
-            throw new IllegalArgumentException("Email cannot be empty.");
+            throw new VideoGamesSystemException(HttpStatus.NOT_FOUND,"Email cannot be empty.");
         }
         return staffRepository.findStaffByEmail(email);
     }
@@ -159,10 +161,10 @@ public class StaffService {
     public Staff deleteStaff(Long id) {
         Staff staff = staffRepository.findStaffById(id);
         if (staff == null) {
-            throw new IllegalArgumentException("Staff not found.");
+            throw new VideoGamesSystemException(HttpStatus.NOT_FOUND,"Staff not found.");
         }
         if (staff.getStaffType() == true){
-            throw new IllegalArgumentException("cannot delete owner");
+            throw new VideoGamesSystemException(HttpStatus.NOT_FOUND,"cannot delete owner");
         }
 
         staffRepository.delete(staff);
@@ -177,7 +179,7 @@ public class StaffService {
     public Staff setOwner(Long id) {
         Staff staff = staffRepository.findStaffById(id);
         if (staff == null) {
-            throw new IllegalArgumentException("Staff not found.");
+            throw new VideoGamesSystemException(HttpStatus.NOT_FOUND,"Staff not found.");
         }
         
         List<Staff> currentOwnerList = staffRepository.findStaffByAdmin(true);

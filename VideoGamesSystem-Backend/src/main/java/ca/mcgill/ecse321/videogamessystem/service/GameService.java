@@ -1,6 +1,7 @@
 package ca.mcgill.ecse321.videogamessystem.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import jakarta.transaction.Transactional;
 import java.util.List;
@@ -8,6 +9,7 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
+import ca.mcgill.ecse321.videogamessystem.exception.VideoGamesSystemException;
 import ca.mcgill.ecse321.videogamessystem.model.Game;
 import ca.mcgill.ecse321.videogamessystem.model.Game.Category;
 import ca.mcgill.ecse321.videogamessystem.model.Game.ConsoleType;
@@ -40,19 +42,24 @@ public class GameService {
     @Transactional
     public Game createGame(String description, int price, String title, Category category, ConsoleType consoleType) {
         if (description == null || description.trim().isEmpty()) {
-            throw new IllegalArgumentException("Description cannot be empty.");
+            throw new VideoGamesSystemException(HttpStatus.CONFLICT, "Description cannot be empty.");
+
         }
         if (price < 0) {
-            throw new IllegalArgumentException("Price cannot be negative.");
+            throw new VideoGamesSystemException(HttpStatus.CONFLICT, "Price cannot be negative.");
+
         }
         if (title == null || title.trim().isEmpty()) {
-            throw new IllegalArgumentException("Title cannot be empty.");
+            throw new VideoGamesSystemException(HttpStatus.CONFLICT, "Title cannot be empty.");
+            
         }
         if (category == null) {
-            throw new IllegalArgumentException("Category cannot be null.");
+            throw new VideoGamesSystemException(HttpStatus.CONFLICT, "Category cannot be null.");
+
+            
         }
         if (consoleType == null) {
-            throw new IllegalArgumentException("consoleType cannot be null.");
+            throw new VideoGamesSystemException(HttpStatus.CONFLICT, "consoleType cannot be null. cannot be null.");
         }
 
         Game game = new Game(description, price, title, category, consoleType);
@@ -67,7 +74,8 @@ public class GameService {
     public Game getGameById(Long id) {
         Game game = gameRepository.findGameById(id);
         if (game == null) {
-            throw new IllegalArgumentException("Game not found.");
+            throw new VideoGamesSystemException(HttpStatus.CONFLICT, "Game not found.");
+
         }
         return game;
     }
@@ -85,7 +93,7 @@ public class GameService {
     @Transactional
     public List<Game> getGamesByTitle(String title) {
         if (title == null || title.trim().isEmpty()) {
-            throw new IllegalArgumentException("Title cannot be empty.");
+            throw new VideoGamesSystemException(HttpStatus.CONFLICT, "Title cannot be empty.");
         }
         return gameRepository.findGameByTitle(title);
     }
@@ -97,7 +105,7 @@ public class GameService {
     @Transactional
     public List<Game> getGamesByCategory(Category category) {
         if (category == null) {
-            throw new IllegalArgumentException("Category cannot be null.");
+            throw new VideoGamesSystemException(HttpStatus.CONFLICT, "Category cannot be null.");
         }
         return gameRepository.findGameByCategory(category);
     }
@@ -109,7 +117,8 @@ public class GameService {
     @Transactional
     public List<Game> getGamesByConsoleType(ConsoleType consoleType) {
         if (consoleType == null) {
-            throw new IllegalArgumentException("consoleType cannot be null.");
+            throw new VideoGamesSystemException(HttpStatus.CONFLICT, "consoleType cannot be null.");
+
         }
         return gameRepository.findGameByConsoleType(consoleType);
     }
@@ -121,7 +130,7 @@ public class GameService {
     @Transactional
     public List<Game> getGamesByPromotion(Promotion promotion) {
         if(promotion == null){
-            new IllegalArgumentException("promotion is null");
+            throw new VideoGamesSystemException(HttpStatus.CONFLICT, "promotion is null");
         }
         return gameRepository.findGameByPromotion(promotion);
     }
@@ -189,10 +198,10 @@ public class GameService {
     public Game updatePrice(Long id, int newPrice) {
         Game game = gameRepository.findGameById(id);
         if (game == null) {
-            throw new IllegalArgumentException("Game not found.");
+            throw new VideoGamesSystemException(HttpStatus.CONFLICT, "Game not found.");
         }
         if (newPrice < 0) {
-            throw new IllegalArgumentException("Price cannot be negative.");
+            throw new VideoGamesSystemException(HttpStatus.CONFLICT, "Price cannot be negative.");
         }
 
         game.setPrice(newPrice);
@@ -245,7 +254,7 @@ public class GameService {
     public Game deleteGame(Long id) {
         Game game = gameRepository.findGameById(id);
         if (game == null) {
-            throw new IllegalArgumentException("Game not found.");
+            throw new VideoGamesSystemException(HttpStatus.CONFLICT, "Game not found.");
         }
 
         gameRepository.delete(game);
@@ -270,11 +279,11 @@ public class GameService {
     public Game addGameToWishlist(Long gameId, Long wishlistId) {
         Game game = gameRepository.findGameById(gameId);
         if (game == null) {
-            throw new IllegalArgumentException("Game not found.");
+            throw new VideoGamesSystemException(HttpStatus.CONFLICT, "Game not found.");
         }
 
         Wishlist wishlist = wishlistRepository.findById(wishlistId)
-            .orElseThrow(() -> new IllegalArgumentException("Wishlist not found."));
+            .orElseThrow(() -> new VideoGamesSystemException(HttpStatus.CONFLICT, "Wishlist not found."));
         
         game.setWishlist(wishlist);
         return gameRepository.save(game);
@@ -300,7 +309,7 @@ public class GameService {
      */
     public List<Game> getGameByWishlist(Wishlist wishlist){
         if (wishlist == null){
-            throw new IllegalArgumentException("wishlist is null");
+            throw new VideoGamesSystemException(HttpStatus.CONFLICT, "wishlist is null");
         }
         return gameRepository.findGameByWishlist(wishlist);
     }
@@ -313,7 +322,7 @@ public class GameService {
      */
     public List<Game> getGamesLowerInstockThan(int n){
         if(n < 0){
-            throw new IllegalArgumentException("search in stock quantity cannot be lower than 0");
+            throw new VideoGamesSystemException(HttpStatus.CONFLICT, "search in stock quantity cannot be lower than 0");
         }
         List<Game> allGames = this.getAllGames();
         ArrayList<Game> games = new ArrayList<>();
@@ -415,7 +424,7 @@ public class GameService {
      */
     public List<Game> getGameByOrder(SpecificOrder order){
         if (order == null){
-            throw new IllegalArgumentException("order cannot be null");
+            throw new VideoGamesSystemException(HttpStatus.CONFLICT, "order cannot be null");
         }
         List<Game> games = new ArrayList<>();
         List<SpecificGame> copies = specificGameRepository.findSpecificGameBySpecificOrder(order);
@@ -493,11 +502,12 @@ public class GameService {
      */
     public Game getGameBySpecificGameID(int id){
         if (id == 0){
-            throw new IllegalArgumentException("specific game id cannot be 0");
+            throw new VideoGamesSystemException(HttpStatus.CONFLICT, "specific game id cannot be 0");
         }
         SpecificGame specificGame = specificGameRepository.findSpecificGameBySerialNumber(id);
         if (specificGame == null){
-            throw new IllegalArgumentException("the specific game cannot be null");
+            throw new VideoGamesSystemException(HttpStatus.CONFLICT, "the specific game cannot be null");
+
         }
         return specificGame.getGame();
     }

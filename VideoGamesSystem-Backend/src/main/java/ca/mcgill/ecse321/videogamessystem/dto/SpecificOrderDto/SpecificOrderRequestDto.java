@@ -15,13 +15,13 @@ public class SpecificOrderRequestDto {
     private int cardNumber;
 
     @Positive(message = "Customer ID must be a positive number.")
-    private int customerId; // Assuming we use customer ID to associate an order with a customer
+    private Long customerId;
 
     // Constructors
     public SpecificOrderRequestDto() {
     }
 
-    public SpecificOrderRequestDto(Date orderDate, int cardNumber, int customerId) {
+    public SpecificOrderRequestDto(Date orderDate, int cardNumber, Long customerId) {
         this.orderDate = orderDate;
         this.cardNumber = cardNumber;
         this.customerId = customerId;
@@ -44,11 +44,11 @@ public class SpecificOrderRequestDto {
         this.cardNumber = cardNumber;
     }
 
-    public int getCustomerId() {
+    public Long getCustomerId() {
         return customerId;
     }
 
-    public void setCustomerId(int customerId) {
+    public void setCustomerId(Long customerId) {
         this.customerId = customerId;
     }
 

@@ -2,22 +2,33 @@ package ca.mcgill.ecse321.videogamessystem.dto.SpecificOrderDto;
 
 import java.sql.Date;
 
+import ca.mcgill.ecse321.videogamessystem.model.SpecificOrder;
+
 public class SpecificOrderResponseDto {
 
     private int orderNumber;
     private Date orderDate;
     private int cardNumber;
-    private int customerId; // Assuming we use customer ID to associate an order with a customer
+    private Long customerId;
 
-    // Constructors
+    // Default constructor
     public SpecificOrderResponseDto() {
     }
 
-    public SpecificOrderResponseDto(int orderNumber, Date orderDate, int cardNumber, int customerId) {
+    // Constructor with all attributes
+    public SpecificOrderResponseDto(int orderNumber, Date orderDate, int cardNumber, Long customerId) {
         this.orderNumber = orderNumber;
         this.orderDate = orderDate;
         this.cardNumber = cardNumber;
         this.customerId = customerId;
+    }
+
+    // Constructor that initializes from SpecificOrder
+    public SpecificOrderResponseDto(SpecificOrder order) {
+        this.orderNumber = order.getNumber();
+        this.orderDate = order.getOrderDate();
+        this.cardNumber = order.getCardNumber();
+        this.customerId = (order.getCustomer() != null) ? order.getCustomer().getId() : null;
     }
 
     // Getters
@@ -33,11 +44,11 @@ public class SpecificOrderResponseDto {
         return cardNumber;
     }
 
-    public int getCustomerId() {
+    public Long getCustomerId() {
         return customerId;
     }
 
-    // Setters (if needed, typically not used for response DTOs)
+    // Setters
     public void setOrderNumber(int orderNumber) {
         this.orderNumber = orderNumber;
     }
@@ -50,7 +61,7 @@ public class SpecificOrderResponseDto {
         this.cardNumber = cardNumber;
     }
 
-    public void setCustomerId(int customerId) {
+    public void setCustomerId(Long customerId) {
         this.customerId = customerId;
     }
 

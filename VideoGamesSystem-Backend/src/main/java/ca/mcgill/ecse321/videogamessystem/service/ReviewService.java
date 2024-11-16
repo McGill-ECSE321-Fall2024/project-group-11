@@ -1,6 +1,7 @@
 package ca.mcgill.ecse321.videogamessystem.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import jakarta.transaction.Transactional;
 import java.sql.Date;
@@ -8,6 +9,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.ArrayList;
 
+import ca.mcgill.ecse321.videogamessystem.exception.VideoGamesSystemException;
 import ca.mcgill.ecse321.videogamessystem.model.Customer;
 import ca.mcgill.ecse321.videogamessystem.model.Game;
 import ca.mcgill.ecse321.videogamessystem.model.Review;
@@ -32,16 +34,17 @@ public class ReviewService {
     @Transactional
     public Review createReview(int gameRating, String reviewContent, Long customerId, Long parentReviewId) {
         if (gameRating < 1 || gameRating > 5) {
-            throw new IllegalArgumentException("Game rating must be between 1 and 5.");
+            throw new VideoGamesSystemException(HttpStatus.NOT_FOUND, "Game rating must be between 1 and 5.");
         }
         if (reviewContent == null || reviewContent.trim().isEmpty()) {
-            throw new IllegalArgumentException("Review content cannot be empty.");
+            throw new VideoGamesSystemException(HttpStatus.NOT_FOUND, "Review content cannot be empty.");
+
         }
 
         Date reviewDate = Date.valueOf(LocalDate.now());
 
         Customer customer = customerRepository.findById(customerId).orElseThrow(() -> 
-            new IllegalArgumentException("Customer not found."));
+            new VideoGamesSystemException(HttpStatus.NOT_FOUND,"Customer not found."));
         
         Review parentReview = null;
         if (parentReviewId != null) {
@@ -63,7 +66,7 @@ public class ReviewService {
     public Review getReviewById(Long id) {
         Review review = reviewRepository.findReviewById(id);
         if (review == null) {
-            throw new IllegalArgumentException("Review not found.");
+            throw new VideoGamesSystemException(HttpStatus.NOT_FOUND, "Review not found.");
         }
         return review;
     }
@@ -95,7 +98,7 @@ public class ReviewService {
     public List<Review> getReviewsByParentReview(Long parentReviewId) {
         Review parentReview = reviewRepository.findReviewById(parentReviewId);
         if (parentReview == null) {
-            throw new IllegalArgumentException("Parent review not found.");
+            throw new VideoGamesSystemException(HttpStatus.NOT_FOUND, "Parent review not found.");
         }
         return reviewRepository.findReviewByParentReview(parentReview);
     }
@@ -107,7 +110,7 @@ public class ReviewService {
     @Transactional
     public List<Review> getReviewsByCustomer(Long customerId) {
         Customer customer = customerRepository.findById(customerId).orElseThrow(() -> 
-            new IllegalArgumentException("Customer not found."));
+            new VideoGamesSystemException(HttpStatus.NOT_FOUND,"Customer not found."));
         return reviewRepository.findReviewByCustomer(customer);
     }
 
@@ -176,7 +179,7 @@ public class ReviewService {
     public Review deleteReview(Long id) {
         Review review = reviewRepository.findReviewById(id);
         if (review == null) {
-            throw new IllegalArgumentException("Review not found.");
+            throw new VideoGamesSystemException(HttpStatus.NOT_FOUND, "Review not found.");
         }
 
         reviewRepository.delete(review);
@@ -211,7 +214,8 @@ public class ReviewService {
      */
     public List<Review> getReviewsByGame(Game game){
         if (game == null){
-            throw new IllegalArgumentException("game cannot be null");
+            throw new VideoGamesSystemException(HttpStatus.NOT_FOUND, "game cannot be null");
+
         }
         return this.reviewRepository.findReviewByGame(game);
     }

@@ -48,63 +48,46 @@ public class SpecificGameResponseDto {
         return availability;
     }
 
-    public void setAvailability(boolean availability) {
-        this.availability = availability;
-    }
+
 
     public int getSerialNumber() {
         return serialNumber;
     }
 
-    public void setSerialNumber(int serialNumber) {
-        this.serialNumber = serialNumber;
-    }
+
 
     public Long getGameId() {
         return gameId;
     }
 
-    public void setGameId(Long gameId) {
-        this.gameId = gameId;
-    }
+
 
     public String getTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+
 
     public String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+ 
 
     public int getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
-        this.price = price;
-    }
+  
 
     public Game.Category getCategory() {
         return category;
     }
 
-    public void setCategory(Game.Category category) {
-        this.category = category;
-    }
+   
 
     public Game.ConsoleType getConsoleType() {
         return consoleType;
     }
 
-    public void setConsoleType(Game.ConsoleType consoleType) {
-        this.consoleType = consoleType;
-    }
 }
