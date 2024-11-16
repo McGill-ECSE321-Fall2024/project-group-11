@@ -42,6 +42,10 @@ public class PromotionService {
         // if (startDate.before(now) || endDate.before(now)) {
         //     throw new VideoGamesSystemException(HttpStatus.CONFLICT, "Dates must be today or in the future.");
         // }
+        if (startDate.after(endDate)) {
+            throw new VideoGamesSystemException(HttpStatus.CONFLICT, "Start date must be before end date.");
+        }
+        
 
         if (percentage <= 0 || percentage > 100) {
             throw new VideoGamesSystemException(HttpStatus.CONFLICT, "Percentage must be between 1 and 100.");

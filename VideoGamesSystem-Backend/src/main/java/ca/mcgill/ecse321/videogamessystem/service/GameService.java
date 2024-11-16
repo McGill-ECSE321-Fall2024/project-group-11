@@ -412,12 +412,12 @@ public class GameService {
         if (!this.getGamePromotionStatusById(id)){
             return priceAfter;
         }
-        
+    
         int discount = game.getPromotion().getPercentage();
-        priceAfter = priceAfter * (1 - discount);
+        priceAfter = priceAfter - (priceAfter * discount / 100); // Corrected calculation
         return priceAfter;
     }
-
+    
     //get all game names by order
     /**
      * @param order
@@ -448,22 +448,22 @@ public class GameService {
     public List<Game> getGamesBetweenPrices(int min, int max){
         List<Game> allGames = this.getAllGames();
         List<Game> games = new ArrayList<>();
-        int price = 0;
-        for (Game game: allGames){
-            price = game.getPrice();
-            if(price >= min || price<= max){
+        for (Game game : allGames){
+            int price = game.getPrice();
+            if(price >= min && price <= max){
                 games.add(game);
             }
         }
         return games;
     }
+    
 
     // //filter by Promotion percentage
     // /**
     //  * @param min
     //  * @return
     //  */
-    // public List<Game> getGamesAbovePromotion(int min){
+    // public List<Game> getGamesAbovePromotion(int min){ 
     //     List<Game> allGames = this.getAllGames();
     //     List<Game> games = new ArrayList<>();
     //     int discount = 0;

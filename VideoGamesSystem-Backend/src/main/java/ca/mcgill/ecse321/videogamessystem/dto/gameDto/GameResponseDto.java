@@ -3,6 +3,7 @@ package ca.mcgill.ecse321.videogamessystem.dto.GameDto;
 import ca.mcgill.ecse321.videogamessystem.model.Game.Category;
 import ca.mcgill.ecse321.videogamessystem.model.Game.ConsoleType;
 import ca.mcgill.ecse321.videogamessystem.model.Game;
+import ca.mcgill.ecse321.videogamessystem.dto.PromotionDto.PromotionResponseDto;
 import ca.mcgill.ecse321.videogamessystem.dto.WishlistDto.WishlistResponseDto;
 
 public class GameResponseDto {
@@ -12,6 +13,8 @@ public class GameResponseDto {
     private String title;
     private Category category;
     private ConsoleType consoleType;
+    private PromotionResponseDto promotion;
+    private WishlistResponseDto wishlist;
 /* 
     private PromotionResponseDto promotion;
 
@@ -29,10 +32,11 @@ public class GameResponseDto {
         this.title = game.getTitle();
         this.category = game.getCategory();
         this.consoleType = game.getConsoleType();
-/* 
-        this.promotion= PromotionResponseDto.convertToPromotionResponseDto(game.getPromotion());
-        this.wishlist= WishlistResponseDto.convertToWishlistResponseDto(game.getWishlist());
-*/
+        this.promotion = game.getPromotion() != null ? new PromotionResponseDto(game.getPromotion()) : null;
+
+        // this.promotion= PromotionResponseDto.convertToPromotionResponseDto(game.getPromotion());
+        // this.wishlist= WishlistResponseDto.convertToWishlistResponseDto(game.getWishlist());
+
     }
 
     // Getters and Setters
@@ -60,6 +64,11 @@ public class GameResponseDto {
 
     public ConsoleType getConsoleType() {
         return consoleType;
+    }
+
+    // Getter
+    public PromotionResponseDto getPromotion() {
+        return promotion;
     }
 /* 
     public WishlistResponseDto getWishlistResponseDto(){

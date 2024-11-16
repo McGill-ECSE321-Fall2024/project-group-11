@@ -2,6 +2,8 @@ package ca.mcgill.ecse321.videogamessystem.dto.PromotionDto;
 
 import java.util.List;
 
+
+
 public class PromotionListDto {
 
     private List<PromotionSummaryDto> promotions;
@@ -12,7 +14,7 @@ public class PromotionListDto {
     }
 
     // Default protected constructor (for potential use by frameworks)
-    protected PromotionListDto() {
+    public PromotionListDto() {
     }
 
     // Getter for the list of promotions

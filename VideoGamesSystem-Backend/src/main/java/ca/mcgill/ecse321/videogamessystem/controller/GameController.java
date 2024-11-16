@@ -3,9 +3,12 @@ package ca.mcgill.ecse321.videogamessystem.controller;
 import ca.mcgill.ecse321.videogamessystem.dto.GameDto.GameRequestDto;
 import ca.mcgill.ecse321.videogamessystem.dto.GameDto.GameResponseDto;
 import ca.mcgill.ecse321.videogamessystem.model.Game;
+import ca.mcgill.ecse321.videogamessystem.model.Promotion;
 import ca.mcgill.ecse321.videogamessystem.service.GameService;
+import ca.mcgill.ecse321.videogamessystem.service.PromotionService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
@@ -19,6 +22,8 @@ public class GameController {
     @Autowired
     private GameService gameService;
 
+    @Autowired
+    private PromotionService promotionService;
     /**
      * Creates a new game with the specified details.
      *
@@ -116,7 +121,8 @@ public class GameController {
      */
     @PutMapping("/games/{id}/promotion/{promotionId}")
     public GameResponseDto addPromotionToGame(@PathVariable Long id, @PathVariable Long promotionId) {
-        Game updatedGame = gameService.updatePromotion(id, gameService.getGameById(promotionId).getPromotion());
+        Promotion promotion = promotionService.getPromotionById(promotionId);
+        Game updatedGame = gameService.updatePromotion(id, promotion);
         return new GameResponseDto(updatedGame);
     }
 
@@ -138,8 +144,9 @@ public class GameController {
     * @return the price after applying the promotion.
     */
     @GetMapping("/games/{id}/price-after-promo")
-    public int getPriceAfterPromo(@PathVariable Long id) {
-        return gameService.getPriceAfterPromoWithId(id);
+    public ResponseEntity<Integer> getPriceAfterPromo(@PathVariable Long id) {
+        int priceAfterPromo = gameService.getPriceAfterPromoWithId(id);
+        return ResponseEntity.ok(priceAfterPromo);
     }
 
     /**
