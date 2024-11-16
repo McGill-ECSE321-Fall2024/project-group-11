@@ -43,10 +43,7 @@ public class SpecificGame
   {
     serialNumber = aSerialNumber;
     availability = aAvailability;
-    Game game = new Game();
     this.game = game;
-    SpecificOrder specificOrder = new SpecificOrder();
-    this.specificOrder = specificOrder;
   }
 
   public SpecificGame(){

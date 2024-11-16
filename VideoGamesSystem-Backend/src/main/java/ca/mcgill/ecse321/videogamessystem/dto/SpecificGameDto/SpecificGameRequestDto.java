@@ -21,6 +21,8 @@ public class SpecificGameRequestDto {
         this.gameId = gameId;
     }
 
+    protected SpecificGameRequestDto(){}
+
     // Getters and Setters
     public boolean isAvailability() {
         return availability;

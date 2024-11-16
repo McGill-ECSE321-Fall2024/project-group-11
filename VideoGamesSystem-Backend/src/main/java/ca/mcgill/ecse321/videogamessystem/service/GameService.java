@@ -13,7 +13,7 @@ import ca.mcgill.ecse321.videogamessystem.exception.VideoGamesSystemException;
 import ca.mcgill.ecse321.videogamessystem.model.Game;
 import ca.mcgill.ecse321.videogamessystem.model.Game.Category;
 import ca.mcgill.ecse321.videogamessystem.model.Game.ConsoleType;
-// import ca.mcgill.ecse321.videogamessystem.model.Promotion;
+import ca.mcgill.ecse321.videogamessystem.model.Promotion;
 import ca.mcgill.ecse321.videogamessystem.model.SpecificGame;
 import ca.mcgill.ecse321.videogamessystem.model.SpecificOrder;
 import ca.mcgill.ecse321.videogamessystem.model.Wishlist;
@@ -123,17 +123,17 @@ public class GameService {
         return gameRepository.findGameByConsoleType(consoleType);
     }
 
-    // /**
-    //  * @param promotion
-    //  * @return
-    //  */
-    // @Transactional
-    // public List<Game> getGamesByPromotion(Promotion promotion) {
-    //     if(promotion == null){
-    //         throw new VideoGamesSystemException(HttpStatus.CONFLICT, "promotion is null");
-    //     }
-    //     return gameRepository.findGameByPromotion(promotion);
-    // }
+    /**
+     * @param promotion
+     * @return
+     */
+    @Transactional
+    public List<Game> getGamesByPromotion(Promotion promotion) {
+        if(promotion == null){
+            throw new VideoGamesSystemException(HttpStatus.CONFLICT, "promotion is null");
+        }
+        return gameRepository.findGameByPromotion(promotion);
+    }
 
     // /**
     //  * @param id
@@ -352,40 +352,40 @@ public class GameService {
         return (this.getStockQuantity(id) > 0);
     }
 
-    // // does game have promoition
-    // /**
-    //  * @param id
-    //  * @return
-    //  */
-    // public boolean getGamePromotionStatusById(Long id) {
-    //     Game game = this.getGameById(id);
-    //     Promotion promotion = game.getPromotion();
-    //     if (promotion == null){
-    //         return false;
-    //     }
-    //     Date endDate = promotion.getEndDate();
-    //     Date startDate = promotion.getStartDate();
-    //     Date now = Date.valueOf(LocalDate.now());
-    //     if (endDate.after(now) && startDate.before(now)){
-    //         return true;
-    //     }
-    //     if (endDate.equals(now) || startDate.equals(now)){
-    //         return true;
-    //     }
-    // return false;
-    // }
+    // does game have promoition
+    /**
+     * @param id
+     * @return
+     */
+    public boolean getGamePromotionStatusById(Long id) {
+        Game game = this.getGameById(id);
+        Promotion promotion = game.getPromotion();
+        if (promotion == null){
+            return false;
+        }
+        Date endDate = promotion.getEndDate();
+        Date startDate = promotion.getStartDate();
+        Date now = Date.valueOf(LocalDate.now());
+        if (endDate.after(now) && startDate.before(now)){
+            return true;
+        }
+        if (endDate.equals(now) || startDate.equals(now)){
+            return true;
+        }
+    return false;
+    }
     
-    // // add game to promo
-    // /**
-    //  * @param id
-    //  * @param promo
-    //  * @return
-    //  */
-    // public Game updatePromotion(Long id, Promotion promo){
-    //     Game game = this.getGameById(id);
-    //     game.setPromotion(promo);
-    //     return gameRepository.save(game);
-    // }
+    // add game to promo
+    /**
+     * @param id
+     * @param promo
+     * @return
+     */
+    public Game updatePromotion(Long id, Promotion promo){
+        Game game = this.getGameById(id);
+        game.setPromotion(promo);
+        return gameRepository.save(game);
+    }
 
     // add game to wishlist
     /**
@@ -401,22 +401,22 @@ public class GameService {
     }
     
 
-    // // get price with promo
-    // /**
-    //  * @param id
-    //  * @return
-    //  */
-    // public int getPriceAfterPromoWithId(Long id){
-    //     Game game = this.getGameById(id);
-    //     int priceAfter = game.getPrice();
-    //     if (!this.getGamePromotionStatusById(id)){
-    //         return priceAfter;
-    //     }
+    // get price with promo
+    /**
+     * @param id
+     * @return
+     */
+    public int getPriceAfterPromoWithId(Long id){
+        Game game = this.getGameById(id);
+        int priceAfter = game.getPrice();
+        if (!this.getGamePromotionStatusById(id)){
+            return priceAfter;
+        }
         
-    //     int discount = game.getPromotion().getPercentage();
-    //     priceAfter = priceAfter * (1 - discount);
-    //     return priceAfter;
-    // }
+        int discount = game.getPromotion().getPercentage();
+        priceAfter = priceAfter * (1 - discount);
+        return priceAfter;
+    }
 
     //get all game names by order
     /**

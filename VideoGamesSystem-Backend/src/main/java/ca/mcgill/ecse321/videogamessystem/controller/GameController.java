@@ -61,6 +61,17 @@ public class GameController {
     }
 
     /**
+     * Retrieves the stock quantity for a specific game.
+     *
+     * @param id the ID of the game.
+     * @return the stock quantity of the game.
+     */
+    @GetMapping("/games/{id}/stock")
+    public int getStockQuantity(@PathVariable Long id) {
+        return gameService.getStockQuantity(id);
+    }
+
+    /**
      * Deletes a game by its unique ID.
      *
      * @param id the ID of the game to delete.
@@ -96,6 +107,19 @@ public class GameController {
         return games.stream().map(GameResponseDto::new).collect(Collectors.toList());
     }
 
+        /**
+     * Adds a promotion to a game.
+     *
+     * @param id the ID of the game to update.
+     * @param promotionId the ID of the promotion to add.
+     * @return a GameResponseDto with the updated game details.
+     */
+    @PutMapping("/games/{id}/promotion/{promotionId}")
+    public GameResponseDto addPromotionToGame(@PathVariable Long id, @PathVariable Long promotionId) {
+        Game updatedGame = gameService.updatePromotion(id, gameService.getGameById(promotionId).getPromotion());
+        return new GameResponseDto(updatedGame);
+    }
+
     /**
      * Retrieves games based on a specified console type.
      *
@@ -106,6 +130,16 @@ public class GameController {
     public List<GameResponseDto> getGamesByConsoleType(@PathVariable Game.ConsoleType consoleType) {
         List<Game> games = gameService.getGamesByConsoleType(consoleType);
         return games.stream().map(GameResponseDto::new).collect(Collectors.toList());
+    }
+    /** 
+    * Retrieves the price after applying a promotion for a specific game.
+    *
+    * @param id the ID of the game.
+    * @return the price after applying the promotion.
+    */
+    @GetMapping("/games/{id}/price-after-promo")
+    public int getPriceAfterPromo(@PathVariable Long id) {
+        return gameService.getPriceAfterPromoWithId(id);
     }
 
     /**

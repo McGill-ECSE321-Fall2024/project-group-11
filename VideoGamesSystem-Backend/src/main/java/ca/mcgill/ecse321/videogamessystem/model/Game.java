@@ -31,8 +31,8 @@ public class Game
   //Game Associations
   @ManyToOne
   private Wishlist wishlist;
-  // @ManyToOne
-  // private Promotion promotion;
+  @ManyToOne
+  private Promotion promotion;
 
   //------------------------
   // CONSTRUCTOR
@@ -136,11 +136,11 @@ public class Game
     return wishlist;
   }
 
-  // /* Code from template association_GetOne */
-  // public Promotion getPromotion()
-  // {
-  //   return promotion;
-  // }
+  /* Code from template association_GetOne */
+  public Promotion getPromotion()
+  {
+    return promotion;
+  }
 
   /* Code from template association_SetUnidirectionalOne */
   public boolean setWishlist(Wishlist aNewWishlist)
@@ -154,17 +154,17 @@ public class Game
     return wasSet;
   }
 
-  // /* Code from template association_SetUnidirectionalOne */
-  // public boolean setPromotion(Promotion aNewPromotion)
-  // {
-  //   boolean wasSet = false;
-  //   if (aNewPromotion != null)
-  //   {
-  //     promotion = aNewPromotion;
-  //     wasSet = true;
-  //   }
-  //   return wasSet;
-  // }
+  /* Code from template association_SetUnidirectionalOne */
+  public boolean setPromotion(Promotion aNewPromotion)
+  {
+    boolean wasSet = false;
+    if (aNewPromotion != null)
+    {
+      promotion = aNewPromotion;
+      wasSet = true;
+    }
+    return wasSet;
+  }
 
   public void delete()
   {

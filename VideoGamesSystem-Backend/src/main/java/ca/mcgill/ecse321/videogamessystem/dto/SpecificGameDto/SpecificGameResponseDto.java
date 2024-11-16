@@ -7,7 +7,7 @@ public class SpecificGameResponseDto {
 
     private boolean availability;
     private int serialNumber;
-    private Long gameId;
+    private Game game;
     private String title;
     private String description;
     private int price;
@@ -15,15 +15,8 @@ public class SpecificGameResponseDto {
     private Game.ConsoleType consoleType;
 
     // Constructor with all relevant attributes
-    public SpecificGameResponseDto(boolean availability, int serialNumber, Long gameId, String title, String description, int price, Game.Category category, Game.ConsoleType consoleType) {
-        this.availability = availability;
-        this.serialNumber = serialNumber;
-        this.gameId = gameId;
-        this.title = title;
-        this.description = description;
-        this.price = price;
-        this.category = category;
-        this.consoleType = consoleType;
+    protected SpecificGameResponseDto() {
+      
     }
 
     // Constructor that initializes fields from a SpecificGame entity
@@ -32,15 +25,16 @@ public class SpecificGameResponseDto {
         this.serialNumber = specificGame.getSerialNumber();
         
         // Initialize fields from the associated Game entity
-        Game game = specificGame.getGame();
-        if (game != null) {
-            this.gameId = game.getId();
-            this.title = game.getTitle();
-            this.description = game.getDescription();
-            this.price = game.getPrice();
-            this.category = game.getCategory();
-            this.consoleType = game.getConsoleType();
-        }
+        // Game game = specificGame.getGame();
+        this.game = specificGame.getGame();
+        this.title = game.getTitle();
+        this.description = game.getDescription();
+        this.price = game.getPrice();  
+        this.category = game.getCategory();
+        this.consoleType = game.getConsoleType();
+    
+            
+        
     }
 
     // Getters and Setters
@@ -56,14 +50,18 @@ public class SpecificGameResponseDto {
 
 
 
-    public Long getGameId() {
-        return gameId;
-    }
+    // public Long getGameId() {
+    //     return gameId;
+    // }
 
 
 
     public String getTitle() {
         return title;
+    }
+
+    public Game getGame(){
+        return this.game;
     }
 
 

@@ -1,5 +1,7 @@
 package ca.mcgill.ecse321.videogamessystem.dto.ReviewDto;
 
+import ca.mcgill.ecse321.videogamessystem.model.Customer;
+import ca.mcgill.ecse321.videogamessystem.model.Game;
 import ca.mcgill.ecse321.videogamessystem.model.Review;
 import java.sql.Date;
 
@@ -9,19 +11,25 @@ public class ReviewResponseDto {
     private int gameRating;
     private String reviewContent;
     private Date reviewDate;
-    private Long customerId;
-    private Long gameId;
-    private Long parentReviewId;
+    private Customer customer;
+    private String customerUsername;
+    private Game game;
+    private String gameTitle;
+    private Review parentReview;
 
     public ReviewResponseDto(Review review) {
         this.id = review.getId();
         this.gameRating = review.getGameRating();
         this.reviewContent = review.getReviewContent();
         this.reviewDate = review.getReviewDate();
-        this.customerId = review.getCustomer() != null ? review.getCustomer().getId() : null;
-        this.gameId = review.getGame() != null ? review.getGame().getId() : null;
-        this.parentReviewId = review.getParentReview() != null ? review.getParentReview().getId() : null;
+        this.customer = review.getCustomer();
+        this.customerUsername = review.getCustomer() != null ? review.getCustomer().getUserName() : null;
+        this.game = review.getGame();
+        this.gameTitle = review.getGame() != null ? review.getGame().getTitle() : null;
+        this.parentReview = review.getParentReview();
     }
+
+    protected ReviewResponseDto() {}
 
     // Getters
     public Long getId() {
@@ -40,15 +48,27 @@ public class ReviewResponseDto {
         return reviewDate;
     }
 
-    public Long getCustomerId() {
-        return customerId;
+    public Customer getCustomer() {
+        return customer;
     }
 
-    public Long getGameId() {
-        return gameId;
+    public String getCustomerUsername() {
+        return customerUsername;
+    }
+
+    public Game getGame() {
+        return game;
+    }
+
+    public String getGameTitle() {
+        return gameTitle;
+    }
+
+    public Review getParentReview() {
+        return parentReview;
     }
 
     public Long getParentReviewId() {
-        return parentReviewId;
+        return parentReview != null ? parentReview.getId() : null;
     }
 }

@@ -25,8 +25,8 @@ public class ReviewRequestDto {
     @Positive(message = "Customer ID must be positive")
     private Long customerId;
 
-    @NotBlank(message = "Customer username cannot be blank")
-    private String customerUserName;
+    // @NotBlank(message = "Customer username cannot be blank")
+    // private String customerUserName;
 
     private Review parentReview;
 
@@ -34,19 +34,19 @@ public class ReviewRequestDto {
     @Positive(message = "Game ID must be positive")
     private Long gameId;
 
-    @NotBlank(message = "Game title cannot be blank")
-    private String gameTitle;
+    // @NotBlank(message = "Game title cannot be blank")
+    // private String gameTitle;
 
     // Constructor with all attributes
-    public ReviewRequestDto(String reviewContent, int gameRating, Date reviewDate, Long customerId, String customerUserName, Review parentReview, Long gameId, String gameTitle) {
+    public ReviewRequestDto(String reviewContent, int gameRating, Date reviewDate, Long customerId, Review parentReview, Long gameId) {
         this.reviewContent = reviewContent;
         this.gameRating = gameRating;
         this.reviewDate = reviewDate;
         this.customerId = customerId;
-        this.customerUserName = customerUserName;
+        // this.customerUserName = customerUserName;
         this.parentReview = parentReview;
         this.gameId = gameId;
-        this.gameTitle = gameTitle;
+        // this.gameTitle = gameTitle;
     }
 
     // Getters and Setters
@@ -82,13 +82,13 @@ public class ReviewRequestDto {
         this.customerId = customerId;
     }
 
-    public String getCustomerUserName() {
-        return customerUserName;
-    }
+    // public String getCustomerUserName() {
+    //     return customerUserName;
+    // }
 
-    public void setCustomerUserName(String customerUserName) {
-        this.customerUserName = customerUserName;
-    }
+    // public void setCustomerUserName(String customerUserName) {
+    //     this.customerUserName = customerUserName;
+    // }
 
     public Review getParentReview() {
         return parentReview;
@@ -106,11 +106,11 @@ public class ReviewRequestDto {
         this.gameId = gameId;
     }
 
-    public String getGameTitle() {
-        return gameTitle;
-    }
+    // public String getGameTitle() {
+    //     return gameTitle;
+    // }
 
-    public void setGameTitle(String gameTitle) {
-        this.gameTitle = gameTitle;
-    }
+    // public void setGameTitle(String gameTitle) {
+    //     this.gameTitle = gameTitle;
+    // }
 }
