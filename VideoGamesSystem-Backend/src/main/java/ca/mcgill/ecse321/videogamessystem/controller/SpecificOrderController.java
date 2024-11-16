@@ -137,7 +137,7 @@ public class SpecificOrderController {
                 order.getNumber(),
                 order.getOrderDate(),
                 order.getCardNumber(),
-                order.getCustomer() != null ? order.getCustomer().getId().intValue() : null
+                order.getCustomer().getId()
         );
     }
 }
