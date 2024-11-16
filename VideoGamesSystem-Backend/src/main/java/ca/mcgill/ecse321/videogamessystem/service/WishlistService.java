@@ -11,6 +11,7 @@ import ca.mcgill.ecse321.videogamessystem.exception.VideoGamesSystemException;
 import ca.mcgill.ecse321.videogamessystem.model.Customer;
 import ca.mcgill.ecse321.videogamessystem.model.Wishlist;
 import ca.mcgill.ecse321.videogamessystem.repository.WishlistRepository;
+import ca.mcgill.ecse321.videogamessystem.repository.CustomerRepository;
 
 @Service
 public class WishlistService {
@@ -18,24 +19,28 @@ public class WishlistService {
     @Autowired
     private WishlistRepository wishlistRepository;
 
-    /**
-     * @param customer
-     * @return
-     */
-    @Transactional
-    public Wishlist createWishlist(Customer customer) {
-        if (customer == null) {
-            throw new VideoGamesSystemException(HttpStatus.NOT_FOUND,"Customer cannot be null.");
-        }
-        if (wishlistRepository.findWishlistByCustomer(customer) != null) {
-            throw new VideoGamesSystemException(HttpStatus.NOT_FOUND,"Customer already has a wishlist.");
-        }
+    @Autowired
+    private CustomerRepository customerRepository;
 
-        Wishlist wishlist = new Wishlist();
-        wishlist.setNbOfItems(0);
-        wishlist.setCustomer(customer);
-        return wishlistRepository.save(wishlist);
-    }
+    // /**
+    //  * @param customer
+    //  * @return
+    //  */
+    // @Transactional
+    // public Wishlist createWishlist(Long customerId) {
+    //     Customer customer= customerRepository.findCustomerById(customerId);
+    //     if ( customer == null) {
+    //         throw new VideoGamesSystemException(HttpStatus.NOT_FOUND,"Customer cannot be null.");
+    //     }
+    //     if (wishlistRepository.findWishlistByCustomer(customer) != null) {
+    //         throw new VideoGamesSystemException(HttpStatus.NOT_FOUND,"Customer already has a wishlist.");
+    //     }
+
+    //     Wishlist wishlist = new Wishlist();
+    //     wishlist.setNbOfItems(0);
+    //     wishlist.setCustomer(customer);
+    //     return wishlistRepository.save(wishlist);
+    // }
 
     /**
      * @param id
@@ -62,25 +67,25 @@ public class WishlistService {
         return wishlistRepository.findWishlistByCustomer(customer);
     }
 
-    /**
-     * @param id
-     * @param nbOfItems
-     * @return
-     */
-    @Transactional
-    public Wishlist updateWishlistNbOfItems(Long id, int nbOfItems) {
-        if (nbOfItems < 0) {
-            throw new VideoGamesSystemException(HttpStatus.NOT_FOUND,"Number of items cannot be negative.");
-        }
+    // /**
+    //  * @param id
+    //  * @param nbOfItems
+    //  * @return
+    //  */
+    // @Transactional
+    // public Wishlist updateWishlistNbOfItems(Long id, int nbOfItems) {
+    //     if (nbOfItems < 0) {
+    //         throw new VideoGamesSystemException(HttpStatus.NOT_FOUND,"Number of items cannot be negative.");
+    //     }
         
-        Wishlist wishlist = wishlistRepository.findWishlistById(id);
-        if (wishlist == null) {
-            throw new VideoGamesSystemException(HttpStatus.NOT_FOUND,"Wishlist not found.");
-        }
+    //     Wishlist wishlist = wishlistRepository.findWishlistById(id);
+    //     if (wishlist == null) {
+    //         throw new VideoGamesSystemException(HttpStatus.NOT_FOUND,"Wishlist not found.");
+    //     }
 
-        wishlist.setNbOfItems(nbOfItems);
-        return wishlistRepository.save(wishlist);
-    }
+    //     wishlist.setNbOfItems(nbOfItems);
+    //     return wishlistRepository.save(wishlist);
+    // }
 
     // /**
     //  * @param id
