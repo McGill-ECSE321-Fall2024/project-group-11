@@ -44,9 +44,6 @@ public class GameIntegrationTests {
     private static final Category VALID_CATEGORY = Category.Adventure;
     private static final ConsoleType VALID_CONSOLE_TYPE = ConsoleType.PS4;
 
-    private static final String UPDATED_TITLE = "Updated Game";
-    private static final int UPDATED_PRICE = 60;
-
     private Long gameId;
 
     @AfterAll

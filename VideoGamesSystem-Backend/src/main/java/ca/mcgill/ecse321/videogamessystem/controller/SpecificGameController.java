@@ -143,15 +143,6 @@ public class SpecificGameController {
      * @return the converted SpecificGameResponseDto
      */
     private SpecificGameResponseDto convertToDto(SpecificGame specificGame) {
-        return new SpecificGameResponseDto(
-                specificGame.getAvailability(),
-                specificGame.getSerialNumber(),
-                specificGame.getGame().getId(),
-                specificGame.getGame().getTitle(),
-                specificGame.getGame().getDescription(),
-                specificGame.getGame().getPrice(),
-                specificGame.getGame().getCategory(),
-                specificGame.getGame().getConsoleType()
-        );
+        return new SpecificGameResponseDto(specificGame);
     }
 }

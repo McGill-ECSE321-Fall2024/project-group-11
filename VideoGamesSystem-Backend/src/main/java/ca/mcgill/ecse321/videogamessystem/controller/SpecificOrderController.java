@@ -133,11 +133,6 @@ public class SpecificOrderController {
      * @return SpecificOrderResponseDto containing the data from the order object.
      */
     private SpecificOrderResponseDto convertToDto(SpecificOrder order) {
-        return new SpecificOrderResponseDto(
-                order.getNumber(),
-                order.getOrderDate(),
-                order.getCardNumber(),
-                order.getCustomer().getId()
-        );
+        return new SpecificOrderResponseDto(order);
     }
 }

@@ -44,15 +44,17 @@ public class SpecificReviewRating {
 
   public SpecificReviewRating(ReviewRating aReviewRating) {
     reviewRating = aReviewRating;
-    Customer customer = new Customer();
+    // Customer customer = new Customer();
     this.customer = customer;
-    Review review = new Review();
+    // Review review = new Review();
     this.review = review;
   }
 
   //------------------------
   // INTERFACE
   //------------------------
+
+  public SpecificReviewRating(){}
 
   public boolean setReviewRating(ReviewRating aReviewRating) {
     boolean wasSet = false;

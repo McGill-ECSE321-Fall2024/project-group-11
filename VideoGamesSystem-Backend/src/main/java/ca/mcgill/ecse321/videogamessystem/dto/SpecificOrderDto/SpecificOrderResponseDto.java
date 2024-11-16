@@ -2,6 +2,7 @@ package ca.mcgill.ecse321.videogamessystem.dto.SpecificOrderDto;
 
 import java.sql.Date;
 
+import ca.mcgill.ecse321.videogamessystem.model.Customer;
 import ca.mcgill.ecse321.videogamessystem.model.SpecificOrder;
 
 public class SpecificOrderResponseDto {
@@ -9,18 +10,13 @@ public class SpecificOrderResponseDto {
     private int orderNumber;
     private Date orderDate;
     private int cardNumber;
-    private Long customerId;
+    private Customer customer;
 
-    // Default constructor
-    public SpecificOrderResponseDto() {
-    }
+    
 
     // Constructor with all attributes
-    public SpecificOrderResponseDto(int orderNumber, Date orderDate, int cardNumber, Long customerId) {
-        this.orderNumber = orderNumber;
-        this.orderDate = orderDate;
-        this.cardNumber = cardNumber;
-        this.customerId = customerId;
+    protected SpecificOrderResponseDto() {
+        
     }
 
     // Constructor that initializes from SpecificOrder
@@ -28,7 +24,7 @@ public class SpecificOrderResponseDto {
         this.orderNumber = order.getNumber();
         this.orderDate = order.getOrderDate();
         this.cardNumber = order.getCardNumber();
-        this.customerId = (order.getCustomer() != null) ? order.getCustomer().getId() : null;
+        this.customer = (order.getCustomer() != null) ? order.getCustomer() : null;
     }
 
     // Getters
@@ -44,8 +40,8 @@ public class SpecificOrderResponseDto {
         return cardNumber;
     }
 
-    public Long getCustomerId() {
-        return customerId;
+    public Customer getCustomer() {
+        return customer;
     }
 
     // Setters
@@ -61,8 +57,8 @@ public class SpecificOrderResponseDto {
         this.cardNumber = cardNumber;
     }
 
-    public void setCustomerId(Long customerId) {
-        this.customerId = customerId;
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 
     @Override
@@ -71,7 +67,7 @@ public class SpecificOrderResponseDto {
                 "orderNumber=" + orderNumber +
                 ", orderDate=" + orderDate +
                 ", cardNumber=" + cardNumber +
-                ", customerId=" + customerId +
+                ", customer=" + customer +
                 '}';
     }
 }
