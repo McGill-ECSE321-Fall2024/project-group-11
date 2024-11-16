@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Arrays;
+import java.lang.reflect.Method;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -167,6 +168,140 @@ public class StaffServiceTest {
         assertNotNull(result, "Result should not be null");
         assertEquals(3, result.size(), "Result list should have three elements");
         assertTrue(result.containsAll(input), "Result should contain all elements from the input");
+    }
+
+    // @Test
+    // public void testSetOwner_NoCurrentOwner() {
+    //     // Arrange
+    //     Long staffId = 1L;
+    //     Staff staff = new Staff("user1", "user1@example.com", "password", false); // Non-owner staff
+    //     when(staffRepository.findStaffById(staffId)).thenReturn(staff);
+    //     when(staffRepository.findStaffByAdmin(true)).thenReturn(new ArrayList<>()); // No current owner
+
+    //     // Act
+    //     Staff newOwner = staffService.setOwner(staffId);
+
+    //     // Assert
+    //     assertNotNull(newOwner, "The returned staff should not be null.");
+    //     assertTrue(newOwner.getStaffType(), "The staff should now be an owner.");
+    //     verify(staffRepository, times(1)).findStaffById(staffId);
+    //     verify(staffRepository, times(1)).findStaffByAdmin(true);
+    //     verify(staffRepository, times(1)).save(newOwner);
+    // }
+
+    @Test
+    public void testSetOwner_StaffNotFound() {
+        // Arrange
+        Long invalidStaffId = 999L;
+        when(staffRepository.findStaffById(invalidStaffId)).thenReturn(null);
+
+        // Act & Assert
+        VideoGamesSystemException exception = assertThrows(VideoGamesSystemException.class, () -> {
+            staffService.setOwner(invalidStaffId);
+        });
+
+        assertEquals("Staff not found.", exception.getMessage());
+        verify(staffRepository, times(1)).findStaffById(invalidStaffId);
+        verify(staffRepository, times(0)).findStaffByAdmin(true); // Should not check for owner if staff is not found
+    }
+    // @Test
+    // public void testSetOwner_CurrentOwnerExists() {
+    //     // Arrange
+    //     Long newOwnerId = 2L;
+    //     Staff currentOwner = new Staff("currentOwner", "owner@example.com", "password", true); // Existing owner
+    //     Staff newOwner = new Staff("newOwner", "newowner@example.com", "password", false); // Non-owner staff
+
+    //     when(staffRepository.findStaffById(newOwnerId)).thenReturn(newOwner);
+    //     when(staffRepository.findStaffByAdmin(true)).thenReturn(List.of(currentOwner)); // Existing owner
+
+    //     // Act
+    //     Staff updatedOwner = staffService.setOwner(newOwnerId);
+
+    //     // Assert
+    //     assertNotNull(updatedOwner, "The returned staff should not be null.");
+    //     assertTrue(updatedOwner.getStaffType(), "The new owner should now be an owner.");
+    //     assertFalse(currentOwner.getStaffType(), "The previous owner should no longer be an owner.");
+    //     verify(staffRepository, times(1)).findStaffById(newOwnerId);
+    //     verify(staffRepository, times(1)).findStaffByAdmin(true);
+    //     verify(staffRepository, times(1)).save(currentOwner); // Ensure the current owner was updated
+    //     verify(staffRepository, times(1)).save(newOwner); // Ensure the new owner was updated
+    // }
+    // @Test
+    // public void testSetOwner_AlreadyOwner() {
+    //     // Arrange
+    //     Long staffId = 1L;
+    //     Staff currentOwner = new Staff("currentOwner", "owner@example.com", "password", true); // Existing owner
+
+    //     when(staffRepository.findStaffById(staffId)).thenReturn(currentOwner);
+    //     when(staffRepository.findStaffByAdmin(true)).thenReturn(List.of(currentOwner)); // Current owner is already the owner
+
+    //     // Act
+    //     Staff updatedOwner = staffService.setOwner(staffId);
+
+    //     // Assert
+    //     assertNotNull(updatedOwner, "The returned staff should not be null.");
+    //     assertTrue(updatedOwner.getStaffType(), "The staff should still be an owner.");
+    //     verify(staffRepository, times(1)).findStaffById(staffId);
+    //     verify(staffRepository, times(1)).findStaffByAdmin(true);
+    //     verify(staffRepository, times(0)).save(any(Staff.class)); // No save should occur
+    // }
+    // @Test
+    // public void testSetOwner_NoCurrentOwner() {
+    //     // Arrange
+    //     Staff staff = new Staff("user1", "email@example.com", "password", false);
+    //     when(staffRepository.findStaffById(1L)).thenReturn(staff);
+    //     when(staffRepository.findStaffByAdmin(true)).thenReturn(new ArrayList<>());
+
+    //     // Act
+    //     Staff newOwner = staffService.setOwner(1L);
+
+    //     // Assert
+    //     assertTrue(newOwner.getStaffType());
+    //     verify(staffRepository, times(1)).findStaffById(1L);
+    //     verify(staffRepository, times(1)).findStaffByAdmin(true);
+    //     verify(staffRepository, times(1)).save(staff);
+    // }
+    @Test
+    public void testToList_ConversionWithReflection() throws Exception {
+        // Arrange
+        Iterable<String> iterable = List.of("Item1", "Item2", "Item3");
+        
+        // Access the private method using reflection
+        Method toListMethod = StaffService.class.getDeclaredMethod("toList", Iterable.class);
+        toListMethod.setAccessible(true);
+
+        // Act
+        @SuppressWarnings("unchecked")
+        List<String> result = (List<String>) toListMethod.invoke(new StaffService(), iterable);
+
+        // Assert
+        assertNotNull(result, "Result list should not be null.");
+        assertEquals(3, result.size(), "The list size should match the size of the iterable.");
+        assertTrue(result.contains("Item1"), "Result list should contain 'Item1'.");
+        assertTrue(result.contains("Item2"), "Result list should contain 'Item2'.");
+        assertTrue(result.contains("Item3"), "Result list should contain 'Item3'.");
+    }
+
+    @Test
+    public void testGetAllStaff_Success() {
+        // Arrange
+        Staff staff1 = new Staff("User1", "user1@example.com", "password123", false);
+        Staff staff2 = new Staff("User2", "user2@example.com", "password456", false);
+        
+        // Mock the repository to return a list of staff
+        when(staffRepository.findAll()).thenReturn(List.of(staff1, staff2));
+        
+        // Act
+        List<Staff> staffList = staffService.getAllStaff();
+
+        // Assert
+        assertNotNull(staffList, "The staff list should not be null.");
+        assertEquals(2, staffList.size(), "The staff list size should match the mocked data.");
+        assertTrue(staffList.contains(staff1), "The staff list should contain staff1.");
+        assertTrue(staffList.contains(staff2), "The staff list should contain staff2.");
+
+        // Verify interaction with the repository
+        verify(staffRepository, times(1)).findAll();
     }
 }
 

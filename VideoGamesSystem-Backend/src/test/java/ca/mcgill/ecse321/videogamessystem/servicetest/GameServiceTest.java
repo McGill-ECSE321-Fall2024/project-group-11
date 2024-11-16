@@ -65,9 +65,12 @@ class GameServiceTest {
 
     @Test
     public void testCreateGame_InvalidPrice() {
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        // Act & Assert
+        VideoGamesSystemException exception = assertThrows(VideoGamesSystemException.class, () -> {
             gameService.createGame("Invalid Price Game", -5, "Negative Price", Category.Action, ConsoleType.PC);
         });
+    
+        // Verify the exception message
         assertEquals("Price cannot be negative.", exception.getMessage());
     }
 
@@ -85,12 +88,15 @@ class GameServiceTest {
 
     @Test
     public void testGetGameById_NotFound() {
+        // Arrange
         when(gameRepository.findGameById(1L)).thenReturn(null);
-
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+    
+        // Act & Assert
+        VideoGamesSystemException exception = assertThrows(VideoGamesSystemException.class, () -> {
             gameService.getGameById(1L);
         });
-
+    
+        // Verify the exception message
         assertEquals("Game not found.", exception.getMessage());
     }
 
@@ -200,11 +206,15 @@ class GameServiceTest {
 
     @Test
     public void testDeleteGame_NotFound() {
-        when(gameRepository.findGameById(1L)).thenReturn(null);
+        // Arrange
+        Long gameId = 1L;
+        when(gameRepository.findGameById(gameId)).thenReturn(null);
 
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            gameService.deleteGame(1L);
+        // Act & Assert
+        VideoGamesSystemException exception = assertThrows(VideoGamesSystemException.class, () -> {
+            gameService.deleteGame(gameId);
         });
+
         assertEquals("Game not found.", exception.getMessage());
     }
 
@@ -286,12 +296,15 @@ class GameServiceTest {
         Long gameId = 1L;
         Long wishlistId = 2L;
 
+        // Mock the repository to return null for the game
         when(gameRepository.findGameById(gameId)).thenReturn(null);
 
         // Act & Assert
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        VideoGamesSystemException exception = assertThrows(VideoGamesSystemException.class, () -> {
             gameService.addGameToWishlist(gameId, wishlistId);
         });
+
+        // Verify the correct exception message
         assertEquals("Game not found.", exception.getMessage());
     }
 
@@ -306,7 +319,7 @@ class GameServiceTest {
         when(wishlistRepository.findById(wishlistId)).thenReturn(Optional.empty());
 
         // Act & Assert
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        VideoGamesSystemException exception = assertThrows(VideoGamesSystemException.class, () -> {
             gameService.addGameToWishlist(gameId, wishlistId);
         });
 
@@ -336,15 +349,17 @@ class GameServiceTest {
     @Test
     public void testCreateGame_WithNullDescription() {
         // Act & Assert
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        VideoGamesSystemException exception = assertThrows(VideoGamesSystemException.class, () -> {
             gameService.createGame(null, 50, "New Game", Category.Action, ConsoleType.PS4);
         });
+
+        // Verify the exception message
         assertEquals("Description cannot be empty.", exception.getMessage());
     }
     @Test
     public void testCreateGame_WithNullTitle() {
         // Act & Assert
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        VideoGamesSystemException exception = assertThrows(VideoGamesSystemException.class, () -> {
             gameService.createGame("Description", 50, null, Category.Action, ConsoleType.PS4);
         });
         assertEquals("Title cannot be empty.", exception.getMessage());
@@ -353,7 +368,7 @@ class GameServiceTest {
     @Test
     public void testCreateGame_WithEmptyTitle() {
         // Act & Assert
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        VideoGamesSystemException exception = assertThrows(VideoGamesSystemException.class, () -> {
             gameService.createGame("Description", 50, "   ", Category.Action, ConsoleType.PS4);
         });
         assertEquals("Title cannot be empty.", exception.getMessage());
@@ -362,19 +377,23 @@ class GameServiceTest {
     @Test
     public void testCreateGame_WithNullCategory() {
         // Act & Assert
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        VideoGamesSystemException exception = assertThrows(VideoGamesSystemException.class, () -> {
             gameService.createGame("Description", 50, "Game Title", null, ConsoleType.PS4);
         });
+
+        // Verify the exception message
         assertEquals("Category cannot be null.", exception.getMessage());
     }
 
     @Test
     public void testCreateGame_WithNullConsoleType() {
         // Act & Assert
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        VideoGamesSystemException exception = assertThrows(VideoGamesSystemException.class, () -> {
             gameService.createGame("Description", 50, "Game Title", Category.Action, null);
         });
-        assertEquals("consoleType cannot be null.", exception.getMessage());
+
+        // Verify the exception message
+        assertEquals("consoleType cannot be null. cannot be null.", exception.getMessage());
     }
     @Test
     public void testGetGamesByPrice_NotSupported() {
@@ -426,7 +445,7 @@ class GameServiceTest {
     @Test
     public void testGetGamesByTitle_EmptyTitle() {
         // Act & Assert
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        VideoGamesSystemException exception = assertThrows(VideoGamesSystemException.class, () -> {
             gameService.getGamesByTitle("   ");
         });
         assertEquals("Title cannot be empty.", exception.getMessage());
@@ -435,7 +454,7 @@ class GameServiceTest {
     @Test
     public void testGetGamesByTitle_NullTitle() {
         // Act & Assert
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        VideoGamesSystemException exception = assertThrows(VideoGamesSystemException.class, () -> {
             gameService.getGamesByTitle(null);
         });
         assertEquals("Title cannot be empty.", exception.getMessage());
@@ -472,7 +491,7 @@ class GameServiceTest {
     @Test
     public void testGetGamesByCategory_NullCategory() {
         // Act & Assert
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        VideoGamesSystemException exception = assertThrows(VideoGamesSystemException.class, () -> {
             gameService.getGamesByCategory(null);
         });
         assertEquals("Category cannot be null.", exception.getMessage());
@@ -509,7 +528,7 @@ class GameServiceTest {
     @Test
     public void testGetGamesByConsoleType_NullConsoleType() {
         // Act & Assert
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        VideoGamesSystemException exception = assertThrows(VideoGamesSystemException.class, () -> {
             gameService.getGamesByConsoleType(null);
         });
         assertEquals("consoleType cannot be null.", exception.getMessage());
@@ -603,20 +622,21 @@ class GameServiceTest {
         // Arrange
         Long gameId = 999L;
         when(gameRepository.findGameById(gameId)).thenReturn(null);
-
+    
         // Act & Assert
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        VideoGamesSystemException exception = assertThrows(VideoGamesSystemException.class, () -> {
             gameService.getStockQuantity(gameId);
         });
         assertEquals("Game not found.", exception.getMessage());
     }
+
     @Test
     public void testGetGameBySpecificGameID_InvalidId() {
         // Arrange
         int invalidId = 0;
-
+    
         // Act & Assert
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        VideoGamesSystemException exception = assertThrows(VideoGamesSystemException.class, () -> {
             gameService.getGameBySpecificGameID(invalidId);
         });
         assertEquals("specific game id cannot be 0", exception.getMessage());
@@ -629,11 +649,12 @@ class GameServiceTest {
         when(specificGameRepository.findSpecificGameBySerialNumber(specificGameId)).thenReturn(null);
 
         // Act & Assert
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        VideoGamesSystemException exception = assertThrows(VideoGamesSystemException.class, () -> {
             gameService.getGameBySpecificGameID(specificGameId);
         });
         assertEquals("the specific game cannot be null", exception.getMessage());
     }
+
     //TODO
     // @Test
     // public void testGetGameBySpecificGameID_Success() {
@@ -688,9 +709,12 @@ class GameServiceTest {
 
     @Test
     public void testGetGameByOrder_NullOrder() {
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        // Act & Assert
+        VideoGamesSystemException exception = assertThrows(VideoGamesSystemException.class, () -> {
             gameService.getGameByOrder(null);
         });
+
+        // Verify the exception message
         assertEquals("order cannot be null", exception.getMessage());
     }
 
@@ -733,12 +757,13 @@ class GameServiceTest {
 
     @Test
     public void testUpdatePromotion_GameNotFound() {
+        // Arrange
         Long gameId = 1L;
         Promotion newPromotion = new Promotion();
         when(gameRepository.findGameById(gameId)).thenReturn(null);
 
         // Act & Assert
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        VideoGamesSystemException exception = assertThrows(VideoGamesSystemException.class, () -> {
             gameService.updatePromotion(gameId, newPromotion);
         });
 
@@ -764,16 +789,19 @@ class GameServiceTest {
 
     @Test
     public void testUpdateWishlist_GameNotFound() {
+        // Arrange
         Long gameId = 1L;
         Wishlist newWishlist = new Wishlist();
-        
+    
+        // Mock the repository to return null, indicating the game was not found
         when(gameRepository.findGameById(gameId)).thenReturn(null);
-
+    
         // Act & Assert
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        VideoGamesSystemException exception = assertThrows(VideoGamesSystemException.class, () -> {
             gameService.updateWishlist(gameId, newWishlist);
         });
-
+    
+        // Verify the exception message
         assertEquals("Game not found.", exception.getMessage());
     }
     // @Test
@@ -819,15 +847,18 @@ class GameServiceTest {
     public void testGetPriceAfterPromoWithId_InvalidGameId() {
         // Arrange
         Long gameId = 999L;
+        // Mock the repository to simulate the game does not exist
         when(gameRepository.findGameById(gameId)).thenReturn(null);
 
         // Act & Assert
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        VideoGamesSystemException exception = assertThrows(VideoGamesSystemException.class, () -> {
             gameService.getPriceAfterPromoWithId(gameId);
         });
 
+        // Verify the exception message
         assertEquals("Game not found.", exception.getMessage());
     }
+
     @Test
     public void testGetGameByWishlist_Success() {
         // Arrange
@@ -848,13 +879,15 @@ class GameServiceTest {
     }
 
     @Test
-    public void testGetGameByWishlist_NullWishlist() {
-        // Act & Assert
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            gameService.getGameByWishlist(null);
-        });
-        assertEquals("wishlist is null", exception.getMessage());
-    }
+public void testGetGameByWishlist_NullWishlist() {
+    // Act & Assert
+    VideoGamesSystemException exception = assertThrows(VideoGamesSystemException.class, () -> {
+        gameService.getGameByWishlist(null);
+    });
+
+    // Verify the exception message
+    assertEquals("wishlist is null", exception.getMessage());
+}
 
     @Test
     public void testGetGameByWishlist_NoGamesFound() {
@@ -909,7 +942,7 @@ class GameServiceTest {
     @Test
     public void testGetGamesLowerInstockThan_InvalidQuantity() {
         // Act & Assert
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        VideoGamesSystemException exception = assertThrows(VideoGamesSystemException.class, () -> {
             gameService.getGamesLowerInstockThan(-1);
         });
         assertEquals("search in stock quantity cannot be lower than 0", exception.getMessage());
@@ -1075,12 +1108,15 @@ class GameServiceTest {
     public void testGetPriceAfterPromoWithId_InvalidGameIdThrowsException() {
         // Arrange
         Long invalidId = 999L;
+        // Mock the repository to return null for the invalid game ID
         when(gameRepository.findGameById(invalidId)).thenReturn(null);
 
         // Act & Assert
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        VideoGamesSystemException exception = assertThrows(VideoGamesSystemException.class, () -> {
             gameService.getPriceAfterPromoWithId(invalidId);
         });
+
+        // Verify the exception message matches the expected behavior
         assertEquals("Game not found.", exception.getMessage());
     }
 

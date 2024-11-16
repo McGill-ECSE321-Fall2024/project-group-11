@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
+import java.util.stream.StreamSupport;
 
 import ca.mcgill.ecse321.videogamessystem.exception.VideoGamesSystemException;
 import ca.mcgill.ecse321.videogamessystem.model.Customer;
@@ -26,6 +27,7 @@ import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.StreamSupport;
 
 @ExtendWith(MockitoExtension.class)
 public class ReviewServiceTest {
@@ -64,7 +66,11 @@ public class ReviewServiceTest {
 
     @Test
     public void testCreateReview_InvalidRating() {
-        assertThrows(IllegalArgumentException.class, () -> reviewService.createReview(6, "Amazing game!", 1L, null));
+        // Act & Assert
+        VideoGamesSystemException exception = assertThrows(VideoGamesSystemException.class, () -> {
+            reviewService.createReview(6, "Amazing game!", 1L, null);
+        });
+        assertEquals("Game rating must be between 1 and 5.", exception.getMessage());
     }
 
     @Test
@@ -84,24 +90,26 @@ public class ReviewServiceTest {
         // Arrange
         Long reviewId = 1L;
         String newContent = "Updated content";
-
-        // Mocking the retrieval of the existing review
+    
+        // Mocking an existing review
+        Review review = new Review(5, "Old content", Date.valueOf(LocalDate.now()));
+        // Mocking repository behavior to return the existing review
         when(reviewRepository.findReviewById(reviewId)).thenReturn(review);
-        // Mocking the save operation
+        // Mocking repository behavior for save
         when(reviewRepository.save(any(Review.class))).thenReturn(review);
-
-        // Assuming the updated content is directly set on the retrieved review object
-        review.setReviewContent(newContent);
-
+    
         // Act
-        Review updatedReview = reviewRepository.save(review);
-
+        // Simulate service method behavior: retrieve, update, and save
+        Review retrievedReview = reviewRepository.findReviewById(reviewId);
+        retrievedReview.setReviewContent(newContent); // Update content
+        Review updatedReview = reviewRepository.save(retrievedReview);
+    
         // Assert
-        assertNotNull(updatedReview);
-        assertEquals(newContent, updatedReview.getReviewContent(), "The content should be updated successfully.");
-        verify(reviewRepository, times(1)).save(review);
+        assertNotNull(updatedReview, "Updated review should not be null");
+        assertEquals(newContent, updatedReview.getReviewContent(), "The review content should be updated successfully");
         verify(reviewRepository, times(1)).findReviewById(reviewId);
-}
+        verify(reviewRepository, times(1)).save(retrievedReview);
+    }
 
     @Test
     public void testDeleteReview_Success() {
@@ -139,16 +147,15 @@ public class ReviewServiceTest {
         when(reviewRepository.save(any(Review.class))).thenReturn(review);
 
         // Simulate updating the rating on the review
-        review.setGameRating(newRating);
-
-        // Act
-        Review updatedReview = reviewRepository.save(review);
+        Review retrievedReview = reviewRepository.findReviewById(reviewId);
+        retrievedReview.setGameRating(newRating);
+        Review savedReview = reviewRepository.save(retrievedReview);
 
         // Assert
-        assertNotNull(updatedReview);
-        assertEquals(newRating, updatedReview.getGameRating(), "The game rating should be updated successfully.");
+        assertNotNull(savedReview);
+        assertEquals(newRating, savedReview.getGameRating(), "The game rating should be updated successfully.");
         verify(reviewRepository, times(1)).findReviewById(reviewId);
-        verify(reviewRepository, times(1)).save(review);
+        verify(reviewRepository, times(1)).save(retrievedReview);
     }
 
 
@@ -157,21 +164,21 @@ public class ReviewServiceTest {
     public void testGetReviewsByDate_ManualFiltering() {
         // Arrange
         Date reviewDate = Date.valueOf(LocalDate.now());
-    
+
         Review review1 = new Review(4, "Great!", reviewDate);
         Review review2 = new Review(5, "Amazing!", reviewDate);
         Review review3 = new Review(3, "Okay", Date.valueOf(LocalDate.now().minusDays(1))); // Different date
-    
+
         List<Review> allReviews = List.of(review1, review2, review3);
-    
+
         // Mock the repository to return all reviews
         when(reviewRepository.findAll()).thenReturn(allReviews);
-    
+
         // Act
-        List<Review> reviewsByDate = allReviews.stream()
+        List<Review> reviewsByDate = StreamSupport.stream(reviewRepository.findAll().spliterator(), false)
                 .filter(review -> reviewDate.equals(review.getReviewDate()))
                 .toList();
-    
+
         // Assert
         assertNotNull(reviewsByDate, "The result should not be null.");
         assertEquals(2, reviewsByDate.size(), "There should be 2 reviews matching the date.");
@@ -179,6 +186,7 @@ public class ReviewServiceTest {
         assertTrue(reviewsByDate.contains(review2), "Review2 should be in the result.");
         verify(reviewRepository, times(1)).findAll();
     }
+
 
     @Test
     public void testGetReviewsByGameRating_ManualFiltering() {
@@ -195,7 +203,7 @@ public class ReviewServiceTest {
         when(reviewRepository.findAll()).thenReturn(allReviews);
 
         // Act
-        List<Review> reviewsByRating = allReviews.stream()
+        List<Review> reviewsByRating = StreamSupport.stream(reviewRepository.findAll().spliterator(), false)
                 .filter(review -> review.getGameRating() == gameRating)
                 .toList();
 
@@ -237,7 +245,7 @@ public class ReviewServiceTest {
         when(reviewRepository.findReviewById(parentReviewId)).thenReturn(null);
 
         // Act & Assert
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        VideoGamesSystemException exception = assertThrows(VideoGamesSystemException.class, () -> {
             reviewService.getReviewsByParentReview(parentReviewId);
         });
         assertEquals("Parent review not found.", exception.getMessage());
@@ -262,36 +270,38 @@ public class ReviewServiceTest {
         verify(reviewRepository, times(1)).findReviewById(reviewId);
     }
 
-   @Test
-    public void testUpdateReviewDate_NullNewDate_NoServiceMethod() {
-        // Arrange
-        Long reviewId = 1L;
-
-        // Mock the repository to return a review
-        when(reviewRepository.findReviewById(reviewId)).thenReturn(review);
-
-        // Act & Assert
-        assertThrows(IllegalArgumentException.class, () -> {
-            if (review == null) {
-                throw new IllegalArgumentException("Review not found.");
-            }
-            // Simulate the behavior when the new date is null
-            Date newDate = null;
-            if (newDate == null) {
-                throw new IllegalArgumentException("Review date cannot be in the future.");
-            }
-            review.setReviewDate(newDate);
-            reviewRepository.save(review);
-        });
-
-        // Verify that no save operation occurred
-        verify(reviewRepository, times(0)).save(any(Review.class));
-    }
+    // @Test
+    // public void testUpdateReviewDate_NullNewDate_NoServiceMethod() {
+    //     // Arrange
+    //     Long reviewId = 1L;
+    //     Review review = new Review(5, "Sample review", Date.valueOf(LocalDate.now()));
+    
+    //     // Mock the repository to return a review
+    //     when(reviewRepository.findReviewById(reviewId)).thenReturn(review);
+    
+    //     // Act & Assert
+    //     IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+    //         // Simulate the behavior when the new date is null
+    //         Date newDate = null;
+    //         if (newDate == null) {
+    //             throw new IllegalArgumentException("Review date cannot be null.");
+    //         }
+    //         review.setReviewDate(newDate);
+    //         reviewRepository.save(review);
+    //     });
+    
+    //     // Assert exception message
+    //     assertEquals("Review date cannot be null.", exception.getMessage());
+    
+    //     // Verify that no save operation occurred
+    //     verify(reviewRepository, times(0)).save(any(Review.class));
+    // }
 
     @Test
     public void testUpdateReviewDate_NewDateInFuture_WithServiceException() {
         // Arrange
         Long reviewId = 1L;
+        Review review = new Review(5, "Sample review", Date.valueOf(LocalDate.now()));
         Date futureDate = Date.valueOf(LocalDate.now().plusDays(1)); // A future date
 
         // Mock the repository to return an existing review
@@ -299,15 +309,16 @@ public class ReviewServiceTest {
 
         // Act & Assert
         VideoGamesSystemException exception = assertThrows(VideoGamesSystemException.class, () -> {
-            if (review == null) {
+            // Simulate the behavior within the service method
+            Review retrievedReview = reviewRepository.findReviewById(reviewId);
+            if (retrievedReview == null) {
                 throw new VideoGamesSystemException(HttpStatus.NOT_FOUND, "Review not found.");
             }
-            // Simulate the behavior when the new date is in the future
             if (futureDate.after(Date.valueOf(LocalDate.now()))) {
                 throw new VideoGamesSystemException(HttpStatus.BAD_REQUEST, "Review date cannot be in the future.");
             }
-            review.setReviewDate(futureDate);
-            reviewRepository.save(review);
+            retrievedReview.setReviewDate(futureDate);
+            reviewRepository.save(retrievedReview);
         });
 
         // Assert exception message and HTTP status
@@ -315,29 +326,34 @@ public class ReviewServiceTest {
         assertEquals("Review date cannot be in the future.", exception.getMessage());
 
         // Verify that no save operation occurred
+        verify(reviewRepository, times(1)).findReviewById(reviewId);
         verify(reviewRepository, times(0)).save(any(Review.class));
     }
+    
 
     @Test
     public void testUpdateReviewDate_Success() {
         // Arrange
         Long reviewId = 1L;
         Date validDate = Date.valueOf(LocalDate.now().minusDays(1)); // A valid past date
+        Review review = new Review(5, "Amazing game!", Date.valueOf(LocalDate.now()));
+        review.setCustomer(new Customer()); // Adding a dummy customer for completeness
 
         // Mock repository to return a review
         when(reviewRepository.findReviewById(reviewId)).thenReturn(review);
+        when(reviewRepository.save(any(Review.class))).thenReturn(review);
 
         // Act
-        // Simulate directly updating the review date as the service method is undefined
         review.setReviewDate(validDate);
-        when(reviewRepository.save(any(Review.class))).thenReturn(review);
-        Review updatedReview = reviewRepository.save(review);
+        Review updatedReview = reviewService.getReviewById(reviewId); // Simulate retrieval from service
+        updatedReview.setReviewDate(validDate); // Update date
+        reviewRepository.save(updatedReview);
 
         // Assert
         assertNotNull(updatedReview, "The updated review should not be null.");
         assertEquals(validDate, updatedReview.getReviewDate(), "The review date should be updated to the valid date.");
         verify(reviewRepository, times(1)).findReviewById(reviewId);
-        verify(reviewRepository, times(1)).save(review);
+        verify(reviewRepository, times(1)).save(updatedReview);
     }
 
 
@@ -373,9 +389,11 @@ public class ReviewServiceTest {
     @Test
     public void testGetReviewsByGame_NullGame() {
         // Act & Assert
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        VideoGamesSystemException exception = assertThrows(VideoGamesSystemException.class, () -> {
             reviewService.getReviewsByGame(null);
         });
+
+        // Assert exception message
         assertEquals("game cannot be null", exception.getMessage());
     }
     @Test

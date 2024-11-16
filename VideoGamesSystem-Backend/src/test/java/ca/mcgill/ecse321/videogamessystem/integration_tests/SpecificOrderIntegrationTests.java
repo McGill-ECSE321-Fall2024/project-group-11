@@ -19,10 +19,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import ca.mcgill.ecse321.videogamessystem.VideogamessystemApplication;
-import ca.mcgill.ecse321.videogamessystem.dto.GameDto.GameRequestDto;
-import ca.mcgill.ecse321.videogamessystem.dto.GameDto.GameResponseDto;
 import ca.mcgill.ecse321.videogamessystem.dto.CustomerDto.CustomerRequestDto;
 import ca.mcgill.ecse321.videogamessystem.dto.CustomerDto.CustomerResponseDto;
+import ca.mcgill.ecse321.videogamessystem.dto.GameDto.GameRequestDto;
+import ca.mcgill.ecse321.videogamessystem.dto.GameDto.GameResponseDto;
 import ca.mcgill.ecse321.videogamessystem.dto.SpecificGameDto.SpecificGameRequestDto;
 import ca.mcgill.ecse321.videogamessystem.dto.SpecificGameDto.SpecificGameResponseDto;
 import ca.mcgill.ecse321.videogamessystem.dto.SpecificOrderDto.SpecificOrderRequestDto;

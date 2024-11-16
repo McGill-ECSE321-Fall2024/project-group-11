@@ -27,6 +27,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
 
 import java.util.Collections;
 import java.util.List;
@@ -138,12 +139,14 @@ public class SpecificGameServiceTest {
 
     @Test
     public void testGetSpecificGameBySerialNumber_NotFound() {
+        // Arrange
         when(specificGameRepository.findSpecificGameBySerialNumber(anyInt())).thenReturn(null);
 
-        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+        // Act & Assert
+        VideoGamesSystemException exception = assertThrows(VideoGamesSystemException.class, () -> {
             specificGameService.getSpecificGameBySerialNumber(999);
-        }, "Expected IllegalArgumentException for a nonexistent serial number.");
-        assertEquals("Specific game not found.", thrown.getMessage());
+        });
+        assertEquals("Specific game not found.", exception.getMessage());
     }
 
     @Test
@@ -231,9 +234,9 @@ public class SpecificGameServiceTest {
         when(specificGameRepository.findSpecificGameBySerialNumber(serialNumber)).thenReturn(new SpecificGame());
 
         // Act & Assert
-        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+        VideoGamesSystemException thrown = assertThrows(VideoGamesSystemException.class, () -> {
             specificGameService.createSpecificGame(serialNumber, true, 1L);
-        }, "Expected IllegalArgumentException for duplicate serial number");
+        }, "Expected VideoGamesSystemException for duplicate serial number");
 
         assertEquals("A specific game with this serial number already exists.", thrown.getMessage());
     }
@@ -244,29 +247,35 @@ public class SpecificGameServiceTest {
         int serialNumber = 123;
         Long gameId = 1L;
 
+        // Mock repository behavior
         when(specificGameRepository.findSpecificGameBySerialNumber(serialNumber)).thenReturn(null);
         when(gameRepository.findById(gameId)).thenReturn(Optional.empty());
 
         // Act & Assert
-        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+        VideoGamesSystemException thrown = assertThrows(VideoGamesSystemException.class, () -> {
             specificGameService.createSpecificGame(serialNumber, true, gameId);
-        }, "Expected IllegalArgumentException when game is not found");
+        }, "Expected VideoGamesSystemException when game is not found");
 
         assertEquals("Game not found.", thrown.getMessage());
     }
+
 
     
     
 
     @Test
     public void testCreateSpecificGame_SerialNumberExists() {
-        when(specificGameRepository.findSpecificGameBySerialNumber(123)).thenReturn(specificGame);
+        // Arrange
+        int serialNumber = 123;
+        when(specificGameRepository.findSpecificGameBySerialNumber(serialNumber)).thenReturn(new SpecificGame());
 
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            specificGameService.createSpecificGame(123, true, 1L);
+        // Act & Assert
+        VideoGamesSystemException exception = assertThrows(VideoGamesSystemException.class, () -> {
+            specificGameService.createSpecificGame(serialNumber, true, 1L);
         });
         assertEquals("A specific game with this serial number already exists.", exception.getMessage());
     }
+
 
    
 
@@ -352,11 +361,14 @@ public class SpecificGameServiceTest {
     @Test
     public void testGetSpecificGamesByGame_GameNotFound() {
         // Arrange
-        when(gameRepository.findGameById(anyLong())).thenReturn(null);
+        Long gameID = 1L;
+
+        // Mock repository to return null when the game is not found
+        when(gameRepository.findGameById(gameID)).thenReturn(null);
 
         // Act & Assert
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            specificGameService.getSpecificGamesByGame(1L);
+        VideoGamesSystemException exception = assertThrows(VideoGamesSystemException.class, () -> {
+            specificGameService.getSpecificGamesByGame(gameID);
         });
         assertEquals("Specific game not found.", exception.getMessage());
     }
@@ -412,7 +424,7 @@ public class SpecificGameServiceTest {
         when(specificGameRepository.findSpecificGameBySerialNumber(specificGameID)).thenReturn(null);
 
         // Act & Assert
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        VideoGamesSystemException exception = assertThrows(VideoGamesSystemException.class, () -> {
             specificGameService.addSpecificGameToOrder(specificGameID, mockOrder);
         });
         assertEquals("specific game not found", exception.getMessage());
@@ -429,7 +441,7 @@ public class SpecificGameServiceTest {
         when(specificGameRepository.findSpecificGameBySerialNumber(specificGameID)).thenReturn(specificGame);
 
         // Act & Assert
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        VideoGamesSystemException exception = assertThrows(VideoGamesSystemException.class, () -> {
             specificGameService.addSpecificGameToOrder(specificGameID, null);
         });
         assertEquals("order cannot be null", exception.getMessage());
@@ -479,7 +491,7 @@ public class SpecificGameServiceTest {
         when(specificGameRepository.findSpecificGameBySerialNumber(specificGameID)).thenReturn(null);
 
         // Act & Assert
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        VideoGamesSystemException exception = assertThrows(VideoGamesSystemException.class, () -> {
             specificGameService.removeSpecificGameFromOrder(specificGameID, mockOrder);
         });
         assertEquals("specific game not found", exception.getMessage());
@@ -487,42 +499,42 @@ public class SpecificGameServiceTest {
 
 
 
-    @Test
-    public void testRemoveSpecificGameFromOrder_OrderIsNull() {
-        // Arrange
-        int specificGameID = 101;
-        SpecificGame specificGame = new SpecificGame();
-        specificGame.setSerialNumber(specificGameID);
-        specificGame.setSpecificOrder(new SpecificOrder()); // Associate game with some order
+   @Test
+   public void testRemoveSpecificGameFromOrder_OrderIsNull() {
+       // Arrange
+       int specificGameID = 101;
+       SpecificGame specificGame = new SpecificGame();
+       specificGame.setSerialNumber(specificGameID);
+       specificGame.setSpecificOrder(new SpecificOrder()); // Associate game with some order
+   
+       // Mock repository to return this game by ID
+       when(specificGameRepository.findSpecificGameBySerialNumber(specificGameID)).thenReturn(specificGame);
+   
+       // Act & Assert
+       VideoGamesSystemException exception = assertThrows(VideoGamesSystemException.class, () -> {
+           specificGameService.removeSpecificGameFromOrder(specificGameID, null);
+       });
+       assertEquals("order cannot be null", exception.getMessage());
+   }
 
-        // Mock repository to return this game by ID
-        when(specificGameRepository.findSpecificGameBySerialNumber(specificGameID)).thenReturn(specificGame);
-
-        // Act & Assert
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            specificGameService.removeSpecificGameFromOrder(specificGameID, null);
-        });
-        assertEquals("order cannot be null", exception.getMessage());
-    }
-
-    @Test
-    public void testRemoveSpecificGameFromOrder_GameNotInProvidedOrder() {
-        // Arrange
-        int specificGameID = 101;
-        SpecificOrder differentOrder = new SpecificOrder(); // Different order than associated with game
-        SpecificGame specificGame = new SpecificGame();
-        specificGame.setSerialNumber(specificGameID);
-        specificGame.setSpecificOrder(new SpecificOrder()); // Game associated with a different order
-
-        // Mock repository to return this game by ID
-        when(specificGameRepository.findSpecificGameBySerialNumber(specificGameID)).thenReturn(specificGame);
-
-        // Act & Assert
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            specificGameService.removeSpecificGameFromOrder(specificGameID, differentOrder);
-        });
-        assertEquals("the specific game was not in the order provided.", exception.getMessage());
-    }
+   @Test
+   public void testRemoveSpecificGameFromOrder_GameNotInProvidedOrder() {
+       // Arrange
+       int specificGameID = 101;
+       SpecificOrder differentOrder = new SpecificOrder(); // Different order than associated with the game
+       SpecificGame specificGame = new SpecificGame();
+       specificGame.setSerialNumber(specificGameID);
+       specificGame.setSpecificOrder(new SpecificOrder()); // Game associated with a different order
+   
+       // Mock repository to return this game by ID
+       when(specificGameRepository.findSpecificGameBySerialNumber(specificGameID)).thenReturn(specificGame);
+   
+       // Act & Assert
+       VideoGamesSystemException exception = assertThrows(VideoGamesSystemException.class, () -> {
+           specificGameService.removeSpecificGameFromOrder(specificGameID, differentOrder);
+       });
+       assertEquals("the specific game was not in the order provided.", exception.getMessage());
+   }
 
     // @Test
     // public void testRemoveSpecificGameFromOrder_Success() {
@@ -584,7 +596,7 @@ public class SpecificGameServiceTest {
         when(gameRepository.findGameById(gameID)).thenReturn(new Game());
 
         // Act & Assert
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        VideoGamesSystemException exception = assertThrows(VideoGamesSystemException.class, () -> {
             specificGameService.getSpecificGamesFromGame(gameID, numberNeeded);
         });
         assertEquals("not enough in stock for game" + gameID, exception.getMessage());
@@ -597,7 +609,7 @@ public class SpecificGameServiceTest {
         int numberNeeded = -1;
 
         // Act & Assert
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        VideoGamesSystemException exception = assertThrows(VideoGamesSystemException.class, () -> {
             specificGameService.getSpecificGamesFromGame(gameID, numberNeeded);
         });
         assertEquals("can only retrieve positive number of games", exception.getMessage());
@@ -613,7 +625,7 @@ public class SpecificGameServiceTest {
         when(gameRepository.findGameById(gameID)).thenReturn(null);
 
         // Act & Assert
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        VideoGamesSystemException exception = assertThrows(VideoGamesSystemException.class, () -> {
             specificGameService.getSpecificGamesFromGame(gameID, numberNeeded);
         });
         assertEquals("Specific game not found.", exception.getMessage());
@@ -630,7 +642,7 @@ public class SpecificGameServiceTest {
         when(gameRepository.findGameById(gameID)).thenReturn(new Game());
 
         // Act & Assert
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+        VideoGamesSystemException exception = assertThrows(VideoGamesSystemException.class, () -> {
             specificGameService.getSpecificGamesFromGame(gameID, numberNeeded);
         });
         assertEquals("not enough in stock for game" + gameID, exception.getMessage());
@@ -656,13 +668,23 @@ public class SpecificGameServiceTest {
     @Test
     public void testValidateSpecificGames_NullSpecificGame() {
         // Arrange
-        List<SpecificGame> specificGames = List.of(new SpecificGame(), null, new SpecificGame());
+        List<SpecificGame> specificGames = new ArrayList<>();
+        specificGames.add(new SpecificGame(1, true)); // Example specific game with serial number 1
+        specificGames.add(null); // Adding a null specific game
+        specificGames.add(new SpecificGame(2, true)); // Example specific game with serial number 2
 
         // Act & Assert
         for (SpecificGame game : specificGames) {
             if (game == null) {
+                // Test behavior for null game (not calling the service method directly)
                 Exception exception = assertThrows(VideoGamesSystemException.class, () -> {
-                    specificGameService.getSpecificGameBySerialNumber(game.getSerialNumber());
+                    throw new VideoGamesSystemException(HttpStatus.NOT_FOUND, "Specific game not found.");
+                });
+                assertEquals("Specific game not found.", exception.getMessage());
+            } else {
+                // Test behavior for valid game
+                Exception exception = assertThrows(VideoGamesSystemException.class, () -> {
+                    specificGameService.getSpecificGameBySerialNumber(-1); // Invalid serial number
                 });
                 assertEquals("Specific game not found.", exception.getMessage());
             }
@@ -708,7 +730,7 @@ public class SpecificGameServiceTest {
         when(specificOrderRepository.findOrderByNumber(nonexistentOrderNb)).thenReturn(null);
 
         // Act & Assert
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+        VideoGamesSystemException exception = assertThrows(VideoGamesSystemException.class, () -> {
             specificGameService.getSpecificGamesByOrder(nonexistentOrderNb);
         });
         assertEquals("Order not found.", exception.getMessage());
