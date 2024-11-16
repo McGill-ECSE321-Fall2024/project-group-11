@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -113,6 +114,7 @@ public class SpecificGameController {
      * @return a ResponseEntity containing a list of SpecificGameResponseDtos associated with the updated order
      */
     @PutMapping("/specificGames/{serialNumber}/removeFromOrder")
+    @Transactional
     public ResponseEntity<List<SpecificGameResponseDto>> removeSpecificGameFromOrder(
             @PathVariable int serialNumber,
             @RequestParam int orderId) {

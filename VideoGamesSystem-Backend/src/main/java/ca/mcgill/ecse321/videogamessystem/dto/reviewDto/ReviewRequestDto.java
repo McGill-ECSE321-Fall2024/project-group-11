@@ -29,6 +29,7 @@ public class ReviewRequestDto {
     // private String customerUserName;
 
     private Review parentReview;
+    private Long parentReviewId;
 
     @NotNull(message = "Game ID cannot be null")
     @Positive(message = "Game ID must be positive")
@@ -38,17 +39,14 @@ public class ReviewRequestDto {
     // private String gameTitle;
 
     // Constructor with all attributes
-    public ReviewRequestDto(String reviewContent, int gameRating, Date reviewDate, Long customerId, Review parentReview, Long gameId) {
+    public ReviewRequestDto(String reviewContent, int gameRating, Date reviewDate, Long customerId, Long parentReviewId, Long gameId) {
         this.reviewContent = reviewContent;
         this.gameRating = gameRating;
         this.reviewDate = reviewDate;
         this.customerId = customerId;
-        // this.customerUserName = customerUserName;
-        this.parentReview = parentReview;
+        this.parentReviewId = parentReviewId;
         this.gameId = gameId;
-        // this.gameTitle = gameTitle;
     }
-
     // Getters and Setters
     public String getReviewContent() {
         return reviewContent;
@@ -77,6 +75,15 @@ public class ReviewRequestDto {
     public Long getCustomerId() {
         return customerId;
     }
+
+    public Long getParentReviewId() {
+        return parentReviewId;
+    }
+
+    public void setParentReviewId(Long parentReviewId) {
+        this.parentReviewId = parentReviewId;
+    }
+    
 
     public void setCustomerId(Long customerId) {
         this.customerId = customerId;

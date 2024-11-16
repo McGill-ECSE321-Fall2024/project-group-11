@@ -3,6 +3,9 @@ package ca.mcgill.ecse321.videogamessystem.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.ArrayList;
@@ -244,6 +247,10 @@ public class SpecificGameService {
      * @param order
      * @return
      */
+
+    @PersistenceContext
+    private EntityManager entityManager;
+
     public List<SpecificGame> removeSpecificGameFromOrder(int specificGameID, SpecificOrder order) {
         // Retrieve the specific game by serial number
         SpecificGame specificCopy = specificGameRepository.findSpecificGameBySerialNumber(specificGameID);
@@ -263,6 +270,10 @@ public class SpecificGameService {
         specificCopy.setSpecificOrder(null);
         specificGameRepository.save(specificCopy);
 
+        // Flush and refresh entities
+        entityManager.flush();
+        entityManager.refresh(order);
+        
         // Return the updated list of games associated with the order (should no longer
         // include this game)
         return specificGameRepository.findSpecificGameBySpecificOrder(order);
