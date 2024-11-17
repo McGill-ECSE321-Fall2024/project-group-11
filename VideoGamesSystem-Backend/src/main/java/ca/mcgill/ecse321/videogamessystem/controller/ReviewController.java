@@ -30,7 +30,8 @@ public class ReviewController {
                 request.getGameRating(),
                 request.getReviewContent(),
                 request.getCustomerId(),
-                request.getParentReview() != null ? request.getParentReview().getId() : null
+                request.getParentReviewId() != null ? request.getParentReviewId() : null,
+                request.getGameId()
         );
         return new ReviewResponseDto(review);
     }
@@ -79,6 +80,12 @@ public class ReviewController {
     @GetMapping("/reviews/parent/{parentReviewId}")
     public List<ReviewResponseDto> getReviewsByParentReview(@PathVariable Long parentReviewId) {
         List<Review> reviews = reviewService.getReviewsByParentReview(parentReviewId);
+        return reviews.stream().map(ReviewResponseDto::new).collect(Collectors.toList());
+    }
+
+    @GetMapping("/reviews/game/{gameId}")
+    public List<ReviewResponseDto> getReviewByGame(@PathVariable Long gameId){
+        List<Review> reviews = reviewService.getReviewsByGame(gameId);
         return reviews.stream().map(ReviewResponseDto::new).collect(Collectors.toList());
     }
 

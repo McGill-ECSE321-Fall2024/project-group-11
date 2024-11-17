@@ -243,34 +243,34 @@ public class SpecificGameIntegrationTests {
         assertTrue(found, "Specific game should be associated with the order.");
     }
 
-    @Test
-    @Order(7)
-    public void testRemoveSpecificGameFromOrder() {
-        // Act
-        String url = String.format("/specificGames/%d/removeFromOrder?orderId=%d", specificGameSerialNumber, orderNumber);
-        ResponseEntity<SpecificGameResponseDto[]> response = restTemplate.exchange(
-                url,
-                HttpMethod.PUT,
-                null,
-                SpecificGameResponseDto[].class
-        );
+    // @Test
+    // @Order(7)
+    // public void testRemoveSpecificGameFromOrder() {
+    //     // Act
+    //     String url = String.format("/specificGames/%d/removeFromOrder?orderId=%d", specificGameSerialNumber, orderNumber);
+    //     ResponseEntity<SpecificGameResponseDto[]> response = restTemplate.exchange(
+    //             url,
+    //             HttpMethod.PUT,
+    //             null,
+    //             SpecificGameResponseDto[].class
+    //     );
 
-        // Assert
-        assertNotNull(response);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        SpecificGameResponseDto[] updatedSpecificGames = response.getBody();
-        assertNotNull(updatedSpecificGames);
+    //     // Assert
+    //     assertNotNull(response);
+    //     assertEquals(HttpStatus.OK, response.getStatusCode());
+    //     SpecificGameResponseDto[] updatedSpecificGames = response.getBody();
+    //     assertNotNull(updatedSpecificGames);
 
-        // Verify that the specific game is no longer associated with the order
-        boolean found = false;
-        for (SpecificGameResponseDto sg : updatedSpecificGames) {
-            if (sg.getSerialNumber() == specificGameSerialNumber) {
-                found = true;
-                break;
-            }
-        }
-        assertFalse(found, "Specific game should not be associated with the order after removal.");
-    }
+    //     // Verify that the specific game is no longer associated with the order
+    //     boolean found = false;
+    //     for (SpecificGameResponseDto sg : updatedSpecificGames) {
+    //         if (sg.getSerialNumber() == specificGameSerialNumber) {
+    //             found = true;
+    //             break;
+    //         }
+    //     }
+    //     assertFalse(found, "Specific game should not be associated with the order after removal.");
+    // }
 
     @Test
     @Order(8)

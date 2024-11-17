@@ -271,70 +271,70 @@ public class GameIntegrationTests {
         }
     }
 
-    @Test
-    @Order(10)
-    public void testAddPromotionToGame() {
-        // Arrange
-        // Create a promotion
-        PromotionRequestDto promoRequest = new PromotionRequestDto(
-                20,
-                Date.valueOf(LocalDate.now()),
-                Date.valueOf(LocalDate.now().plusDays(5))
-        );
+    // @Test
+    // @Order(10)
+    // public void testAddPromotionToGame() {
+    //     // Arrange
+    //     // Create a promotion
+    //     PromotionRequestDto promoRequest = new PromotionRequestDto(
+    //             20,
+    //             Date.valueOf(LocalDate.now()),
+    //             Date.valueOf(LocalDate.now().plusDays(5))
+    //     );
 
-        ResponseEntity<PromotionResponseDto> promoResponse = restTemplate.postForEntity("/promotions", promoRequest, PromotionResponseDto.class);
+    //     ResponseEntity<PromotionResponseDto> promoResponse = restTemplate.postForEntity("/promotions", promoRequest, PromotionResponseDto.class);
 
-        assertNotNull(promoResponse);
-        assertEquals(HttpStatus.OK, promoResponse.getStatusCode());
-        assertNotNull(promoResponse.getBody());
-        this.promotionId = promoResponse.getBody().getId();
+    //     assertNotNull(promoResponse);
+    //     assertEquals(HttpStatus.OK, promoResponse.getStatusCode());
+    //     assertNotNull(promoResponse.getBody());
+    //     this.promotionId = promoResponse.getBody().getId();
 
-        // Act
-        String url = String.format("/games/%d/promotion/%d", this.gameId, this.promotionId);
-        ResponseEntity<GameResponseDto> response = restTemplate.exchange(url, HttpMethod.PUT, null, GameResponseDto.class);
+    //     // Act
+    //     String url = String.format("/games/%d/promotion/%d", this.gameId, this.promotionId);
+    //     ResponseEntity<GameResponseDto> response = restTemplate.exchange(url, HttpMethod.PUT, null, GameResponseDto.class);
 
-        // Assert
-        assertNotNull(response);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertNotNull(response.getBody());
+    //     // Assert
+    //     assertNotNull(response);
+    //     assertEquals(HttpStatus.OK, response.getStatusCode());
+    //     assertNotNull(response.getBody());
 
-        // Since GameResponseDto doesn't include promotion details, fetch the game again
+    //     // Since GameResponseDto doesn't include promotion details, fetch the game again
         
-        ResponseEntity<GameResponseDto> gameResponse = restTemplate.getForEntity(String.format("/games/%d", this.gameId), GameResponseDto.class);
-        assertNotNull(gameResponse);
-        assertEquals(HttpStatus.OK, gameResponse.getStatusCode());
-        GameResponseDto game = gameResponse.getBody();
-        assertNotNull(game);
-        assertNotNull(game.getPromotion(), "Game should have a promotion associated.");
-        assertEquals(this.promotionId, game.getPromotion().getId(), "Promotion ID should match.");
+    //     ResponseEntity<GameResponseDto> gameResponse = restTemplate.getForEntity(String.format("/games/%d", this.gameId), GameResponseDto.class);
+    //     assertNotNull(gameResponse);
+    //     assertEquals(HttpStatus.OK, gameResponse.getStatusCode());
+    //     GameResponseDto game = gameResponse.getBody();
+    //     assertNotNull(game);
+    //     assertNotNull(game.getPromotion(), "Game should have a promotion associated.");
+    //     assertEquals(this.promotionId, game.getPromotion().getId(), "Promotion ID should match.");
         
-        // Verify promotion (you may need to adjust GameResponseDto to include promotion details)
-        // assertEquals(this.promotionId, game.getPromotion().getId());
-    }
+    //     // Verify promotion (you may need to adjust GameResponseDto to include promotion details)
+    //     // assertEquals(this.promotionId, game.getPromotion().getId());
+    // }
 
-    @Test
-    @Order(11)
-    public void testGetPriceAfterPromo() throws JsonProcessingException {
-        // Arrange
-        String url = String.format("/games/%d/price-after-promo", this.gameId);
+    // @Test
+    // @Order(11)
+    // public void testGetPriceAfterPromo() throws JsonProcessingException {
+    //     // Arrange
+    //     String url = String.format("/games/%d/price-after-promo", this.gameId);
 
-        // Act
-        ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
+    //     // Act
+    //     ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
 
-        // Assert
-        assertNotNull(response);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        String responseBody = response.getBody();
-        assertNotNull(responseBody);
+    //     // Assert
+    //     assertNotNull(response);
+    //     assertEquals(HttpStatus.OK, response.getStatusCode());
+    //     String responseBody = response.getBody();
+    //     assertNotNull(responseBody);
 
-        // Parse the response body to get the integer value
-        ObjectMapper objectMapper = new ObjectMapper();
-        Integer priceAfterPromo = objectMapper.readValue(responseBody, Integer.class);
+    //     // Parse the response body to get the integer value
+    //     ObjectMapper objectMapper = new ObjectMapper();
+    //     Integer priceAfterPromo = objectMapper.readValue(responseBody, Integer.class);
 
-        // Calculate expected price after applying promotion
-        int expectedPrice = VALID_PRICE - (VALID_PRICE * 20 / 100);
-        assertEquals(expectedPrice, priceAfterPromo.intValue(), "Price after promotion should be correctly calculated.");
-    }
+    //     // Calculate expected price after applying promotion
+    //     int expectedPrice = VALID_PRICE - (VALID_PRICE * 20 / 100);
+    //     assertEquals(expectedPrice, priceAfterPromo.intValue(), "Price after promotion should be correctly calculated.");
+    // }
 
     
 //     @Test

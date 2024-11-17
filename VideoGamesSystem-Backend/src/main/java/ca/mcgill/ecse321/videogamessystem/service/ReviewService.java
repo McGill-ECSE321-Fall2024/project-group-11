@@ -15,6 +15,7 @@ import ca.mcgill.ecse321.videogamessystem.model.Game;
 import ca.mcgill.ecse321.videogamessystem.model.Review;
 import ca.mcgill.ecse321.videogamessystem.repository.ReviewRepository;
 import ca.mcgill.ecse321.videogamessystem.repository.CustomerRepository;
+import ca.mcgill.ecse321.videogamessystem.repository.GameRepository;
 
 @Service
 public class ReviewService {
@@ -24,6 +25,9 @@ public class ReviewService {
     @Autowired
     private CustomerRepository customerRepository;
 
+    @Autowired
+    private GameRepository gameRepository;
+
     /**
      * @param gameRating
      * @param reviewContent
@@ -32,32 +36,36 @@ public class ReviewService {
      * @return
      */
     @Transactional
-    public Review createReview(int gameRating, String reviewContent, Long customerId, Long parentReviewId) {
+    public Review createReview(int gameRating, String reviewContent, Long customerId, Long parentReviewId, Long gameId) {
         if (gameRating < 1 || gameRating > 5) {
-            throw new VideoGamesSystemException(HttpStatus.NOT_FOUND, "Game rating must be between 1 and 5.");
+            throw new VideoGamesSystemException(HttpStatus.BAD_REQUEST, "Game rating must be between 1 and 5.");
         }
         if (reviewContent == null || reviewContent.trim().isEmpty()) {
-            throw new VideoGamesSystemException(HttpStatus.NOT_FOUND, "Review content cannot be empty.");
-
+            throw new VideoGamesSystemException(HttpStatus.BAD_REQUEST, "Review content cannot be empty.");
         }
-
+    
         Date reviewDate = Date.valueOf(LocalDate.now());
-
-        Customer customer = customerRepository.findById(customerId).orElseThrow(() -> 
-            new VideoGamesSystemException(HttpStatus.NOT_FOUND,"Customer not found."));
-        
-        Review parentReview = null;
-        if (parentReviewId != null) {
-            parentReview = reviewRepository.findReviewById(parentReviewId);
-        }
-
+    
+        Customer customer = customerRepository.findById(customerId).orElseThrow(() ->
+                new VideoGamesSystemException(HttpStatus.NOT_FOUND, "Customer not found."));
+        Game game = gameRepository.findById(gameId).orElseThrow(() ->
+                new VideoGamesSystemException(HttpStatus.NOT_FOUND, "Game not found."));
+    
         Review review = new Review(gameRating, reviewContent, reviewDate);
         review.setCustomer(customer);
-        review.setParentReview(parentReview);
-        
+        review.setGame(game);
+    
+        if (parentReviewId != null) {
+            Review parentReview = reviewRepository.findReviewById(parentReviewId);
+            if (parentReview == null) {
+                throw new VideoGamesSystemException(HttpStatus.NOT_FOUND, "Parent review not found.");
+            }
+            review.setParentReview(parentReview);
+        }
+    
         return reviewRepository.save(review);
     }
-
+    
     /**
      * @param id
      * @return
@@ -208,16 +216,24 @@ public class ReviewService {
         return resultList;
     }
 
-    /**
-     * @param game
-     * @return
-     */
-    public List<Review> getReviewsByGame(Game game){
-        if (game == null){
-            throw new VideoGamesSystemException(HttpStatus.NOT_FOUND, "game cannot be null");
 
+    /**
+     * Retrieves reviews associated with a specific game.
+     * @param gameId the ID of the game
+     * @return a list of reviews for the specified game
+     */
+    @Transactional
+    public List<Review> getReviewsByGame(Long gameId) {
+        if (gameId == null) {
+            throw new VideoGamesSystemException(HttpStatus.NOT_FOUND, "Game ID cannot be null.");
         }
-        return this.reviewRepository.findReviewByGame(game);
+        
+        Game game = gameRepository.findById(gameId)
+            .orElseThrow(() -> new VideoGamesSystemException(HttpStatus.NOT_FOUND, "Game not found."));
+        
+        return reviewRepository.findReviewByGame(game);
     }
+
+    
 }
 

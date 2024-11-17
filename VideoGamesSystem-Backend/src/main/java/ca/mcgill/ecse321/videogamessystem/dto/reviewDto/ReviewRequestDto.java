@@ -27,8 +27,6 @@ public class ReviewRequestDto {
 
     // @NotBlank(message = "Customer username cannot be blank")
     // private String customerUserName;
-
-    private Review parentReview;
     private Long parentReviewId;
 
     @NotNull(message = "Game ID cannot be null")
@@ -59,6 +57,7 @@ public class ReviewRequestDto {
     public int getGameRating() {
         return gameRating;
     }
+
 
     public void setGameRating(int gameRating) {
         this.gameRating = gameRating;
@@ -96,14 +95,6 @@ public class ReviewRequestDto {
     // public void setCustomerUserName(String customerUserName) {
     //     this.customerUserName = customerUserName;
     // }
-
-    public Review getParentReview() {
-        return parentReview;
-    }
-
-    public void setParentReview(Review parentReview) {
-        this.parentReview = parentReview;
-    }
 
     public Long getGameId() {
         return gameId;
