@@ -1,6 +1,4 @@
 package ca.mcgill.ecse321.videogamessystem.dto.WishlistDto;
-import ca.mcgill.ecse321.videogamessystem.dto.CustomerDto.CustomerResponseDto;
-import ca.mcgill.ecse321.videogamessystem.dto.GameDto.GameListDto;
 import ca.mcgill.ecse321.videogamessystem.model.Customer;
 import ca.mcgill.ecse321.videogamessystem.model.Wishlist;
 

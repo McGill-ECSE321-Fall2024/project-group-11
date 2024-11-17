@@ -3,7 +3,7 @@ package ca.mcgill.ecse321.videogamessystem.dto.PromotionDto;
 import java.sql.Date;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.FutureOrPresent;
+//import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Max;
 

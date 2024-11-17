@@ -16,7 +16,6 @@ public class ReviewResponseDto {
     private Game game;
     private String gameTitle;
     private Review parentReview;
-    private Long parentReviewId;
 
     public ReviewResponseDto(Review review) {
         this.id = review.getId();
@@ -28,7 +27,6 @@ public class ReviewResponseDto {
         this.game = review.getGame();
         this.gameTitle = review.getGame() != null ? review.getGame().getTitle() : null;
         this.parentReview = review.getParentReview();
-        this.parentReviewId = review.getParentReview() != null ? review.getParentReview().getId() : null;
     }
 
     protected ReviewResponseDto() {}

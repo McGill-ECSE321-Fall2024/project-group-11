@@ -1,8 +1,6 @@
 package ca.mcgill.ecse321.videogamessystem.dto.SpecificReviewRatingDto;
 
 import ca.mcgill.ecse321.videogamessystem.model.SpecificReviewRating.ReviewRating;
-import ca.mcgill.ecse321.videogamessystem.model.Review;
-import ca.mcgill.ecse321.videogamessystem.model.Customer;
 
 import jakarta.validation.constraints.NotNull;
 

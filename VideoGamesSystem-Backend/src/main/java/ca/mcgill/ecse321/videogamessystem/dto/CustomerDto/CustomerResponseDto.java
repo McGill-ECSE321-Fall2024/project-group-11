@@ -1,7 +1,5 @@
 package ca.mcgill.ecse321.videogamessystem.dto.CustomerDto;
-import ca.mcgill.ecse321.videogamessystem.dto.WishlistDto.WishlistResponseDto;
 import ca.mcgill.ecse321.videogamessystem.model.Customer;
-import ca.mcgill.ecse321.videogamessystem.model.Wishlist;
 
 
 

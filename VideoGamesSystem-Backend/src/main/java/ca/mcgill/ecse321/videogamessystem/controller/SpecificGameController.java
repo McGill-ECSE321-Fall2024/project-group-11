@@ -6,8 +6,6 @@ import ca.mcgill.ecse321.videogamessystem.model.SpecificGame;
 import ca.mcgill.ecse321.videogamessystem.model.SpecificOrder;
 import ca.mcgill.ecse321.videogamessystem.service.SpecificGameService;
 import ca.mcgill.ecse321.videogamessystem.service.SpecificOrderService;
-import ca.mcgill.ecse321.videogamessystem.service.GameService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,9 +21,6 @@ public class SpecificGameController {
 
     @Autowired
     private SpecificGameService specificGameService;
-
-    @Autowired
-    private GameService gameService;
 
     @Autowired
     private SpecificOrderService specificOrderService;

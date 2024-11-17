@@ -39,11 +39,9 @@ public class SpecificGame
   // CONSTRUCTOR
   
 
-  public SpecificGame(int aSerialNumber, boolean aAvailability)
-  {
+  public SpecificGame(int aSerialNumber, boolean aAvailability){
     serialNumber = aSerialNumber;
     availability = aAvailability;
-    this.game = game;
   }
 
   public SpecificGame(){

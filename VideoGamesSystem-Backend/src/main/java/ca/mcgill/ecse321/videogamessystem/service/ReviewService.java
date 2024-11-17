@@ -122,63 +122,6 @@ public class ReviewService {
         return reviewRepository.findReviewByCustomer(customer);
     }
 
-    // /**
-    //  * @param id
-    //  * @param newContent
-    //  * @return
-    //  */
-    // @Transactional
-    // public Review updateReviewContent(Long id, String newContent) {
-    //     Review review = reviewRepository.findReviewById(id);
-    //     if (review == null) {
-    //         throw new IllegalArgumentException("Review not found.");
-    //     }
-    //     if (newContent == null || newContent.trim().isEmpty()) {
-    //         throw new IllegalArgumentException("Review content cannot be empty.");
-    //     }
-
-    //     review.setReviewContent(newContent);
-    //     return reviewRepository.save(review);
-    // }
-
-    // /**
-    //  * @param id
-    //  * @param newDate
-    //  * @return
-    //  */
-    // @Transactional
-    // public Review updateReviewDate(Long id, Date newDate) {
-    //     Review review = reviewRepository.findReviewById(id);
-    //     if (review == null) {
-    //         throw new IllegalArgumentException("Review not found.");
-    //     }
-    //     if (newDate == null || newDate.after(Date.valueOf(LocalDate.now()))) {
-    //         throw new IllegalArgumentException("Review date cannot be in the future.");
-    //     }
-
-    //     review.setReviewDate(newDate);
-    //     return reviewRepository.save(review);
-    // }
-
-    // /**
-    //  * @param id
-    //  * @param newRating
-    //  * @return
-    //  */
-    // @Transactional
-    // public Review updateGameRating(Long id, int newRating) {
-    //     Review review = reviewRepository.findReviewById(id);
-    //     if (review == null) {
-    //         throw new IllegalArgumentException("Review not found.");
-    //     }
-    //     if (newRating < 1 || newRating > 5) {
-    //         throw new IllegalArgumentException("Game rating must be between 1 and 5.");
-    //     }
-
-    //     review.setGameRating(newRating);
-    //     return reviewRepository.save(review);
-    // }
-
     /**
      * @param id
      * @return

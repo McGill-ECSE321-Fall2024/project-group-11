@@ -80,24 +80,6 @@ public class SpecificOrderService {
         return specificOrderRepository.findOrderByCustomer(customer);
     }
 
-    // /**
-    //  * @param number
-    //  * @param newOrderDate
-    //  * @return
-    //  */
-    // @Transactional
-    // public SpecificOrder updateOrderDate(int number, Date newOrderDate) {
-    //     SpecificOrder order = specificOrderRepository.findOrderByNumber(number);
-    //     if (order == null) {
-    //         throw new IllegalArgumentException("Order not found.");
-    //     }
-    //     if (newOrderDate == null || newOrderDate.after(new Date(System.currentTimeMillis()))) {
-    //         throw new IllegalArgumentException("Order date cannot be in the future.");
-    //     }
-
-    //     order.setOrderDate(newOrderDate);
-    //     return specificOrderRepository.save(order);
-    // }
 
     /**
      * @param number
@@ -176,6 +158,7 @@ public class SpecificOrderService {
         return specificOrderRepository.save(order);
     }
 
+    //Add method to find update specific game availability after order is placed
     // specific game repo -> findspecififc game by order
     // for each specific game in list of specific game
     // update availability

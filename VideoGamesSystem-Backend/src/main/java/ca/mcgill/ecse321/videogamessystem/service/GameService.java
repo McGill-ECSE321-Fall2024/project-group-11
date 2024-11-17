@@ -135,59 +135,6 @@ public class GameService {
         return gameRepository.findGameByPromotion(promotion);
     }
 
-    // /**
-    //  * @param id
-    //  * @param category
-    //  * @return
-    //  */
-    // @Transactional
-    // public Game updateCategory(Long id, Category category) {
-    //     Game game = gameRepository.findGameById(id);
-    //     if (game == null) {
-    //         throw new IllegalArgumentException("invalid id to update category");
-    //     }
-    //     game.setCategory(category);
-    //     return gameRepository.save(game);
-
-    // }
-
-    // /**
-    //  * @param id
-    //  * @param consoleType
-    //  * @return
-    //  */
-    // @Transactional
-    // public Game updateConsoleType(Long id, ConsoleType consoleType) {
-    //     Game game = gameRepository.findGameById(id);
-    //     if (game == null) {
-    //         throw new IllegalArgumentException("invalid id to update consoleType");
-    //     }
-    //     game.setConsoleType(consoleType);
-    //     return gameRepository.save(game);
-    // }
-
-    // /**
-    //  * @param id
-    //  * @param description
-    //  * @param price
-    //  * @param title
-    //  * @param category
-    //  * @return
-    //  */
-    // @Transactional
-    // public Game updateGame(long id, String description, int price, String title, Category category){
-    //     Game game = gameRepository.findGameById(id);
-    //     if (game == null) {
-    //         throw new IllegalArgumentException("invalid id to update description");
-    //     }
-    //     game.setDescription(description);
-    //     game.setPrice(price);
-    //     game.setDescription(title);
-    //     game.setCategory(category);
-
-    //     return gameRepository.save(game);
-    // }
-
 
     /**
      * @param id
@@ -207,44 +154,6 @@ public class GameService {
         game.setPrice(newPrice);
         return gameRepository.save(game);
     }
-
-    // /**
-    //  * @param id
-    //  * @param newDescription
-    //  * @return
-    //  */
-    // @Transactional
-    // public Game updateDescription(Long id, String newDescription) {
-    //     Game game = gameRepository.findGameById(id);
-    //     if (game == null) {
-    //         throw new IllegalArgumentException("Game not found.");
-    //     }
-    //     if (newDescription == null || newDescription.trim().isEmpty()) {
-    //         throw new IllegalArgumentException("Description cannot be empty.");
-    //     }
-
-    //     game.setDescription(newDescription);
-    //     return gameRepository.save(game);
-    // }
-
-    // /**
-    //  * @param id
-    //  * @param newTitle
-    //  * @return
-    //  */
-    // @Transactional
-    // public Game updateTitle(Long id, String newTitle) {
-    //     Game game = gameRepository.findGameById(id);
-    //     if (game == null) {
-    //         throw new IllegalArgumentException("Game not found.");
-    //     }
-    //     if (newTitle == null || newTitle.trim().isEmpty()) {
-    //         throw new IllegalArgumentException("Title cannot be empty.");
-    //     }
-
-    //     game.setTitle(newTitle);
-    //     return gameRepository.save(game);
-    // }
 
     /**
      * @param id
@@ -456,30 +365,6 @@ public class GameService {
         }
         return games;
     }
-    
-
-    // //filter by Promotion percentage
-    // /**
-    //  * @param min
-    //  * @return
-    //  */
-    // public List<Game> getGamesAbovePromotion(int min){ 
-    //     List<Game> allGames = this.getAllGames();
-    //     List<Game> games = new ArrayList<>();
-    //     int discount = 0;
-    //     for (Game game: allGames){
-    //         if(!this.getGamePromotionStatusById(game.getId())){
-    //             continue;
-    //         }
-    //         else{
-    //             discount = game.getPromotion().getPercentage();
-    //             if (discount >= min){
-    //                 games.add(game);
-    //             }
-    //         }
-    //     }
-    //     return games;
-    // }
 
     //get stock quantity by id
     /**

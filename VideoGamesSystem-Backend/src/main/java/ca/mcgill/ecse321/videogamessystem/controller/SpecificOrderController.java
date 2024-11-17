@@ -2,16 +2,13 @@ package ca.mcgill.ecse321.videogamessystem.controller;
 
 import ca.mcgill.ecse321.videogamessystem.dto.SpecificOrderDto.SpecificOrderRequestDto;
 import ca.mcgill.ecse321.videogamessystem.dto.SpecificOrderDto.SpecificOrderResponseDto;
-import ca.mcgill.ecse321.videogamessystem.model.Customer;
 import ca.mcgill.ecse321.videogamessystem.model.SpecificOrder;
-import ca.mcgill.ecse321.videogamessystem.service.CustomerService;
 import ca.mcgill.ecse321.videogamessystem.service.SpecificOrderService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 import jakarta.validation.Valid;

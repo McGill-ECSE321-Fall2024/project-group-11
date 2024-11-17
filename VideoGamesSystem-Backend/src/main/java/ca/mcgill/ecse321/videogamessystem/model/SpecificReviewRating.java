@@ -44,10 +44,6 @@ public class SpecificReviewRating {
 
   public SpecificReviewRating(ReviewRating aReviewRating) {
     reviewRating = aReviewRating;
-    // Customer customer = new Customer();
-    this.customer = customer;
-    // Review review = new Review();
-    this.review = review;
   }
 
   //------------------------

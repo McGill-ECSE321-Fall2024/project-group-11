@@ -6,7 +6,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
-import ca.mcgill.ecse321.videogamessystem.model.Review;
 
 public class ReviewRequestDto {
 
@@ -25,16 +24,11 @@ public class ReviewRequestDto {
     @Positive(message = "Customer ID must be positive")
     private Long customerId;
 
-    // @NotBlank(message = "Customer username cannot be blank")
-    // private String customerUserName;
     private Long parentReviewId;
 
     @NotNull(message = "Game ID cannot be null")
     @Positive(message = "Game ID must be positive")
     private Long gameId;
-
-    // @NotBlank(message = "Game title cannot be blank")
-    // private String gameTitle;
 
     // Constructor with all attributes
     public ReviewRequestDto(String reviewContent, int gameRating, Date reviewDate, Long customerId, Long parentReviewId, Long gameId) {
@@ -88,13 +82,6 @@ public class ReviewRequestDto {
         this.customerId = customerId;
     }
 
-    // public String getCustomerUserName() {
-    //     return customerUserName;
-    // }
-
-    // public void setCustomerUserName(String customerUserName) {
-    //     this.customerUserName = customerUserName;
-    // }
 
     public Long getGameId() {
         return gameId;
@@ -104,11 +91,4 @@ public class ReviewRequestDto {
         this.gameId = gameId;
     }
 
-    // public String getGameTitle() {
-    //     return gameTitle;
-    // }
-
-    // public void setGameTitle(String gameTitle) {
-    //     this.gameTitle = gameTitle;
-    // }
 }

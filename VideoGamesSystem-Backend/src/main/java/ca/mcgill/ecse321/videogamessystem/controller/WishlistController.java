@@ -1,6 +1,5 @@
 package ca.mcgill.ecse321.videogamessystem.controller;
 
-import ca.mcgill.ecse321.videogamessystem.dto.WishlistDto.WishlistRequestDto;
 import ca.mcgill.ecse321.videogamessystem.dto.WishlistDto.WishlistResponseDto;
 import ca.mcgill.ecse321.videogamessystem.model.Customer;
 import ca.mcgill.ecse321.videogamessystem.model.Wishlist;
@@ -9,10 +8,6 @@ import ca.mcgill.ecse321.videogamessystem.service.CustomerService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import jakarta.validation.Valid;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:8080")

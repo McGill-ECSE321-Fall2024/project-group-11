@@ -87,32 +87,6 @@ public class CustomerService {
         return customerRepository.findCustomerByEmail(email);
     }
 
-    // @Transactional
-    // public Customer getCustomerByPhoneNumber(int phoneNumber) {
-    //     return customerRepository.findCustomerByPhoneNumber(phoneNumber);
-    // }
-
-    // @Transactional
-    // public List<Customer> getCustomersByAddress(String address) {
-    //     return customerRepository.findCustomerByAddress(address);
-    // }
-
-    // @Transactional
-    // public Customer updateCustomer(Long id, String newUserName, String newEmail, int newPhoneNumber, String newAddress) {
-    //     Customer customer = getCustomerById(id);
-
-    //     if (newUserName != null && !newUserName.isEmpty()) {
-    //         customer.setUserName(newUserName);
-    //     }
-    //     if (newEmail != null && !newEmail.isEmpty()) {
-    //         customer.setEmail(newEmail);
-    //     }
-    //     customer.setPhoneNumber(newPhoneNumber);
-    //     customer.setAddress(newAddress);
-
-    //     return customerRepository.save(customer);
-    // }
-
     @Transactional
     public Customer updateCustomerUserName(Long id, String newUserName) {
         Customer customer = getCustomerById(id);

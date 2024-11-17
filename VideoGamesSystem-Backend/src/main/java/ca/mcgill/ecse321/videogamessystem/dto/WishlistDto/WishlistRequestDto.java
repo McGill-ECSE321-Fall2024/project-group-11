@@ -1,8 +1,6 @@
 package ca.mcgill.ecse321.videogamessystem.dto.WishlistDto;
-import java.util.List;
 
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
 
 public class WishlistRequestDto {
     
