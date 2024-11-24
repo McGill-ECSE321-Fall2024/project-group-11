@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:8080")
+@CrossOrigin(origins = "http://localhost:5173")
 public class CustomerController {
 
     @Autowired
@@ -31,7 +31,7 @@ public class CustomerController {
                 request.getEmail(),
                 request.getPassword(),
                 request.getPhoneNumber(),
-                request.getAdress()
+                request.getAddress()
         );
         return new CustomerResponseDto(customer);
     }
@@ -118,7 +118,7 @@ public class CustomerController {
      * @param newAddress the new address for the customer
      * @return the response DTO with the updated customer details
      */
-    @PutMapping("/customers/{id}/adress")
+    @PutMapping("/customers/{id}/address")
     public CustomerResponseDto updateCustomerAddress(@PathVariable Long id, @RequestParam String newAddress) {
         Customer updatedCustomer = customerService.updateCustomerAddress(id, newAddress);
         return new CustomerResponseDto(updatedCustomer);

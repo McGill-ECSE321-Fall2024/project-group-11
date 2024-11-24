@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 import jakarta.validation.Valid;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:8080")
+@CrossOrigin(origins = "http://localhost:5173")
 public class StaffController {
 
     @Autowired

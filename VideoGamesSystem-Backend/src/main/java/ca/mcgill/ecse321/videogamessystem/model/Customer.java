@@ -81,6 +81,6 @@ public class Customer extends Account
   {
     return super.toString() + "["+
             "phoneNumber" + ":" + getPhoneNumber()+ "," +
-            "adress" + ":" + getAddress()+ "]" + System.getProperties().getProperty("line.separator");
+            "address" + ":" + getAddress()+ "]" + System.getProperties().getProperty("line.separator");
   }
 }

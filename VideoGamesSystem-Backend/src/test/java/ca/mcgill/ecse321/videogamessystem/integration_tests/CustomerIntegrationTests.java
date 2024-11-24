@@ -38,12 +38,12 @@ public class CustomerIntegrationTests {
     private static final String VALID_EMAIL = "testuser@example.com";
     private static final String VALID_PASSWORD = "securepassword";
     private static final int VALID_PHONENUMBER = 123456789;
-    private static final String VALID_ADRESS = "123 Test Street";
+    private static final String VALID_ADDRESS = "123 Test Street";
 
     private static final String UPDATED_USERNAME = "updateduser";
     private static final String UPDATED_EMAIL = "updateduser@example.com";
     private static final int UPDATED_PHONENUMBER = 987654321;
-    private static final String UPDATED_ADRESS = "456 Updated Street";
+    private static final String UPDATED_ADDRESS = "456 Updated Street";
 
     private Long customerId;
 
@@ -56,7 +56,7 @@ public class CustomerIntegrationTests {
     @Order(1)
     public void testCreateCustomer() {
         // Arrange
-        CustomerRequestDto request = new CustomerRequestDto(VALID_USERNAME, VALID_EMAIL, VALID_PASSWORD, VALID_PHONENUMBER, VALID_ADRESS);
+        CustomerRequestDto request = new CustomerRequestDto(VALID_USERNAME, VALID_EMAIL, VALID_PASSWORD, VALID_PHONENUMBER, VALID_ADDRESS);
 
         // Act
         ResponseEntity<CustomerResponseDto> response = restTemplate.postForEntity("/customers", request, CustomerResponseDto.class);
@@ -70,7 +70,7 @@ public class CustomerIntegrationTests {
         assertEquals(VALID_USERNAME, response.getBody().getUserName());
         assertEquals(VALID_EMAIL, response.getBody().getEmail());
         assertEquals(VALID_PHONENUMBER, response.getBody().getPhoneNumber());
-        assertEquals(VALID_ADRESS, response.getBody().getAdress());
+        assertEquals(VALID_ADDRESS, response.getBody().getAddress());
     }
 
     @Test
@@ -90,7 +90,7 @@ public class CustomerIntegrationTests {
         assertEquals(VALID_USERNAME, response.getBody().getUserName());
         assertEquals(VALID_EMAIL, response.getBody().getEmail());
         assertEquals(VALID_PHONENUMBER, response.getBody().getPhoneNumber());
-        assertEquals(VALID_ADRESS, response.getBody().getAdress());
+        assertEquals(VALID_ADDRESS, response.getBody().getAddress());
     }
 
     @Test
@@ -115,10 +115,10 @@ public class CustomerIntegrationTests {
         assertEquals(UPDATED_PHONENUMBER, responseAfterPhoneNumberUpdate.getBody().getPhoneNumber());
 
         // Update address
-        String updateAddressUrl = String.format("/customers/%d/adress?newAddress=%s", this.customerId, UPDATED_ADRESS);
+        String updateAddressUrl = String.format("/customers/%d/address?newAddress=%s", this.customerId, UPDATED_ADDRESS);
         restTemplate.put(updateAddressUrl, null);
         ResponseEntity<CustomerResponseDto> responseAfterAddressUpdate = restTemplate.getForEntity(String.format("/customers/%d", this.customerId), CustomerResponseDto.class);
-        assertEquals(UPDATED_ADRESS, responseAfterAddressUpdate.getBody().getAdress());
+        assertEquals(UPDATED_ADDRESS, responseAfterAddressUpdate.getBody().getAddress());
     }
 
     @Test

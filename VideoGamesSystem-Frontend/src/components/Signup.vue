@@ -39,7 +39,7 @@ import axios from "axios";
 
 const axiosClient = axios.create({
   // NOTE: it's baseURL, not baseUrl
-  baseURL: "http://localhost:8080",
+  baseURL: "http://localhost:8081",
 });
 
 export default {
@@ -61,7 +61,7 @@ export default {
         email: this.email,
         password: this.password,
         phoneNumber: this.phoneNumber,
-        adress: this.adress,
+        address: this.address,
       };
       try {
         const response = await axiosClient.post("/customers", newUser);
@@ -69,8 +69,9 @@ export default {
       } catch (e) {
         // Handle error
         console.error(e);
-        if (e.response && e.response.data && e.response.data.message) {
-          this.errorMessage = e.response.data.message;
+        console.log(e);
+        if (e.response.data.errors[0]) {
+          this.errorMessage = e.response.data.errors[0];
         } else {
           this.errorMessage = "An error occurred during account creation";
         }

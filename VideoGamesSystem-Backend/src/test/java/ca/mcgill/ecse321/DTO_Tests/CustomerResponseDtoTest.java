@@ -15,7 +15,7 @@
 //         customer.setUserName("testUser");
 //         customer.setEmail("test@example.com");
 //         customer.setPhoneNumber(123456);
-//         customer.setAdress("ma maisonnette");
+//         customer.setAddress("ma maisonnette");
     
 //         // Initialize CustomerResponseDto from the model
 //         CustomerResponseDto dto = new CustomerResponseDto(customer);
@@ -29,7 +29,7 @@
 //         assertEquals("testUser", dto.getUserName(), "Username mismatch");
 //         assertEquals("test@example.com", dto.getEmail(), "Email mismatch");
 //         assertEquals(123456, dto.getPhoneNumber(), "Phone number mismatch");
-//         assertEquals("ma maisonnette", dto.getAdress(), "Address mismatch");
+//         assertEquals("ma maisonnette", dto.getAddress(), "Address mismatch");
 //     }
     
 
@@ -41,12 +41,12 @@
 //         dto.setUserName("newUser");
 //         dto.setEmail("new@example.com");
 //         dto.setPhoneNumber(654321);
-//         dto.setAdress("new address");
+//         dto.setAddress("new address");
 
 //         assertEquals(2L, dto.getId());
 //         assertEquals("newUser", dto.getUserName());
 //         assertEquals("new@example.com", dto.getEmail());
 //         assertEquals(654321, dto.getPhoneNumber());
-//         assertEquals("new address", dto.getAdress());
+//         assertEquals("new address", dto.getAddress());
 //     }
 // }

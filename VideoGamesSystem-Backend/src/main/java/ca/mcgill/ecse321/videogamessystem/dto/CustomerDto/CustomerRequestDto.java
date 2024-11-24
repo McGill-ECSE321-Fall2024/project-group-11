@@ -23,8 +23,8 @@ public class CustomerRequestDto {
     @Positive(message = "Game ID must be positive") 
     private int phoneNumber;
 
-    @NotBlank(message = "Customer adress cannot be empty")
-    private String adress;
+    @NotBlank(message = "Customer address cannot be empty")
+    private String address;
 
 
 
@@ -33,12 +33,12 @@ public class CustomerRequestDto {
     }
 
 
-    public CustomerRequestDto(String userName, String email, String password, int phoneNumber, String adress) {
+    public CustomerRequestDto(String userName, String email, String password, int phoneNumber, String address) {
         this.userName = userName;
         this.email = email;
         this.password = password;
         this.phoneNumber = phoneNumber;
-        this.adress= adress;
+        this.address= address;
     }
 
     public String getEmail() {
@@ -57,8 +57,8 @@ public class CustomerRequestDto {
         return phoneNumber;
     }
 
-    public String getAdress() {
-        return adress;
+    public String getAddress() {
+        return address;
     }
 
     public void setEmail(String email) {
@@ -77,8 +77,8 @@ public class CustomerRequestDto {
         this.phoneNumber = phoneNumber;
     }
 
-    public void setAdress(String adress) {
-        this.adress = adress;
+    public void setAddress(String address) {
+        this.address = address;
 
     }
 // pas besoin de get et set wishlist apparemment :

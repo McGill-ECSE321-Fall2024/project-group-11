@@ -37,13 +37,13 @@
 // 		String emailAddress = "muffin.man@gmail.com";
 // 		String password = "i_love_muffins";
 // 		int phoneNumber = 123783;
-// 		String adress= "abc";
+// 		String address= "abc";
 // 		Customer muffinMan = new Customer();
 // 		muffinMan.setUserName(name);
 // 		muffinMan.setEmail(emailAddress);
 // 		muffinMan.setPassword(password);
 // 		muffinMan.setPhoneNumber(phoneNumber);
-// 		muffinMan.setAdress(adress);
+// 		muffinMan.setAddress(address);
 
 // 		// Save person
 // 		muffinMan = customerRepository.save(muffinMan);

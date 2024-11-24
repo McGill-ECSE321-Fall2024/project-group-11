@@ -9,7 +9,7 @@ public class CustomerResponseDto {
     private String userName;
     private String email;
     private int phoneNumber;
-    private String adress;
+    private String address;
 
 
 
@@ -23,7 +23,7 @@ public class CustomerResponseDto {
         this.userName = model.getUserName();
         this.email = model.getEmail();
         this.phoneNumber = model.getPhoneNumber();
-        this.adress = model.getAddress();
+        this.address = model.getAddress();
         
     }
 
@@ -60,12 +60,12 @@ public class CustomerResponseDto {
         this.phoneNumber= phoneNumber;
     }
 
-    public String getAdress() {
-        return adress;
+    public String getAddress() {
+        return address;
     }
 
-    public void setAdress(String adress){
-        this.adress= adress;
+    public void setAddress(String address){
+        this.address= address;
     }
 
 }

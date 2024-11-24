@@ -51,7 +51,7 @@ public class SpecificReviewRatingControllerIntegrationTests {
     private static final String VALID_CUSTOMER_EMAIL = "testuser@example.com";
     private static final String VALID_CUSTOMER_PASSWORD = "securepassword";
     private static final int VALID_CUSTOMER_PHONENUMBER = 123456;
-    private static final String VALID_CUSTOMER_ADRESS = "123 Test Street";
+    private static final String VALID_CUSTOMER_ADDRESS = "123 Test Street";
 
 
     private static final String VALID_GAME_TITLE = "Test Game";
@@ -79,7 +79,7 @@ public class SpecificReviewRatingControllerIntegrationTests {
     @Order(1)
     public void testCreateCustomer() {
         // Arrange
-        CustomerRequestDto request = new CustomerRequestDto(VALID_CUSTOMER_USERNAME, VALID_CUSTOMER_EMAIL, VALID_CUSTOMER_PASSWORD, VALID_CUSTOMER_PHONENUMBER, VALID_CUSTOMER_ADRESS);
+        CustomerRequestDto request = new CustomerRequestDto(VALID_CUSTOMER_USERNAME, VALID_CUSTOMER_EMAIL, VALID_CUSTOMER_PASSWORD, VALID_CUSTOMER_PHONENUMBER, VALID_CUSTOMER_ADDRESS);
 
         // Act
         ResponseEntity<CustomerResponseDto> response = restTemplate.postForEntity("/customers", request, CustomerResponseDto.class);
