@@ -77,5 +77,7 @@ export default {
 </script>
 
 <style scoped>
-/* Your existing styles */
+.error-message {
+  color: red;
+}
 </style>
