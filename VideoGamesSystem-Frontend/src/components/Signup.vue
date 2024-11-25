@@ -1,3 +1,4 @@
+<!-- src/components/Signup.vue -->
 <template>
   <div class="signup-container">
     <h1>Create an Account</h1>
@@ -36,9 +37,9 @@
 
 <script>
 import axios from "axios";
+import { store } from "../store.js";
 
 const axiosClient = axios.create({
-  // NOTE: it's baseURL, not baseUrl
   baseURL: "http://localhost:8081",
 });
 
@@ -65,26 +66,25 @@ export default {
       };
       try {
         const response = await axiosClient.post("/customers", newUser);
-        this.$router.push("/login");
+        // Optionally log the user in immediately, idk if I liked this feature we can talk more later
+        localStorage.setItem("user", JSON.stringify(response.data));
+        localStorage.setItem("userType", "customer");
+        store.user = response.data;
+        store.userType = "customer";
+        this.$router.push("/home");
       } catch (e) {
-        // Handle error
         console.error(e);
-        console.log(e);
-        if (e.response.data.errors[0]) {
+        if (
+          e.response &&
+          e.response.data &&
+          e.response.data.errors &&
+          e.response.data.errors[0]
+        ) {
           this.errorMessage = e.response.data.errors[0];
         } else {
           this.errorMessage = "An error occurred during account creation";
         }
       }
-      //   // Optionally, clear form inputs
-      //   this.clearInputs();
-    },
-    clearInputs() {
-      this.userName = "";
-      this.email = "";
-      this.password = "";
-      this.phoneNumber = null;
-      this.address = "";
     },
     goToLogin() {
       this.$router.push("/login");

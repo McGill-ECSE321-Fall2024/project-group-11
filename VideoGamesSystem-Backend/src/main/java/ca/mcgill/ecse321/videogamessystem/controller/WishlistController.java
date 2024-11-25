@@ -25,6 +25,7 @@ public class WishlistController {
      * @param id the ID of the wishlist.
      * @return WishlistResponseDto with the requested wishlist details.
      */
+    @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping("/wishlists/{id}")
     public WishlistResponseDto getWishlistById(@PathVariable Long id) {
         Wishlist wishlist = wishlistService.getWishlistById(id);
