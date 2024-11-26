@@ -2,12 +2,15 @@ package ca.mcgill.ecse321.videogamessystem.controller;
 
 import ca.mcgill.ecse321.videogamessystem.dto.GameDto.GameRequestDto;
 import ca.mcgill.ecse321.videogamessystem.dto.GameDto.GameResponseDto;
+import ca.mcgill.ecse321.videogamessystem.exception.VideoGamesSystemException;
 import ca.mcgill.ecse321.videogamessystem.model.Game;
 import ca.mcgill.ecse321.videogamessystem.model.Promotion;
 import ca.mcgill.ecse321.videogamessystem.service.GameService;
 import ca.mcgill.ecse321.videogamessystem.service.PromotionService;
+import ca.mcgill.ecse321.videogamessystem.service.SpecificGameService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +24,9 @@ public class GameController {
 
     @Autowired
     private GameService gameService;
+
+    @Autowired
+    private SpecificGameService specificGameService;
 
     @Autowired
     private PromotionService promotionService;
@@ -74,6 +80,23 @@ public class GameController {
     @GetMapping("/games/{id}/stock")
     public int getStockQuantity(@PathVariable Long id) {
         return gameService.getStockQuantity(id);
+    }
+
+    /**
+     * Generates specific games from the given stock quantity when creating a game.
+     *
+     * @param gameId the ID of the game for which specific games are being generated.
+     * @param stockQuantity the number of specific games to generate.
+     * @return a ResponseEntity indicating the status of the request.
+     */
+    @PostMapping("/games/{gameId}/generate-specific-games")
+    public ResponseEntity<Void> generateSpecificGames(@PathVariable Long gameId, @RequestParam int stockQuantity) {
+        try {
+            specificGameService.generateSpecificGamesFromStockQuantity(gameId, stockQuantity);
+            return ResponseEntity.status(HttpStatus.CREATED).build();  // Return status 201 (Created)
+        } catch (IllegalArgumentException | VideoGamesSystemException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();  // Return status 400 (Bad Request)
+        }
     }
 
     /**
