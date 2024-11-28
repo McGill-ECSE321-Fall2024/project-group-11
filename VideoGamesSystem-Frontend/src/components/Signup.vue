@@ -4,6 +4,13 @@
     <h1>Create an Account</h1>
     <form @submit.prevent="signup">
       <div>
+        <label for="userType">Account Type:</label>
+        <select v-model="userType" required>
+          <option value="customer">Customer</option>
+          <option value="staff">Staff</option>
+        </select>
+      </div>
+      <div>
         <label for="userName">Username:</label>
         <input type="text" v-model="userName" required />
       </div>
@@ -15,13 +22,25 @@
         <label for="password">Password:</label>
         <input type="password" v-model="password" required />
       </div>
-      <div>
-        <label for="phoneNumber">Phone Number:</label>
-        <input type="number" v-model.number="phoneNumber" required />
+        <!-- Conditionally display fields based on user type -->
+        <div v-if="userType === 'customer'">
+        <div>
+          <label for="phoneNumber">Phone Number:</label>
+          <input type="number" v-model.number="phoneNumber" />
+        </div>
+        <div>
+          <label for="address">Address:</label>
+          <input type="text" v-model="address" />
+        </div>
       </div>
-      <div>
-        <label for="address">Address:</label>
-        <input type="text" v-model="address" required />
+      <div v-else-if="userType === 'staff'">
+        <div>
+          <label for="admin">Role:</label>
+          <select v-model="admin" required>
+            <option value="true">Owner</option>
+            <option value="false">Employee</option>
+          </select>
+        </div>
       </div>
       <button type="submit">Create Account</button>
     </form>
@@ -52,20 +71,31 @@ export default {
       password: "",
       phoneNumber: null,
       address: "",
+      userType: "customer", // Default user type is customer
+      amdin: null, // Changed to null to allow for undefined values
       errorMessage: "",
     };
   },
   methods: {
     async signup() {
-      const newUser = {
-        userName: this.userName,
-        email: this.email,
-        password: this.password,
-        phoneNumber: this.phoneNumber,
-        address: this.address,
-      };
+      const newUser = this.userType === "customer"
+        ? {
+          userName: this.userName,
+          email: this.email,
+          password: this.password,
+          phoneNumber: this.phoneNumber,
+          address: this.address,
+        }
+        : {
+          userName: this.userName,
+          email: this.email,
+          password: this.password,
+          admin: this.admin === "false", // Map isOwner to boolean
+        };  // Remove the extra } that was here
       try {
-        const response = await axiosClient.post("/customers", newUser);
+        const endpoint = this.userType === "staff" ? "/staff" : "/customers";
+        console.log("Payload:", newUser);
+        const response = await axiosClient.post(endpoint, newUser);
         // Optionally log the user in immediately, idk if I liked this feature we can talk more later
         localStorage.setItem("user", JSON.stringify(response.data));
         localStorage.setItem("userType", "customer");
