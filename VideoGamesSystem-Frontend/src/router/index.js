@@ -1,4 +1,3 @@
-// src/router/index.js
 import { createRouter, createWebHistory } from "vue-router";
 import Home from "../components/Home.vue";
 import Wishlist from "../components/Wishlist.vue";
@@ -6,6 +5,7 @@ import Cart from "../components/Cart.vue";
 import MyGames from "../components/MyGames.vue";
 import Login from "../components/Login.vue";
 import Signup from "../components/Signup.vue";
+import GameDetails from "../components/GameDetails.vue";  // Import GameDetails component
 
 const routes = [
   { path: "/", name: "Home", component: Home },
@@ -15,6 +15,7 @@ const routes = [
   { path: "/my-games", name: "MyGames", component: MyGames },
   { path: "/login", name: "Login", component: Login },
   { path: "/signup", name: "Signup", component: Signup },
+  { path: "/game-details/:gameId", name: "GameDetails", component: GameDetails }, // New route for GameDetails
 ];
 
 const router = createRouter({

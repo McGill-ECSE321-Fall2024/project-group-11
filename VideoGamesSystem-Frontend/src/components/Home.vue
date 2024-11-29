@@ -8,7 +8,6 @@
     <div v-else-if="store.userType === 'staff'">
       <!-- Staff-specific content -->
       <p>You are logged in as a staff member.</p>
-      <!-- Add staff functionalities -->
     </div>
 
     <div class="home-page">
@@ -22,7 +21,13 @@
         </select>
       </div>
       <div class="games-list">
-        <div v-for="game in games" :key="game.id" class="game-item">
+        <!-- Loop through games and use router-link for navigation to GameDetails -->
+        <router-link
+          v-for="game in games"
+          :key="game.id"
+          :to="{ name: 'GameDetails', params: { gameId: game.id } }"
+          class="game-item"
+        >
           <h3>{{ game.title }}</h3>
           <p>{{ game.description }}</p>
           <p>Price: ${{ game.price }}</p>
@@ -36,7 +41,7 @@
             Add to Cart
           </button>
           <button @click="addToWishlist(game)">Add to Wishlist</button>
-        </div>
+        </router-link>
       </div>
     </div>
   </div>
@@ -44,7 +49,6 @@
 
 <script>
 import { store } from "../store.js";
-// import axios from 'axios'; // Commented out since I'm using local data
 
 export default {
   name: "Home",
@@ -73,7 +77,7 @@ export default {
           id: 2,
           title: "Mystery tests",
           description:
-            "A game where rami finds all non functional tests and comments them out instead of fixing code",
+            "A game where rami finds all non-functional tests and comments them out instead of fixing code",
           price: 40,
           category: "Puzzle",
           consoleType: "Switch",
@@ -201,6 +205,7 @@ export default {
   padding: 10px;
   margin: 10px;
   width: 200px;
+  cursor: pointer;
 }
 .filters {
   margin-bottom: 20px;
