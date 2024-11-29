@@ -14,7 +14,8 @@ const routes = [
   { path: "/cart", name: "Cart", component: Cart },
   { path: "/my-games", name: "MyGames", component: MyGames },
   { path: "/login", name: "Login", component: Login },
-  { path: "/signup", name: "Signup", component: Signup },
+  { path: "/signup", name: "Signup", component: Signup
+   },
 ];
 
 const router = createRouter({
