@@ -5,6 +5,8 @@
         <li><router-link to="/homeEmp">Home</router-link></li>
         <li><router-link to="/AddGames">AddGames</router-link></li>
         <li><router-link to="/AddPromotions">AddPromotions</router-link></li>
+        <li><router-link to="/MyAccount">MyAccount</router-link></li>
+
         <li @click="logout">Logout</li>
       </ul>
     </nav>
