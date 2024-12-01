@@ -6,6 +6,10 @@ import Cart from "../components/Cart.vue";
 import MyGames from "../components/MyGames.vue";
 import Login from "../components/Login.vue";
 import Signup from "../components/Signup.vue";
+import HomeOwner from "@/components/HomeOwner.vue";
+import AddPromotions from "@/components/AddPromotions.vue";
+import AddGames from "@/components/AddGames.vue";
+import AddEmployee from "@/components/AddEmployee.vue";
 
 const routes = [
   { path: "/", name: "Home", component: Home },
@@ -14,8 +18,11 @@ const routes = [
   { path: "/cart", name: "Cart", component: Cart },
   { path: "/my-games", name: "MyGames", component: MyGames },
   { path: "/login", name: "Login", component: Login },
-  { path: "/signup", name: "Signup", component: Signup
-   },
+  { path: "/signup", name: "Signup", component: Signup },
+  { path: "/addPromotions", name: "AddPromotions", component: AddPromotions },
+  { path: "/addGames", name: "AddGames", component: AddGames },
+  { path: "/homeOwner", name: "HomeOwner", component: HomeOwner },
+  { path: "/addEmployee", name: "AddEmployee", component: AddEmployee },
 ];
 
 const router = createRouter({

@@ -34,7 +34,7 @@
         {{ errorMessage }}
       </div>
     </div>
-  </template>
+</template>
   
   <script>
   import axios from "axios";

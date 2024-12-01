@@ -17,11 +17,28 @@
       </div>
       <div>
         <label for="category">Category:</label>
-        <input type="text" v-model="category" required />
+        <select v-model="category" required>
+          <option value="">Select a category</option>
+          <option value="ACTION">Action</option>
+          <option value="ADVENTURE">Adventure</option>
+          <option value="PUZZLE">Puzzle</option>
+          <option value="RACING">Racing</option>
+          <option value="RPG">RPG</option>
+          <option value="SPORTS">Sports</option>
+          <option value="STRATEGY">Strategy</option>
+        </select>
       </div>
       <div>
         <label for="consoleType">Console Type:</label>
-        <input type="text" v-model="consoleType" required />
+        <select v-model="consoleType" required>
+          <option value="">Select a console type</option>
+          <option value="PS4">PS4</option>
+          <option value="PS5">PS5</option>
+          <option value="XBOX_ONE">Xbox One</option>
+          <option value="XBOX_X">Xbox Series X</option>
+          <option value="SWITCH">Nintendo Switch</option>
+          <option value="PC">PC</option>
+        </select>
       </div>
       <button type="submit">Request to Add Game</button>
     </form>
@@ -53,7 +70,7 @@ export default {
   },
   methods: {
     async addGame() {
-      const newGame = { // ordre matters je crois
+      const newGame = {
         description: this.description,
         price: this.price,
         title: this.title,
@@ -62,16 +79,21 @@ export default {
       };
       try {
         const response = await axiosGame.post("/games", newGame);
-        // jsp ce quil fait store dans local storage : pas bien compros a quoi ca sert 
         localStorage.setItem("game", JSON.stringify(response.data));
-
         
-        if (!store.games) store.games = []; //ca cest chat:checks 
-        //if the store.games property exists, and if it doesn’t, it initializes it as an empty array. After ensuring store.games is defined, it adds the new game data
+        if (!store.games) store.games = [];
         store.games.push(response.data);
 
-        this.$router.push("/home");
-      } catch (e) { // je pense pas que je dois changer le error , il est automatique non avec le backend
+        const userType = store.userType || localStorage.getItem("userType");
+        if (userType === "OWNER") {
+          this.$router.push("/homeOwner");
+        } else if (userType === "EMPLOYEE") {
+          this.$router.push("/homeEmp");
+        } else {
+          console.error("Unknown user type:", userType);
+          this.$router.push("/login");
+        }
+      } catch (e) {
         console.error(e);
         if (
           e.response &&
@@ -96,5 +118,36 @@ export default {
 }
 .error-message {
   color: red;
+}
+select {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+input {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+button {
+  width: 100%;
+  padding: 10px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+button:hover {
+  background-color: #45a049;
 }
 </style>
