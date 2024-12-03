@@ -5,6 +5,5 @@ export const store = reactive({
   userType: localStorage.getItem("userType") || null,
   cartSpecificGames:
     JSON.parse(localStorage.getItem("cartSpecificGames")) || [],
-  wishlistGames: JSON.parse(localStorage.getItem("wishlistGames")) || [],
   // Other shared state can be added here
 });

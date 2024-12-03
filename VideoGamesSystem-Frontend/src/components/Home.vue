@@ -180,37 +180,10 @@ export default {
         alert("This game is already in your cart.");
       }
     },
-    async addToWishlist(game) {
-  try {
-    // Check if the user is logged in
-    if (!store.user) {
-      this.$router.push("/login"); // Redirect to login if the user is not logged in
-      return;
-    }
-
-    // Check if the game is already in the wishlist
-    const alreadyInWishlist = store.wishlistGames.some(
-      (wishlistGame) => wishlistGame.id === game.id
-    );
-
-    if (alreadyInWishlist) {
-      alert("This game is already in your wishlist.");
-      return;
-    }
-
-    // Add the game to the wishlist (both local store and localStorage)
-    store.wishlistGames.push(game);
-    localStorage.setItem(
-      "wishlistGames",
-      JSON.stringify(store.wishlistGames)
-    );
-
-    alert(`Game "${game.title}" added to wishlist!`);
-  } catch (e) {
-    console.error(e);
-    alert("Failed to add the game to your wishlist.");
-  }
-},
+    addToWishlist(game) {
+      // Simulating as I am not currently connected to backend
+      alert(`Game "${game.title}" added to wishlist!`);
+    },
   },
 };
 </script>
