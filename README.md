@@ -74,5 +74,20 @@ For Deliverable 2, we will implement backend services using Java Spring to provi
 | Jeffrey Nahas  | Development and Testing     | 33 hours | created data base again, and ran Tests, implemented servoces , DTo and Controller Files,testing |
 |  Yanzhe Zhang|Development and Testing    | 35 hours | Persistence Layer with model files and repository files, did and debugged services files, Testing |
 
-Each team member contributed to the project through their assigned roles, ensuring that all tasks for Deliverable 1 were completed efficiently and on time.
+Each team member contributed to the project through their assigned roles, ensuring that all tasks for Deliverable 2 were completed efficiently and on time.
 
+# Deliverable 2: Backend Services, Behaviour Modelling, and Testin
+
+You can see the Deliverable Report here: [Deliverable3](https://github.com/McGill-ECSE321-Fall2024/project-group-11/wiki/Deliverable3)
+
+For Deliverable 3, we will develop a web frontend using HTML, CSS, and JavaScript, ensuring usability and functional correctness. This frontend will integrate seamlessly with the backend services implemented in Deliverable 2 via asynchronous RESTful API calls. We will establish a build system to automate compilation, testing, and packaging processes, ensuring a streamlined development workflow. Project management will involve using GitHub’s issue tracking to manage the backlog, assign responsibilities, and document progress. A README file will outline team roles, contributions, and the project’s scope, while a linked project report in the GitHub wiki will capture meeting minutes and key design decisions.
+
+| Name            | Contributions frontend                 | Hours                            | Contribution|
+|-----------------|----------------------|----------------------------------|----------------------------------|
+| Emile Labrunie   | navigation bars for employee owner, create game page, add promotion, create employee , myaccount page | 22hours  | Manage Wiki pages,manage table of contents,|
+|  Paolo Lahoud| initialized frontend, customer home page, log in page, wishlist | 28 hours |Schedule meetings,   |
+| Rami El Nawam | my games page    | 29 hours | record Meeting Minutes |
+| Jeffrey Nahas  | implemented functionnalities for customers to link it to backend, log out  method | 33 hours |fix backend for frontend |
+|  Yanzhe Zhang|Delete game, Delete employee   | 35 hours | created services methods missing|
+
+Each team member contributed to the project through their assigned roles, ensuring that all tasks for Deliverable 3 were completed efficiently and on time.
