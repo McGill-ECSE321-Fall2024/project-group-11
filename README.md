@@ -86,8 +86,8 @@ For Deliverable 3, we will develop a web frontend using HTML, CSS, and JavaScrip
 |-----------------|----------------------|----------------------------------|----------------------------------|
 | Emile Labrunie   | navigation bars for employee owner, create game page, add promotion, create employee , myaccount page | 22hours  | Manage Wiki pages,manage table of contents,|
 |  Paolo Lahoud| initialized frontend, customer home page, log in page, wishlist | 28 hours |Schedule meetings,   |
-| Rami El Nawam | my games page    | 29 hours | record Meeting Minutes |
-| Jeffrey Nahas  | implemented functionnalities for customers to link it to backend, log out  method | 33 hours |fix backend for frontend |
-|  Yanzhe Zhang|Delete game, Delete employee   | 35 hours | created services methods missing|
+| Rami El Nawam | my games page    | 22 hours | record Meeting Minutes |
+| Jeffrey Nahas  | implemented functionnalities for customers to link it to backend, log out  method | 26 hours |fix backend for frontend |
+|  Yanzhe Zhang|Delete game, Delete employee   | 24 hours | created services methods missing|
 
 Each team member contributed to the project through their assigned roles, ensuring that all tasks for Deliverable 3 were completed efficiently and on time.
