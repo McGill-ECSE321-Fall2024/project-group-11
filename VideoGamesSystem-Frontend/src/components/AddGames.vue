@@ -48,7 +48,7 @@
         <label for="Stock Quantity">Stock Quantity:</label>
         <input type="number" v-model.number="stockQuantity" required />
       </div>
-      <button type="submit">Request to Add Game</button>
+      <button type="submit">Add Game</button>
     </form>
     <div v-if="errorMessage" class="error-message">
       {{ errorMessage }}
