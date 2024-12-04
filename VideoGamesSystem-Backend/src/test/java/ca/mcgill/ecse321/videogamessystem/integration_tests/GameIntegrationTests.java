@@ -318,46 +318,60 @@ public class GameIntegrationTests {
         }
     }
 
-    // @Test
-    // @Order(10)
-    // public void testAddPromotionToGame() {
-    //     // Arrange
-    //     // Create a promotion
-    //     PromotionRequestDto promoRequest = new PromotionRequestDto(
-    //             20,
-    //             Date.valueOf(LocalDate.now()),
-    //             Date.valueOf(LocalDate.now().plusDays(5))
-    //     );
+    @Test
+    @Order(10)
+    public void testAddPromotionToGame() {
+        // Arrange: Create game
+        GameRequestDto gameRequest = new GameRequestDto(
+            "A test game", 50, "Test Title", Category.Action, ConsoleType.PS4
+        );
+        ResponseEntity<GameResponseDto> gameResponse = restTemplate.postForEntity(
+            "/games", gameRequest, GameResponseDto.class
+        );
 
-    //     ResponseEntity<PromotionResponseDto> promoResponse = restTemplate.postForEntity("/promotions", promoRequest, PromotionResponseDto.class);
+        // Assert: Game creation
+        assertNotNull(gameResponse);
+        assertEquals(HttpStatus.OK, gameResponse.getStatusCode());
+        assertNotNull(gameResponse.getBody());
+        Long gameId = gameResponse.getBody().getId();
+        assertNotNull(gameId, "Game ID should not be null");
 
-    //     assertNotNull(promoResponse);
-    //     assertEquals(HttpStatus.OK, promoResponse.getStatusCode());
-    //     assertNotNull(promoResponse.getBody());
-    //     this.promotionId = promoResponse.getBody().getId();
+        // Arrange: Create promotion
+        PromotionRequestDto promoRequest = new PromotionRequestDto(
+            20, Date.valueOf(LocalDate.now()), Date.valueOf(LocalDate.now().plusDays(5))
+        );
+        ResponseEntity<PromotionResponseDto> promoResponse = restTemplate.postForEntity(
+            "/promotions", promoRequest, PromotionResponseDto.class
+        );
 
-    //     // Act
-    //     String url = String.format("/games/%d/promotion/%d", this.gameId, this.promotionId);
-    //     ResponseEntity<GameResponseDto> response = restTemplate.exchange(url, HttpMethod.PUT, null, GameResponseDto.class);
+        // Assert: Promotion creation
+        assertNotNull(promoResponse);
+        assertEquals(HttpStatus.OK, promoResponse.getStatusCode());
+        assertNotNull(promoResponse.getBody());
+        Long promoId = promoResponse.getBody().getId();
+        assertNotNull(promoId, "Promotion ID should not be null");
 
-    //     // Assert
-    //     assertNotNull(response);
-    //     assertEquals(HttpStatus.OK, response.getStatusCode());
-    //     assertNotNull(response.getBody());
+        // Act: Associate promotion with game
+        String url = String.format("/games/%d/promotion/%d", gameId, promoId);
+        ResponseEntity<GameResponseDto> updatedGameResponse = restTemplate.exchange(
+            url, HttpMethod.PUT, null, GameResponseDto.class
+        );
 
-    //     // Since GameResponseDto doesn't include promotion details, fetch the game again
-        
-    //     ResponseEntity<GameResponseDto> gameResponse = restTemplate.getForEntity(String.format("/games/%d", this.gameId), GameResponseDto.class);
-    //     assertNotNull(gameResponse);
-    //     assertEquals(HttpStatus.OK, gameResponse.getStatusCode());
-    //     GameResponseDto game = gameResponse.getBody();
-    //     assertNotNull(game);
-    //     assertNotNull(game.getPromotion(), "Game should have a promotion associated.");
-    //     assertEquals(this.promotionId, game.getPromotion().getId(), "Promotion ID should match.");
-        
-    //     // Verify promotion (you may need to adjust GameResponseDto to include promotion details)
-    //     // assertEquals(this.promotionId, game.getPromotion().getId());
-    // }
+        // Assert: Verify association
+        assertNotNull(updatedGameResponse);
+        assertEquals(HttpStatus.OK, updatedGameResponse.getStatusCode());
+
+        GameResponseDto updatedGame = updatedGameResponse.getBody();
+        assertNotNull(updatedGame, "Updated game should not be null");
+        assertNotNull(updatedGame.getPromotion(), "Game should have a promotion associated");
+        assertEquals(promoId, updatedGame.getPromotion().getId(), "Promotion ID should match the associated promotion");
+
+        // Additional Assertions (Optional)
+        assertEquals(gameRequest.getTitle(), updatedGame.getTitle(), "Game title should remain unchanged");
+        assertEquals(gameRequest.getPrice(), updatedGame.getPrice(), "Game price should remain unchanged");
+    }
+
+
 
     // @Test
     // @Order(11)

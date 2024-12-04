@@ -737,12 +737,21 @@ class GameServiceTest {
         assertTrue(result.contains(game1));
     }
     @Test
+
     public void testUpdatePromotion_Success() {
+        // Arrange
         Long gameId = 1L;
-        Game mockGame = new Game("Test Game", 50, "Exciting game", Game.Category.Adventure, Game.ConsoleType.PS4);
+
+        // Create a mock game
+        Game mockGame = new Game("Test Game", 100, "Exciting Game", Game.Category.Adventure, Game.ConsoleType.PS4);
+
+        // Create a valid promotion
         Promotion newPromotion = new Promotion();
-        newPromotion.setPercentage(20);
-        
+        newPromotion.setPercentage(20); // 20% discount
+        newPromotion.setStartDate(Date.valueOf(LocalDate.now()));
+        newPromotion.setEndDate(Date.valueOf(LocalDate.now().plusDays(5)));
+
+        // Mock repository behavior
         when(gameRepository.findGameById(gameId)).thenReturn(mockGame);
         when(gameRepository.save(any(Game.class))).thenReturn(mockGame);
 
@@ -750,8 +759,14 @@ class GameServiceTest {
         Game updatedGame = gameService.updatePromotion(gameId, newPromotion);
 
         // Assert
-        assertNotNull(updatedGame);
-        assertEquals(newPromotion, updatedGame.getPromotion());
+        assertNotNull(updatedGame, "Updated game should not be null");
+        assertNotNull(updatedGame.getPromotion(), "Game should have a promotion associated");
+        assertEquals(newPromotion.getPercentage(), updatedGame.getPromotion().getPercentage(), "Promotion percentage should match");
+        assertEquals(newPromotion.getStartDate(), updatedGame.getPromotion().getStartDate(), "Promotion start date should match");
+        assertEquals(newPromotion.getEndDate(), updatedGame.getPromotion().getEndDate(), "Promotion end date should match");
+
+        // Verify interactions
+        verify(gameRepository, times(1)).findGameById(gameId);
         verify(gameRepository, times(1)).save(mockGame);
     }
 
@@ -768,6 +783,7 @@ class GameServiceTest {
         });
 
         assertEquals("Game not found.", exception.getMessage());
+        verify(gameRepository, never()).save(any(Game.class));
     }
     @Test
     public void testUpdateWishlist_Success() {

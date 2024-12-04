@@ -285,16 +285,40 @@ public class GameService {
     }
     
     // add game to promo
-    /**
-     * @param id
-     * @param promo
-     * @return
+  /**
+     * Updates the promotion for a specific game.
+     * @param id The ID of the game.
+     * @param promo The promotion to associate with the game.
+     * @return The updated game with the associated promotion.
      */
-    public Game updatePromotion(Long id, Promotion promo){
-        Game game = this.getGameById(id);
+    @Transactional
+    public Game updatePromotion(Long id, Promotion promo) {
+        // First, validate the existence of the game
+        Game game = this.getGameById(id); // Throws "Game not found." if the game doesn't exist
+
+        // Then, validate the promotion
+        if (promo == null) {
+            throw new VideoGamesSystemException(HttpStatus.CONFLICT, "Promotion cannot be null");
+        }
+        if (promo.getStartDate() == null || promo.getEndDate() == null) {
+            throw new VideoGamesSystemException(HttpStatus.CONFLICT, "Promotion dates cannot be null");
+        }
+        if (promo.getStartDate().after(promo.getEndDate())) {
+            throw new VideoGamesSystemException(HttpStatus.CONFLICT, "Promotion start date must be before end date");
+        }
+
+        // Ensure the game does not already have an active promotion
+        if (game.getPromotion() != null) {
+            throw new VideoGamesSystemException(HttpStatus.CONFLICT, "Game already has a promotion");
+        }
+
+        // Associate the promotion with the game
         game.setPromotion(promo);
         return gameRepository.save(game);
     }
+
+
+    
 
     // add game to wishlist
     /**
