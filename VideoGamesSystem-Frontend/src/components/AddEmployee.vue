@@ -1,11 +1,11 @@
 <template>
     <div class="AddEmployee-container">
       <h1>Add Employee</h1>
-      <form @submit.prevent="addEmployee">
+      <form @submit.prevent="createStaff">
        
         <div>
-          <label for="username">Username:</label>
-          <input type="text" id="username" v-model="username" required />
+          <label for="userName">Username:</label>
+          <input type="text" id="userName" v-model="userName" required />
         </div>
   
    
@@ -21,7 +21,7 @@
         </div>
   
        
-        <button type="submit">Add Employee</button>
+        <button type="submit">Create Staff</button>
       </form>
   
     
@@ -33,32 +33,49 @@
   
   <script>
   import axios from "axios";
+  import { store } from "../store.js";
   
   const axiosEmployee = axios.create({
     baseURL: "http://localhost:8081", 
   });
   
   export default {
-    name: "AddEmployee",
+    name: "CreateStaff",
     data() {
       return {
-        username: "", 
+        userName: "", 
         email: "", 
         password: "", 
         errorMessage: "", 
       };
     },
     methods: {
-      async addEmployee() {
+      async createStaff() {
+        console.log('Form data:', {
+          userName: this.userName,
+          email: this.email,
+          password: this.password
+        });
+        
+        
         const newEmployee = {
-          username: this.username,
+          userName: this.userName,
           email: this.email,
           password: this.password,
+          admin: false
         };
+
+        console.log('Request payload:', newEmployee); // Debug log
   
         try {
-          const response = await axiosEmployee.post("/employees", newEmployee);
-          localStorage.setItem("Employee", JSON.stringify(response.data));
+          // localStorage.setItem("Employee", JSON.stringify(response.data));
+
+          const response = await axiosEmployee.post("/staff", newEmployee, {
+          headers: {
+              'Content-Type': 'application/json'
+            }
+          });
+          console.log('Response:', response.data);
   
           // Redirect to a different page (e.g., employee list) after successful submission
           this.$router.push("/HomeOwner");// a ajouter

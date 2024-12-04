@@ -16,7 +16,6 @@
           <p>Price: ${{ game.price }}</p>
           <p>Category: {{ game.category }}</p>
           <p>Console: {{ game.consoleType }}</p>
-          <p>Available Quantity: {{ game.availableQuantity }}</p>
         </div>
         <div class="game-actions">
           <button 
@@ -77,6 +76,16 @@ export default {
       showModal: false,
       gameToDelete: null,
     };
+  },
+  // Add this lifecycle hook to fetch games when component mounts
+  async created() {
+    try {
+      const response = await axiosGame.get('/games');
+      store.games = response.data;
+    } catch (error) {
+      console.error('Error fetching games:', error);
+      alert('Failed to load games');
+    }
   },
   computed: {
     sortedGames() {
@@ -139,7 +148,7 @@ export default {
   border: 1px solid #ddd;
   padding: 15px;
   border-radius: 8px;
-  background-color: white;
+  background-color: grey;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
@@ -187,7 +196,7 @@ export default {
 }
 
 .modal-content {
-  background-color: white;
+  background-color: grey;
   padding: 20px;
   border-radius: 8px;
   max-width: 400px;

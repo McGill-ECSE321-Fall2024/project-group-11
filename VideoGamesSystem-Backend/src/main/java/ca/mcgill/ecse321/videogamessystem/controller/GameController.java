@@ -82,22 +82,22 @@ public class GameController {
         return gameService.getStockQuantity(id);
     }
 
-    /**
-     * Generates specific games from the given stock quantity when creating a game.
-     *
-     * @param gameId the ID of the game for which specific games are being generated.
-     * @param stockQuantity the number of specific games to generate.
-     * @return a ResponseEntity indicating the status of the request.
-     */
-    @PostMapping("/games/{gameId}/generate-specific-games")
-    public ResponseEntity<Void> generateSpecificGames(@PathVariable Long gameId, @RequestParam int stockQuantity) {
-        try {
-            specificGameService.generateSpecificGamesFromStockQuantity(gameId, stockQuantity);
-            return ResponseEntity.status(HttpStatus.CREATED).build();  // Return status 201 (Created)
-        } catch (IllegalArgumentException | VideoGamesSystemException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();  // Return status 400 (Bad Request)
-        }
-    }
+    // /**
+    //  * Generates specific games from the given stock quantity when creating a game.
+    //  *
+    //  * @param gameId the ID of the game for which specific games are being generated.
+    //  * @param stockQuantity the number of specific games to generate.
+    //  * @return a ResponseEntity indicating the status of the request.
+    //  */
+    // @PostMapping("/games/{gameId}/generate-specific-games")
+    // public ResponseEntity<Void> generateSpecificGames(@PathVariable Long gameId, @RequestParam int stockQuantity) {
+    //     try {
+    //         specificGameService.generateSpecificGamesFromStockQuantity(gameId, stockQuantity);
+    //         return ResponseEntity.status(HttpStatus.CREATED).build();  // Return status 201 (Created)
+    //     } catch (IllegalArgumentException | VideoGamesSystemException e) {
+    //         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();  // Return status 400 (Bad Request)
+    //     }
+    // }
 
     /**
      * Deletes a game by its unique ID.

@@ -24,9 +24,9 @@ public class GameRequestDto {
     @NotNull(message = "Console type must be specified.")
     private ConsoleType consoleType;
 
-    @Positive(message = "Stock quantity must be a positive number.")
-    @NotNull(message = "Stock quantity must be specified.")
-    private Integer stockQuantity;
+    // @Positive(message = "Stock quantity must be a positive number.")
+    // @NotNull(message = "Stock quantity must be specified.")
+    // private Integer stockQuantity;
 
 
 
@@ -68,17 +68,17 @@ public class GameRequestDto {
         this.title = title;
     }
 
-    public void setStockQuantity(int stockQuantity){
-        this.stockQuantity= stockQuantity;
-    }
+    // public void setStockQuantity(int stockQuantity){
+    //     this.stockQuantity= stockQuantity;
+    // }
 
     public Category getCategory() {
         return category;
     }
 
-    public int getStockQuantity(){
-        return stockQuantity;
-    }
+    // public int getStockQuantity(){
+    //     return stockQuantity;
+    // }
 
     public void setCategory(Category category) {
         this.category = category;
