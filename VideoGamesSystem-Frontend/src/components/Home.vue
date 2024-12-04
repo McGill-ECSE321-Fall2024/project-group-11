@@ -36,6 +36,8 @@
             Add to Cart
           </button>
           <button @click="addToWishlist(game)">Add to Wishlist</button>
+          <!-- Include the DislikeLikeButton component -->
+          <DislikeLikeButton :gameId="game.id" />
         </div>
       </div>
     </div>
@@ -44,7 +46,7 @@
 
 <script>
 import { store } from "../store.js";
-// import axios from 'axios'; // Commented out since I'm using local data
+import DislikeLikeButton from "../components/DislikeLikeButton.vue";
 
 export default {
   name: "Home",
@@ -63,7 +65,7 @@ export default {
           price: 60,
           category: "Action",
           consoleType: "PS4",
-          availableQuantity: 1, // Number of available SpecificGame instances
+          availableQuantity: 1,
           specificGames: [
             { serialNumber: 1001, availability: true },
             { serialNumber: 1002, availability: true },
@@ -125,6 +127,9 @@ export default {
       this.sortGames();
     }
   },
+  components: {
+    DislikeLikeButton,
+  },
   methods: {
     sortGames() {
       if (this.sortOption === "price") {
@@ -141,7 +146,6 @@ export default {
         return;
       }
 
-      // Find an available SpecificGame instance
       const availableSpecificGame = game.specificGames.find(
         (sg) => sg.availability
       );
@@ -151,17 +155,14 @@ export default {
         return;
       }
 
-      // Add the SpecificGame to the cart
       const exists = store.cartSpecificGames.find(
         (sg) => sg.serialNumber === availableSpecificGame.serialNumber
       );
 
       if (!exists) {
-        // Mark the SpecificGame as unavailable
         availableSpecificGame.availability = false;
         game.availableQuantity -= 1;
 
-        // Add game details to the SpecificGame object for display purposes
         const cartGame = {
           ...availableSpecificGame,
           title: game.title,
@@ -181,7 +182,6 @@ export default {
       }
     },
     addToWishlist(game) {
-      // Simulating as I am not currently connected to backend
       alert(`Game "${game.title}" added to wishlist!`);
     },
   },
