@@ -8,6 +8,7 @@
     <div v-else-if="store.userType === 'staff'">
       <!-- Staff-specific content -->
       <p>You are logged in as a staff member.</p>
+      <!-- Add staff functionalities -->
     </div>
 
     <div class="home-page">
@@ -22,10 +23,9 @@
       </div>
       <div class="games-list">
         <!-- Loop through games and use router-link for navigation to GameDetails -->
-        <router-link
+        <div
           v-for="game in games"
           :key="game.id"
-          :to="{ name: 'GameDetails', params: { gameId: game.id } }"
           class="game-item"
         >
           <h3>{{ game.title }}</h3>
@@ -41,7 +41,15 @@
             Add to Cart
           </button>
           <button @click="addToWishlist(game)">Add to Wishlist</button>
-        </router-link>
+
+          <!-- Added the "See Game Details" button -->
+          <router-link
+            :to="{ name: 'GameDetails', params: { gameId: game.id } }"
+            class="see-details-button"
+          >
+            See Game Details
+          </router-link>
+        </div>
       </div>
     </div>
   </div>
@@ -49,6 +57,7 @@
 
 <script>
 import { store } from "../store.js";
+import axios from 'axios'; // Axios to make API calls
 
 export default {
   name: "Home",
@@ -58,78 +67,26 @@ export default {
   data() {
     return {
       sortOption: "price",
-      games: [
-        {
-          id: 1,
-          title: "Where's my Rami?",
-          description:
-            "An adventure where you try to find the work Rami did on this deliverable.",
-          price: 60,
-          category: "Action",
-          consoleType: "PS4",
-          availableQuantity: 1, // Number of available SpecificGame instances
-          specificGames: [
-            { serialNumber: 1001, availability: true },
-            { serialNumber: 1002, availability: true },
-          ],
-        },
-        {
-          id: 2,
-          title: "Mystery tests",
-          description:
-            "A game where rami finds all non-functional tests and comments them out instead of fixing code",
-          price: 40,
-          category: "Puzzle",
-          consoleType: "Switch",
-          availableQuantity: 1,
-          specificGames: [{ serialNumber: 2001, availability: true }],
-        },
-        {
-          id: 3,
-          title: "Tennis Pro",
-          description: "Game where you get to hit Emile with a tennis racket",
-          price: 50,
-          category: "Racing",
-          consoleType: "PS4",
-          availableQuantity: 0,
-          specificGames: [{ serialNumber: 3001, availability: false }],
-        },
-        {
-          id: 4,
-          title: "AYCE HotPot",
-          description:
-            "Extreme sport where everyone eats hotpot until they throw up",
-          price: 55,
-          category: "Sports",
-          consoleType: "Switch",
-          availableQuantity: 3,
-          specificGames: [
-            { serialNumber: 4001, availability: true },
-            { serialNumber: 4002, availability: true },
-            { serialNumber: 4003, availability: true },
-          ],
-        },
-        {
-          id: 5,
-          title: "Fantazizi",
-          description: "Explore the fantasyzi world.",
-          price: 45,
-          category: "RPG",
-          consoleType: "PS4",
-          availableQuantity: 1,
-          specificGames: [{ serialNumber: 5001, availability: true }],
-        },
-      ],
+      games: [],
     };
   },
   created() {
     if (!store.user || !store.userType) {
       this.$router.push("/login");
     } else {
-      this.sortGames();
+      this.fetchGames(); // Fetch games on page load
     }
   },
   methods: {
+    fetchGames() {
+      axios.get('http://localhost:8080/games') // Adjust the URL as needed based on your backend
+        .then(response => {
+          this.games = response.data;
+        })
+        .catch(error => {
+          console.error('Error fetching games:', error);
+        });
+    },
     sortGames() {
       if (this.sortOption === "price") {
         this.games.sort((a, b) => a.price - b.price);
@@ -209,5 +166,21 @@ export default {
 }
 .filters {
   margin-bottom: 20px;
+}
+.see-details-button {
+  margin-top: 10px;
+  display: block;
+  text-align: center;
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  text-decoration: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.see-details-button:hover {
+  background-color: #45a049;
 }
 </style>
