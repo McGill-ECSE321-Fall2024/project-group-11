@@ -14,7 +14,7 @@
   import { store } from "../store.js";
   
   export default {
-    name: "navbarEmp",
+    name: "NavbarEmp",
     setup() {
       return { store };
     },

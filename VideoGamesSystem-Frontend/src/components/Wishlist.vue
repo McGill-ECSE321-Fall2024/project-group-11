@@ -37,68 +37,88 @@ export default {
   },
   methods: {
     async fetchWishlist() {
-      store.wishlistGames =
-        JSON.parse(localStorage.getItem("wishlistGames")) || [];
-    },
+  try {
+    if (!store.user) return;
+    
+    const response = await axiosClient.get(`/wishlists/customer/${store.user.id}`);
+    store.wishlistGames = response.data.games || [];
+    localStorage.setItem("wishlistGames", JSON.stringify(store.wishlistGames));
+  } catch (error) {
+    console.error("Error fetching wishlist:", error);
+    // Fall back to local storage
+    store.wishlistGames = JSON.parse(localStorage.getItem("wishlistGames")) || [];
+  }
+},
+async removeFromWishlist(game) {
+  try {
+    const index = store.wishlistGames.findIndex(g => g.id === game.id);
+    if (index !== -1) {
+      store.wishlistGames.splice(index, 1);
+      localStorage.setItem("wishlistGames", JSON.stringify(store.wishlistGames));
+      
+      // Update wishlist on backend
+      await axiosClient.delete(`/wishlists/${store.user.id}/games/${game.id}`);
+    }
+  } catch (error) {
+    console.error("Error removing game from wishlist:", error);
+    alert("Failed to remove game from wishlist.");
+    }
+  },
 
-    async removeFromWishlist(game) {
-      const index = store.wishlistGames.findIndex(
-        (g) => g.id === game.id
-      );
-      if (index !== -1) {
-        store.wishlistGames.splice(index, 1);
-        localStorage.setItem(
-          "wishlistGames",
-          JSON.stringify(store.wishlistGames)
-        );
-      }
-    },
+  async addToCart(game) {
+  try {
+    if (game.availableQuantity === 0) {
+      alert("No available copies of this game.");
+      return;
+    }
 
-    async addToCart(game) {
-      if (game.availableQuantity === 0) {
-        alert("No available copies of this game.");
-        return;
-      }
+    // First, get available specific games for this game
+    const response = await axiosGame.get('/specificGames');
+    const availableSpecificGame = response.data.find(
+      sg => sg.gameId === game.id && sg.availability
+    );
 
-      // Find an available SpecificGame instance
-      const availableSpecificGame = game.specificGames.find(
-        (sg) => sg.availability
-      );
+    if (!availableSpecificGame) {
+      alert("No available copies of this game.");
+      return;
+    }
 
-      if (!availableSpecificGame) {
-        alert("No available copies of this game.");
-        return;
-      }
+    // Check if game is already in cart
+    const exists = store.cartSpecificGames.find(
+      sg => sg.serialNumber === availableSpecificGame.serialNumber
+    );
 
-      // Add the SpecificGame to the cart
-      const exists = store.cartSpecificGames.find(
-        (sg) => sg.serialNumber === availableSpecificGame.serialNumber
-      );
+    if (exists) {
+      alert("This game is already in your cart.");
+      return;
+    }
 
-      if (!exists) {
-        // Mark the SpecificGame as unavailable
-        availableSpecificGame.availability = false;
-        game.availableQuantity -= 1;
+    // Mark the specific game as unavailable
+    await axiosGame.put(
+      `/specificGames/${availableSpecificGame.serialNumber}/availability`,
+      { availability: false }
+    );
 
-        // Add game details to the SpecificGame object for display purposes
-        const cartGame = {
-          ...availableSpecificGame,
-          title: game.title,
-          description: game.description,
-          price: game.price,
-        };
+    // Add game details to cart
+    const cartGame = {
+      serialNumber: availableSpecificGame.serialNumber,
+      title: game.title,
+      description: game.description,
+      price: game.price,
+    };
 
-        store.cartSpecificGames.push(cartGame);
-        localStorage.setItem(
-          "cartSpecificGames",
-          JSON.stringify(store.cartSpecificGames)
-        );
+    store.cartSpecificGames.push(cartGame);
+    localStorage.setItem(
+      "cartSpecificGames",
+      JSON.stringify(store.cartSpecificGames)
+    );
 
-        alert("Game added to cart!");
-      } else {
-        alert("This game is already in your cart.");
-      }
-    },
+    alert("Game added to cart!");
+  } catch (error) {
+    console.error("Error adding game to cart:", error);
+    alert("Failed to add game to cart. Please try again.");
+    }
+  },
   },
 };
 </script>

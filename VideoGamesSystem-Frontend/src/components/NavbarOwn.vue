@@ -16,7 +16,7 @@
   import { store } from "../store.js";
   
   export default {
-    name: "navbarOwn",
+    name: "NavbarOwn",
     setup() {
       return { store };
     },

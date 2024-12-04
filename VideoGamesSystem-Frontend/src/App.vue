@@ -1,24 +1,60 @@
 <!-- src/App.vue -->
 <template>
   <div id="app">
-    <navbarOwn />
+    <!-- Hide navbar on login and signup pages -->
+    <template v-if="!isAuthPage">
+      <!-- Guest Navbar -->
+      <NavbarGuest v-if="!store.user" />
+      
+      <!-- Customer Navbar -->
+      <Navbar 
+        v-else-if="store.user && store.userType === 'customer'"
+      />
+      
+      <!-- Employee Navbar -->
+      <NavbarEmp 
+        v-else-if="store.user && store.userType === 'staff'"
+      />
+      
+      <!-- Owner Navbar -->
+      <NavbarOwn 
+        v-else-if="store.user && store.userType === 'owner'"
+      />
+    </template>
+    
     <router-view />
   </div>
 </template>
 
 <script>
 import Navbar from "./components/Navbar.vue";
-import navbarOwn from "./components/NavbarOwn.vue"
+import NavbarGuest from "./components/NavbarGuest.vue";
+import NavbarOwn from "./components/NavbarOwn.vue"
+import NavbarEmp from "./components/NavbarEmp.vue";
 import { store } from "./store.js";
+import { computed } from 'vue';
+import { useRoute } from 'vue-router';
 
 export default {
   name: "App",
   components: {
     Navbar,
-    navbarOwn,
+    NavbarOwn,
+    NavbarEmp,
+    NavbarGuest,
   },
   setup() {
-    return { store };
+    const route = useRoute();
+    
+    // Computed property to check if current route is login or signup
+    const isAuthPage = computed(() => {
+      return ['/login', '/signup'].includes(route.path);
+    });
+
+    return { 
+      store,
+      isAuthPage
+    };
   },
 };
 </script>
