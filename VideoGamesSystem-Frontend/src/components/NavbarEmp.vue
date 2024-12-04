@@ -32,25 +32,28 @@ export default {
 </script>
 
 <style scoped>
-.navbar {
+.navbarEmp {
   background-color: #333;
   overflow: hidden;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
 }
-.navbar ul {
+
+.navbarEmp ul {
   list-style-type: none;
   margin: 0;
   padding: 0;
   display: flex;
+  justify-content: center; /* Center the navigation items horizontally */
+  align-items: center; /* Center the items vertically */
+  height: 50px; /* Reduced height for a more compact navbar */
 }
-.navbar li {
-  padding: 14px 20px;
+
+.navbarEmp li {
+  padding: 8px 15px; 
 }
-.navbar a {
-  color: #f2f2f2;
-  text-decoration: none;
-}
-.navbar a:hover {
-  background-color: #ddd;
-  color: black;
-}
+
 </style>

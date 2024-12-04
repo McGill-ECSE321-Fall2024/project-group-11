@@ -1,62 +1,64 @@
 <template>
-  <div>
-    <h1>Welcome to Video Games System</h1>
+  <div class="home">
+    <h1>Video Games System</h1>
 
-    <div class="home-page">
-      <h2>Available Games</h2>
+    <!-- Search Bar -->
+    <div class="search-bar">
+      <label for="search">Search Games:</label>
+      <input
+        type="text"
+        id="search"
+        v-model="searchQuery"
+        @input="handleSearchInput"
+        placeholder="Search by title, description, etc..."
+        aria-label="Search Games"
+      />
+    </div>
 
-      <!-- Search Bar -->
-      <div class="search-bar">
-        <label for="search">Search Games:</label>
-        <input
-          type="text"
-          id="search"
-          v-model="searchQuery"
-          placeholder="Enter game title or description..."
-        />
-      </div>
+    <!-- Sort Controls -->
+    <div class="sort-controls">
+      <label for="sort">Sort by:</label>
+      <select
+        v-model="sortOption"
+        @change="sortGames"
+        id="sort"
+        aria-label="Sort Games"
+      >
+        <option value="price">Price</option>
+        <option value="title">Title</option>
+        <option value="category">Category</option>
+        <option value="consoleType">Console Type</option>
+      </select>
+    </div>
 
-      <!-- Sort Controls -->
-      <div class="filters">
-        <label for="sort">Sort by:</label>
-        <select v-model="sortOption" @change="sortGames">
-          <option value="price">Price</option>
-          <option value="category">Category</option>
-          <option value="consoleType">Console Type</option>
-          <option value="title">Title</option>
-        </select>
-      </div>
-
-      <!-- Loading and Error States -->
-      <div v-if="loading" class="loading">Loading games...</div>
-
-      <div v-else-if="error" class="error">
-        {{ error }}
-      </div>
-
-      <!-- Games List -->
-      <div v-else class="games-list">
-        <div v-for="game in sortedGames" :key="game.id" class="game-item">
+    <!-- Games List -->
+    <div v-if="loading" class="loading">Loading games...</div>
+    <div v-else-if="error" class="error">{{ error }}</div>
+    <div v-else class="games-list">
+      <div v-for="game in sortedGames" :key="game.id" class="game-card">
+        <div class="game-info">
           <h3>{{ game.title }}</h3>
-          <p class="description">{{ game.description }}</p>
-          <p class="price">Price: ${{ game.price }}</p>
-          <p class="category">Category: {{ game.category }}</p>
-          <p class="console">Console: {{ game.consoleType }}</p>
-          <!-- Availability Paragraph -->
-          <p
-            class="availability"
-            :class="{
-              'in-stock': game.availableQuantity > 0,
-              'out-of-stock': game.availableQuantity === 0,
-            }"
-          >
-            {{ game.availableQuantity > 0 ? "In Stock" : "Out of Stock" }}
-          </p>
-          <div class="login-prompt">
-            <router-link to="/login" class="login-link"
-              >Log in to purchase</router-link
+          <p>{{ game.description }}</p>
+          <p>Price: ${{ game.price.toFixed(2) }}</p>
+          <p>Category: {{ game.category }}</p>
+          <p>Console: {{ game.consoleType }}</p>
+          <p>
+            Status:
+            <span
+              :class="{
+                available: game.stockQuantity > 0,
+                'out-of-stock': game.stockQuantity === 0,
+              }"
             >
-          </div>
+              {{ game.stockQuantity > 0 ? "Available" : "Out of Stock" }}
+            </span>
+          </p>
+        </div>
+        <div class="game-actions">
+          <router-link to="/login" class="login-btn">
+            {{ game.stockQuantity === 0 ? "Out of Stock" : "Log in to Purchase" }}
+          </router-link>
+          <router-link to="/login" class="wishlist-btn">Log in to Save</router-link>
         </div>
       </div>
     </div>
@@ -65,54 +67,72 @@
 
 <script>
 import axios from "axios";
+import debounce from "lodash/debounce";
+
+const axiosGame = axios.create({
+  baseURL: "http://localhost:8081",
+});
 
 export default {
   name: "GuestHome",
   data() {
     return {
       sortOption: "price",
-      searchQuery: "", // New data property for search
+      searchQuery: "",
       games: [],
       loading: false,
       error: null,
+      debouncedSearch: null,
     };
   },
   computed: {
     sortedGames() {
-      // First, filter the games based on the search query
-      let filtered = this.games.filter((game) => {
-        const query = this.searchQuery.trim().toLowerCase();
-        if (!query) return true; // If search query is empty, include all games
+      const query = this.searchQuery.toLowerCase().trim();
+      let filteredGames = this.games;
 
-        // Check if the query matches the title or description
-        return (
-          game.title.toLowerCase().includes(query) ||
-          game.description.toLowerCase().includes(query)
-        );
-      });
+      if (query) {
+        filteredGames = this.games.filter((game) => {
+          return (
+            game.title.toLowerCase().includes(query) ||
+            game.description.toLowerCase().includes(query) ||
+            game.category.toLowerCase().includes(query) ||
+            game.consoleType.toLowerCase().includes(query)
+          );
+        });
+      }
 
-      // Then, sort the filtered games based on the sortOption
-      return filtered.sort((a, b) => {
+      return filteredGames.sort((a, b) => {
         if (this.sortOption === "price") {
           return a.price - b.price;
+        } else if (this.sortOption === "title") {
+          return a.title.localeCompare(b.title);
         } else if (this.sortOption === "category") {
           return a.category.localeCompare(b.category);
         } else if (this.sortOption === "consoleType") {
           return a.consoleType.localeCompare(b.consoleType);
-        } else if (this.sortOption === "title") {
-          return a.title.localeCompare(b.title);
         }
         return 0;
       });
     },
   },
   methods: {
+    handleSearchInput() {
+      if (this.debouncedSearch) {
+        this.debouncedSearch();
+      }
+    },
     async fetchGames() {
       this.loading = true;
       this.error = null;
       try {
-        const response = await axios.get("http://localhost:8081/games");
+        const response = await axiosGame.get("/games");
         this.games = response.data;
+
+        // Fetch the stock quantity for each game
+        for (const game of this.games) {
+          const stockResponse = await axiosGame.get(`/games/${game.id}/stock`);
+          game.stockQuantity = stockResponse.data;
+        }
       } catch (err) {
         console.error("Error fetching games:", err);
         this.error = "Failed to load games. Please try again later.";
@@ -120,152 +140,222 @@ export default {
         this.loading = false;
       }
     },
-    sortGames() {
-      // Sorting is handled by the computed property
-    },
   },
   created() {
     this.fetchGames();
+    this.debouncedSearch = debounce(() => {
+      // Currently, the computed property handles filtering
+    }, 300);
   },
 };
 </script>
 
 <style scoped>
-.home-page {
+/* Global Styles */
+.home {
   padding: 20px;
-  max-width: 1200px;
+  max-width: 2000px;
+  width: 95%;
   margin: 0 auto;
+  box-sizing: border-box;
 }
 
 h1 {
+  font-size: 2rem;
+  color: #222;
+  margin-bottom: 20px;
   text-align: center;
-  color: #333;
-  margin-bottom: 2rem;
 }
 
+/* Search Bar */
 .search-bar {
-  margin-bottom: 20px;
+  margin-bottom: 15px;
   display: flex;
-  align-items: center;
+  justify-content: center;
 }
 
 .search-bar label {
-  margin-right: 10px;
   font-weight: bold;
+  margin-right: 10px;
 }
 
 .search-bar input {
-  flex: 1;
   padding: 8px;
-  border-radius: 4px;
-  border: 1px solid #ddd;
+  width: 100%;
+  max-width: 300px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
 }
 
-.filters {
-  margin-bottom: 20px;
+/* Sort Controls */
+.sort-controls {
+  margin-bottom: 25px;
   display: flex;
-  align-items: center;
+  justify-content: center;
 }
 
-.filters label {
-  margin-right: 10px;
+.sort-controls label {
   font-weight: bold;
+  margin-right: 10px;
 }
 
-.filters select {
+.sort-controls select {
   padding: 8px;
-  border-radius: 4px;
-  border: 1px solid #ddd;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+  width: 150px;
 }
 
+/* Game List */
 .games-list {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 20px;
-  padding: 10px;
+  justify-items: center;
 }
 
-.game-item {
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
+.game-card {
+  background-color: white;
   padding: 20px;
-  background: white;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  width: 100%;
+  max-width: 350px;
 }
 
-.game-item:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+.game-card:hover {
+  transform: scale(1.03);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
-h3 {
-  color: #2c3e50;
-  margin-top: 0;
-  font-size: 1.2rem;
+.game-info h3 {
+  font-size: 1.5rem;
+  color: #222;
   margin-bottom: 10px;
 }
 
-.description {
-  color: #666;
-  font-size: 0.9rem;
-  margin-bottom: 15px;
-  line-height: 1.4;
+.game-info p {
+  font-size: 1rem;
+  color: #555;
 }
 
-.price {
+.game-info p span {
   font-weight: bold;
-  color: #2c3e50;
-  font-size: 1.1rem;
 }
 
-.category,
-.console {
-  color: #666;
-  font-size: 0.9rem;
-}
-
-.availability {
-  font-weight: bold;
-  margin: 10px 0;
-}
-
-/* New classes for availability colors */
-.in-stock {
-  color: #4caf50; /* Green */
+.available {
+  color: green;
 }
 
 .out-of-stock {
-  color: #f44336; /* Red */
+  color: red;
 }
 
-.login-prompt {
-  margin-top: 15px;
-  padding: 10px;
-  background-color: #f5f5f5;
-  border-radius: 4px;
-  text-align: center;
+/* Game Actions */
+.game-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+  justify-content: center;
 }
 
-.login-link {
-  color: #1976d2;
+.login-btn,
+.wishlist-btn {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: 100%;
+  max-width: 200px;
   text-decoration: none;
-  font-weight: 500;
+  text-align: center;
+  display: inline-block;
 }
 
-.login-link:hover {
-  text-decoration: underline;
+.login-btn {
+  background-color: #28a745;
+  color: white;
+}
+
+.login-btn:hover {
+  background-color: #218838;
+}
+
+.login-btn[disabled] {
+  background-color: #d6d6d6;
+  cursor: not-allowed;
+}
+
+.wishlist-btn {
+  background-color: #ff6600;
+  color: white;
+}
+
+.wishlist-btn:hover {
+  background-color: #e65c00;
 }
 
 .loading,
 .error {
   text-align: center;
+  padding: 20px;
   font-size: 1.1rem;
-  color: #666;
-  margin: 20px 0;
 }
 
 .error {
-  color: #f44336;
+  color: #dc3545;
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  .search-bar input,
+  .sort-controls select {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .games-list {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  }
+
+  .game-card {
+    max-width: 100%;
+  }
+
+  .login-btn,
+  .wishlist-btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  h1 {
+    font-size: 1.25rem;
+  }
+
+  .game-card {
+    padding: 15px;
+    width: 90%;
+  }
+
+  .game-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .login-btn,
+  .wishlist-btn {
+    width: 100%;
+    margin-bottom: 10px;
+  }
 }
 </style>

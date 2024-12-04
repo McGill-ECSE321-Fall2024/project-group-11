@@ -127,70 +127,161 @@ export default {
 </script>
 
 <style scoped>
+/* Global Styles */
 .wishlist-page {
   padding: 20px;
+  max-width: 2000px;
+  width: 95%;
+  margin: 0 auto;
+  box-sizing: border-box;
 }
 
 h1 {
+  font-size: 2rem;
+  color: #222;
+  margin-bottom: 30px;
   text-align: center;
-  color: #333;
-  margin-bottom: 2rem;
 }
 
+/* Games List Grid */
 .games-list {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 20px;
+  gap: 25px;
+  width: 100%;
+  padding: 20px;
+  justify-content: start;
 }
 
 .game-item {
-  border: 1px solid #ddd;
-  padding: 15px;
-  border-radius: 8px;
-  background-color: #f9f9f9;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  background-color: white;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  width: 100%;
+  min-width: 280px;
+  margin: 0;
 }
 
+.game-item:hover {
+  transform: scale(1.03);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Game Content Styling */
 .game-item h2 {
-  margin-top: 0;
-  color: #333;
+  font-size: 1.5rem;
+  color: #222;
   margin-bottom: 10px;
 }
 
 .game-item p {
-  margin: 8px 0;
+  font-size: 1rem;
   color: #555;
+  margin: 8px 0;
 }
 
+/* Buttons */
 button {
-  padding: 8px 16px;
+  padding: 12px 20px;
   border: none;
-  border-radius: 4px;
+  border-radius: 5px;
+  font-size: 1rem;
   cursor: pointer;
-  margin-top: 10px;
-  font-weight: 500;
-  transition: background-color 0.2s, opacity 0.2s;
+  transition: background-color 0.3s ease;
+  width: 100%;
+  max-width: 200px;
+  margin: 10px auto;
+  display: block;
 }
 
-.remove-btn {
-  background-color: #f44336; /* Red */
-  color: white;
-  margin-bottom: 5px;
-}
-
-.remove-btn:hover {
-  background-color: #d32f2f;
-}
-
-.add-to-cart-btn {
-  background-color: #4caf50; /* Green */
+button[type="button"]:first-of-type {
+  background-color: #ff6600;
   color: white;
 }
 
-.add-to-cart-btn:hover {
-  background-color: #388e3c;
+button[type="button"]:first-of-type:hover {
+  background-color: #e65c00;
+}
+
+button[type="button"]:last-of-type {
+  background-color: #28a745;
+  color: white;
+}
+
+button[type="button"]:last-of-type:hover {
+  background-color: #218838;
+}
+
+button:disabled {
+  background-color: #d6d6d6;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Empty Wishlist Message */
+.wishlist-page > div:first-of-type {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #666;
+  margin-top: 50px;
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 1600px) {
+  .games-list {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  }
+}
+
+@media (max-width: 1200px) {
+  .games-list {
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  .games-list {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    padding: 10px;
+  }
+
+  .game-item {
+    padding: 15px;
+  }
+
+  button {
+    width: 100%;
+    margin: 5px 0;
+  }
+}
+
+@media (max-width: 480px) {
+  h1 {
+    font-size: 1.25rem;
+  }
+
+  .game-item {
+    padding: 15px;
+    width: 90%;
+  }
+
+  button {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}
+
+/* Added for better use of wide screens */
+@media (min-width: 2000px) {
+  .games-list {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  }
 }
 </style>
+
