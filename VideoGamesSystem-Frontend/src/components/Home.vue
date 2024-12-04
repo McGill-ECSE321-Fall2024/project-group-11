@@ -73,6 +73,14 @@
           >
             Add to Wishlist
           </button>
+
+          <!-- View Details Button that leads to GameDetails -->
+          <button 
+            @click="viewGameDetails(game.id)"
+            class="view-details-btn"
+          >
+            View Details
+          </button>
         </div>
       </div>
     </div>
@@ -395,6 +403,6 @@ h1 {
 }
 
 .wishlist-btn:hover {
-  background-color: #1976d2;
+  background-color: #1976D2;
 }
 </style>

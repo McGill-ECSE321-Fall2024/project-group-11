@@ -88,7 +88,7 @@ public class ReviewController {
         List<Review> reviews = reviewService.getReviewsByGame(gameId);
         return reviews.stream().map(ReviewResponseDto::new).collect(Collectors.toList());
     }
-
+    
     /**
      * Delete a review by its ID.
      * 
