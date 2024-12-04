@@ -1,6 +1,6 @@
 <template>
   <div class="my-games-page">
-    <h1>My Games</h1>
+    <h1 class="page-title">My Games</h1>
     
     <!-- Empty state -->
     <div v-if="!hasGames" class="empty-state">
@@ -9,14 +9,25 @@
     
     <!-- Games list -->
     <div v-else class="games-list">
-      <div v-for="game in sortedGames" :key="game.serialNumber" class="game-item">
-        <h3>{{ game.title }}</h3>
-        <p>{{ game.description }}</p>
-        <p class="price">Price: ${{ game.price }}</p>
-        <div class="game-details">
-          <p>Serial Number: {{ game.serialNumber }}</p>
-          <p>Order #: {{ game.orderNumber }}</p>
-          <p>Purchased: {{ formatDate(game.purchaseDate) }}</p>
+      <div v-for="game in sortedGames" :key="game.serialNumber" class="game-card">
+        <div class="game-info">
+          <h3 class="game-title">{{ game.title }}</h3>
+          <p class="game-description">{{ game.description }}</p>
+          <p class="price">Price: ${{ game.price }}</p>
+        </div>
+        <div class="purchase-details">
+          <div class="detail-item">
+            <span class="detail-label">Serial Number:</span>
+            <span class="detail-value">{{ game.serialNumber }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Order #:</span>
+            <span class="detail-value">{{ game.orderNumber }}</span>
+          </div>
+          <div class="detail-item">
+            <span class="detail-label">Purchased:</span>
+            <span class="detail-value">{{ formatDate(game.purchaseDate) }}</span>
+          </div>
         </div>
       </div>
     </div>
@@ -31,7 +42,6 @@ export default {
   name: "MyGames",
   
   setup() {
-    // Initialize store.orderedGames if it doesn't exist
     if (!store.orderedGames) {
       store.orderedGames = [];
     }
@@ -60,7 +70,6 @@ export default {
       return;
     }
     
-    // Load ordered games from localStorage if they exist
     const savedGames = localStorage.getItem("orderedGames");
     if (savedGames) {
       store.orderedGames = JSON.parse(savedGames);
@@ -83,51 +92,123 @@ export default {
 </script>
 
 <style scoped>
+/* Variables for consistent colors */
+:root {
+  --primary-color: black;
+  --secondary-color: #3498db;
+  --accent-color: #e74c3c;
+  --background-color: #f8f9fa;
+  --text-color: rgb(67, 10, 10);
+  --border-color: #dde1e3;
+  --shadow-color: rgba(0, 0, 0, 0.1);
+}
+
 .my-games-page {
-  padding: 20px;
-  max-width: 1200px;
+  padding: 2rem;
+  max-width: 1400px;
   margin: 0 auto;
+  background-color: var(--background-color);
+  min-height: 100vh;
+}
+
+.page-title {
+  text-align: center;
+  color: var(--primary-color);
+  margin-bottom: 2rem;
+  font-size: 2.5rem;
+  font-weight: 600;
 }
 
 .games-list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 20px;
-  margin-top: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 2rem;
 }
 
-.game-item {
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 15px;
-  background: white;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s;
+.game-card {
+  background-color: darkslategray;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px var(--shadow-color);
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
-.game-item:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+.game-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 12px var(--shadow-color);
 }
 
-.game-details {
-  margin-top: 10px;
-  padding-top: 10px;
-  border-top: 1px solid #eee;
-  font-size: 0.9em;
-  color: #666;
+.game-title {
+  color: var(--primary-color);
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.game-description {
+  color: var(--text-color);
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.price {
+  font-size: 1.25rem;
+  color: var(--accent-color);
+  font-weight: 600;
+  margin: 1rem 0;
+}
+
+.purchase-details {
+  margin-top: auto;
+  padding-top: 1rem;
+  border-top: 2px solid var(--border-color);
+}
+
+.detail-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+}
+
+.detail-label {
+  color: var(--text-color);
+  font-weight: 600;
+}
+
+.detail-value {
+  color: var(--secondary-color);
 }
 
 .empty-state {
   text-align: center;
-  padding: 40px;
-  color: #666;
+  padding: 4rem 2rem;
+  color: var(--text-color);
+  background-color: black;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px var(--shadow-color);
+  font-size: 1.2rem;
+  margin-top: 2rem;
 }
 
-.price {
-  font-weight: bold;
-  color: #2c3e50;
-  font-size: 1.1em;
-  margin: 10px 0;
+@media (max-width: 768px) {
+  .my-games-page {
+    padding: 1rem;
+  }
+
+  .games-list {
+    grid-template-columns: 1fr;
+  }
+
+  .game-card {
+    padding: 1rem;
+  }
+
+  .page-title {
+    font-size: 2rem;
+  }
 }
 </style>

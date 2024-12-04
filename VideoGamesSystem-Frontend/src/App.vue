@@ -10,16 +10,15 @@
       <Navbar 
         v-else-if="store.user && store.userType === 'customer'"
       />
-      
+      <!-- Owner Navbar -->
+            <NavbarOwn 
+        v-else-if="store.user && store.userType === 'staff' && store.user.admin === true"
+      />
       <!-- Employee Navbar -->
       <NavbarEmp 
         v-else-if="store.user && store.userType === 'staff'"
       />
-      
-      <!-- Owner Navbar -->
-      <NavbarOwn 
-        v-else-if="store.user && store.userType === 'owner'"
-      />
+
     </template>
     
     <router-view />

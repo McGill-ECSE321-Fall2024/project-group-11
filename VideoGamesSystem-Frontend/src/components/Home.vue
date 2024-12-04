@@ -1,4 +1,3 @@
-<!-- src/components/Home.vue -->
 <template>
   <div class="home">
     <h1>Welcome, {{ store.user.userName }}!</h1>
@@ -45,15 +44,26 @@
           <p>Price: ${{ game.price.toFixed(2) }}</p>
           <p>Category: {{ game.category }}</p>
           <p>Console: {{ game.consoleType }}</p>
-          <p>Status: {{ game.stockQuantity > 0 ? "Available" : "Out of Stock" }}</p>
+          <p>
+            Status:
+            <span
+              :class="{
+                available: game.stockQuantity > 0,
+                'out-of-stock': game.stockQuantity === 0,
+              }"
+            >
+              {{ game.stockQuantity > 0 ? "Available" : "Out of Stock" }}
+            </span>
+          </p>
         </div>
         <div class="game-actions">
           <button
             @click="addToCart(game)"
             class="cart-btn"
-            :disabled="game.stockQuantity === 0"
+            :disabled="game.stockQuantity === 0 || isAddingToCart"
+            aria-label="Add to Cart"
           >
-            {{ game.stockQuantity === 0 ? 'Out of Stock' : 'Add to Cart' }}
+            {{ game.stockQuantity === 0 ? "Out of Stock" : "Add to Cart" }}
           </button>
           <button
             @click="addToWishlist(game)"
@@ -72,7 +82,7 @@
 <script>
 import { store } from "../store.js";
 import axios from "axios";
-import debounce from "lodash/debounce"; // Ensure Lodash is installed
+import debounce from "lodash/debounce";
 
 const axiosGame = axios.create({
   baseURL: "http://localhost:8081",
@@ -86,9 +96,18 @@ export default {
   data() {
     return {
       sortOption: "price",
+      searchQuery: "",
+      isAddingToCart: false,
+      isAddingToWishlist: false,
+      debouncedSearch: null,
     };
   },
   async created() {
+    if (!store.user) {
+      this.$router.push("/login");
+      return;
+    }
+
     try {
       const response = await axiosGame.get('/games');
       store.games = response.data;
@@ -102,6 +121,12 @@ export default {
       console.error('Error fetching games:', error);
       alert('Failed to load games');
     }
+
+    // Initialize debounced search function
+    this.debouncedSearch = debounce(() => {
+      // If you want to perform any action after debounced search
+      // Currently, the computed property handles filtering
+    }, 300);
   },
   computed: {
     filteredAndSortedGames() {
@@ -136,72 +161,55 @@ export default {
     },
   },
   methods: {
-    async fetchGames() {
-      try {
-        const response = await axiosGame.get("/games");
-        store.games = response.data;
-      } catch (error) {
-        console.error("Error fetching games:", error);
-        alert("Failed to load games");
-      }
-    },
-    sortGames() {
-      // Sorting is handled in the computed property 'filteredAndSortedGames'
-      // This method can be retained for additional sorting logic if needed
-    },
     handleSearchInput() {
       if (this.debouncedSearch) {
         this.debouncedSearch();
       }
     },
-async addToCart(game) {
-  try {
-    if (game.stockQuantity === 0) {
-      alert("No available copies of this game.");
-      return;
-    }
-    // Get available specific games for this game
-    const response = await axiosGame.get(`/games/${game.id}/specific-games`);
-    const availableSpecificGames = response.data;
+    async addToCart(game) {
+      this.isAddingToCart = true;
+      try {
+        if (game.stockQuantity === 0) {
+          alert("No available copies of this game.");
+          return;
+        }
+        // Get available specific games for this game
+        const response = await axiosGame.get(`/games/${game.id}/specific-games`);
+        const availableSpecificGames = response.data;
 
-    if (availableSpecificGames.length === 0) {
-      alert("No available copies of this game.");
-      return;
-    }
+        if (availableSpecificGames.length === 0) {
+          alert("No available copies of this game.");
+          return;
+        }
 
-    const specificGameToAdd = availableSpecificGames[0];
+        const specificGameToAdd = availableSpecificGames[0];
 
-    // Check if game is already in cart
-    const exists = store.cartSpecificGames.some(
-      sg => sg.serialNumber === specificGameToAdd.serialNumber
-    );
+        // Check if game is already in cart
+        const exists = store.cartSpecificGames.some(
+          sg => sg.serialNumber === specificGameToAdd.serialNumber
+        );
 
-    if (exists) {
-      alert("This game is already in your cart.");
-      return;
-    }
-  //   // Mark the specific game as unavailable
-  //   await axiosGame.put(
-  // `/specificGames/${specificGameToAdd.serialNumber}/availability`,
-  //     { newAvailability: false }
-  //   );
+        if (exists) {
+          alert("This game is already in your cart.");
+          return;
+        }
 
-    // Add game details to cart
-    const cartGame = {
-      serialNumber: specificGameToAdd.serialNumber,
-      title: game.title,
-      description: game.description,
-      price: game.price,
-    };
+        // Add game details to cart
+        const cartGame = {
+          serialNumber: specificGameToAdd.serialNumber,
+          title: game.title,
+          description: game.description,
+          price: game.price,
+        };
 
-    store.cartSpecificGames.push(cartGame);
-    localStorage.setItem(
-      "cartSpecificGames",
-      JSON.stringify(store.cartSpecificGames)
-    );
+        store.cartSpecificGames.push(cartGame);
+        localStorage.setItem(
+          "cartSpecificGames",
+          JSON.stringify(store.cartSpecificGames)
+        );
 
-    // Update the game's stock quantity
-    game.stockQuantity--;
+        // Update the game's stock quantity in the UI
+        game.stockQuantity--;
 
         alert("Game added to cart!");
       } catch (error) {
@@ -210,67 +218,50 @@ async addToCart(game) {
       } finally {
         this.isAddingToCart = false;
       }
-    }, 300), // 300ms debounce
+    },
 
-    addToWishlist: debounce(async function (game) {
-      this.isAddingToWishlist = true;
-      try {
-        if (!store.user) {
-          this.$router.push("/login");
-          return;
-        }
+//     addToWishlist: debounce(async function (game) {
+//   this.isAddingToWishlist = true;
+//   try {
+//     if (!store.user) {
+//       this.$router.push("/login");
+//       return;
+//     }
 
-        // Check if wishlist exists for customer, if not create one
-        let wishlist;
-        try {
-          const response = await axiosGame.get(
-            `/wishlists/customer/${store.user.id}`
-          );
-          wishlist = response.data;
-        } catch (err) {
-          // If wishlist doesn't exist, create one
-          const createResponse = await axiosGame.post("/wishlists", {
-            customerId: store.user.id,
-          });
-          wishlist = createResponse.data;
-        }
+//     // Check if game is already in local wishlist
+//     const alreadyInWishlist = store.wishlistGames.some(
+//       (wishlistGame) => wishlistGame.id === game.id
+//     );
 
-        // Add game to wishlist via backend API
-        await axiosGame.put(`/games/${game.id}/wishlist/${wishlist.id}`);
+//     if (alreadyInWishlist) {
+//       alert("This game is already in your wishlist.");
+//       return;
+//     }
 
-        // Update local store and localStorage
-        const alreadyInWishlist = store.wishlistGames.some(
-          (wishlistGame) => wishlistGame.id === game.id
-        );
+//     // Add game to wishlist in backend
+//     await axiosGame.put(`/games/${game.id}/addToWishlist/${store.user.id}`);
 
-        if (alreadyInWishlist) {
-          alert("This game is already in your wishlist.");
-          return;
-        }
+//     // Update local state
+//     const gameToAdd = {
+//       id: game.id,
+//       title: game.title,
+//       description: game.description,
+//       price: game.price,
+//       category: game.category,
+//       consoleType: game.consoleType
+//     };
 
-        store.wishlistGames.push(game);
-        localStorage.setItem(
-          "wishlistGames",
-          JSON.stringify(store.wishlistGames)
-        );
+//     store.wishlistGames.push(gameToAdd);
+//     localStorage.setItem("wishlistGames", JSON.stringify(store.wishlistGames));
+//     alert(`"${game.title}" added to wishlist!`);
 
-        alert(`Game "${game.title}" added to wishlist!`);
-      } catch (error) {
-        console.error("Error adding game to wishlist:", error);
-        alert("Failed to add game to wishlist.");
-      } finally {
-        this.isAddingToWishlist = false;
-      }
-    }, 300), // 300ms debounce
-  },
-  created() {
-    this.fetchGames();
-
-    // Initialize debounced search function (optional)
-    this.debouncedSearch = debounce(() => {
-      // If you want to perform any action after debounced search
-      // Currently, the computed property handles filtering
-    }, 300); // 300ms delay
+//   } catch (error) {
+//     console.error("Error adding to wishlist:", error);
+//     alert("Failed to add game to wishlist. Please try again.");
+//   } finally {
+//     this.isAddingToWishlist = false;
+//   }
+// }, 300)
   },
 };
 </script>
