@@ -228,48 +228,44 @@ export default {
       }
     },
 
-//     addToWishlist: debounce(async function (game) {
-//   this.isAddingToWishlist = true;
-//   try {
-//     if (!store.user) {
-//       this.$router.push("/login");
-//       return;
-//     }
+    viewGameDetails(gameId) {
+      this.$router.push(`/game-details/${gameId}`);
+    },
 
-//     // Check if game is already in local wishlist
-//     const alreadyInWishlist = store.wishlistGames.some(
-//       (wishlistGame) => wishlistGame.id === game.id
-//     );
+    addToWishlist(game) {
+  try {
+    // Check if game is already in wishlist
+    const alreadyInWishlist = store.wishlistGames.some(
+      (wishlistGame) => wishlistGame.id === game.id
+    );
 
-//     if (alreadyInWishlist) {
-//       alert("This game is already in your wishlist.");
-//       return;
-//     }
+    if (alreadyInWishlist) {
+      alert("This game is already in your wishlist.");
+      return;
+    }
 
-//     // Add game to wishlist in backend
-//     await axiosGame.put(`/games/${game.id}/addToWishlist/${store.user.id}`);
+    // Add game to wishlist
+    const gameToAdd = {
+      id: game.id,
+      title: game.title,
+      description: game.description,
+      price: game.price,
+      category: game.category,
+      consoleType: game.consoleType
+    };
 
-//     // Update local state
-//     const gameToAdd = {
-//       id: game.id,
-//       title: game.title,
-//       description: game.description,
-//       price: game.price,
-//       category: game.category,
-//       consoleType: game.consoleType
-//     };
+    store.wishlistGames.push(gameToAdd);
+    
+    // Update localStorage
+    localStorage.setItem("wishlistGames", JSON.stringify(store.wishlistGames));
+    
+    alert(`"${game.title}" added to wishlist!`);
 
-//     store.wishlistGames.push(gameToAdd);
-//     localStorage.setItem("wishlistGames", JSON.stringify(store.wishlistGames));
-//     alert(`"${game.title}" added to wishlist!`);
-
-//   } catch (error) {
-//     console.error("Error adding to wishlist:", error);
-//     alert("Failed to add game to wishlist. Please try again.");
-//   } finally {
-//     this.isAddingToWishlist = false;
-//   }
-// }, 300)
+  } catch (error) {
+    console.error("Error adding to wishlist:", error);
+    alert("Failed to add game to wishlist. Please try again.");
+      }
+    },
   },
 };
 </script>
@@ -327,7 +323,22 @@ h1 {
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 20px;
 }
+.view-details-btn {
+  background-color: #ff9800;
+  color: white;
+}
 
+.view-details-btn:hover {
+  background-color: #f57c00;
+}
+.cart-btn, .wishlist-btn, .view-details-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
 .game-card {
   border: 1px solid #ddd;
   padding: 15px;

@@ -5,20 +5,25 @@
     <p><strong>Price:</strong> ${{ game.price }}</p>
     <p><strong>Available Quantity:</strong> {{ game.availableQuantity }}</p>
 
-    <!-- Action Buttons -->
-    <button
-      @click="addToCart(game)"
-      :disabled="game.availableQuantity === 0"
-      class="btn btn-primary"
-    >
-      Add to Cart
-    </button>
-    <button @click="addToWishlist(game)" class="btn btn-secondary">
-      Add to Wishlist
-    </button>
+    <!-- Action Buttons - Only show for customers -->
+    <template v-if="store.userType === 'customer'">
+      <button
+        @click="addToCart(game)"
+        :disabled="game.availableQuantity === 0"
+        class="btn btn-primary"
+      >
+        Add to Cart
+      </button>
+      <button @click="addToWishlist(game)" class="btn btn-secondary">
+        Add to Wishlist
+      </button>
+    </template>
 
-    <!-- Back to Home Button -->
-    <router-link to="/home" class="btn btn-back">
+    <!-- Back to Home Button - Different routes based on user type -->
+    <router-link 
+      :to="store.userType === 'CUSTOMER' ? '/home' : '/homeowner'" 
+      class="btn btn-back"
+    >
       Back to Home
     </router-link>
 
@@ -31,6 +36,13 @@
 
   <div v-else>
     <p>Game not found. Please make sure the game exists in the list.</p>
+    <!-- Back button for error state -->
+    <router-link 
+      :to="store.userType === 'CUSTOMER' ? '/home' : '/homeowner'" 
+      class="btn btn-back"
+    >
+      Back to Home
+    </router-link>
   </div>
 </template>
 
@@ -64,12 +76,25 @@ export default {
       }
     },
     addToCart(game) {
+      if (store.userType !== 'customer') {
+        alert('Only customers can add items to cart');
+        return;
+      }
       alert(`${game.title} added to the cart!`);
     },
     addToWishlist(game) {
+      if (store.userType !== 'customer') {
+        alert('Only customers can add items to wishlist');
+        return;
+      }
       alert(`${game.title} added to the wishlist!`);
     },
   },
+  computed: {
+    isCustomer() {
+      return store.userType === 'customer';
+    }
+  }
 };
 </script>
 

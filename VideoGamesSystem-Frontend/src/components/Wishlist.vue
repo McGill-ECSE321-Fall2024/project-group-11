@@ -63,7 +63,6 @@ export default {
     },
 
     async removeFromWishlist(game) {
-      try {
         const index = store.wishlistGames.findIndex((g) => g.id === game.id);
         if (index !== -1) {
           store.wishlistGames.splice(index, 1);
@@ -77,66 +76,52 @@ export default {
             `/wishlists/${store.user.id}/games/${game.id}`
           );
         }
-      } catch (error) {
-        console.error("Error removing game from wishlist:", error);
-        alert("Failed to remove game from wishlist.");
-      }
     },
 
     async addToCart(game) {
-      try {
-        if (game.availableQuantity === 0) {
-          alert("No available copies of this game.");
-          return;
-        }
+    this.isAddingToCart = true;
+      // Get available specific games for this game
+      const response = await axiosClient.get(`/games/${game.id}/specific-games`);
+      const availableSpecificGames = response.data;
 
-        // First, get available specific games for this game
-        const response = await axiosClient.get("/specificGames");
-        const availableSpecificGame = response.data.find(
-          (sg) => sg.gameId === game.id && sg.availability
-        );
-
-        if (!availableSpecificGame) {
-          alert("No available copies of this game.");
-          return;
-        }
-
-        // Check if game is already in cart
-        const exists = store.cartSpecificGames.find(
-          (sg) => sg.serialNumber === availableSpecificGame.serialNumber
-        );
-
-        if (exists) {
-          alert("This game is already in your cart.");
-          return;
-        }
-
-        // Mark the specific game as unavailable
-        await axiosClient.put(
-          `/specificGames/${availableSpecificGame.serialNumber}/availability`,
-          { availability: false }
-        );
-
-        // Add game details to cart
-        const cartGame = {
-          serialNumber: availableSpecificGame.serialNumber,
-          title: game.title,
-          description: game.description,
-          price: game.price,
-        };
-
-        store.cartSpecificGames.push(cartGame);
-        localStorage.setItem(
-          "cartSpecificGames",
-          JSON.stringify(store.cartSpecificGames)
-        );
-
-        alert("Game added to cart!");
-      } catch (error) {
-        console.error("Error adding game to cart:", error);
-        alert("Failed to add game to cart. Please try again.");
+      if (availableSpecificGames.length === 0) {
+        alert("No available copies of this game.");
+        return;
       }
-    },
+
+      const specificGameToAdd = availableSpecificGames[0];
+
+      // Check if game is already in cart
+      const exists = store.cartSpecificGames.some(
+        sg => sg.serialNumber === specificGameToAdd.serialNumber
+      );
+
+      if (exists) {
+        alert("This game is already in your cart.");
+        return;
+      }
+
+      // Add game details to cart
+      const cartGame = {
+        serialNumber: specificGameToAdd.serialNumber,
+        title: game.title,
+        description: game.description,
+        price: game.price,
+      };
+
+      // Add to cart first
+      store.cartSpecificGames.push(cartGame);
+      localStorage.setItem(
+        "cartSpecificGames",
+        JSON.stringify(store.cartSpecificGames)
+      );
+
+      // Then remove from wishlist
+      await this.removeFromWishlist(game);
+
+      alert("Game added to cart and removed from wishlist!");
+      this.isAddingToCart = false;
+},
   },
 };
 </script>
