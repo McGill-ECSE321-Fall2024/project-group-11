@@ -1,12 +1,14 @@
 package ca.mcgill.ecse321.videogamessystem.dto.WishlistDto;
+
+import ca.mcgill.ecse321.videogamessystem.model.Game;
+import java.util.List;
 import ca.mcgill.ecse321.videogamessystem.model.Customer;
 import ca.mcgill.ecse321.videogamessystem.model.Wishlist;
-
 public class WishlistResponseDto {
     private Long id;
     private int nbOfItems;
-
     private Customer customer;
+    private List<Game> games; // Add this line
 
     protected WishlistResponseDto(){} 
 
@@ -14,7 +16,6 @@ public class WishlistResponseDto {
     public WishlistResponseDto(Wishlist wishlist) {
         this.id = wishlist.getId();
         this.nbOfItems = wishlist.getNbOfItems();
-        
         this.customer = wishlist.getCustomer();
     }
 
@@ -39,4 +40,11 @@ public class WishlistResponseDto {
         return this.customer;
     }
 
+    public List<Game> getGames() { // Add getter
+        return games;
+    }
+
+    public void setGames(List<Game> games) { // Add setter
+        this.games = games;
+    }
 }
