@@ -3,10 +3,10 @@
     <nav class="navbarOwn" v-if="store.user">
       <ul>
         <li><router-link to="/homeOwner">Home</router-link></li>
-        <li><router-link to="/Add-Games">Add-Games</router-link></li>
-        <li><router-link to="/Add-Promotion">Add-Promotion</router-link></li>
-        <li><router-link to="/Add-Employee">Add-Promotion</router-link></li>
-        <li><router-link to="/Delete-Employee">Delete-employee</router-link></li>
+        <li><router-link to="/addGames">Add Games</router-link></li>
+        <li><router-link to="/addPromotions">Add Promotions</router-link></li>
+        <li><router-link to="/addEmployee">Add Employee</router-link></li>
+        <li><router-link to="/deleteEmployee">Delete Employee</router-link></li>
         <li @click="logout">Logout</li>
       </ul>
     </nav>
