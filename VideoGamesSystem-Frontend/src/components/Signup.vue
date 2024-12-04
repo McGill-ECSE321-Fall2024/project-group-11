@@ -1,4 +1,3 @@
-<!-- src/components/Signup.vue -->
 <template>
   <div class="signup-container">
     <h1>Create an Account</h1>

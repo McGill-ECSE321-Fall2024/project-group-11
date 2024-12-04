@@ -29,6 +29,7 @@
           <p>Category: {{ game.category }}</p>
           <p>Console: {{ game.consoleType }}</p>
           <p>Available: {{ game.availableQuantity > 0 ? "Yes" : "No" }}</p>
+          <p>Stock: {{ game.availableQuantity }}</p>
           <button
             @click="addToCart(game)"
             :disabled="game.availableQuantity === 0"
