@@ -2,7 +2,7 @@
 <template>
   <nav class="navbarEmp" v-if="store.user">
     <ul>
-      <li><router-link to="/homeEmp">Home</router-link></li>
+      <li><router-link to="/homeOwner">Home</router-link></li>
       <li><router-link to="/addGames">Add Games</router-link></li>
       <li><router-link to="/addPromotions">Add Promotions</router-link></li>
       <li @click="logout">Logout</li>
