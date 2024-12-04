@@ -1,4 +1,3 @@
-<!-- src/components/MyGames.vue -->
 <template>
   <div class="my-games-page">
     <h1>My Games</h1>
@@ -9,6 +8,8 @@
         <p>{{ game.description }}</p>
         <p>Price: ${{ game.price }}</p>
         <p>Serial Number: {{ game.serialNumber }}</p>
+        <!-- Add LikeDislikeButton Component -->
+        <LikeDislikeButton :gameId="game.id" />
       </div>
     </div>
   </div>
@@ -17,6 +18,7 @@
 <script>
 import axios from "axios";
 import { store } from "../store.js";
+import LikeDislikeButton from "../components/LikeDislikeButton.vue";
 
 const axiosClient = axios.create({
   baseURL: "http://localhost:8081",
@@ -24,6 +26,7 @@ const axiosClient = axios.create({
 
 export default {
   name: "MyGames",
+  components: { LikeDislikeButton },
   data() {
     return {
       games: [],
@@ -81,5 +84,7 @@ export default {
   padding: 10px;
   margin: 10px;
   width: 200px;
+  background-color: #f9f9f9;
+  border-radius: 5px;
 }
 </style>

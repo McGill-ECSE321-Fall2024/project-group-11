@@ -1,4 +1,3 @@
-// src/router/index.js
 import { createRouter, createWebHistory } from "vue-router";
 import Home from "../components/Home.vue";
 import Wishlist from "../components/Wishlist.vue";
@@ -12,18 +11,26 @@ import AddGames from "@/components/AddGames.vue";
 import AddEmployee from "@/components/AddEmployee.vue";
 import DeleteEmployee from "@/components/DeleteEmployee.vue";
 import HomeGuest from "@/components/HomeGuest.vue";
+import GameDetails from "@/components/GameDetails.vue";
+
 const routes = [
   { 
     path: "/", 
     name: "Home", 
     component: Home,
-    meta: { requiresAuth: false } // Allow public access
+    meta: { requiresAuth: false }
   },
   { 
     path: "/home", 
     name: "HomePage", 
     component: Home,
     meta: { requiresAuth: true, roles: ['customer'] }
+  },
+  { 
+    path: "/game-details/:gameId",  
+    name: "GameDetails",
+    component: GameDetails,
+    props: true,  
   },
   { 
     path: "/homeOwner", 
@@ -37,8 +44,6 @@ const routes = [
     component: HomeGuest,
     meta: { requiresAuth: false }
   },
-  { path: "/", name: "Home", component: Home },
-  { path: "/home", name: "HomePage", component: Home },
   { path: "/wishlist", name: "Wishlist", component: Wishlist },
   { path: "/cart", name: "Cart", component: Cart },
   { path: "/my-games", name: "MyGames", component: MyGames },
@@ -46,7 +51,6 @@ const routes = [
   { path: "/signup", name: "Signup", component: Signup },
   { path: "/addPromotions", name: "AddPromotions", component: AddPromotions },
   { path: "/addGames", name: "AddGames", component: AddGames },
-  { path: "/homeOwner", name: "HomeOwner", component: HomeOwner },
   { path: "/addEmployee", name: "AddEmployee", component: AddEmployee },
   { path: "/deleteEmployee", name: "DeleteEmployee", component: DeleteEmployee },
 ];
@@ -56,28 +60,20 @@ const router = createRouter({
   routes,
 });
 
-// Navigation guard to protect routes
 router.beforeEach((to, from, next) => {
-  // const publicPages = ["/login", "/signup"];
-  // const authRequired = !publicPages.includes(to.path);
-  // const loggedIn = localStorage.getItem("user");
-  const user = JSON.parse(localStorage.getItem('user'));
-  const userType = localStorage.getItem('userType');
+  const user = JSON.parse(localStorage.getItem("user"));
+  const userType = localStorage.getItem("userType");
 
-  // Check if route requires authentication
   if (to.meta.requiresAuth && !user) {
-    next('/login');
+    next("/login");
     return;
   }
 
-  // Handle post-login navigation
-  if (to.path === '/login' && user) {
-    if (userType === 'customer') {
-      next('/home');
-    } else if (userType === 'staff') {
-      next('/homeOwner');
-    } else if (userType === 'owner') {
-      next('/homeOwner');
+  if (to.path === "/login" && user) {
+    if (userType === "customer") {
+      next("/home");
+    } else if (userType === "staff" || userType === "owner") {
+      next("/homeOwner");
     }
     return;
   }

@@ -18,6 +18,9 @@
           <p>Console: {{ game.consoleType }}</p>
         </div>
         <div class="game-actions">
+          <router-link :to="{ name: 'GameDetails', params: { gameId: game.id } }" class="details-btn">
+            View Details
+          </router-link>
           <button 
             @click="showDeleteConfirmation(game)" 
             class="delete-btn"
@@ -77,7 +80,6 @@ export default {
       gameToDelete: null,
     };
   },
-  // Add this lifecycle hook to fetch games when component mounts
   async created() {
     try {
       const response = await axiosGame.get('/games');
@@ -149,7 +151,7 @@ export default {
   padding: 15px;
   border-radius: 8px;
   background-color: grey;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .game-info h3 {
@@ -160,7 +162,22 @@ export default {
 .game-actions {
   margin-top: 15px;
   display: flex;
+  gap: 10px;
   justify-content: flex-end;
+}
+
+.details-btn {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.details-btn:hover {
+  background-color: #0056b3;
 }
 
 .delete-btn {
@@ -248,4 +265,4 @@ export default {
   opacity: 0.7;
   cursor: not-allowed;
 }
-</style> 
+</style>

@@ -36,6 +36,14 @@
           >
             Add to Wishlist
           </button>
+
+          <!-- View Details Button that leads to GameDetails -->
+          <button 
+            @click="viewGameDetails(game.id)"
+            class="view-details-btn"
+          >
+            View Details
+          </button>
         </div>
       </div>
     </div>
@@ -97,99 +105,104 @@ export default {
       }
     },
     async addToCart(game) {
-  try {
-    if (game.availableQuantity === 0) {
-      alert("No available copies of this game.");
-      return;
-    }
+      try {
+        if (game.availableQuantity === 0) {
+          alert("No available copies of this game.");
+          return;
+        }
 
-    // First, get available specific games for this game
-    const response = await axiosGame.get('/specificGames');
-    const availableSpecificGame = response.data.find(
-      sg => sg.gameId === game.id && sg.availability
-    );
+        // First, get available specific games for this game
+        const response = await axiosGame.get('/specificGames');
+        const availableSpecificGame = response.data.find(
+          sg => sg.gameId === game.id && sg.availability
+        );
 
-    if (!availableSpecificGame) {
-      alert("No available copies of this game.");
-      return;
-    }
+        if (!availableSpecificGame) {
+          alert("No available copies of this game.");
+          return;
+        }
 
-    // Check if game is already in cart
-    const exists = store.cartSpecificGames.find(
-      sg => sg.serialNumber === availableSpecificGame.serialNumber
-    );
+        // Check if game is already in cart
+        const exists = store.cartSpecificGames.find(
+          sg => sg.serialNumber === availableSpecificGame.serialNumber
+        );
 
-    if (exists) {
-      alert("This game is already in your cart.");
-      return;
-    }
+        if (exists) {
+          alert("This game is already in your cart.");
+          return;
+        }
 
-    // Mark the specific game as unavailable
-    await axiosGame.put(
-      `/specificGames/${availableSpecificGame.serialNumber}/availability`,
-      { availability: false }
-    );
+        // Mark the specific game as unavailable
+        await axiosGame.put(
+          `/specificGames/${availableSpecificGame.serialNumber}/availability`,
+          { availability: false }
+        );
 
-    // Add game details to cart
-    const cartGame = {
-      serialNumber: availableSpecificGame.serialNumber,
-      title: game.title,
-      description: game.description,
-      price: game.price,
-    };
+        // Add game details to cart
+        const cartGame = {
+          serialNumber: availableSpecificGame.serialNumber,
+          title: game.title,
+          description: game.description,
+          price: game.price,
+        };
 
-    store.cartSpecificGames.push(cartGame);
-    localStorage.setItem(
-      "cartSpecificGames",
-      JSON.stringify(store.cartSpecificGames)
-    );
+        store.cartSpecificGames.push(cartGame);
+        localStorage.setItem(
+          "cartSpecificGames",
+          JSON.stringify(store.cartSpecificGames)
+        );
 
-    alert("Game added to cart!");
-  } catch (error) {
-    console.error("Error adding game to cart:", error);
-    alert("Failed to add game to cart. Please try again.");
-    }
-  },
-  async addToWishlist(game) {
-  try {
-    if (!store.user) {
-      this.$router.push("/login");
-      return;
-    }
+        alert("Game added to cart!");
+      } catch (error) {
+        console.error("Error adding game to cart:", error);
+        alert("Failed to add game to cart. Please try again.");
+      }
+    },
+    async addToWishlist(game) {
+      try {
+        if (!store.user) {
+          this.$router.push("/login");
+          return;
+        }
 
-    // Check if wishlist exists for customer, if not create one
-    let wishlist;
-    try {
-      wishlist = await axiosGame.get(`/wishlists/customer/${store.user.id}`);
-    } catch {
-      // Create new wishlist for customer
-      wishlist = await axiosGame.post('/wishlists', {
-        customerId: store.user.id
-      });
-    }
+        // Check if wishlist exists for customer, if not create one
+        let wishlist;
+        try {
+          wishlist = await axiosGame.get(`/wishlists/customer/${store.user.id}`);
+        } catch {
+          // Create new wishlist for customer
+          wishlist = await axiosGame.post('/wishlists', {
+            customerId: store.user.id
+          });
+        }
 
-    // Add game to local storage wishlist
-    const alreadyInWishlist = store.wishlistGames.some(
-      wishlistGame => wishlistGame.id === game.id
-    );
+        // Add game to local storage wishlist
+        const alreadyInWishlist = store.wishlistGames.some(
+          wishlistGame => wishlistGame.id === game.id
+        );
 
-    if (alreadyInWishlist) {
-      alert("This game is already in your wishlist.");
-      return;
-    }
+        if (alreadyInWishlist) {
+          alert("This game is already in your wishlist.");
+          return;
+        }
 
-    store.wishlistGames.push(game);
-    localStorage.setItem(
-      "wishlistGames",
-      JSON.stringify(store.wishlistGames)
-    );
+        store.wishlistGames.push(game);
+        localStorage.setItem(
+          "wishlistGames",
+          JSON.stringify(store.wishlistGames)
+        );
 
-    alert(`Game "${game.title}" added to wishlist!`);
-  } catch (error) {
-    console.error("Error adding game to wishlist:", error);
-    alert("Failed to add game to wishlist.");
-    }
-  },
+        alert(`Game "${game.title}" added to wishlist!`);
+      } catch (error) {
+        console.error("Error adding game to wishlist:", error);
+        alert("Failed to add game to wishlist.");
+      }
+    },
+
+    // Method for navigating to the game details page
+    viewGameDetails(gameId) {
+      this.$router.push(`/game-details/${gameId}`);
+    },
   },
 };
 </script>
@@ -244,7 +257,7 @@ export default {
   justify-content: flex-end;
 }
 
-.cart-btn, .wishlist-btn {
+.cart-btn, .wishlist-btn, .view-details-btn {
   padding: 8px 16px;
   border: none;
   border-radius: 4px;
@@ -274,5 +287,14 @@ export default {
 
 .wishlist-btn:hover {
   background-color: #1976D2;
+}
+
+.view-details-btn {
+  background-color: #ff9800;
+  color: white;
+}
+
+.view-details-btn:hover {
+  background-color: #f57c00;
 }
 </style>

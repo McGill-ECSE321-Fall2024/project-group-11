@@ -13,6 +13,7 @@ import ca.mcgill.ecse321.videogamessystem.exception.VideoGamesSystemException;
 import ca.mcgill.ecse321.videogamessystem.model.Customer;
 import ca.mcgill.ecse321.videogamessystem.model.Game;
 import ca.mcgill.ecse321.videogamessystem.model.Review;
+import ca.mcgill.ecse321.videogamessystem.model.Staff;
 import ca.mcgill.ecse321.videogamessystem.repository.ReviewRepository;
 import ca.mcgill.ecse321.videogamessystem.repository.CustomerRepository;
 import ca.mcgill.ecse321.videogamessystem.repository.GameRepository;
@@ -36,35 +37,49 @@ public class ReviewService {
      * @return
      */
     @Transactional
-    public Review createReview(int gameRating, String reviewContent, Long customerId, Long parentReviewId, Long gameId) {
-        if (gameRating < 1 || gameRating > 5) {
-            throw new VideoGamesSystemException(HttpStatus.BAD_REQUEST, "Game rating must be between 1 and 5.");
+public Review createReview(int gameRating, String reviewContent, Long customerId, Long parentReviewId, Long gameId) {
+    if (gameRating < 1 || gameRating > 5) {
+        throw new VideoGamesSystemException(HttpStatus.BAD_REQUEST, "Game rating must be between 1 and 5.");
+    }
+    if (reviewContent == null || reviewContent.trim().isEmpty()) {
+        throw new VideoGamesSystemException(HttpStatus.BAD_REQUEST, "Review content cannot be empty.");
+    }
+
+    Date reviewDate = Date.valueOf(LocalDate.now());
+
+    Game game = gameRepository.findById(gameId).orElseThrow(() ->
+            new VideoGamesSystemException(HttpStatus.NOT_FOUND, "Game not found."));
+
+    Review review = new Review(gameRating, reviewContent, reviewDate);
+    review.setGame(game);
+
+    if (parentReviewId != null) {
+        // Handle reply logic
+        Review parentReview = reviewRepository.findReviewById(parentReviewId);
+        if (parentReview == null) {
+            throw new VideoGamesSystemException(HttpStatus.NOT_FOUND, "Parent review not found.");
         }
-        if (reviewContent == null || reviewContent.trim().isEmpty()) {
-            throw new VideoGamesSystemException(HttpStatus.BAD_REQUEST, "Review content cannot be empty.");
+        review.setParentReview(parentReview);
+
+        // Check if the customerId is a staff member
+        if (customerId != null) {
+            // Check if the customerId corresponds to a staff member
+            Staff staff = staffRepository.findById(customerId).orElse(null);
+            if (staff == null) {
+                throw new VideoGamesSystemException(HttpStatus.NOT_FOUND, "Staff member not found.");
+            }
+            review.setCustomer(staff);
         }
-    
-        Date reviewDate = Date.valueOf(LocalDate.now());
-    
+    } else {
+        // Handle customer review logic
         Customer customer = customerRepository.findById(customerId).orElseThrow(() ->
                 new VideoGamesSystemException(HttpStatus.NOT_FOUND, "Customer not found."));
-        Game game = gameRepository.findById(gameId).orElseThrow(() ->
-                new VideoGamesSystemException(HttpStatus.NOT_FOUND, "Game not found."));
-    
-        Review review = new Review(gameRating, reviewContent, reviewDate);
         review.setCustomer(customer);
-        review.setGame(game);
-    
-        if (parentReviewId != null) {
-            Review parentReview = reviewRepository.findReviewById(parentReviewId);
-            if (parentReview == null) {
-                throw new VideoGamesSystemException(HttpStatus.NOT_FOUND, "Parent review not found.");
-            }
-            review.setParentReview(parentReview);
-        }
-    
-        return reviewRepository.save(review);
     }
+
+    return reviewRepository.save(review);
+}
+
     
     /**
      * @param id
