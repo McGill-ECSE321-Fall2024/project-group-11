@@ -1,7 +1,7 @@
 <template>
   <div class="review-card">
     <div class="review-content">
-      <p><strong>{{ review.customerUsername || "Anonymous" }}</strong>:</p>
+      <p><strong>{{ review.customerUsername || 'Anonymous' }}</strong>:</p>
       <p>{{ review.reviewContent }}</p>
       <p>Rating: {{ review.gameRating }} / 5</p>
       <p><small>{{ formatDate(review.reviewDate) }}</small></p>
@@ -10,11 +10,13 @@
     <!-- Replies Section -->
     <div v-if="review.replies && review.replies.length > 0" class="replies">
       <h4>Replies:</h4>
-      <div v-for="reply in review.replies" :key="reply.id" class="reply">
-        <p><strong>{{ reply.customerUsername || "Anonymous" }}</strong>:</p>
-        <p>{{ reply.reviewContent }}</p>
-        <p><small>{{ formatDate(reply.reviewDate) }}</small></p>
-      </div>
+      <ReviewCard
+        v-for="reply in review.replies"
+        :key="reply.id"
+        :review="reply"
+        :isStaff="isStaff"
+        @reply-posted="replyPosted"
+      />
     </div>
 
     <!-- Reply Form for Staff -->
@@ -33,6 +35,8 @@
 <script>
 import axios from "axios";
 
+const PLACEHOLDER_CUSTOMER_ID = 999; // Replace with a valid dummy customer ID in your database
+
 export default {
   name: "ReviewCard",
   props: {
@@ -43,10 +47,6 @@ export default {
     isStaff: {
       type: Boolean,
       required: true,
-    },
-    staffId: {
-      type: Number,
-      required: true, // Staff ID must be passed for staff replies
     },
   },
   data() {
@@ -67,35 +67,29 @@ export default {
 
       const payload = {
         reviewContent: this.replyContent,
-        gameRating: 5, // Fixed rating for staff replies
-        customerId: this.isStaff ? this.staffId : null, // Use staffId for staff replies
-        parentReviewId: this.review.id, // Parent review ID
-        gameId: this.review.game.id, // Game ID
-        reviewDate: new Date().toISOString().split("T")[0], // Current date
+        gameRating: 5, // Default rating for replies
+        customerId: PLACEHOLDER_CUSTOMER_ID, // Use placeholder customer ID for staff replies
+        parentReviewId: this.review.id,
+        gameId: this.review.game.id,
+        reviewDate: new Date().toISOString().split("T")[0],
       };
-
-      console.log("Submitting reply payload:", payload);
 
       try {
         const response = await axios.post("http://localhost:8081/reviews", payload);
-        console.log("Reply submitted successfully:", response.data);
-
-        // Notify parent component of the new reply
         this.$emit("reply-posted", response.data);
         this.replyContent = "";
         this.toggleReplyForm();
-        alert("Reply submitted successfully!");
       } catch (error) {
         console.error("Error submitting reply:", error.response || error);
-        alert(
-          `Failed to submit reply: ${
-            error.response?.data?.message || error.message
-          }`
-        );
+        alert("Failed to submit reply. Please try again.");
       }
     },
     formatDate(date) {
       return new Date(date).toLocaleDateString();
+    },
+    replyPosted(reply) {
+      if (!this.review.replies) this.review.replies = [];
+      this.review.replies.push(reply);
     },
   },
 };
@@ -127,10 +121,6 @@ export default {
   margin-top: 10px;
   border-left: 2px solid #ccc;
   padding-left: 10px;
-}
-
-.reply {
-  margin-bottom: 10px;
 }
 
 .reply-btn button {
