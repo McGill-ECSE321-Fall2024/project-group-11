@@ -19,13 +19,17 @@
         <label for="category">Category:</label>
         <select v-model="category" required>
           <option value="">Select a category</option>
-          <option value="ACTION">Action</option>
-          <option value="ADVENTURE">Adventure</option>
-          <option value="PUZZLE">Puzzle</option>
-          <option value="RACING">Racing</option>
-          <option value="RPG">RPG</option>
-          <option value="SPORTS">Sports</option>
-          <option value="STRATEGY">Strategy</option>
+          <option value="Adventure">Adventure</option>
+          <option value="Action">Action</option>
+          <option value="Arcade">Arcade</option>
+          <option value="Puzzle">Puzzle</option>
+          <option value="Party">Party</option>
+          <option value="Sports">Sports</option>
+          <option value="Strategy">Strategy</option>
+          <option value="Survival">Survival</option>
+          <option value="Other">Survival</option>
+
+
         </select>
       </div>
       <div>
@@ -33,12 +37,16 @@
         <select v-model="consoleType" required>
           <option value="">Select a console type</option>
           <option value="PS4">PS4</option>
-          <option value="PS5">PS5</option>
-          <option value="XBOX_ONE">Xbox One</option>
-          <option value="XBOX_X">Xbox Series X</option>
-          <option value="SWITCH">Nintendo Switch</option>
+          <option value="XBOX">Xbox Series X</option>
+          <option value="Switch">Nintendo Switch</option>
           <option value="PC">PC</option>
+          <option value="Wii">Wii U</option>
+          <option value="Other">Other Console</option>
         </select>
+      </div>
+      <div>
+        <label for="Stock Quantity">Stock Quantity:</label>
+        <input type="number" v-model="availableQuantity" required />
       </div>
       <button type="submit">Request to Add Game</button>
     </form>
@@ -76,6 +84,7 @@ export default {
         title: this.title,
         category: this.category,
         consoleType: this.consoleType,
+        availableQuantity: 0
       };
       try {
         const response = await axiosGame.post("/games", newGame);

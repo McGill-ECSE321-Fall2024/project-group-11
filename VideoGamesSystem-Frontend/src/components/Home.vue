@@ -1,42 +1,79 @@
+<!-- src/components/Home.vue -->
 <template>
-  <div>
+  <div class="home">
     <h1>Welcome, {{ store.user.userName }}!</h1>
-    <div v-if="store.userType === 'customer'">
-      <!-- Customer-specific content -->
-      <p>You are logged in as a customer.</p>
-    </div>
-    <div v-else-if="store.userType === 'staff'">
-      <!-- Staff-specific content -->
-      <p>You are logged in as a staff member.</p>
-      <!-- Add staff functionalities -->
+
+    <!-- Search Bar -->
+    <div class="search-bar">
+      <label for="search">Search Games:</label>
+      <input
+        type="text"
+        id="search"
+        v-model="searchQuery"
+        @input="handleSearchInput"
+        placeholder="Search by title, description, etc..."
+        aria-label="Search Games"
+      />
     </div>
 
-    <div class="home-page">
-      <h2>All Games</h2>
-      <div class="filters">
-        <label for="sort">Sort by:</label>
-        <select v-model="sortOption" @change="sortGames">
-          <option value="price">Price</option>
-          <option value="category">Category</option>
-          <option value="consoleType">Console Type</option>
-        </select>
-      </div>
-      <div class="games-list">
-        <div v-for="game in games" :key="game.id" class="game-item">
+    <!-- Sort Controls -->
+    <div class="sort-controls">
+      <label for="sort">Sort by:</label>
+      <select
+        v-model="sortOption"
+        @change="sortGames"
+        id="sort"
+        aria-label="Sort Games"
+      >
+        <option value="price">Price</option>
+        <option value="title">Title</option>
+        <option value="category">Category</option>
+        <option value="consoleType">Console Type</option>
+      </select>
+    </div>
+
+    <!-- Games List -->
+    <div class="games-list">
+      <div
+        v-for="game in filteredAndSortedGames"
+        :key="game.id"
+        class="game-card"
+      >
+        <div class="game-info">
           <h3>{{ game.title }}</h3>
           <p>{{ game.description }}</p>
-          <p>Price: ${{ game.price }}</p>
+          <p>Price: ${{ game.price.toFixed(2) }}</p>
           <p>Category: {{ game.category }}</p>
           <p>Console: {{ game.consoleType }}</p>
-          <p>Available: {{ game.availableQuantity > 0 ? "Yes" : "No" }}</p>
-          <p>Stock: {{ game.availableQuantity }}</p>
+          <p>
+            Status:
+            <span
+              :class="{
+                available: game.availableQuantity > 0,
+                'out-of-stock': game.availableQuantity === 0,
+              }"
+            >
+              {{ game.availableQuantity > 0 ? "Available" : "Out of Stock" }}
+            </span>
+          </p>
+        </div>
+        <div class="game-actions">
           <button
             @click="addToCart(game)"
-            :disabled="game.availableQuantity === 0"
+            class="cart-btn"
+            :disabled="game.availableQuantity === 0 || isAddingToCart"
+            aria-label="Add to Cart"
           >
-            Add to Cart
+            {{ game.availableQuantity === 0 ? "Out of Stock" : "Add to Cart" }}
           </button>
-          <button @click="addToWishlist(game)">Add to Wishlist</button>
+          <button
+            @click="addToWishlist(game)"
+            class="wishlist-btn"
+            :disabled="isAddingToWishlist"
+            aria-label="Add to Wishlist"
+          >
+            Add to Wishlist
+          </button>
         </div>
       </div>
     </div>
@@ -45,7 +82,12 @@
 
 <script>
 import { store } from "../store.js";
-// import axios from 'axios'; // Commented out since I'm using local data
+import axios from "axios";
+import debounce from "lodash/debounce"; // Ensure Lodash is installed
+
+const axiosGame = axios.create({
+  baseURL: "http://localhost:8081",
+});
 
 export default {
   name: "Home",
@@ -55,116 +97,101 @@ export default {
   data() {
     return {
       sortOption: "price",
-      games: [
-        {
-          id: 1,
-          title: "Where's my Rami?",
-          description:
-            "An adventure where you try to find the work Rami did on this deliverable.",
-          price: 60,
-          category: "Action",
-          consoleType: "PS4",
-          availableQuantity: 1, // Number of available SpecificGame instances
-          specificGames: [
-            { serialNumber: 1001, availability: true },
-            { serialNumber: 1002, availability: true },
-          ],
-        },
-        {
-          id: 2,
-          title: "Mystery tests",
-          description:
-            "A game where rami finds all non functional tests and comments them out instead of fixing code",
-          price: 40,
-          category: "Puzzle",
-          consoleType: "Switch",
-          availableQuantity: 1,
-          specificGames: [{ serialNumber: 2001, availability: true }],
-        },
-        {
-          id: 3,
-          title: "Tennis Pro",
-          description: "Game where you get to hit Emile with a tennis racket",
-          price: 50,
-          category: "Racing",
-          consoleType: "PS4",
-          availableQuantity: 0,
-          specificGames: [{ serialNumber: 3001, availability: false }],
-        },
-        {
-          id: 4,
-          title: "AYCE HotPot",
-          description:
-            "Extreme sport where everyone eats hotpot until they throw up",
-          price: 55,
-          category: "Sports",
-          consoleType: "Switch",
-          availableQuantity: 3,
-          specificGames: [
-            { serialNumber: 4001, availability: true },
-            { serialNumber: 4002, availability: true },
-            { serialNumber: 4003, availability: true },
-          ],
-        },
-        {
-          id: 5,
-          title: "Fantazizi",
-          description: "Explore the fantasyzi world.",
-          price: 45,
-          category: "RPG",
-          consoleType: "PS4",
-          availableQuantity: 1,
-          specificGames: [{ serialNumber: 5001, availability: true }],
-        },
-      ],
+      searchQuery: "",
+      isAddingToCart: false,
+      isAddingToWishlist: false,
+      debouncedSearch: null,
     };
   },
-  created() {
-    if (!store.user || !store.userType) {
-      this.$router.push("/login");
-    } else {
-      this.sortGames();
-    }
+  computed: {
+    filteredAndSortedGames() {
+      if (!store.games) return [];
+
+      const query = this.searchQuery.toLowerCase().trim();
+      let filteredGames = store.games;
+
+      if (query) {
+        filteredGames = store.games.filter((game) => {
+          return (
+            game.title.toLowerCase().includes(query) ||
+            game.description.toLowerCase().includes(query) ||
+            game.category.toLowerCase().includes(query) ||
+            game.consoleType.toLowerCase().includes(query)
+          );
+        });
+      }
+
+      return filteredGames.sort((a, b) => {
+        if (this.sortOption === "price") {
+          return a.price - b.price;
+        } else if (this.sortOption === "title") {
+          return a.title.localeCompare(b.title);
+        } else if (this.sortOption === "category") {
+          return a.category.localeCompare(b.category);
+        } else if (this.sortOption === "consoleType") {
+          return a.consoleType.localeCompare(b.consoleType);
+        }
+        return 0;
+      });
+    },
   },
   methods: {
-    sortGames() {
-      if (this.sortOption === "price") {
-        this.games.sort((a, b) => a.price - b.price);
-      } else if (this.sortOption === "category") {
-        this.games.sort((a, b) => a.category.localeCompare(b.category));
-      } else if (this.sortOption === "consoleType") {
-        this.games.sort((a, b) => a.consoleType.localeCompare(b.consoleType));
+    async fetchGames() {
+      try {
+        const response = await axiosGame.get("/games");
+        store.games = response.data;
+      } catch (error) {
+        console.error("Error fetching games:", error);
+        alert("Failed to load games");
       }
     },
-    addToCart(game) {
-      if (game.availableQuantity === 0) {
-        alert("No available copies of this game.");
-        return;
+    sortGames() {
+      // Sorting is handled in the computed property 'filteredAndSortedGames'
+      // This method can be retained for additional sorting logic if needed
+    },
+    handleSearchInput() {
+      if (this.debouncedSearch) {
+        this.debouncedSearch();
       }
+    },
+    addToCart: debounce(async function (game) {
+      this.isAddingToCart = true;
+      try {
+        if (game.availableQuantity === 0) {
+          alert("No available copies of this game.");
+          return;
+        }
 
-      // Find an available SpecificGame instance
-      const availableSpecificGame = game.specificGames.find(
-        (sg) => sg.availability
-      );
+        // Fetch available specific games for this game
+        const response = await axiosGame.get("/specificGames");
+        const availableSpecificGame = response.data.find(
+          (sg) => sg.gameId === game.id && sg.availability
+        );
 
-      if (!availableSpecificGame) {
-        alert("No available copies of this game.");
-        return;
-      }
+        if (!availableSpecificGame) {
+          alert("No available copies of this game.");
+          return;
+        }
 
-      // Add the SpecificGame to the cart
-      const exists = store.cartSpecificGames.find(
-        (sg) => sg.serialNumber === availableSpecificGame.serialNumber
-      );
+        // Check if game is already in cart
+        const exists = store.cartSpecificGames.find(
+          (sg) => sg.serialNumber === availableSpecificGame.serialNumber
+        );
 
-      if (!exists) {
-        // Mark the SpecificGame as unavailable
-        availableSpecificGame.availability = false;
-        game.availableQuantity -= 1;
+        if (exists) {
+          alert("This game is already in your cart.");
+          return;
+        }
 
-        // Add game details to the SpecificGame object for display purposes
+        // Mark the specific game as unavailable
+        await axiosGame.put(
+          `/specificGames/${availableSpecificGame.serialNumber}/availability`,
+          { availability: false }
+        );
+
+        // Add game details to cart
         const cartGame = {
-          ...availableSpecificGame,
+          serialNumber: availableSpecificGame.serialNumber,
           title: game.title,
           description: game.description,
           price: game.price,
@@ -177,33 +204,206 @@ export default {
         );
 
         alert("Game added to cart!");
-      } else {
-        alert("This game is already in your cart.");
+      } catch (error) {
+        console.error("Error adding game to cart:", error);
+        alert("Failed to add game to cart. Please try again.");
+      } finally {
+        this.isAddingToCart = false;
       }
-    },
-    addToWishlist(game) {
-      // Simulating as I am not currently connected to backend
-      alert(`Game "${game.title}" added to wishlist!`);
-    },
+    }, 300), // 300ms debounce
+
+    addToWishlist: debounce(async function (game) {
+      this.isAddingToWishlist = true;
+      try {
+        if (!store.user) {
+          this.$router.push("/login");
+          return;
+        }
+
+        // Check if wishlist exists for customer, if not create one
+        let wishlist;
+        try {
+          const response = await axiosGame.get(
+            `/wishlists/customer/${store.user.id}`
+          );
+          wishlist = response.data;
+        } catch (err) {
+          // If wishlist doesn't exist, create one
+          const createResponse = await axiosGame.post("/wishlists", {
+            customerId: store.user.id,
+          });
+          wishlist = createResponse.data;
+        }
+
+        // Add game to wishlist via backend API
+        await axiosGame.put(`/games/${game.id}/wishlist/${wishlist.id}`);
+
+        // Update local store and localStorage
+        const alreadyInWishlist = store.wishlistGames.some(
+          (wishlistGame) => wishlistGame.id === game.id
+        );
+
+        if (alreadyInWishlist) {
+          alert("This game is already in your wishlist.");
+          return;
+        }
+
+        store.wishlistGames.push(game);
+        localStorage.setItem(
+          "wishlistGames",
+          JSON.stringify(store.wishlistGames)
+        );
+
+        alert(`Game "${game.title}" added to wishlist!`);
+      } catch (error) {
+        console.error("Error adding game to wishlist:", error);
+        alert("Failed to add game to wishlist.");
+      } finally {
+        this.isAddingToWishlist = false;
+      }
+    }, 300), // 300ms debounce
+  },
+  created() {
+    this.fetchGames();
+
+    // Initialize debounced search function (optional)
+    this.debouncedSearch = debounce(() => {
+      // If you want to perform any action after debounced search
+      // Currently, the computed property handles filtering
+    }, 300); // 300ms delay
   },
 };
 </script>
 
 <style scoped>
-.home-page {
+.home {
   padding: 20px;
 }
-.games-list {
-  display: flex;
-  flex-wrap: wrap;
+
+h1 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 2rem;
 }
-.game-item {
-  border: 1px solid #ccc;
-  padding: 10px;
-  margin: 10px;
-  width: 200px;
-}
-.filters {
+
+.search-bar {
   margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.search-bar label {
+  margin-right: 10px;
+  font-weight: bold;
+}
+
+.search-bar input {
+  flex: 1;
+  padding: 8px 12px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  font-size: 1rem;
+}
+
+.sort-controls {
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.sort-controls label {
+  margin-right: 10px;
+  font-weight: bold;
+}
+
+.sort-controls select {
+  padding: 8px 12px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  font-size: 1rem;
+}
+
+.games-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.game-card {
+  border: 1px solid #ddd;
+  padding: 15px;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.game-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.game-info h3 {
+  margin-top: 0;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.game-info p {
+  margin: 8px 0;
+  color: #555;
+}
+
+.available {
+  color: #4caf50; /* Green */
+  font-weight: bold;
+}
+
+.out-of-stock {
+  color: #f44336; /* Red */
+  font-weight: bold;
+}
+
+.game-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.cart-btn,
+.wishlist-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s, opacity 0.2s;
+}
+
+.cart-btn {
+  background-color: #4caf50;
+  color: white;
+}
+
+.cart-btn:hover:not(:disabled) {
+  background-color: #45a049;
+}
+
+.cart-btn:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.wishlist-btn {
+  background-color: #2196f3;
+  color: white;
+}
+
+.wishlist-btn:hover {
+  background-color: #1976d2;
 }
 </style>

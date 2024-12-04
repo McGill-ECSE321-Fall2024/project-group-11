@@ -68,35 +68,34 @@ export default {
       }
     },
     async checkout() {
-      try {
-        // Create a new order
-        const orderRequest = {
-          orderDate: new Date().toISOString().split("T")[0],
-          cardNumber: store.user.cardNumber || 123456789,
-          customerId: store.user.id,
-        };
-        const orderResponse = await axiosClient.post("/orders", orderRequest);
-        const orderNumber = orderResponse.data.orderNumber;
+  try {
+    // Create a new specific order
+    const orderRequest = {
+      orderDate: new Date().toISOString().split('T')[0],
+      cardNumber: store.user.cardNumber || 123456789,
+      customerId: store.user.id
+    };
 
-        // Add each SpecificGame to the order
-        for (const game of store.cartSpecificGames) {
-          await axiosClient.put(
-            `/specificGames/${game.serialNumber}/addToOrder`,
-            {
-              orderNumber: orderNumber,
-            }
-          );
-        }
+    const orderResponse = await axiosClient.post('/orders', orderRequest);
+    const orderNumber = orderResponse.data.orderNumber;
 
-        // Clear the cart
-        store.cartSpecificGames = [];
-        localStorage.removeItem("cartSpecificGames");
-        this.totalPrice = 0;
-        alert("Checkout successful!");
-        this.$router.push("/my-games");
-      } catch (e) {
-        console.error(e);
-        alert("Checkout failed.");
+    // Add each specific game to the order
+    for (const game of store.cartSpecificGames) {
+      await axiosClient.put(
+        `/specificGames/${game.serialNumber}/addToOrder?orderId=${orderNumber}`
+      );
+    }
+
+    // Clear cart
+    store.cartSpecificGames = [];
+    localStorage.removeItem("cartSpecificGames");
+    this.totalPrice = 0;
+
+    alert("Checkout successful!");
+    this.$router.push("/my-games");
+  } catch (error) {
+    console.error("Checkout failed:", error);
+    alert("Checkout failed. Please try again.");
       }
     },
   },

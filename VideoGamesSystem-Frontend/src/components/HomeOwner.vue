@@ -16,15 +16,14 @@
           <p>Price: ${{ game.price }}</p>
           <p>Category: {{ game.category }}</p>
           <p>Console: {{ game.consoleType }}</p>
-          <p>Available Quantity: {{ game.availableQuantity }}</p>
         </div>
         <div class="game-actions">
-          <button 
-            @click="showDeleteConfirmation(game)" 
+          <button
+            @click="showDeleteConfirmation(game)"
             class="delete-btn"
             :disabled="isDeleting"
           >
-            {{ isDeleting ? 'Deleting...' : 'Delete Game' }}
+            {{ isDeleting ? "Deleting..." : "Delete Game" }}
           </button>
         </div>
       </div>
@@ -37,15 +36,15 @@
         <p>Are you sure you want to delete "{{ gameToDelete?.title }}"?</p>
         <p class="warning-text">This action cannot be undone!</p>
         <div class="modal-buttons">
-          <button 
-            @click="confirmDelete" 
+          <button
+            @click="confirmDelete"
             class="confirm-btn"
             :disabled="isDeleting"
           >
             Delete
           </button>
-          <button 
-            @click="cancelDelete" 
+          <button
+            @click="cancelDelete"
             class="cancel-btn"
             :disabled="isDeleting"
           >
@@ -78,6 +77,16 @@ export default {
       gameToDelete: null,
     };
   },
+  // Add this lifecycle hook to fetch games when component mounts
+  async created() {
+    try {
+      const response = await axiosGame.get("/games");
+      store.games = response.data;
+    } catch (error) {
+      console.error("Error fetching games:", error);
+      alert("Failed to load games");
+    }
+  },
   computed: {
     sortedGames() {
       if (!store.games) return [];
@@ -97,11 +106,13 @@ export default {
     },
     async confirmDelete() {
       if (!this.gameToDelete) return;
-      
+
       this.isDeleting = true;
       try {
         await axiosGame.delete(`/games/${this.gameToDelete.id}`);
-        store.games = store.games.filter(game => game.id !== this.gameToDelete.id);
+        store.games = store.games.filter(
+          (game) => game.id !== this.gameToDelete.id
+        );
         alert("Game deleted successfully");
       } catch (error) {
         console.error("Error deleting game:", error);
@@ -139,8 +150,8 @@ export default {
   border: 1px solid #ddd;
   padding: 15px;
   border-radius: 8px;
-  background-color: white;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  background-color: grey;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .game-info h3 {
@@ -187,7 +198,7 @@ export default {
 }
 
 .modal-content {
-  background-color: white;
+  background-color: grey;
   padding: 20px;
   border-radius: 8px;
   max-width: 400px;
@@ -239,4 +250,4 @@ export default {
   opacity: 0.7;
   cursor: not-allowed;
 }
-</style> 
+</style>

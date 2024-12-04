@@ -2,9 +2,9 @@
 <template>
   <div class="wishlist-page">
     <h1>My Wishlist</h1>
-    <div v-if="games.length === 0">Your wishlist is empty.</div>
+    <div v-if="store.wishlistGames.length === 0">Your wishlist is empty.</div>
     <div v-else class="games-list">
-      <div v-for="game in games" :key="game.id" class="game-item">
+      <div v-for="game in store.wishlistGames" :key="game.id" class="game-item">
         <h2>{{ game.title }}</h2>
         <p>{{ game.description }}</p>
         <p>Price: ${{ game.price }}</p>
@@ -28,12 +28,6 @@ export default {
   setup() {
     return { store };
   },
-  data() {
-    return {
-      games: [],
-      wishlistId: null,
-    };
-  },
   created() {
     if (store.user) {
       this.fetchWishlist();
@@ -44,42 +38,62 @@ export default {
   methods: {
     async fetchWishlist() {
       try {
-        // Fetch the user's wishlist
-        const wishlistResponse = await axiosClient.get(
+        if (!store.user) return;
+
+        const response = await axiosClient.get(
           `/wishlists/customer/${store.user.id}`
         );
-        this.wishlistId = wishlistResponse.data.id;
+        const wishlistId = response.data.id;
 
         // Fetch games in the wishlist
         const gamesResponse = await axiosClient.get(
-          `/wishlists/${this.wishlistId}/games`
+          `/wishlists/${wishlistId}/games`
         );
-        this.games = gamesResponse.data; // List of GameResponseDto
-      } catch (e) {
-        console.error(e);
+        store.wishlistGames = gamesResponse.data || [];
+        localStorage.setItem(
+          "wishlistGames",
+          JSON.stringify(store.wishlistGames)
+        );
+      } catch (error) {
+        console.error("Error fetching wishlist:", error);
+        // Fall back to local storage
+        store.wishlistGames =
+          JSON.parse(localStorage.getItem("wishlistGames")) || [];
       }
     },
+
     async removeFromWishlist(game) {
       try {
-        await axiosClient.delete(
-          `/wishlists/${this.wishlistId}/games/${game.id}`
-        );
-        this.games = this.games.filter((g) => g.id !== game.id);
-      } catch (e) {
-        console.error(e);
+        const index = store.wishlistGames.findIndex((g) => g.id === game.id);
+        if (index !== -1) {
+          store.wishlistGames.splice(index, 1);
+          localStorage.setItem(
+            "wishlistGames",
+            JSON.stringify(store.wishlistGames)
+          );
+
+          // Update wishlist on backend
+          await axiosClient.delete(
+            `/wishlists/${store.user.id}/games/${game.id}`
+          );
+        }
+      } catch (error) {
+        console.error("Error removing game from wishlist:", error);
+        alert("Failed to remove game from wishlist.");
       }
     },
+
     async addToCart(game) {
       try {
-        // Fetch available specific games for the selected game
-        const response = await axiosClient.get(
-          `/games/${game.id}/specificGames`
-        );
-        const specificGames = response.data; // List of SpecificGameResponseDto
+        if (game.availableQuantity === 0) {
+          alert("No available copies of this game.");
+          return;
+        }
 
-        // Find an available specific game
-        const availableSpecificGame = specificGames.find(
-          (sg) => sg.availability
+        // First, get available specific games for this game
+        const response = await axiosClient.get("/specificGames");
+        const availableSpecificGame = response.data.find(
+          (sg) => sg.gameId === game.id && sg.availability
         );
 
         if (!availableSpecificGame) {
@@ -87,24 +101,40 @@ export default {
           return;
         }
 
-        // Add the specific game to the cart
+        // Check if game is already in cart
         const exists = store.cartSpecificGames.find(
           (sg) => sg.serialNumber === availableSpecificGame.serialNumber
         );
 
-        if (!exists) {
-          store.cartSpecificGames.push(availableSpecificGame);
-          localStorage.setItem(
-            "cartSpecificGames",
-            JSON.stringify(store.cartSpecificGames)
-          );
-          alert("Game added to cart!");
-        } else {
+        if (exists) {
           alert("This game is already in your cart.");
+          return;
         }
-      } catch (e) {
-        console.error(e);
-        alert("Failed to add game to cart.");
+
+        // Mark the specific game as unavailable
+        await axiosClient.put(
+          `/specificGames/${availableSpecificGame.serialNumber}/availability`,
+          { availability: false }
+        );
+
+        // Add game details to cart
+        const cartGame = {
+          serialNumber: availableSpecificGame.serialNumber,
+          title: game.title,
+          description: game.description,
+          price: game.price,
+        };
+
+        store.cartSpecificGames.push(cartGame);
+        localStorage.setItem(
+          "cartSpecificGames",
+          JSON.stringify(store.cartSpecificGames)
+        );
+
+        alert("Game added to cart!");
+      } catch (error) {
+        console.error("Error adding game to cart:", error);
+        alert("Failed to add game to cart. Please try again.");
       }
     },
   },
@@ -112,5 +142,70 @@ export default {
 </script>
 
 <style scoped>
-/* Add styles here */
+.wishlist-page {
+  padding: 20px;
+}
+
+h1 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 2rem;
+}
+
+.games-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.game-item {
+  border: 1px solid #ddd;
+  padding: 15px;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.game-item h2 {
+  margin-top: 0;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.game-item p {
+  margin: 8px 0;
+  color: #555;
+}
+
+button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 10px;
+  font-weight: 500;
+  transition: background-color 0.2s, opacity 0.2s;
+}
+
+.remove-btn {
+  background-color: #f44336; /* Red */
+  color: white;
+  margin-bottom: 5px;
+}
+
+.remove-btn:hover {
+  background-color: #d32f2f;
+}
+
+.add-to-cart-btn {
+  background-color: #4caf50; /* Green */
+  color: white;
+}
+
+.add-to-cart-btn:hover {
+  background-color: #388e3c;
+}
 </style>

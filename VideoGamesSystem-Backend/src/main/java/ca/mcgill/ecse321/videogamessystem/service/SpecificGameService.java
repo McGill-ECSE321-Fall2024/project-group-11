@@ -9,6 +9,7 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Random;
 
 import ca.mcgill.ecse321.videogamessystem.exception.VideoGamesSystemException;
 import ca.mcgill.ecse321.videogamessystem.model.Game;
@@ -47,6 +48,28 @@ public class SpecificGameService {
         SpecificGame specificGame = new SpecificGame(serialNumber, availability);
         specificGame.setGame(game);
         return specificGameRepository.save(specificGame);
+    }
+
+    /**
+     * @param id
+     * @param stockQuantity
+     * @return
+     */
+    @Transactional
+    public void generateSpecificGamesFromStockQuantity(Long GameId, int stockQuantity){
+        Game game = gameRepository.findGameById(GameId);
+        if (game == null) {
+            throw new VideoGamesSystemException(HttpStatus.CONFLICT, "Game not found.");
+        }
+            // Validate stock quantity
+        if (stockQuantity <= 0) {
+            throw new IllegalArgumentException("Stock quantity must be greater than zero.");
+        }
+        Random random = new Random();
+        for (int i = 1; i <= stockQuantity; i++){
+            int randomSerialNumber = random.nextInt(Integer.MAX_VALUE);
+            specificGameRepository.save(createSpecificGame(randomSerialNumber, true, GameId));
+        }
     }
 
     /**

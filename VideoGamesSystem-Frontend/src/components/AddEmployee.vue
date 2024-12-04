@@ -1,10 +1,10 @@
 <template>
   <div class="AddEmployee-container">
     <h1>Add Employee</h1>
-    <form @submit.prevent="addEmployee">
+    <form @submit.prevent="createStaff">
       <div>
-        <label for="username">Username:</label>
-        <input type="text" id="username" v-model="username" required />
+        <label for="userName">Username:</label>
+        <input type="text" id="userName" v-model="userName" required />
       </div>
 
       <div>
@@ -17,46 +17,78 @@
         <input type="password" id="password" v-model="password" required />
       </div>
 
-      <button type="submit">Add Employee</button>
+      <button type="submit">Create Staff</button>
     </form>
 
     <div v-if="errorMessage" class="error-message">
       {{ errorMessage }}
     </div>
+
+    <div>
+      <label for="email">Email:</label>
+      <input type="email" id="email" v-model="email" required />
+    </div>
+
+    <div>
+      <label for="password">Password:</label>
+      <input type="password" id="password" v-model="password" required />
+    </div>
+
+    <button type="submit">Add Employee</button>
+  </div>
+
+  <div v-if="errorMessage" class="error-message">
+    {{ errorMessage }}
   </div>
 </template>
 
 <script>
 import axios from "axios";
+import { store } from "../store.js";
 
 const axiosEmployee = axios.create({
   baseURL: "http://localhost:8081",
 });
 
 export default {
-  name: "AddEmployee",
+  name: "CreateStaff",
   data() {
     return {
-      username: "",
+      userName: "",
       email: "",
       password: "",
       errorMessage: "",
     };
   },
   methods: {
-    async addEmployee() {
-      const newEmployee = {
-        username: this.username,
+    async createStaff() {
+      console.log("Form data:", {
+        userName: this.userName,
         email: this.email,
         password: this.password,
+      });
+
+      const newEmployee = {
+        userName: this.userName,
+        email: this.email,
+        password: this.password,
+        admin: false,
       };
 
+      console.log("Request payload:", newEmployee); // Debug log
+
       try {
-        const response = await axiosEmployee.post("/employees", newEmployee);
-        localStorage.setItem("Employee", JSON.stringify(response.data));
+        // localStorage.setItem("Employee", JSON.stringify(response.data));
+
+        const response = await axiosEmployee.post("/staff", newEmployee, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        console.log("Response:", response.data);
 
         // Redirect to a different page (e.g., employee list) after successful submission
-        this.$router.push("/HomeOwner"); // TODO: a ajouter
+        this.$router.push("/HomeOwner"); // a ajouter
       } catch (e) {
         console.error("Error adding employee:", e);
         if (
