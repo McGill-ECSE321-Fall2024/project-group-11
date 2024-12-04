@@ -67,7 +67,6 @@ public class GameResponseDto {
     public List<SpecificGameResponseDto> getSpecificGames() {
         return specificGames;
     }
-
     
 
     public ConsoleType getConsoleType() {

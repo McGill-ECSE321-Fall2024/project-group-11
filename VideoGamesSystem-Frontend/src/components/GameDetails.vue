@@ -3,13 +3,21 @@
     <h1 class="game-title">{{ game.title }}</h1>
     <p><strong>Description:</strong> {{ game.description }}</p>
     <p><strong>Price:</strong> ${{ game.price }}</p>
-    <p><strong>Available Quantity:</strong> {{ game.availableQuantity }}</p>
+    <p><strong>Status:</strong> {{ game.stockQuantity > 0 ? 'Available' : 'Out of Stock' }}</p>
+
+<button
+  @click="addToCart(game)"
+  :disabled="game.stockQuantity === 0"
+  class="btn btn-primary"
+>
+  Add to Cart
+</button>
 
     <!-- Action Buttons - Only show for customers -->
     <template v-if="store.userType === 'customer'">
       <button
         @click="addToCart(game)"
-        :disabled="game.availableQuantity === 0"
+        :disabled="game.stockQuantity === 0"
         class="btn btn-primary"
       >
         Add to Cart
@@ -66,13 +74,17 @@ export default {
   },
   methods: {
     async fetchGame() {
-      const gameId = this.gameId;
-      try {
-        const response = await axios.get(`http://localhost:8081/games/${gameId}`);
-        this.game = response.data;
-      } catch (error) {
-        console.error("Error fetching game data:", error);
-        alert("Failed to load game details. Please try again.");
+  const gameId = this.gameId;
+  try {
+    const response = await axios.get(`http://localhost:8081/games/${gameId}`);
+    this.game = response.data;
+    
+    // Fetch stock quantity
+    const stockResponse = await axios.get(`http://localhost:8081/games/${gameId}/stock`);
+    this.game.stockQuantity = stockResponse.data;
+  } catch (error) {
+    console.error("Error fetching game data:", error);
+    alert("Failed to load game details. Please try again.");
       }
     },
     addToCart(game) {
