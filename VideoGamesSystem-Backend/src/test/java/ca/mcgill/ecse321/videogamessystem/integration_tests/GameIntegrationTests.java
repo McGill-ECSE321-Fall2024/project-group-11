@@ -96,6 +96,53 @@ public class GameIntegrationTests {
 
     @Test
     @Order(2)
+    public void testCreateGameWithSpecificGames() {
+        // Arrange
+        int stockQuantity = 3;
+        GameRequestDto request = new GameRequestDto(
+            VALID_DESCRIPTION,
+            VALID_PRICE,
+            VALID_TITLE,
+            VALID_CATEGORY,
+            VALID_CONSOLE_TYPE
+        );
+        request.setStockQuantity(stockQuantity);
+    
+        // Act
+        ResponseEntity<GameResponseDto> response = restTemplate.postForEntity("/games", request, GameResponseDto.class);
+    
+        // Assert game creation
+        assertNotNull(response);
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+        Long gameId = response.getBody().getId();
+    
+        // Verify basic game properties
+        assertEquals(VALID_TITLE, response.getBody().getTitle());
+        assertEquals(VALID_PRICE, response.getBody().getPrice());
+        assertEquals(VALID_CATEGORY, response.getBody().getCategory());
+        assertEquals(VALID_CONSOLE_TYPE, response.getBody().getConsoleType());
+    
+        // Get game by ID to verify it exists
+        String gameUrl = String.format("/games/%d", gameId);
+        ResponseEntity<GameResponseDto> getResponse = restTemplate.getForEntity(gameUrl, GameResponseDto.class);
+        assertEquals(HttpStatus.OK, getResponse.getStatusCode());
+        assertNotNull(getResponse.getBody());
+    
+        // If you have a specific endpoint for specific games, use that instead
+        // For example, if you have an endpoint like /games/{id}/specific-games
+        String specificGamesUrl = String.format("/games/%d/specific-games", gameId);
+        ResponseEntity<Object[]> specificGamesResponse = restTemplate.getForEntity(
+            specificGamesUrl, 
+            Object[].class
+        );
+        
+        assertNotNull(specificGamesResponse.getBody());
+        assertEquals(stockQuantity, specificGamesResponse.getBody().length);
+    }
+
+    @Test
+    @Order(3)
     public void testGetGameById() {
         // Arrange
         String url = String.format("/games/%d", this.gameId);
@@ -114,7 +161,7 @@ public class GameIntegrationTests {
     }
 
     @Test
-    @Order(3)
+    @Order(4)
     public void testGetAllGames() {
         // Act
         ResponseEntity<GameResponseDto[]> response = restTemplate.getForEntity("/games", GameResponseDto[].class);
@@ -127,7 +174,7 @@ public class GameIntegrationTests {
     }
 
     @Test
-    @Order(4)
+    @Order(5)
     public void testGetStockQuantity() {
         // Arrange
         String url = String.format("/games/%d/stock", this.gameId);
@@ -146,7 +193,7 @@ public class GameIntegrationTests {
     }
 
     @Test
-    @Order(5)
+    @Order(6)
     public void testDeleteGame() {
         // Arrange
         String url = String.format("/games/%d", this.gameId);
@@ -166,7 +213,7 @@ public class GameIntegrationTests {
     }
 
     @Test
-    @Order(6)
+    @Order(7)
     public void testGetGamesByTitle() {
         // Arrange
         String titleToTest = "Same Title Game";
@@ -199,7 +246,7 @@ public class GameIntegrationTests {
     }
 
     @Test
-    @Order(7)
+    @Order(8)
     public void testGetGamesByCategory() {
         // Arrange
         Category categoryToTest = Category.Action;
@@ -223,7 +270,7 @@ public class GameIntegrationTests {
     }
 
     @Test
-    @Order(8)
+    @Order(9)
     public void testGetGamesByConsoleType() {
         // Arrange
         ConsoleType consoleTypeToTest = ConsoleType.PS4;
@@ -247,7 +294,7 @@ public class GameIntegrationTests {
     }
 
     @Test
-    @Order(9)
+    @Order(10)
     public void testGetGamesBetweenPrices() {
         // Arrange
         int minPrice = 60;

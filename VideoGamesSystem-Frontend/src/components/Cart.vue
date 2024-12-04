@@ -1,4 +1,3 @@
-<!-- src/components/Cart.vue -->
 <template>
   <div class="cart-page">
     <h1>My Cart</h1>
@@ -17,7 +16,22 @@
     </div>
     <div class="checkout" v-if="store.cartSpecificGames.length > 0">
       <p>Total Price: ${{ totalPrice }}</p>
-      <button @click="checkout">Checkout</button>
+      <div class="promise-checkbox">
+        <label>
+          <input 
+            type="checkbox" 
+            v-model="promiseChecked"
+          >
+          I pinky promise that I will e-transfer ${{ totalPrice }} to jeffnahas4@gmail.com
+        </label>
+      </div>
+      <button 
+        @click="checkout" 
+        :disabled="!promiseChecked"
+        :class="{ 'button-disabled': !promiseChecked }"
+      >
+        Checkout
+      </button>
     </div>
   </div>
 </template>
@@ -38,6 +52,7 @@ export default {
   data() {
     return {
       totalPrice: 0,
+      promiseChecked: false
     };
   },
   created() {
@@ -68,34 +83,58 @@ export default {
       }
     },
     async checkout() {
-  try {
-    // Create a new specific order
-    const orderRequest = {
-      orderDate: new Date().toISOString().split('T')[0],
-      cardNumber: store.user.cardNumber || 123456789,
-      customerId: store.user.id
-    };
+      try {
+        if (!this.promiseChecked) {
+          alert("Please confirm your e-transfer promise before checking out.");
+          return;
+        }
 
-    const orderResponse = await axiosClient.post('/orders', orderRequest);
-    const orderNumber = orderResponse.data.orderNumber;
+        const orderDate = new Date().toISOString().split('T')[0];
+        
+        // Create a new specific order
+        const orderRequest = {
+          orderDate: orderDate,
+          cardNumber: store.user.cardNumber || 123456789,
+          customerId: store.user.id
+        };
 
-    // Add each specific game to the order
-    for (const game of store.cartSpecificGames) {
-      await axiosClient.put(
-        `/specificGames/${game.serialNumber}/addToOrder?orderId=${orderNumber}`
-      );
-    }
+        const orderResponse = await axiosClient.post('/orders', orderRequest);
+        const orderNumber = orderResponse.data.orderNumber;
 
-    // Clear cart
-    store.cartSpecificGames = [];
-    localStorage.removeItem("cartSpecificGames");
-    this.totalPrice = 0;
+        // Initialize orderedGames if it doesn't exist
+        if (!store.orderedGames) {
+          store.orderedGames = [];
+        }
 
-    alert("Checkout successful!");
-    this.$router.push("/my-games");
-  } catch (error) {
-    console.error("Checkout failed:", error);
-    alert("Checkout failed. Please try again.");
+        // Add each game to the order
+        for (const game of store.cartSpecificGames) {
+          await axiosClient.put(
+            `/specificGames/${game.serialNumber}/addToOrder?orderId=${orderNumber}`
+          );
+
+          // Add the game to orderedGames with additional information
+          store.orderedGames.push({
+            ...game,
+            orderNumber,
+            orderDate,
+            purchaseDate: new Date().toLocaleString()
+          });
+        }
+
+        // Persist orderedGames to localStorage
+        localStorage.setItem("orderedGames", JSON.stringify(store.orderedGames));
+
+        // Clear cart
+        store.cartSpecificGames = [];
+        localStorage.removeItem("cartSpecificGames");
+        this.totalPrice = 0;
+        this.promiseChecked = false;
+
+        alert("Checkout successful! Please don't forget to send the e-transfer!");
+        this.$router.push("/my-games");
+      } catch (error) {
+        console.error("Checkout failed:", error);
+        alert("Checkout failed. Please try again.");
       }
     },
   },
@@ -106,17 +145,64 @@ export default {
 .cart-page {
   padding: 20px;
 }
+
 .games-list {
   display: flex;
   flex-wrap: wrap;
 }
+
 .game-item {
   border: 1px solid #ccc;
   padding: 10px;
   margin: 10px;
   width: 200px;
 }
+
 .checkout {
   margin-top: 20px;
+}
+
+.promise-checkbox {
+  margin: 20px 0;
+  padding: 15px;
+  background-color: black;
+  border-radius: 8px;
+  border: 1px solid #dee2e6;
+}
+
+.promise-checkbox label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.promise-checkbox input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+button:hover:not(.button-disabled) {
+  background-color: #0056b3;
+}
+
+.button-disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.button-disabled:hover {
+  background-color: #cccccc;
 }
 </style>

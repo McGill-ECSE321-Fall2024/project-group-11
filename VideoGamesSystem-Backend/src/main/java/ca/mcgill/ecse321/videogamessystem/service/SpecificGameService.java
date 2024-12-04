@@ -50,26 +50,53 @@ public class SpecificGameService {
         return specificGameRepository.save(specificGame);
     }
 
-    /**
-     * @param id
+    // /**
+    //  * @param id
+    //  * @param stockQuantity
+    //  * @return
+    //  */
+    // @Transactional
+    // public void generateSpecificGamesFromStockQuantity(Long GameId, int stockQuantity){
+    //     Game game = gameRepository.findGameById(GameId);
+    //     if (game == null) {
+    //         throw new VideoGamesSystemException(HttpStatus.CONFLICT, "Game not found.");
+    //     }
+    //         // Validate stock quantity
+    //     if (stockQuantity <= 0) {
+    //         throw new IllegalArgumentException("Stock quantity must be greater than zero.");
+    //     }
+    //     Random random = new Random();
+    //     for (int i = 1; i <= stockQuantity; i++){
+    //         int randomSerialNumber = random.nextInt(Integer.MAX_VALUE);
+    //         specificGameRepository.save(createSpecificGame(randomSerialNumber, true, GameId));
+    //     }
+    // }
+
+        /**
+     * @param gameId
      * @param stockQuantity
      * @return
      */
     @Transactional
-    public void generateSpecificGamesFromStockQuantity(Long GameId, int stockQuantity){
-        Game game = gameRepository.findGameById(GameId);
-        if (game == null) {
-            throw new VideoGamesSystemException(HttpStatus.CONFLICT, "Game not found.");
-        }
-            // Validate stock quantity
+    public List<SpecificGame> generateSpecificGamesFromStockQuantity(Long gameId, int stockQuantity) {
+        Game game = gameRepository.findById(gameId).orElseThrow(() -> 
+            new VideoGamesSystemException(HttpStatus.NOT_FOUND,"Game not found."));
+
         if (stockQuantity <= 0) {
             throw new IllegalArgumentException("Stock quantity must be greater than zero.");
         }
+
+        List<SpecificGame> specificGames = new ArrayList<>();
         Random random = new Random();
-        for (int i = 1; i <= stockQuantity; i++){
+
+        for (int i = 0; i < stockQuantity; i++) {
             int randomSerialNumber = random.nextInt(Integer.MAX_VALUE);
-            specificGameRepository.save(createSpecificGame(randomSerialNumber, true, GameId));
+            SpecificGame specificGame = new SpecificGame(randomSerialNumber, true);
+            specificGame.setGame(game);
+            specificGames.add(specificGameRepository.save(specificGame));
         }
+
+        return specificGames;
     }
 
     /**

@@ -7,5 +7,6 @@ export const store = reactive({
   cartSpecificGames:
     JSON.parse(localStorage.getItem("cartSpecificGames")) || [],
   wishlistGames: JSON.parse(localStorage.getItem("wishlistGames")) || [],
+  orderedGames: JSON.parse(localStorage.getItem("orderedGames")) || [],
   // Other shared state can be added here
 });

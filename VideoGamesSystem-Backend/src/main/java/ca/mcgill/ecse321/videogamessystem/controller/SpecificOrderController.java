@@ -1,9 +1,12 @@
 package ca.mcgill.ecse321.videogamessystem.controller;
 
+import ca.mcgill.ecse321.videogamessystem.dto.SpecificGameDto.SpecificGameResponseDto;
 import ca.mcgill.ecse321.videogamessystem.dto.SpecificOrderDto.SpecificOrderRequestDto;
 import ca.mcgill.ecse321.videogamessystem.dto.SpecificOrderDto.SpecificOrderResponseDto;
+import ca.mcgill.ecse321.videogamessystem.model.SpecificGame;
 import ca.mcgill.ecse321.videogamessystem.model.SpecificOrder;
 import ca.mcgill.ecse321.videogamessystem.service.SpecificOrderService;
+import ca.mcgill.ecse321.videogamessystem.service.SpecificGameService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +22,9 @@ public class SpecificOrderController {
 
     @Autowired
     private SpecificOrderService specificOrderService;
+
+    @Autowired
+    private SpecificGameService specificGameService;
 
     @PostMapping("/orders")
     public ResponseEntity<SpecificOrderResponseDto> createOrder(@Valid @RequestBody SpecificOrderRequestDto orderRequest) {
@@ -57,6 +63,14 @@ public class SpecificOrderController {
     public ResponseEntity<Void> deleteOrder(@PathVariable int orderId) {
         specificOrderService.deleteOrder(orderId);
         return ResponseEntity.noContent().build();
+    }
+    @GetMapping("/orders/{orderNumber}/specificGames")
+    public ResponseEntity<List<SpecificGameResponseDto>> getSpecificGamesForOrder(@PathVariable int orderNumber) {
+        List<SpecificGame> specificGames = specificGameService.getSpecificGamesByOrder(orderNumber);
+        List<SpecificGameResponseDto> responseDtos = specificGames.stream()
+                .map(SpecificGameResponseDto::new)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(responseDtos);
     }
 
     @GetMapping("/orders")

@@ -77,7 +77,7 @@ public class SpecificGameController {
     @PutMapping("/specificGames/{serialNumber}/availability")
     public ResponseEntity<SpecificGameResponseDto> updateAvailability(
             @PathVariable int serialNumber,
-            @RequestParam boolean newAvailability) {
+            @RequestBody boolean newAvailability) {
         SpecificGame specificGame = specificGameService.updateAvailability(serialNumber, newAvailability);
         return ResponseEntity.ok(convertToDto(specificGame));
     }

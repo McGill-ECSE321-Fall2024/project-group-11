@@ -13,7 +13,7 @@ public class SpecificGameResponseDto {
     private int price;
     private Game.Category category;
     private Game.ConsoleType consoleType;
-
+    private Integer orderNumber; // Added field for order number
     // Constructor with all relevant attributes
     protected SpecificGameResponseDto() {
       
@@ -32,7 +32,10 @@ public class SpecificGameResponseDto {
         this.price = game.getPrice();  
         this.category = game.getCategory();
         this.consoleType = game.getConsoleType();
-    
+                // Add order number if the specific game has an order
+        if (specificGame.getSpecificOrder() != null) {
+            this.orderNumber = specificGame.getSpecificOrder().getNumber();
+        }
             
         
     }
@@ -46,6 +49,10 @@ public class SpecificGameResponseDto {
 
     public int getSerialNumber() {
         return serialNumber;
+    }
+
+    public Integer getOrderNumber() {
+        return orderNumber;
     }
 
 

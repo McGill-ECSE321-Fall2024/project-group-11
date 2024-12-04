@@ -2,9 +2,11 @@ package ca.mcgill.ecse321.videogamessystem.controller;
 
 import ca.mcgill.ecse321.videogamessystem.dto.GameDto.GameRequestDto;
 import ca.mcgill.ecse321.videogamessystem.dto.GameDto.GameResponseDto;
+import ca.mcgill.ecse321.videogamessystem.dto.SpecificGameDto.SpecificGameResponseDto;
 import ca.mcgill.ecse321.videogamessystem.exception.VideoGamesSystemException;
 import ca.mcgill.ecse321.videogamessystem.model.Game;
 import ca.mcgill.ecse321.videogamessystem.model.Promotion;
+import ca.mcgill.ecse321.videogamessystem.model.SpecificGame;
 import ca.mcgill.ecse321.videogamessystem.service.GameService;
 import ca.mcgill.ecse321.videogamessystem.service.PromotionService;
 import ca.mcgill.ecse321.videogamessystem.service.SpecificGameService;
@@ -46,6 +48,27 @@ public class GameController {
                 gameRequestDto.getConsoleType()
         );
         return new GameResponseDto(game);
+    }
+    /**
+     * Generates specific games from the given stock quantity when creating a game.
+     *
+     * @param gameId the ID of the game for which specific games are being generated.
+     * @param stockQuantity the number of specific games to generate.
+     * @return a ResponseEntity containing a list of SpecificGameResponseDtos representing the generated specific games.
+     */
+    @PostMapping("/games/{gameId}/specific-games")
+    public ResponseEntity<List<SpecificGameResponseDto>> generateSpecificGames(
+            @PathVariable Long gameId,
+            @RequestParam int stockQuantity) {
+        try {
+            List<SpecificGame> specificGames = specificGameService.generateSpecificGamesFromStockQuantity(gameId, stockQuantity);
+            List<SpecificGameResponseDto> responseDtos = specificGames.stream()
+                    .map(SpecificGameResponseDto::new)
+                    .collect(Collectors.toList());
+            return ResponseEntity.status(HttpStatus.CREATED).body(responseDtos);
+        } catch (IllegalArgumentException | VideoGamesSystemException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
     }
 
     /**
@@ -197,4 +220,18 @@ public class GameController {
         List<Game> games = gameService.getGamesBetweenPrices(min, max);
         return games.stream().map(GameResponseDto::new).collect(Collectors.toList());
     }
+
+        /**
+     * Retrieves specific games associated with a given game ID.
+     *
+     * @param gameId the ID of the game.
+     * @return a list of SpecificGameResponseDto containing details of specific games associated with the game.
+     */
+    @GetMapping("/games/{gameId}/specific-games")
+    public List<SpecificGameResponseDto> getSpecificGamesByGame(@PathVariable Long gameId) {
+        List<SpecificGame> specificGames = specificGameService.getSpecificGamesByGame(gameId);
+        return specificGames.stream()
+                .map(SpecificGameResponseDto::new)
+                .collect(Collectors.toList());
+        }
 }

@@ -46,7 +46,7 @@
       </div>
       <div>
         <label for="Stock Quantity">Stock Quantity:</label>
-        <input type="number" v-model="availableQuantity" required />
+        <input type="number" v-model.number="stockQuantity" required />
       </div>
       <button type="submit">Request to Add Game</button>
     </form>
@@ -74,48 +74,47 @@ export default {
       category: "",
       consoleType: "",
       errorMessage: "",
+      stockQuantity: 2,
     };
   },
   methods: {
     async addGame() {
-      const newGame = {
-        description: this.description,
-        price: this.price,
-        title: this.title,
-        category: this.category,
-        consoleType: this.consoleType,
-        availableQuantity: 0
-      };
-      try {
-        const response = await axiosGame.post("/games", newGame);
-        localStorage.setItem("game", JSON.stringify(response.data));
-        
-        if (!store.games) store.games = [];
-        store.games.push(response.data);
+  const newGame = {
+    description: this.description,
+    price: this.price,
+    title: this.title,
+    category: this.category,
+    consoleType: this.consoleType,
+    stockQuantity: parseInt(this.stockQuantity),
+  };
 
-        const userType = store.userType || localStorage.getItem("userType");
-        if (userType === "OWNER") {
-          this.$router.push("/homeOwner");
-        } else if (userType === "EMPLOYEE") {
-          this.$router.push("/homeEmp");
-        } else {
-          console.error("Unknown user type:", userType);
-          this.$router.push("/login");
-        }
-      } catch (e) {
-        console.error(e);
-        if (
-          e.response &&
-          e.response.data &&
-          e.response.data.errors &&
-          e.response.data.errors[0]
-        ) {
-          this.errorMessage = e.response.data.errors[0];
-        } else {
-          this.errorMessage = "An error occurred while adding the game.";
-        }
-      }
-    },
+  try {
+    console.log('Sending game data:', newGame);
+    const response = await axiosGame.post("/games", newGame);
+
+    // Generate specific games based on the stock quantity
+    const specificGamesResponse = await axiosGame.post(`/games/${response.data.id}/specific-games?stockQuantity=${this.stockQuantity}`);
+
+    // Store the game and specific games in the local storage and the store
+    localStorage.setItem("game", JSON.stringify(response.data));
+    if (!store.games) store.games = [];
+    store.games.push(response.data);
+    store.specificGames = specificGamesResponse.data;
+
+    alert('Game and specific games added successfully!');
+
+    // Redirect the user based on their role
+    const userType = store.userType || localStorage.getItem("userType");
+    if (userType === "OWNER" || userType === "staff") {
+      this.$router.push("/homeOwner");
+    } else {
+      this.$router.push("/login");
+    }
+  } catch (e) {
+    console.error('Error details:', e.response?.data);
+    this.errorMessage = e.response?.data?.message || "An error occurred while adding the game.";
+  }
+},
   },
 };
 </script>

@@ -20,15 +20,15 @@
           <p>Price: ${{ game.price }}</p>
           <p>Category: {{ game.category }}</p>
           <p>Console: {{ game.consoleType }}</p>
-          <p>Status: {{ game.availableQuantity > 0 ? "Available" : "Out of Stock" }}</p>
+          <p>Status: {{ game.stockQuantity > 0 ? "Available" : "Out of Stock" }}</p>
         </div>
         <div class="game-actions">
           <button 
             @click="addToCart(game)" 
             class="cart-btn"
-            :disabled="game.availableQuantity === 0"
+            :disabled="game.stockQuantity === 0"
           >
-            {{ game.availableQuantity === 0 ? 'Out of Stock' : 'Add to Cart' }}
+            {{ game.stockQuantity === 0 ? 'Out of Stock' : 'Add to Cart' }}
           </button>
           <button 
             @click="addToWishlist(game)"
@@ -64,6 +64,12 @@ export default {
     try {
       const response = await axiosGame.get('/games');
       store.games = response.data;
+
+      // Fetch the stock quantity for each game
+      for (const game of store.games) {
+        const stockResponse = await axiosGame.get(`/games/${game.id}/stock`);
+        game.stockQuantity = stockResponse.data;
+      }
     } catch (error) {
       console.error('Error fetching games:', error);
       alert('Failed to load games');
@@ -96,43 +102,41 @@ export default {
         this.games.sort((a, b) => a.consoleType.localeCompare(b.consoleType));
       }
     },
-    async addToCart(game) {
+async addToCart(game) {
   try {
-    if (game.availableQuantity === 0) {
+    if (game.stockQuantity === 0) {
+      alert("No available copies of this game.");
+      return;
+    }
+    // Get available specific games for this game
+    const response = await axiosGame.get(`/games/${game.id}/specific-games`);
+    const availableSpecificGames = response.data;
+
+    if (availableSpecificGames.length === 0) {
       alert("No available copies of this game.");
       return;
     }
 
-    // First, get available specific games for this game
-    const response = await axiosGame.get('/specificGames');
-    const availableSpecificGame = response.data.find(
-      sg => sg.gameId === game.id && sg.availability
-    );
-
-    if (!availableSpecificGame) {
-      alert("No available copies of this game.");
-      return;
-    }
+    const specificGameToAdd = availableSpecificGames[0];
 
     // Check if game is already in cart
-    const exists = store.cartSpecificGames.find(
-      sg => sg.serialNumber === availableSpecificGame.serialNumber
+    const exists = store.cartSpecificGames.some(
+      sg => sg.serialNumber === specificGameToAdd.serialNumber
     );
 
     if (exists) {
       alert("This game is already in your cart.");
       return;
     }
-
-    // Mark the specific game as unavailable
-    await axiosGame.put(
-      `/specificGames/${availableSpecificGame.serialNumber}/availability`,
-      { availability: false }
-    );
+  //   // Mark the specific game as unavailable
+  //   await axiosGame.put(
+  // `/specificGames/${specificGameToAdd.serialNumber}/availability`,
+  //     { newAvailability: false }
+  //   );
 
     // Add game details to cart
     const cartGame = {
-      serialNumber: availableSpecificGame.serialNumber,
+      serialNumber: specificGameToAdd.serialNumber,
       title: game.title,
       description: game.description,
       price: game.price,
@@ -144,6 +148,9 @@ export default {
       JSON.stringify(store.cartSpecificGames)
     );
 
+    // Update the game's stock quantity
+    game.stockQuantity--;
+
     alert("Game added to cart!");
   } catch (error) {
     console.error("Error adding game to cart:", error);
@@ -151,7 +158,7 @@ export default {
     }
   },
   async addToWishlist(game) {
-  try {
+    try {
     if (!store.user) {
       this.$router.push("/login");
       return;

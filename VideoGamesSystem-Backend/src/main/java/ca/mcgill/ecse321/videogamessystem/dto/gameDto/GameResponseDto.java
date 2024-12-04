@@ -4,6 +4,9 @@ import ca.mcgill.ecse321.videogamessystem.model.Game.Category;
 import ca.mcgill.ecse321.videogamessystem.model.Game.ConsoleType;
 import ca.mcgill.ecse321.videogamessystem.model.Game;
 import ca.mcgill.ecse321.videogamessystem.dto.PromotionDto.PromotionResponseDto;
+import ca.mcgill.ecse321.videogamessystem.dto.SpecificGameDto.SpecificGameResponseDto;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class GameResponseDto {
     private Long id;
@@ -13,7 +16,8 @@ public class GameResponseDto {
     private Category category;
     private ConsoleType consoleType;
     private PromotionResponseDto promotion;
-/* 
+    private List<SpecificGameResponseDto> specificGames;
+/*  
     private PromotionResponseDto promotion;
 
     private WishlistResponseDto wishlist;
@@ -59,6 +63,12 @@ public class GameResponseDto {
     public Category getCategory() {
         return category;
     }
+
+    public List<SpecificGameResponseDto> getSpecificGames() {
+        return specificGames;
+    }
+
+    
 
     public ConsoleType getConsoleType() {
         return consoleType;
