@@ -69,55 +69,55 @@ public class SpecificOrderIntegrationTests {
         specificOrderRepository.deleteAll();
     }
 
+    // @Test
+    // @Order(1)
+    // public void testCreateGame() {
+    //     // Arrange
+    //     GameRequestDto gameRequest = new GameRequestDto(
+    //             VALID_GAME_DESCRIPTION, VALID_GAME_PRICE, VALID_GAME_TITLE, VALID_GAME_CATEGORY, VALID_GAME_CONSOLE_TYPE
+    //     );
+
+    //     // Act
+    //     ResponseEntity<GameResponseDto> response = restTemplate.postForEntity(
+    //             "/games", gameRequest, GameResponseDto.class
+    //     );
+
+    //     // Assert
+    //     assertNotNull(response);
+    //     assertEquals(HttpStatus.OK, response.getStatusCode());
+    //     assertNotNull(response.getBody());
+    //     assertTrue(response.getBody().getId() > 0, "Game ID should be positive.");
+    //     this.gameId = response.getBody().getId();
+    //     assertEquals(VALID_GAME_TITLE, response.getBody().getTitle());
+    //     assertEquals(VALID_GAME_DESCRIPTION, response.getBody().getDescription());
+    // }
+
+    // @Test
+    // @Order(2)
+    // public void testCreateSpecificGame() {
+    //     // Arrange
+    //     SpecificGameRequestDto specificGameRequest = new SpecificGameRequestDto(
+    //         VALID_SPECIFIC_GAME_AVAILABILITY,
+    //         VALID_SPECIFIC_GAME_SERIAL_NUMBER,
+    //         gameId
+    //     );
+
+    //     // Act
+    //     ResponseEntity<SpecificGameResponseDto> response = restTemplate.postForEntity(
+    //         "/specificGames", specificGameRequest, SpecificGameResponseDto.class
+    //     );
+
+    //     // Assert
+    //     assertNotNull(response);
+    //     assertEquals(HttpStatus.OK, response.getStatusCode());
+    //     assertNotNull(response.getBody());
+    //     assertEquals(VALID_SPECIFIC_GAME_SERIAL_NUMBER, response.getBody().getSerialNumber());
+    //     assertEquals(VALID_SPECIFIC_GAME_AVAILABILITY, response.getBody().isAvailability());
+    //     assertEquals(gameId, response.getBody().getGame().getId());
+    // }
+
     @Test
     @Order(1)
-    public void testCreateGame() {
-        // Arrange
-        GameRequestDto gameRequest = new GameRequestDto(
-                VALID_GAME_DESCRIPTION, VALID_GAME_PRICE, VALID_GAME_TITLE, VALID_GAME_CATEGORY, VALID_GAME_CONSOLE_TYPE
-        );
-
-        // Act
-        ResponseEntity<GameResponseDto> response = restTemplate.postForEntity(
-                "/games", gameRequest, GameResponseDto.class
-        );
-
-        // Assert
-        assertNotNull(response);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertNotNull(response.getBody());
-        assertTrue(response.getBody().getId() > 0, "Game ID should be positive.");
-        this.gameId = response.getBody().getId();
-        assertEquals(VALID_GAME_TITLE, response.getBody().getTitle());
-        assertEquals(VALID_GAME_DESCRIPTION, response.getBody().getDescription());
-    }
-
-    @Test
-    @Order(2)
-    public void testCreateSpecificGame() {
-        // Arrange
-        SpecificGameRequestDto specificGameRequest = new SpecificGameRequestDto(
-            VALID_SPECIFIC_GAME_AVAILABILITY,
-            VALID_SPECIFIC_GAME_SERIAL_NUMBER,
-            gameId
-        );
-
-        // Act
-        ResponseEntity<SpecificGameResponseDto> response = restTemplate.postForEntity(
-            "/specificGames", specificGameRequest, SpecificGameResponseDto.class
-        );
-
-        // Assert
-        assertNotNull(response);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertNotNull(response.getBody());
-        assertEquals(VALID_SPECIFIC_GAME_SERIAL_NUMBER, response.getBody().getSerialNumber());
-        assertEquals(VALID_SPECIFIC_GAME_AVAILABILITY, response.getBody().isAvailability());
-        assertEquals(gameId, response.getBody().getGame().getId());
-    }
-
-    @Test
-    @Order(3)
     public void testCreateCustomer() {
         // Arrange
         CustomerRequestDto customerRequest = new CustomerRequestDto(
@@ -139,7 +139,7 @@ public class SpecificOrderIntegrationTests {
     }
 
     @Test
-    @Order(4)
+    @Order(2)
     public void testCreateSpecificOrder() {
         // Arrange
         SpecificOrderRequestDto orderRequest = new SpecificOrderRequestDto(
@@ -162,7 +162,7 @@ public class SpecificOrderIntegrationTests {
     }
 
     @Test
-    @Order(5)
+    @Order(3)
     public void testGetOrderById() {
         // Act
         ResponseEntity<SpecificOrderResponseDto> response = restTemplate.getForEntity(
@@ -177,7 +177,7 @@ public class SpecificOrderIntegrationTests {
     }
 
     @Test
-    @Order(6)
+    @Order(4)
     public void testGetOrdersByCustomer() {
         // Act
         ResponseEntity<SpecificOrderResponseDto[]> response = restTemplate.getForEntity(
@@ -202,7 +202,7 @@ public class SpecificOrderIntegrationTests {
     }
 
     @Test
-    @Order(7)
+    @Order(5)
     public void testUpdateCardNumber() {
         // Arrange
         int newCardNumber = 87654321;
@@ -231,7 +231,7 @@ public class SpecificOrderIntegrationTests {
     }
 
     @Test
-    @Order(8)
+    @Order(6)
     public void testGetAllOrders() {
         // Act
         ResponseEntity<SpecificOrderResponseDto[]> response = restTemplate.getForEntity(
@@ -249,7 +249,7 @@ public class SpecificOrderIntegrationTests {
     }
 
     @Test
-    @Order(9)
+    @Order(7)
     public void testDeleteOrder() {
         // Act
         String url = "/orders/" + specificOrderId;

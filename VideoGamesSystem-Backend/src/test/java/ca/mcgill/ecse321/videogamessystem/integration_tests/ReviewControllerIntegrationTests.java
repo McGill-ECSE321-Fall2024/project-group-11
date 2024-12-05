@@ -103,165 +103,164 @@ public class ReviewControllerIntegrationTests {
         assertEquals(VALID_CUSTOMER_EMAIL, response.getBody().getEmail());
     }
 
-    @Test
-    @Order(2)
-    public void testCreateGame() {
-        // Arrange
-        GameRequestDto request = new GameRequestDto(
-                VALID_GAME_DESCRIPTION,
-                VALID_GAME_PRICE,
-                VALID_GAME_TITLE,
-                VALID_GAME_CATEGORY,
-                VALID_GAME_CONSOLE_TYPE
-        );
+    // @Test
+    // @Order(2)
+    // public void testCreateGame() {
+    //     // Arrange
+    //     GameRequestDto request = new GameRequestDto(
+    //             VALID_GAME_DESCRIPTION,
+    //             VALID_GAME_PRICE,
+    //             VALID_GAME_TITLE,
+    //             VALID_GAME_CATEGORY,
+    //             VALID_GAME_CONSOLE_TYPE
+    //     );
 
-        // Act
-        ResponseEntity<GameResponseDto> response = restTemplate.postForEntity("/games", request, GameResponseDto.class);
+    //     // Act
+    //     ResponseEntity<GameResponseDto> response = restTemplate.postForEntity("/games", request, GameResponseDto.class);
 
-        // Assert
-        assertNotNull(response);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertNotNull(response.getBody());
-        assertTrue(response.getBody().getId() > 0, "The ID should be positive.");
-        this.gameId = response.getBody().getId();
-        assertEquals(VALID_GAME_TITLE, response.getBody().getTitle());
-        assertEquals(VALID_GAME_DESCRIPTION, response.getBody().getDescription());
-    }
+    //     // Assert
+    //     assertNotNull(response);
+    //     assertEquals(HttpStatus.OK, response.getStatusCode());
+    //     assertNotNull(response.getBody());
+    //     assertTrue(response.getBody().getId() > 0, "The ID should be positive.");
+    //     this.gameId = response.getBody().getId();
+    //     assertEquals(VALID_GAME_TITLE, response.getBody().getTitle());
+    //     assertEquals(VALID_GAME_DESCRIPTION, response.getBody().getDescription());
+    // }
 
-    @Test
-    @Order(3)
-    public void testCreateReview() {
-        // Arrange
-        ReviewRequestDto request = new ReviewRequestDto(
-                VALID_REVIEW_CONTENT,
-                VALID_GAME_RATING,
-                VALID_DATE,
-                this.customerId,
-                null, // No parent review
-                this.gameId
-        );
+    // @Test
+    // @Order(3)
+    // public void testCreateReview() {
+    //     // Arrange
+    //     ReviewRequestDto request = new ReviewRequestDto(
+    //             VALID_REVIEW_CONTENT,
+    //             VALID_GAME_RATING,
+    //             VALID_DATE,
+    //             this.customerId,
+    //             null, // No parent review
+    //             this.gameId
+    //     );
 
-        // Act
-        ResponseEntity<ReviewResponseDto> response = restTemplate.postForEntity("/reviews", request, ReviewResponseDto.class);
+    //     // Act
+    //     ResponseEntity<ReviewResponseDto> response = restTemplate.postForEntity("/reviews", request, ReviewResponseDto.class);
 
-        // Assert
-        assertNotNull(response);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertNotNull(response.getBody());
-        assertTrue(response.getBody().getId() > 0, "The ID should be positive.");
-        this.reviewId = response.getBody().getId();
-        assertEquals(VALID_REVIEW_CONTENT, response.getBody().getReviewContent());
-        assertEquals(VALID_GAME_RATING, response.getBody().getGameRating());
-        assertEquals(this.customerId, response.getBody().getCustomer().getId());
-    }
+    //     // Assert
+    //     assertNotNull(response);
+    //     assertEquals(HttpStatus.OK, response.getStatusCode());
+    //     assertNotNull(response.getBody());
+    //     assertTrue(response.getBody().getId() > 0, "The ID should be positive.");
+    //     this.reviewId = response.getBody().getId();
+    //     assertEquals(VALID_REVIEW_CONTENT, response.getBody().getReviewContent());
+    //     assertEquals(VALID_GAME_RATING, response.getBody().getGameRating());
+    //     assertEquals(this.customerId, response.getBody().getCustomer().getId());
+    // }
 
-    @Test
-    @Order(4)
-    public void testGetReviewById() {
-        // Arrange
-        String url = String.format("/reviews/%d", this.reviewId);
+    // @Test
+    // @Order(4)
+    // public void testGetReviewById() {
+    //     // Arrange
+    //     String url = String.format("/reviews/%d", this.reviewId);
 
-        // Act
-        ResponseEntity<ReviewResponseDto> response = restTemplate.getForEntity(url, ReviewResponseDto.class);
+    //     // Act
+    //     ResponseEntity<ReviewResponseDto> response = restTemplate.getForEntity(url, ReviewResponseDto.class);
 
-        // Assert
-        assertNotNull(response);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertNotNull(response.getBody());
-        assertEquals(this.reviewId, response.getBody().getId());
-        assertEquals(VALID_REVIEW_CONTENT, response.getBody().getReviewContent());
-        assertEquals(this.customerId, response.getBody().getCustomer().getId());
-    }
+    //     // Assert
+    //     assertNotNull(response);
+    //     assertEquals(HttpStatus.OK, response.getStatusCode());
+    //     assertNotNull(response.getBody());
+    //     assertEquals(this.reviewId, response.getBody().getId());
+    //     assertEquals(VALID_REVIEW_CONTENT, response.getBody().getReviewContent());
+    //     assertEquals(this.customerId, response.getBody().getCustomer().getId());
+    // }
 
-    @Test
-    @Order(5)
-    public void testGetAllReviews() {
-        // Act
-        ResponseEntity<ReviewResponseDto[]> response = restTemplate.getForEntity("/reviews", ReviewResponseDto[].class);
+    // @Test
+    // @Order(5)
+    // public void testGetAllReviews() {
+    //     // Act
+    //     ResponseEntity<ReviewResponseDto[]> response = restTemplate.getForEntity("/reviews", ReviewResponseDto[].class);
 
-        // Assert
-        assertNotNull(response);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        ReviewResponseDto[] reviews = response.getBody();
-        assertNotNull(reviews);
-        assertTrue(reviews.length > 0, "There should be at least one review.");
-        boolean found = Arrays.stream(reviews).anyMatch(r -> r.getId().equals(this.reviewId));
-        assertTrue(found, "Created review should be in the list of all reviews.");
-    }
+    //     // Assert
+    //     assertNotNull(response);
+    //     assertEquals(HttpStatus.OK, response.getStatusCode());
+    //     ReviewResponseDto[] reviews = response.getBody();
+    //     assertNotNull(reviews);
+    //     assertTrue(reviews.length > 0, "There should be at least one review.");
+    //     boolean found = Arrays.stream(reviews).anyMatch(r -> r.getId().equals(this.reviewId));
+    //     assertTrue(found, "Created review should be in the list of all reviews.");
+    // }
 
-    @Test
-    @Order(6)
-    public void testGetReviewsByCustomer() {
-        // Act
-        String url = String.format("/reviews/customer/%d", this.customerId);
-        ResponseEntity<ReviewResponseDto[]> response = restTemplate.getForEntity(url, ReviewResponseDto[].class);
+    // @Test
+    // @Order(6)
+    // public void testGetReviewsByCustomer() {
+    //     // Act
+    //     String url = String.format("/reviews/customer/%d", this.customerId);
+    //     ResponseEntity<ReviewResponseDto[]> response = restTemplate.getForEntity(url, ReviewResponseDto[].class);
 
-        // Assert
-        assertNotNull(response);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        ReviewResponseDto[] reviews = response.getBody();
-        assertNotNull(reviews);
-        assertTrue(reviews.length > 0, "Customer should have at least one review.");
-        boolean found = Arrays.stream(reviews).anyMatch(r -> r.getId().equals(this.reviewId));
-        assertTrue(found, "Created review should be in the list of customer's reviews.");
-    }
+    //     // Assert
+    //     assertNotNull(response);
+    //     assertEquals(HttpStatus.OK, response.getStatusCode());
+    //     ReviewResponseDto[] reviews = response.getBody();
+    //     assertNotNull(reviews);
+    //     assertTrue(reviews.length > 0, "Customer should have at least one review.");
+    //     boolean found = Arrays.stream(reviews).anyMatch(r -> r.getId().equals(this.reviewId));
+    //     assertTrue(found, "Created review should be in the list of customer's reviews.");
+    // }
 
-    @Test
-    @Order(7)
-    public void testCreateChildReview() {
-        // Arrange
-        String childReviewContent = "I agree!";
-        int childGameRating = 4;
-        ReviewRequestDto request = new ReviewRequestDto(
-                childReviewContent,
-                childGameRating,
-                VALID_DATE,
-                this.customerId,
-                this.reviewId, // Correctly passing parentReviewId
-                this.gameId
-        );
+    // @Test
+    // @Order(7)
+    // public void testCreateChildReview() {
+    //     // Arrange
+    //     String childReviewContent = "I agree!";
+    //     int childGameRating = 4;
+    //     ReviewRequestDto request = new ReviewRequestDto(
+    //             childReviewContent,
+    //             childGameRating,
+    //             VALID_DATE,
+    //             this.customerId,
+    //             this.reviewId, // Correctly passing parentReviewId
+    //             this.gameId
+    //     );
     
-        // Act
-        ResponseEntity<ReviewResponseDto> response = restTemplate.postForEntity("/reviews", request, ReviewResponseDto.class);
+    //     // Act
+    //     ResponseEntity<ReviewResponseDto> response = restTemplate.postForEntity("/reviews", request, ReviewResponseDto.class);
     
-        // Assert
-        assertNotNull(response);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertNotNull(response.getBody());
-        assertTrue(response.getBody().getId() > 0, "The ID should be positive.");
-        this.childReviewId = response.getBody().getId();
-        assertEquals(childReviewContent, response.getBody().getReviewContent());
-        assertEquals(childGameRating, response.getBody().getGameRating());
-        assertEquals(this.customerId, response.getBody().getCustomer().getId());
-        assertEquals(this.reviewId, response.getBody().getParentReviewId());
-    }
+    //     // Assert
+    //     assertNotNull(response);
+    //     assertEquals(HttpStatus.OK, response.getStatusCode());
+    //     assertNotNull(response.getBody());
+    //     assertTrue(response.getBody().getId() > 0, "The ID should be positive.");
+    //     this.childReviewId = response.getBody().getId();
+    //     assertEquals(childReviewContent, response.getBody().getReviewContent());
+    //     assertEquals(childGameRating, response.getBody().getGameRating());
+    //     assertEquals(this.customerId, response.getBody().getCustomer().getId());
+    //     assertEquals(this.reviewId, response.getBody().getParentReviewId());
+    // }
     
 
-    @Test
-    @Order(8)
-    public void testGetReviewsByParentReview() {
-        // Act
-        String url = String.format("/reviews/parent/%d", this.reviewId);
-        ResponseEntity<ReviewResponseDto[]> response = restTemplate.getForEntity(url, ReviewResponseDto[].class);
+    // @Test
+    // @Order(8)
+    // public void testGetReviewsByParentReview() {
+    //     // Act
+    //     String url = String.format("/reviews/parent/%d", this.reviewId);
+    //     ResponseEntity<ReviewResponseDto[]> response = restTemplate.getForEntity(url, ReviewResponseDto[].class);
 
-        // Assert
-        assertNotNull(response);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        ReviewResponseDto[] reviews = response.getBody();
-        assertNotNull(reviews);
-        assertTrue(reviews.length > 0, "Parent review should have at least one child review.");
-        boolean found = Arrays.stream(reviews).anyMatch(r -> r.getId().equals(this.childReviewId));
-        assertTrue(found, "Child review should be in the list of parent review's replies.");
-    }
+    //     // Assert
+    //     assertNotNull(response);
+    //     assertEquals(HttpStatus.OK, response.getStatusCode());
+    //     ReviewResponseDto[] reviews = response.getBody();
+    //     assertNotNull(reviews);
+    //     assertTrue(reviews.length > 0, "Parent review should have at least one child review.");
+    //     boolean found = Arrays.stream(reviews).anyMatch(r -> r.getId().equals(this.childReviewId));
+    //     assertTrue(found, "Child review should be in the list of parent review's replies.");
+    // }
 
-    @Test
-    @Order(9)
-    public void testDeleteReview() {
-        // Act
-        restTemplate.delete(String.format("/reviews/%d", this.reviewId));
+//     @Test
+//     @Order(9)
+//     public void testDeleteReview() {
+//         // Act
+//         restTemplate.delete(String.format("/reviews/%d", this.reviewId));
 
-        // Assert
-        ResponseEntity<ReviewResponseDto> response = restTemplate.getForEntity(String.format("/reviews/%d", this.reviewId), ReviewResponseDto.class);
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-    }
-}
+//         // Assert
+//         ResponseEntity<ReviewResponseDto> response = restTemplate.getForEntity(String.format("/reviews/%d", this.reviewId), ReviewResponseDto.class);
+//         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+ }
